@@ -1,0 +1,30 @@
+{
+  "sources": {
+    "BC Liquor": {
+      "status": "ok",
+      "edition": "July 2026",
+      "file": "bc_liquor_store_product_price_list_july_2026.csv",
+      "source_last_modified": null,
+      "compared_with": null,
+      "count": 5957,
+      "data_file": "wines.json",
+      "refreshed": "2026-10-23"
+    },
+    "ZYN": {
+      "status": "ok",
+      "edition": null,
+      "count": 5453,
+      "note": "in-stock wines from the store's online catalogue",
+      "data_file": "wines-zyn.json",
+      "refreshed": "2026-10-23"
+    },
+    "BSW Liquor": {
+      "status": "ok",
+      "edition": null,
+      "count": 12413,
+      "note": "in-stock wines from the store's online catalogue",
+      "data_file": "wines-bsw.json",
+      "refreshed": "2026-10-23"
+    }
+  }
+}

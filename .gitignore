@@ -1,0 +1,6 @@
+Design/
+Latest BC Product List/
+*.pdf
+__pycache__/
+.pytest_cache/
+.claude/

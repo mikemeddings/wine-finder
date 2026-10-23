@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Unlisted: shared by link only, so ask search engines not to list it. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Basil's Wine Finder</title>
+<!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
+<link rel="stylesheet" href="app.css?v=2026-10-23.15">
+</head>
+<body>
+<header class="top">
+  <h1>Basil's Wine Finder</h1>
+  <nav class="views" aria-label="Pages">
+    <button type="button" class="view-btn" data-view="find" aria-pressed="true">Find wines</button>
+    <button type="button" class="view-btn" data-view="mywines" aria-pressed="false">My wines</button>
+    <button type="button" class="view-btn" data-view="shortlist" aria-pressed="false">Short List for Claude: <span class="sl-count">0</span></button>
+  </nav>
+  <button type="button" class="btn btn-reset" id="start-over">Start over</button>
+</header>
+
+<main id="view-find">
+  <section class="quick" aria-labelledby="quick-h">
+    <h2 id="quick-h">Quick picks</h2>
+    <div class="quick-list" id="quick-list"></div>
+    <h3 class="pick-sub">Famous wines <span class="ew-note">(searches every store)</span></h3>
+    <div class="quick-list" id="icon-list"></div>
+  </section>
+
+  <section class="ew-box" aria-labelledby="ew-h">
+    <h2 id="ew-h">Where can I buy…?</h2>
+    <p>Type a wine someone recommended, or one Claude mentions. You'll see it on our store lists if it's there, plus buttons to search other stores.</p>
+    <div id="ew-top"></div>
+  </section>
+
+  <div class="layout">
+    <aside class="filters" aria-labelledby="filters-h">
+      <button type="button" class="btn filter-toggle" id="filter-toggle" aria-expanded="false" aria-controls="filter-body">
+        Show filters
+      </button>
+      <h2 id="filters-h" class="filters-title">Filters</h2>
+      <div id="filter-body" class="filter-body">
+
+        <fieldset>
+          <legend>Search words</legend>
+          <label for="q" class="hint">Name, producer, region or grape — for example Douro, Saperavi, Tokaji</label>
+          <input type="search" id="q" autocomplete="off" spellcheck="false">
+        </fieldset>
+
+        <fieldset id="fs-source">
+          <legend id="source-legend">Sold by</legend>
+          <div id="source-list"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Country</legend>
+          <label for="country-q" class="hint">Type to find a country</label>
+          <input type="search" id="country-q" autocomplete="off">
+          <div class="mini-row">
+            <button type="button" class="btn btn-mini" id="country-all">Select all</button>
+            <button type="button" class="btn btn-mini" id="country-none">Clear all</button>
+          </div>
+          <p class="hint">No country ticked means every country is shown.</p>
+          <div id="country-list" class="country-list"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Type of wine</legend>
+          <div id="type-list"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Price</legend>
+          <div class="price-row">
+            <label for="price-from">Price from $</label>
+            <div class="stepper">
+              <button type="button" class="btn step" data-target="price-from" data-dir="-1" aria-label="Lower the starting price">−</button>
+              <input type="number" id="price-from" inputmode="decimal" min="0" placeholder="Any">
+              <button type="button" class="btn step" data-target="price-from" data-dir="1" aria-label="Raise the starting price">+</button>
+            </div>
+          </div>
+          <div class="price-row">
+            <label for="price-to">Price to $</label>
+            <div class="stepper">
+              <button type="button" class="btn step" data-target="price-to" data-dir="-1" aria-label="Lower the top price">−</button>
+              <input type="number" id="price-to" inputmode="decimal" min="0" placeholder="Any">
+              <button type="button" class="btn step" data-target="price-to" data-dir="1" aria-label="Raise the top price">+</button>
+            </div>
+          </div>
+          <button type="button" class="btn btn-mini" id="price-any">Any price</button>
+          <p class="hint">The − and + buttons jump between $15, 20, 25, 30, 40, 50, 75, 100, 150, 200 and 500. An empty box means any price.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Sweetness</legend>
+          <div id="sweet-list"></div>
+          <label class="check check-strong"><input type="checkbox" id="not-rated" checked> Include wines with no sweetness rating</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Bottle size</legend>
+          <label class="check"><input type="checkbox" id="bottle-only" checked> Standard 750 ml bottles only</label>
+          <p class="hint">Untick to include half bottles, magnums, boxes and others.</p>
+        </fieldset>
+
+        <button type="button" class="btn btn-primary filter-done" id="filter-done">Show the wines</button>
+      </div>
+    </aside>
+
+    <section class="results" aria-labelledby="results-h">
+      <div class="results-head">
+        <h2 id="results-h"><span id="result-count">Loading wines…</span></h2>
+        <label class="sort">Sort by
+          <select id="sort">
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="name">Name A to Z</option>
+            <option value="country">Country</option>
+            <option value="vintage">Vintage: newest first</option>
+            <option value="abv">Alcohol %: lowest first</option>
+          </select>
+        </label>
+      </div>
+      <div id="active-filters" class="active-filters"></div>
+      <div id="result-list" class="result-list" aria-live="polite"></div>
+      <button type="button" class="btn more" id="show-more" hidden>Show more wines</button>
+    </section>
+  </div>
+
+  <div class="sl-bar" id="sl-bar">
+    <span>Short List for Claude: <strong class="sl-count">0</strong> <span class="sl-summary" id="sl-summary"></span></span>
+    <button type="button" class="btn btn-primary" data-view="shortlist">See the list and ask Claude</button>
+  </div>
+</main>
+
+<main id="view-mywines" hidden>
+  <h2>My wines</h2>
+  <p class="sl-keep">Wines from family cellars, and wines you add yourself. They are kept on this computer only,
+    so press “Save a backup file” now and then.</p>
+
+  <section class="mw-box" aria-labelledby="mw-import-h">
+    <h3 id="mw-import-h">Import a cellar from CellarTracker</h3>
+    <details class="mw-how"><summary>How to get the file from CellarTracker</summary>
+      <ol>
+        <li>On a computer (not the phone app), sign in at cellartracker.com and open <strong>My Cellar</strong>.</li>
+        <li>Switch to the <strong>Wines</strong> view (one row per wine).</li>
+        <li>Press <strong>Export</strong> at the top right and choose <strong>CSV</strong>. Tick at least Wine, Vintage, Producer,
+          Country, Region, Varietal, Quantity and the scores (your own and the community's), then export.</li>
+        <li>Email the file, then save it on this computer.</li>
+      </ol>
+    </details>
+    <label class="mw-label" for="mw-owner">Whose cellar is this?</label>
+    <input type="text" id="mw-owner" autocomplete="off" placeholder="for example Alex">
+    <label class="btn btn-primary mw-file">Choose the CellarTracker file…
+      <input type="file" id="mw-file" accept=".csv,.txt,.tsv,text/csv,text/plain" hidden>
+    </label>
+    <div id="mw-preview" class="notice" role="status" hidden></div>
+  </section>
+
+  <section class="mw-box" aria-labelledby="mw-add-h">
+    <h3 id="mw-add-h">Add a wine by hand</h3>
+    <p class="hint">For a wine from an importer, a private store, or someone's cellar.</p>
+    <form id="mw-form" class="mw-form" autocomplete="off">
+      <input type="hidden" id="mw-edit-id">
+      <label for="mw-name">Wine name <span class="hint-inline">(required)</span><input type="text" id="mw-name" required></label>
+      <label for="mw-where">Where it's from<input type="text" id="mw-where" placeholder="for example Alex's cellar, Marquis Wine Cellars"></label>
+      <label for="mw-vintage">Vintage<input type="number" id="mw-vintage" inputmode="numeric" min="1900" max="2100"></label>
+      <label for="mw-country">Country<input type="text" id="mw-country"></label>
+      <label for="mw-price">Price $ <span class="hint-inline">(optional)</span><input type="number" id="mw-price" inputmode="decimal" min="0" step="0.01"></label>
+      <label for="mw-notes" class="mw-wide">Notes<input type="text" id="mw-notes"></label>
+      <div class="mw-wide mw-form-buttons">
+        <button type="submit" class="btn btn-primary" id="mw-save">Add this wine</button>
+        <button type="button" class="btn" id="mw-cancel" hidden>Cancel editing</button>
+      </div>
+    </form>
+  </section>
+
+  <section aria-labelledby="mw-list-h">
+    <div class="results-head">
+      <h3 id="mw-list-h" class="mw-count">No wines yet</h3>
+      <label class="sort">Sort by
+        <select id="mw-sort">
+          <option value="name">Name A to Z</option>
+          <option value="my">Family score: highest first</option>
+          <option value="ct">CellarTracker community score: highest first</option>
+          <option value="vintage">Vintage: oldest first</option>
+          <option value="drink">Drink by: soonest first</option>
+        </select>
+      </label>
+    </div>
+    <div class="mw-filters">
+      <label for="mw-q" class="mw-label">Search my wines<input type="search" id="mw-q" autocomplete="off"></label>
+      <div id="mw-owners" class="mw-owners"></div>
+    </div>
+    <ul id="mw-list" class="mw-list"></ul>
+    <button type="button" class="btn more" id="mw-more" hidden>Show more</button>
+  </section>
+
+  <section class="mw-box" aria-labelledby="mw-backup-h">
+    <h3 id="mw-backup-h">Backup</h3>
+    <p>“My wines” live only in this browser. A backup file keeps them safe, or moves them to another computer.</p>
+    <div class="sl-actions">
+      <button type="button" class="btn" id="mw-backup">Save a backup file</button>
+      <label class="btn">Restore from a backup file…<input type="file" id="mw-restore" accept=".json,application/json" hidden></label>
+    </div>
+    <p id="mw-status" class="status" role="status"></p>
+  </section>
+</main>
+
+<main id="view-shortlist" hidden>
+  <h2>Your Short List for Claude</h2>
+  <p class="sl-keep" id="sl-keep" hidden></p>
+  <div id="ask-notice" class="notice" role="status" hidden></div>
+  <div id="sl-warning" class="warning" hidden></div>
+  <div class="sl-actions" id="sl-actions">
+    <button type="button" class="btn btn-primary btn-big" id="ask-claude">Ask Claude about these</button>
+    <button type="button" class="btn btn-big btn-rank" id="ask-claude-rank">Ask Claude to rank these by reviews</button>
+    <button type="button" class="btn" id="sl-copy">Copy as text</button>
+    <a class="btn" id="sl-email" href="#">Email</a>
+    <button type="button" class="btn" id="sl-print">Print</button>
+    <button type="button" class="btn btn-danger" id="sl-clear">Clear the list</button>
+  </div>
+  <p id="sl-status" class="status" role="status"></p>
+  <ol id="sl-list" class="sl-list"></ol>
+  <p id="sl-empty" class="empty" hidden>Your Short List for Claude is empty. Go to <button type="button" class="linklike" data-view="find">Find wines</button> and press “Add to Short List” on any wine.</p>
+</main>
+
+<footer class="foot">
+  <p id="foot-editions">Loading…</p>
+  <p>Prices exclude tax; availability not guaranteed (BC LDB).</p>
+  <p id="foot-calgary" hidden>BSW Liquor and ZYN are Calgary retailers — check shipping to BC.</p>
+  <p>The CellarTracker and Wine Enthusiast buttons open those websites in a new tab.</p>
+</footer>
+
+<dialog id="reset-dialog" class="dialog" aria-labelledby="reset-q">
+  <p id="reset-q" class="dialog-q"></p>
+  <p>The filters have been reset. Do you also want to empty your Short List for Claude?</p>
+  <div class="dialog-actions">
+    <button type="button" class="btn btn-danger" id="reset-yes">Yes, empty the list</button>
+    <button type="button" class="btn btn-primary" id="reset-no" autofocus>No, keep my list</button>
+  </div>
+</dialog>
+
+<div id="print-area" class="print-area"></div>
+
+<script src="app.js?v=2026-10-23.15"></script>
+</body>
+</html>

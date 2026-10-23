@@ -1,0 +1,53 @@
+name: Refresh wine lists
+
+# Every three months (BC publishes a new price list about quarterly), plus a
+# "Run workflow" button on the Actions tab for any time. For monthly, use "17 10 1 * *".
+on:
+  schedule:
+    - cron: "17 10 1 1,4,7,10 *"   # 10:17 UTC on 1 Jan, Apr, Jul, Oct
+  workflow_dispatch:
+
+permissions:
+  contents: write   # to commit the refreshed data/ files
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30   # the Calgary stores are read politely: about 8 minutes
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install -r requirements.txt
+
+      # A store that fails keeps its previous data (refresh.py exits 1); the others
+      # still update. The job is marked failed at the end so the problem is noticed.
+      - name: Refresh
+        id: refresh
+        run: |
+          if python scripts/refresh.py; then echo "ok=true" >> "$GITHUB_OUTPUT"
+          else echo "ok=false" >> "$GITHUB_OUTPUT"; echo "::warning::A store could not be refreshed; see the log above."; fi
+
+      - name: Test
+        run: python -m pytest scripts -q
+
+      - name: Commit changed data
+        run: |
+          git add data/
+          if git diff --cached --quiet; then echo "No changes."; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Refresh wine lists ($(date -u +%Y-%m-%d))"
+          git push
+
+      - name: Report a failed store
+        if: steps.refresh.outputs.ok == 'false'
+        run: exit 1

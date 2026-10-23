@@ -1,0 +1,331 @@
+/* Basil's Wine Finder — large, high-contrast, light theme. Sizes in rem so browser zoom scales everything.
+   Colour always sits beside a text label; every text/background pair here is at least 4.5:1. */
+:root {
+  --text: #1f1a17;
+  --muted: #3f3a36;          /* still dark: no light-grey text */
+  --bg: #fbf6ee;
+  --card: #ffffff;
+  --panel: #f3e9da;
+  --line: #9a8c7a;
+  --focus: #0b57d0;
+
+  --wine: #7a1f2b;   --wine-dark: #5a1420;  --wine-tint: #f6e3e6;
+  --gold: #6e4e00;   --gold-tint: #fbefc8;
+  --teal: #0f5757;   --teal-tint: #d7efec;
+  --green: #1f6a2e;  --green-tint: #dff1e1;
+  --plum: #5b2a6e;   --plum-tint: #eee2f3;
+  --blue: #1d3f73;   --blue-tint: #e2eaf6;
+  --claude: #a3482a; --claude-dark: #84391f;
+  --danger: #a3141c; --danger-tint: #fbe3e3;
+  --bc-navy: #003366; --bc-gold: #fcba19;
+
+  --warn-bg: #fff3d6; --warn-line: #8a5a00;
+}
+
+* { box-sizing: border-box; }
+/* The hidden attribute must win over display: rules such as .btn's inline-flex. */
+[hidden] { display: none !important; }
+html { font-size: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  font-size: 1.25rem;          /* 20px at 100% zoom */
+  line-height: 1.55;
+}
+h1, h2, h3 { line-height: 1.25; }
+h2 { font-size: 1.5rem; margin: 0 0 0.6rem; color: var(--wine); }
+:focus-visible { outline: 4px solid var(--focus); outline-offset: 2px; }
+
+/* Buttons and inputs: 48px+ targets */
+.btn, select, input[type="search"], input[type="number"] {
+  font: inherit;
+  min-height: 3rem;
+  border: 2px solid var(--line);
+  border-radius: 0.6rem;
+  background: #fff;
+  color: var(--text);
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.15s, filter 0.15s;
+}
+.btn:hover { filter: brightness(0.95); }
+.btn-primary { background: var(--wine); border-color: var(--wine); color: #fff; }
+.btn-primary:hover { background: var(--wine-dark); filter: none; }
+.btn-danger { color: var(--danger); border-color: var(--danger); background: var(--danger-tint); }
+.btn-big { font-size: 1.4rem; min-height: 3.75rem; padding: 0.5rem 1.5rem; }
+.btn-mini { font-size: 1.05rem; padding: 0.2rem 0.9rem; background: var(--wine-tint); border-color: var(--wine); color: var(--wine-dark); }
+.mini-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+input[type="search"], input[type="number"] { width: 100%; padding: 0.3rem 0.6rem; }
+select { padding: 0.3rem 0.5rem; }
+.linklike { font: inherit; color: var(--wine); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; }
+
+/* Header */
+.top {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem;
+  padding: 0.85rem 1rem;
+  background: linear-gradient(120deg, var(--wine-dark), var(--wine) 55%, #8e3b2e);
+  color: #fff;
+  border-bottom: 5px solid #d9a33b;
+}
+.top h1 { margin: 0; font-size: 2rem; margin-right: auto; }
+.top h1::before { content: "🍷 "; }
+.views { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.view-btn {
+  font: inherit; font-weight: 600; min-height: 3rem; padding: 0.4rem 1rem;
+  border: 2px solid #fff; border-radius: 0.6rem; background: transparent; color: #fff; cursor: pointer;
+}
+.view-btn[aria-pressed="true"] { background: #fff; color: var(--wine); }
+.btn-reset { border-color: #fff; background: #fff3c4; color: var(--wine-dark); }
+
+main { padding: 1rem; max-width: 90rem; margin: 0 auto; }
+
+/* Quick picks: each preset has its own colour (set in QUICK_PICKS) */
+.quick { margin-bottom: 1rem; }
+.quick-list { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.pick { flex-direction: column; align-items: flex-start; text-align: left; border-width: 2px; border-left-width: 0.5rem; }
+.pick small { font-weight: 400; font-size: 1rem; color: var(--muted); }
+.pick-wine  { background: var(--wine-tint);  border-color: var(--wine);  color: var(--wine-dark); }
+.pick-gold  { background: var(--gold-tint);  border-color: #b38a1d;     color: var(--gold); }
+.pick-teal  { background: var(--teal-tint);  border-color: var(--teal);  color: var(--teal); }
+.pick-green { background: var(--green-tint); border-color: var(--green); color: var(--green); }
+.pick-plum  { background: var(--plum-tint);  border-color: var(--plum);  color: var(--plum); }
+.pick-blue  { background: var(--blue-tint);  border-color: var(--blue);  color: var(--blue); }
+
+/* Two-column layout on wide screens */
+.layout { display: grid; gap: 1.25rem; }
+@media (min-width: 62.5em) {
+  .layout { grid-template-columns: 22rem 1fr; align-items: start; }
+  .filter-toggle, .filter-done { display: none !important; }
+  .filter-body { display: block !important; }
+}
+
+/* Filters */
+.filters { background: var(--panel); border-radius: 0.75rem; padding: 1rem; border: 2px solid #e2d3bc; }
+.filters-title { margin-top: 0; }
+.filter-toggle { background: var(--wine-tint); border-color: var(--wine); color: var(--wine-dark); }
+@media (max-width: 62.49em) {
+  .filters-title { display: none; }
+  .filter-toggle { width: 100%; }
+  .filter-body { display: none; margin-top: 1rem; }
+  .filter-body.open { display: block; }
+  .filter-done { width: 100%; margin-top: 0.5rem; }
+}
+fieldset { border: 0; border-top: 3px solid #d8c4a6; margin: 0 0 1rem; padding: 0.75rem 0 0; min-width: 0; }
+legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(--wine); }
+.hint { display: block; font-size: 1.05rem; color: var(--muted); margin: 0.2rem 0 0.4rem; }
+.check {
+  display: flex; align-items: center; gap: 0.6rem;
+  min-height: 3rem; padding: 0.2rem 0.4rem; cursor: pointer; border-radius: 0.5rem;
+  border: 2px solid transparent;
+}
+.check:hover { background: rgba(122, 31, 43, 0.06); }
+.check:has(input:checked) { background: var(--wine-tint); border-color: var(--wine); }
+.check input { width: 1.6rem; height: 1.6rem; flex: none; accent-color: var(--wine); }
+.check .count { margin-left: auto; color: var(--muted); font-size: 1.05rem; }
+.check-strong { font-weight: 600; }
+.check.disabled { color: var(--muted); cursor: default; }
+.check.zero { color: #5c5650; }
+.check.zero .count::after { content: " now"; }
+.country-list {
+  max-height: 20rem; overflow-y: auto; margin-top: 0.5rem;
+  border: 2px solid var(--line); border-radius: 0.5rem; background: #fff; padding: 0.2rem;
+}
+.price-row { margin-bottom: 0.6rem; }
+.price-row label { display: block; font-weight: 600; }
+.stepper { display: flex; gap: 0.4rem; }
+.stepper input { text-align: center; }
+.step { min-width: 3rem; font-size: 1.5rem; padding: 0 0.6rem; background: var(--gold-tint); border-color: #b38a1d; color: var(--gold); }
+
+/* Wine type: a coloured pill that always carries its name */
+.type-pill {
+  display: inline-block; padding: 0 0.55rem; border-radius: 999px; border: 2px solid transparent;
+  font-weight: 700; font-size: 1.05rem; line-height: 1.6;
+}
+.type-Red       { background: #7a1f2b; color: #fff; }
+.type-White     { background: #f3e3a0; color: #3a2f00; border-color: #b39b3a; }
+.type-Rosé      { background: #f7c6d0; color: #5a1a2a; border-color: #d98aa0; }
+.type-Sparkling { background: #d6e6f5; color: #13385e; border-color: #6f9fcf; }
+.type-Fortified { background: #6b3a12; color: #fff; }
+.type-Dessert   { background: #f0c46a; color: #3d2800; border-color: #c08a1e; }
+.type-Sake      { background: #eceae4; color: #2b2b2b; border-color: #a8a29a; }
+.type-Other     { background: #d9d4cc; color: #2b2b2b; border-color: #8c8c8c; }
+
+/* Results */
+.results-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; }
+.results-head h2 { margin: 0; }
+.sort { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; flex-wrap: wrap; }
+.active-filters { margin: 0.5rem 0 1rem; color: var(--muted); padding: 0.4rem 0.75rem; background: var(--panel); border-radius: 0.5rem; }
+.active-filters strong { color: var(--wine); }
+.result-list { display: grid; gap: 0.9rem; }
+.wine {
+  border: 2px solid #d8ccbb; border-left: 0.6rem solid var(--line); border-radius: 0.75rem; background: var(--card);
+  padding: 0.9rem 1rem;
+  display: grid; grid-template-columns: 1fr auto; gap: 0.3rem 1rem;
+  box-shadow: 0 1px 3px rgba(60, 30, 20, 0.08);
+}
+.wine-Red { border-left-color: #7a1f2b; }
+.wine-White { border-left-color: #c9ad3e; }
+.wine-Rosé { border-left-color: #e58aa0; }
+.wine-Sparkling { border-left-color: #6f9fcf; }
+.wine-Fortified { border-left-color: #6b3a12; }
+.wine-Dessert { border-left-color: #d9a33b; }
+.wine-Sake { border-left-color: #a8a29a; }
+.wine-Other { border-left-color: #8c8c8c; }
+.wine.on-list { background: #f3faf3; border-color: var(--green); border-left-color: var(--green); }
+.wine-name { margin: 0; font-size: 1.35rem; }
+.wine-price { font-size: 1.5rem; font-weight: 700; text-align: right; white-space: nowrap; color: var(--wine); }
+.wine-facts, .wine-detail { margin: 0; grid-column: 1 / -1; }
+.wine-facts { font-weight: 600; }
+.wine-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+.badge {
+  display: inline-block; border: 2px solid var(--text); border-radius: 0.4rem;
+  padding: 0 0.45rem; font-size: 1rem; font-weight: 700; margin-left: 0.3rem; white-space: nowrap;
+}
+.badge-src { margin-left: 0; }
+.badge-bcl { background: var(--bc-navy); color: #fff; border-color: var(--bc-navy); border-bottom: 4px solid var(--bc-gold); }
+.badge-bsw { background: var(--teal); color: #fff; border-color: var(--teal); }
+.badge-zyn { background: var(--plum); color: #fff; border-color: var(--plum); }
+.wine-detail .badge-src { margin-left: 0.3rem; }
+.badge-new { background: #fff3a8; }
+.btn-add { background: var(--green-tint); border-color: var(--green); color: var(--green); }
+.btn-add[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: #fff; }
+.btn-ct { background: var(--wine-tint); border-color: #8b1e3f; color: #6d1630; }
+.btn-we { background: var(--blue-tint); border-color: var(--blue); color: var(--blue); }
+.more { width: 100%; margin-top: 1rem; background: var(--wine-tint); border-color: var(--wine); color: var(--wine-dark); }
+.empty { padding: 1rem; background: var(--panel); border-radius: 0.75rem; }
+.ext::after { content: " ↗"; }
+
+/* Bottom shortlist bar on the Find page */
+.sl-bar {
+  position: sticky; bottom: 0; z-index: 5;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem;
+  margin: 1rem -1rem -1rem; padding: 0.6rem 1rem;
+  background: #fffaf0; border-top: 4px solid #d9a33b;
+  font-size: 1.3rem;
+}
+.sl-bar strong { color: var(--green); }
+
+/* Shortlist page */
+.sl-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.5rem 0 1rem; }
+#ask-claude { background: var(--claude); border-color: var(--claude); color: #fff; }
+#ask-claude:hover { background: var(--claude-dark); filter: none; }
+#sl-copy { background: var(--blue-tint); border-color: var(--blue); color: var(--blue); }
+#sl-email { background: var(--teal-tint); border-color: var(--teal); color: var(--teal); }
+#sl-print { background: var(--plum-tint); border-color: var(--plum); color: var(--plum); }
+.sl-list { padding-left: 2.2rem; }
+.sl-list li { margin-bottom: 0.9rem; padding: 0.5rem 0.75rem; border: 2px solid #d8ccbb; border-left: 0.5rem solid var(--green); border-radius: 0.6rem; background: #fff; }
+.sl-list li::marker { font-weight: 700; color: var(--wine); }
+.sl-list .sl-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; justify-content: space-between; }
+.sl-list .sl-name { font-weight: 700; }
+.notice { border: 3px solid var(--green); background: var(--green-tint); border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.notice .big { font-size: 1.5rem; font-weight: 700; margin: 0 0 0.6rem; }
+.notice textarea { width: 100%; min-height: 12rem; font: inherit; font-size: 1rem; margin-top: 0.5rem; }
+.warning { border: 3px solid var(--warn-line); background: var(--warn-bg); border-radius: 0.75rem; padding: 0.75rem 1rem; margin-bottom: 1rem; }
+.status { font-weight: 600; color: #154015; min-height: 1.5em; }
+
+.foot { padding: 1rem; border-top: 4px solid #d9a33b; max-width: 90rem; margin: 2rem auto 0; color: var(--muted); }
+.foot p { margin: 0.3rem 0; }
+
+.print-area { display: none; }
+@media print {
+  body { font-size: 12pt; background: #fff; }
+  body > :not(.print-area) { display: none !important; }
+  .print-area { display: block; }
+  .print-area h1 { font-size: 18pt; margin: 0 0 6pt; }
+  .print-area ol { padding-left: 18pt; }
+  .print-area li { margin-bottom: 8pt; break-inside: avoid; }
+  .print-area .pa-name { font-weight: 700; }
+  .print-area .pa-foot { margin-top: 12pt; font-size: 10pt; }
+}
+
+/* "See the question" inside the Ask Claude message */
+.notice details { margin-top: 0.5rem; }
+.notice summary { cursor: pointer; font-weight: 700; min-height: 3rem; display: flex; align-items: center; }
+
+.sl-summary { font-size: 1.05rem; color: var(--muted); }
+.sl-keep { margin: 0 0 0.75rem; padding: 0.5rem 0.75rem; background: var(--panel); border-radius: 0.5rem; }
+
+/* Start over: "also empty the list?" box */
+.dialog {
+  max-width: min(36rem, calc(100vw - 2rem)); padding: 1.25rem 1.5rem;
+  border: 4px solid var(--wine); border-radius: 0.9rem; background: #fff; color: var(--text);
+  font-size: 1.25rem; line-height: 1.55;
+}
+.dialog::backdrop { background: rgba(40, 20, 15, 0.55); }
+.dialog-q { font-size: 1.4rem; font-weight: 700; margin-top: 0; }
+.dialog-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+.dialog-actions .btn { flex: 1 1 12rem; min-height: 3.5rem; }
+
+.notice .tip { padding: 0.5rem 0.75rem; background: #fff; border-left: 0.4rem solid var(--gold); border-radius: 0.4rem; }
+
+/* Ask Claude: step-by-step box shown before Claude opens */
+.notice .steps { padding-left: 1.8rem; }
+.notice .steps li { margin-bottom: 0.5rem; }
+.btn-claude { background: var(--claude); border-color: var(--claude); color: #fff; }
+.btn-claude:hover { background: var(--claude-dark); filter: none; }
+.status-box { padding: 0.6rem 0.9rem; background: #fff; border: 2px solid var(--green); border-radius: 0.5rem; font-weight: 600; }
+
+/* Find it elsewhere: search links to other stores */
+.ew-box { background: var(--teal-tint); border: 2px solid var(--teal); border-radius: 0.75rem; padding: 0.9rem 1rem; margin-bottom: 1rem; }
+.ew-box h2 { color: var(--teal); }
+.ew-box > p { margin: 0 0 0.5rem; }
+.ew-label { display: block; font-weight: 700; }
+.ew-label input { margin-top: 0.3rem; background: #fff; }
+.elsewhere.is-empty .ew-groups { display: none; }
+.ew-groups { display: grid; gap: 0.75rem; margin-top: 0.5rem; }
+@media (min-width: 62.5em) { .ew-groups { grid-template-columns: repeat(2, 1fr); } }
+.ew-group h4 { margin: 0 0 0.35rem; font-size: 1.2rem; color: var(--teal); }
+.ew-note { font-weight: 400; font-size: 1.05rem; color: var(--muted); }
+.ew-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.ew-store { background: #fff; border-color: var(--teal); color: var(--teal); }
+.btn-ew { background: var(--teal-tint); border-color: var(--teal); color: var(--teal); }
+.btn-ew[aria-expanded="true"] { background: var(--teal); color: #fff; }
+.ew-panel { grid-column: 1 / -1; margin-top: 0.5rem; padding: 0.75rem; background: var(--teal-tint); border: 2px solid var(--teal); border-radius: 0.6rem; }
+.sl-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+.source-only { margin: 0.2rem 0 0.4rem; }
+
+/* "Where can I buy…?" — wines found on our own lists */
+.ew-sub { font-size: 1.3rem; color: var(--teal); margin: 0.9rem 0 0.3rem; }
+.ew-hits:empty { display: none; }
+.ew-hit-list { list-style: none; padding: 0; margin: 0.4rem 0; display: grid; gap: 0.5rem; }
+.ew-hit {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem; background: #fff; border: 2px solid #b9d9d5; border-radius: 0.6rem;
+}
+.elsewhere.is-empty > .ew-sub, .elsewhere.is-empty > .ew-sub + .hint { display: none; }
+.badge-score { background: #fff3c4; border-color: #8a6100; color: #4a3500; margin-left: 0; }
+.btn-rank { background: #fbe6d9; border-color: var(--claude); color: var(--claude-dark); }
+
+/* Quick picks: count after each label, and the "Famous wines" row */
+.pick-count { font-weight: 400; }
+.pick-sub { font-size: 1.2rem; color: var(--wine); margin: 0.8rem 0 0.4rem; }
+
+/* My wines */
+.mw-box { background: var(--panel); border: 2px solid #e2d3bc; border-radius: 0.75rem; padding: 0.9rem 1rem; margin-bottom: 1rem; }
+.mw-box h3, #mw-list-h { font-size: 1.3rem; color: var(--wine); margin: 0 0 0.5rem; }
+.mw-how summary { cursor: pointer; font-weight: 600; min-height: 3rem; display: flex; align-items: center; color: var(--blue); }
+.mw-label { display: block; font-weight: 700; margin-top: 0.5rem; }
+#mw-owner { max-width: 24rem; display: block; margin-bottom: 0.6rem; }
+#mw-owner, .mw-form input, #mw-q { font: inherit; min-height: 3rem; border: 2px solid var(--line); border-radius: 0.5rem; padding: 0.3rem 0.6rem; width: 100%; background: #fff; }
+.mw-file { margin-top: 0.3rem; }
+#mw-preview { margin-top: 1rem; }
+.mw-sample { margin: 0.3rem 0; }
+.mw-form { display: grid; gap: 0.6rem 1rem; }
+@media (min-width: 50em) { .mw-form { grid-template-columns: 1fr 1fr; } .mw-wide { grid-column: 1 / -1; } }
+.mw-form label { font-weight: 600; }
+.hint-inline { font-weight: 400; color: var(--muted); font-size: 1rem; }
+.mw-form-buttons { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.mw-filters { margin: 0.5rem 0; }
+.mw-owners { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+.mw-owners .btn[aria-pressed="true"] { background: var(--wine); color: #fff; }
+.mw-list { list-style: none; padding: 0; display: grid; gap: 0.8rem; }
+.mw-row { background: #fff; border: 2px solid #d8ccbb; border-left: 0.6rem solid var(--plum); border-radius: 0.75rem; padding: 0.8rem 1rem; }
+.mw-scores { color: var(--plum); }
