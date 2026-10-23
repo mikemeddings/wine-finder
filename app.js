@@ -326,6 +326,7 @@ const SORTS = {
   country: (a, b) => a.country.localeCompare(b.country) || a.price - b.price,
   vintage: (a, b) => (b.vintage ?? -1) - (a.vintage ?? -1) || a.price - b.price,
   abv: (a, b) => (a.abv ?? 99) - (b.abv ?? 99) || a.price - b.price,
+  sweet: (a, b) => (b.sweetness ?? -1) - (a.sweetness ?? -1) || a.price - b.price, // not rated last
 };
 
 function countBy(skip, key) {
