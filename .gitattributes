@@ -1,0 +1,5 @@
+# Keep the archived BC price lists byte-for-byte as downloaded (no line-ending changes),
+# and the generated data files with plain LF endings, so refreshes on GitHub and on
+# Windows don't show whole-file changes.
+data/archive/*.csv -text
+data/*.json text eol=lf
