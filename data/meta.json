@@ -4,7 +4,7 @@
       "status": "ok",
       "edition": "July 2026",
       "file": "bc_liquor_store_product_price_list_july_2026.csv",
-      "source_last_modified": null,
+      "source_last_modified": "2026-10-14T17:30:04.928730",
       "compared_with": null,
       "count": 5957,
       "data_file": "wines.json",
@@ -13,7 +13,7 @@
     "ZYN": {
       "status": "ok",
       "edition": null,
-      "count": 5453,
+      "count": 5451,
       "note": "in-stock wines from the store's online catalogue",
       "data_file": "wines-zyn.json",
       "refreshed": "2026-10-23"
