@@ -155,8 +155,10 @@ const STORE_GROUPS = [
   { place: "Ontario", note: "Ontario's liquor board.", stores: [
     { name: "LCBO", url: "https://www.lcbo.com/en/catalogsearch/result/#q={q}&t=Products&sort=relevancy&layout=card" },
   ] },
-  { place: "Switzerland", note: "Prices in Swiss francs. Mövenpick's site is in French.", stores: [
-    { name: "Mövenpick Wein (Geneva shops)", url: "https://www.moevenpick-wein.com/fr/catalogsearch/result/?q={q}" },
+  // Mövenpick's terms allow links to its home page only (no deep links without permission),
+  // so its button opens the home page and Basil searches there.
+  { place: "Switzerland", note: "Prices in Swiss francs. Mövenpick opens on its home page (in French): search there.", stores: [
+    { name: "Mövenpick Wein (Geneva shops)", url: "https://www.moevenpick-wein.com/fr/" },
     { name: "Flaschenpost", url: "https://www.flaschenpost.ch/en/wine?searchParam={q}" },
   ] },
 ];
