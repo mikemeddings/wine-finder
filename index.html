@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-24.4">
+<link rel="stylesheet" href="app.css?v=2026-10-24.5">
 </head>
 <body>
 <header class="top">
@@ -122,6 +122,7 @@
             <option value="sweet">Sweetness: sweetest first</option>
             <option value="claude">Claude's rating: highest first</option>
             <option value="mine">Your rating: highest first</option>
+            <option value="family">Family rating (FR): highest first</option>
           </select>
         </label>
       </div>
@@ -200,6 +201,29 @@
     <button type="button" class="btn more" id="mw-more" hidden>Show more</button>
   </section>
 
+  <section class="mw-box fr-box" aria-labelledby="fr-h">
+    <h3 id="fr-h">Family ratings (FR)</h3>
+    <p>Publish the ratings on this computer, both Claude's and your own, so everyone who opens Basil's Wine Finder
+      sees them as <strong>FR</strong>. Only the person who looks after the website can publish.</p>
+    <p id="fr-count" class="fr-count"></p>
+    <div class="sl-actions">
+      <button type="button" class="btn btn-primary" id="fr-publish" hidden>Publish as Family ratings</button>
+      <button type="button" class="btn" id="fr-download">Download ratings.json</button>
+    </div>
+    <p id="fr-status" class="status" role="status"></p>
+    <details class="mw-how"><summary>Publishing key (website keeper only)</summary>
+      <p id="fr-key-state"></p>
+      <label class="mw-label" for="fr-key">Paste a GitHub key for the wine-finder repository</label>
+      <div class="typed-row">
+        <input type="password" id="fr-key" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+        <button type="button" class="btn" id="fr-key-save">Save key on this computer</button>
+        <button type="button" class="btn btn-danger" id="fr-key-forget" hidden>Remove key</button>
+      </div>
+      <p class="hint">The key stays in this browser only. It is never part of the website. Without a key, use
+        “Download ratings.json” and upload the file to the repository's data folder on GitHub.</p>
+    </details>
+  </section>
+
   <section class="mw-box" aria-labelledby="mw-backup-h">
     <h3 id="mw-backup-h">Backup</h3>
     <p>“My wines” live only in this browser. A backup file keeps them safe, or moves them to another computer.</p>
@@ -268,6 +292,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-24.4"></script>
+<script src="app.js?v=2026-10-24.5"></script>
 </body>
 </html>

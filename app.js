@@ -100,7 +100,7 @@ const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB" };
 const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn" };
 const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 50;
-const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings" };
+const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey" };
 
 // ---- Helpers -----------------------------------------------------------------
 
@@ -368,6 +368,7 @@ const SORTS = {
   sweet: (a, b) => (b.sweetness ?? -1) - (a.sweetness ?? -1) || a.price - b.price, // not rated last
   claude: (a, b) => (ratingOf(b.id).claude?.points ?? -1) - (ratingOf(a.id).claude?.points ?? -1) || a.price - b.price,
   mine: (a, b) => (ratingOf(b.id).mine?.points ?? -1) - (ratingOf(a.id).mine?.points ?? -1) || a.price - b.price,
+  family: (a, b) => (frScore(b.id) ?? -1) - (frScore(a.id) ?? -1) || a.price - b.price,
 };
 
 function countBy(skip, key) {
@@ -585,6 +586,9 @@ function wineLine(w, i, forClaude = false) {
     const r = ratingOf(w.id);
     if (r.mine) line += `; my own rating: ${r.mine.points}/100`;
     if (r.claude?.points) line += `; your earlier rating: ${r.claude.points}/100${r.claude.vintage ? ` for ${r.claude.vintage}` : ""}`;
+    const f = frOf(w.id);
+    if (f.family && !r.mine) line += `; our family's rating: ${f.family.points}/100`;
+    if (f.claude?.points && !r.claude) line += `; your earlier rating (shared by family): ${f.claude.points}/100${f.claude.vintage ? ` for ${f.claude.vintage}` : ""}`;
     line += ` [${w.id}]`;
   }
   return line;
@@ -1187,14 +1191,15 @@ const shortDate = (iso) => {
 };
 
 function ratingsHtml(w) {
-  const r = ratingOf(w.id), parts = [];
-  if (r.claude) {
+  const r = ratingOf(w.id), f = frOf(w.id), parts = [frHtml(w)].filter(Boolean);
+  const same = (a, b) => b && JSON.stringify(a) === JSON.stringify(b);
+  if (r.claude && !same(r.claude, f.claude)) {
     const c = r.claude;
     parts.push(`<span class="rating rating-claude">Claude's rating <strong>${c.points ?? "no reviews found"}</strong>` +
       `${c.vintage ? ` (${esc(String(c.vintage))})` : ""}${c.note ? ` · ${esc(c.note)}` : ""}` +
       ` <span class="rating-date">${esc(shortDate(c.date))}</span></span>`);
   }
-  if (r.mine) {
+  if (r.mine && !same(r.mine, f.family)) {
     parts.push(`<span class="rating rating-mine">Your rating <strong>${r.mine.points}</strong>` +
       `${r.mine.note ? ` · ${esc(r.mine.note)}` : ""}</span>`);
   }
@@ -1313,6 +1318,136 @@ function confirmSavedRatings() {
   refreshRatedViews();
 }
 
+// ---- Family ratings (FR): ratings published to the website for everyone -------------
+// data/ratings.json in the repository, read by every visitor's page. Only someone with
+// write access to the repository can publish: either one click with a GitHub key kept
+// in that person's own browser (never in this code), or by downloading the file and
+// uploading it on GitHub. The file is public, so it holds wine codes, points, vintages
+// and short notes, never people's names.
+const PUBLISH = { owner: "mikemeddings", repo: "wine-finder", path: "data/ratings.json", branch: "main" };
+let familyRatings = {};
+const frOf = (id) => familyRatings[id] || {};
+const frScore = (id) => frOf(id).family?.points ?? frOf(id).claude?.points ?? null;
+
+function frHtml(w) {
+  const f = frOf(w.id), parts = [];
+  if (f.claude) parts.push(`<span class="rating rating-fr">FR <strong>${f.claude.points ?? "no reviews"}</strong> (Claude)` +
+    `${f.claude.vintage ? ` · ${esc(String(f.claude.vintage))}` : ""}${f.claude.note ? ` · ${esc(f.claude.note)}` : ""}</span>`);
+  if (f.family) parts.push(`<span class="rating rating-fr">FR <strong>${f.family.points}</strong> (family)` +
+    `${f.family.note ? ` · ${esc(f.family.note)}` : ""}</span>`);
+  return parts.join("");
+}
+
+// The published file merged with this computer's ratings: newer ratings win, and
+// nothing already published is removed.
+function mergedForPublish(base) {
+  const out = JSON.parse(JSON.stringify(base || {}));
+  const newer = (a, b) => !b || (a.date || "") >= (b.date || "");
+  for (const [id, r] of Object.entries(ratings)) {
+    const e = out[id] || {};
+    if (r.name) e.name = r.name;
+    if (r.claude && newer(r.claude, e.claude)) e.claude = { ...r.claude };
+    if (r.mine && newer(r.mine, e.family)) e.family = { ...r.mine };
+    if (e.claude || e.family) out[id] = e;
+  }
+  return out;
+}
+
+const unpublishedCount = () => Object.entries(ratings).filter(([id, r]) => {
+  const f = frOf(id);
+  return (r.claude && JSON.stringify(r.claude) !== JSON.stringify(f.claude)) ||
+    (r.mine && JSON.stringify(r.mine) !== JSON.stringify(f.family));
+}).length;
+
+const ratingsFileText = (map) => JSON.stringify({ updated: todayIso(), ratings: map }, null, 1) + "\n";
+const toBase64 = (text) => { let s = ""; for (const b of new TextEncoder().encode(text)) s += String.fromCharCode(b); return btoa(s); };
+const fromBase64 = (b64) => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\s/g, "")), (c) => c.charCodeAt(0)));
+
+function frStatus(msg) { $("fr-status").textContent = msg; }
+
+function renderFamilyBox() {
+  const n = unpublishedCount();
+  const hasKey = !!storeGet(STORE.ghKey, "");
+  $("fr-count").textContent = n
+    ? `${n} ${n === 1 ? "wine has" : "wines have"} ratings on this computer that aren't published yet.`
+    : "Everything rated on this computer is already published (or nothing has been rated yet).";
+  $("fr-publish").hidden = !hasKey;
+  $("fr-key-state").textContent = hasKey ? "A publishing key is saved on this computer." : "No publishing key on this computer.";
+  $("fr-key-forget").hidden = !hasKey;
+}
+
+async function ghFetch(method, body) {
+  const key = storeGet(STORE.ghKey, "");
+  const url = `https://api.github.com/repos/${PUBLISH.owner}/${PUBLISH.repo}/contents/${PUBLISH.path}` +
+    (method === "GET" ? `?ref=${PUBLISH.branch}&t=${Date.now()}` : "");
+  const r = await fetch(url, {
+    method,
+    headers: { Authorization: `Bearer ${key}`, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" },
+    body: body ? JSON.stringify(body) : undefined,
+    cache: "no-store",
+  });
+  if (!r.ok) {
+    const why = r.status === 401 ? "GitHub refused the key; it may have expired or been mistyped."
+      : r.status === 403 || r.status === 404 ? "The key doesn't have permission to write to the wine-finder repository."
+      : r.status === 409 || r.status === 422 ? "conflict"
+      : `GitHub answered with error ${r.status}.`;
+    throw new Error(why);
+  }
+  return r.json();
+}
+
+async function publishFamilyRatings() {
+  $("fr-publish").disabled = true;
+  frStatus("Publishing…");
+  try {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const cur = await ghFetch("GET");
+      const published = JSON.parse(fromBase64(cur.content)).ratings || {};
+      const merged = mergedForPublish(published);
+      try {
+        await ghFetch("PUT", { message: `Family ratings (${Object.keys(merged).length} wines)`,
+          content: toBase64(ratingsFileText(merged)), sha: cur.sha, branch: PUBLISH.branch });
+        familyRatings = merged;
+        frStatus(`Published ${Object.keys(merged).length} wines' ratings. Everyone will see them within a couple of minutes (after reloading the page).`);
+        renderFamilyBox();
+        return;
+      } catch (e) {
+        if (e.message !== "conflict" || attempt === 1) throw e; // someone published at the same moment: try once more
+      }
+    }
+  } catch (e) {
+    frStatus(`Not published. ${e.message === "conflict" ? "Please try again in a minute." : e.message}`);
+  } finally {
+    $("fr-publish").disabled = false;
+  }
+}
+
+function downloadFamilyFile() {
+  const blob = new Blob([ratingsFileText(mergedForPublish(familyRatings))], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "ratings.json";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  frStatus("ratings.json is in your Downloads folder. Upload it to the data folder of the wine-finder repository on GitHub (it replaces the old one).");
+}
+
+function saveGhKey() {
+  const key = $("fr-key").value.trim();
+  if (!/^(github_pat_|ghp_)[A-Za-z0-9_]{20,}$/.test(key)) { frStatus("That doesn't look like a GitHub key (they start with github_pat_)."); return; }
+  storeSet(STORE.ghKey, key);
+  $("fr-key").value = "";
+  frStatus("Key saved on this computer only.");
+  renderFamilyBox();
+}
+
+function forgetGhKey() {
+  try { localStorage.removeItem(STORE.ghKey); } catch { /* ignore */ }
+  frStatus("Key removed from this computer.");
+  renderFamilyBox();
+}
+
 // ---- Views -------------------------------------------------------------------
 
 function showView(name) {
@@ -1321,7 +1456,7 @@ function showView(name) {
   $("view-mywines").hidden = name !== "mywines";
   for (const b of document.querySelectorAll(".view-btn")) b.setAttribute("aria-pressed", String(b.dataset.view === name));
   if (name === "shortlist") renderShortlist();
-  else if (name === "mywines") renderMyWines();
+  else if (name === "mywines") { renderMyWines(); renderFamilyBox(); }
   else renderResults();
   window.scrollTo(0, 0);
 }
@@ -1465,6 +1600,10 @@ function wireEvents() {
     else if (t.dataset.rateClear) clearMyRating(t.dataset.rateClear);
     else if (t.id === "save-yes") confirmSavedRatings();
     else if (t.id === "save-no") { pendingSave = null; $("save-dialog").close(); }
+    else if (t.id === "fr-publish") publishFamilyRatings();
+    else if (t.id === "fr-download") downloadFamilyFile();
+    else if (t.id === "fr-key-save") saveGhKey();
+    else if (t.id === "fr-key-forget") forgetGhKey();
     else if (t.dataset.action === "mw-confirm") confirmImport();
     else if (t.dataset.action === "mw-cancel-import") { mwPending = null; $("mw-preview").hidden = true; $("mw-file").value = ""; }
     else if (t.dataset.action === "mw-owner") { mwView.owner = t.dataset.owner; mwView.shown = MW_PAGE; renderMyWines(); }
@@ -1626,11 +1765,13 @@ async function init() {
   wireEvents();
   saveShortlist();
   try {
-    const [wines, meta] = await Promise.all([
+    const [wines, meta, fr] = await Promise.all([
       fetch("data/wines.json", FRESH).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }),
       fetch("data/meta.json", FRESH).then((r) => (r.ok ? r.json() : { sources: {} })).catch(() => ({ sources: {} })),
+      fetch("data/ratings.json", FRESH).then((r) => (r.ok ? r.json() : {})).catch(() => ({})),
     ]);
     META = meta;
+    familyRatings = fr && typeof fr.ratings === "object" && fr.ratings ? fr.ratings : {};
     addWines(wines);
     LOADED.add("BC Liquor");
   } catch (err) {

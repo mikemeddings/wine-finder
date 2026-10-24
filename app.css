@@ -360,3 +360,9 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .rate-msg { color: var(--danger); font-weight: 600; min-height: 1.2em; margin: 0.2rem 0; }
 .save-list { padding-left: 1.4rem; max-height: 50vh; overflow-y: auto; }
 .save-list li { margin-bottom: 0.5rem; }
+
+/* Family ratings (FR), published for everyone */
+.rating-fr { background: var(--green-tint); border-color: var(--green); color: #154015; }
+.fr-box { border-color: var(--green); }
+.fr-count { font-weight: 600; }
+#fr-key { flex: 1 1 18rem; font: inherit; min-height: 3rem; border: 2px solid var(--line); border-radius: 0.5rem; padding: 0.3rem 0.6rem; background: #fff; }
