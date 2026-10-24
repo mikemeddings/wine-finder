@@ -337,6 +337,11 @@ const words = (s) => " " + fold(s).replace(/[^a-z0-9]+/g, " ").trim() + " ";
 
 function matches(w, skip, st = state) {
   if (!st.sources.has(w.source)) return false;
+  if (cellarOn(st)) { // a family cellar is ticked: its wines only, and the store boxes mean "that this store sells"
+    if (w.kind !== "cellar") return false;
+    const stores = storesTicked(st);
+    if (stores.length && !storeMatchesOf(w.id).some((s) => stores.includes(s.source))) return false;
+  }
   if (skip !== "country" && st.countries.size && !st.countries.has(w.country)) return false;
   if (skip !== "type" && st.types.size && !st.types.has(w.type)) return false;
   if (st.priceFrom != null && w.price != null && w.price < st.priceFrom) return false;
@@ -398,7 +403,8 @@ function renderSources() {
     renderCellarFilter();
     return;
   }
-  $("source-legend").textContent = "Sold by";
+  const cel = [...state.sources].filter((s) => !ALL_SOURCES.includes(s));
+  $("source-legend").textContent = cel.length ? `Sold by (of ${cel.join(", ")}'s wines)`.replace("'s cellar's", "'s") : "Sold by";
   $("source-list").innerHTML = have.map((s) => checkbox("source", s, state.sources.has(s), sourceBadge(s), null)).join("") +
     (have.includes("ZYN") ? `<label class="check check-strong"><input type="checkbox" id="top-only"${state.topOnly ? " checked" : ""}>
        Only ZYN's “90+ point wines under $35”</label>
@@ -483,7 +489,7 @@ function cellarCard(w) {
     <div class="wine-price wine-price-cellar">In the cellar</div>
     <p class="wine-facts">${typePill(w.type)} ${facts}</p>
     <p class="wine-detail"><span class="badge badge-cellar">${esc(w.source)}</span>${w.size_ml && w.size_ml !== 750 ? ` ${esc(sizeText(w))}` : ""}</p>
-    ${scores ? `<p class="wine-detail mw-scores">${scores}</p>` : ""}${ratingsHtml(w)}
+    ${scores ? `<p class="wine-detail mw-scores">${scores}</p>` : ""}${soldAtHtml(w)}${ratingsHtml(w)}
     <div class="wine-actions">
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "Add to Short List"}</button>
       <button type="button" class="btn btn-ew" data-action="mw-where" data-id="${esc(w.id)}">Where can I buy it?</button>
@@ -543,8 +549,11 @@ function renderResults() {
   if (state.topOnly) parts.push("ZYN's 90+ under $35 list");
   if (state.minAge) parts.push(`${state.minAge} years or older`);
   if (state.names) parts.push(`famous wines (${esc(state.pickLabel)})`);
-  if (state.sources.size > 1 || [...state.sources].some((s) => !ALL_SOURCES.includes(s)))
-    parts.unshift([...state.sources].map(sourceLabel).map(esc).join(", "));
+  if (cellarOn()) {
+    const stores = storesTicked();
+    parts.unshift([...state.sources].filter((s) => !ALL_SOURCES.includes(s)).map(esc).join(", ") +
+      (stores.length ? `, sold by ${stores.map(sourceLabel).map(esc).join(" or ")}` : " (the whole cellar)"));
+  } else if (state.sources.size > 1) parts.unshift([...state.sources].map(sourceLabel).map(esc).join(", "));
   $("active-filters").innerHTML = `<strong>Showing:</strong> ${parts.join(" · ")}`;
 
   if (!n) {
@@ -1634,10 +1643,11 @@ function cellarFindWines() {
     _w: words(w.name) }));
   return cellarFindCache;
 }
-const findPool = () => ([...state.sources].some((s) => !ALL_SOURCES.includes(s)) ? WINES.concat(cellarFindWines()) : WINES);
+const findPool = () => (cellarOn() ? cellarFindWines() : WINES);
 
 function cellarsChanged() {
   cellarFindCache = null;
+  storeMatchIndex = null;
   sharedWinesCache = null;
   cellarIndex = null;
   cellarMatchCache.clear();
@@ -1730,6 +1740,12 @@ const GRAPE_WORDS = new Set(("cabernet sauvignon merlot pinot noir grigio gris b
   "grenache garnacha mourvedre monastrell viognier semillon muscat moscato chenin gamay barbera touriga nacional " +
   "nero davola montepulciano verdejo albarino godello mencia corvina aglianico dolcetto torrontes tannat pinotage " +
   "marsanne roussanne cinsault carignan carinena mataro trebbiano vermentino gruner veltliner").split(" "));
+// Words for a style of the same producer's wine: both names must agree on these
+// (Zenato Amarone is not Zenato Valpolicella; a Riserva is not the regular bottling).
+const STYLE_WORDS = { amarone: "amarone", ripasso: "ripasso", recioto: "recioto", riserva: "reserve", reserva: "reserve",
+  reserve: "reserve", gran: "gran", blanc: "blanc", bianco: "blanc", blanco: "blanc", rose: "rose", rosato: "rose",
+  rosado: "rose", brut: "brut", spatlese: "spatlese", auslese: "auslese", kabinett: "kabinett", icewine: "icewine" };
+const styleOf = (s) => [...new Set(fold(s).split(/[^a-z0-9]+/).map((t) => STYLE_WORDS[t]).filter(Boolean))].sort().join(" ");
 const nameTokens = (s) => fold(s).split(/[^a-z0-9]+/).filter((t) => t.length >= 3 && !/^\d+$/.test(t) && !MATCH_STOP.has(t));
 
 function storeTokens(name) {
@@ -1749,7 +1765,7 @@ function buildCellarIndex() {
     // Words that name this particular wine (Oculus, Tignanello), beyond producer, grape and place.
     const prodT = new Set(nameTokens(w.producer || ""));
     const specific = [...nameT].filter((t) => !prodT.has(t) && !generic.has(t) && !GRAPE_WORDS.has(t));
-    const e = { w, nameT, all, generic, specific };
+    const e = { w, nameT, all, generic, specific, style: styleOf(w.name) };
     for (const t of nameT) { if (!idx.has(t)) idx.set(t, []); idx.get(t).push(e); }
   }
   return idx;
@@ -1761,7 +1777,7 @@ function cellarMatches(w) {
   if (cellarMatchCache.has(w.id)) return cellarMatchCache.get(w.id);
   cellarIndex ??= buildCellarIndex();
   const S = storeTokens(w.name);
-  const bySource = new Map();
+  const bySource = new Map(), ids = [];
   if (S.length >= 2 && cellarIndex.size) {
     const seen = new Set();
     for (const t of S) for (const e of cellarIndex.get(t) || []) {
@@ -1770,13 +1786,52 @@ function cellarMatches(w) {
       if (!S.every((x) => e.all.has(x)) || S.filter((x) => e.nameT.has(x)).length < 2) continue;
       if (!S.some((x) => e.nameT.has(x) && !e.generic.has(x) && !GRAPE_WORDS.has(x))) continue;
       if (e.specific.length && !S.some((x) => e.specific.includes(x))) continue; // same producer, different wine
+      if (w.type && e.w.type && w.type !== "Other" && e.w.type !== "Other" && w.type !== e.w.type) continue; // their rosé isn't Jon's red
+      if (styleOf(w.name) !== e.style) continue; // Amarone vs Valpolicella, Riserva vs regular
+      ids.push(e.w.id);
       if (!bySource.has(e.w.source)) bySource.set(e.w.source, new Set());
       if (e.w.vintage) bySource.get(e.w.source).add(e.w.vintage);
     }
   }
   const res = [...bySource].map(([source, v]) => ({ source, vintages: [...v].sort() }));
+  res.ids = ids;
   cellarMatchCache.set(w.id, res);
   return res;
+}
+
+// The other way round: cellar wine -> the store listings that look like it.
+let storeMatchIndex = null, storeMatchKey = "";
+function storeMatchesOf(cellarId) {
+  const key = `${WINES.length}|${[...LOADED].join()}`;
+  if (!storeMatchIndex || storeMatchKey !== key) {
+    storeMatchIndex = new Map();
+    storeMatchKey = key;
+    for (const w of WINES) for (const id of cellarMatches(w).ids || []) {
+      if (!storeMatchIndex.has(id)) storeMatchIndex.set(id, []);
+      storeMatchIndex.get(id).push(w);
+    }
+  }
+  return storeMatchIndex.get(cellarId) || [];
+}
+
+const cellarOn = (st = state) => [...st.sources].some((s) => !ALL_SOURCES.includes(s));
+const storesTicked = (st = state) => [...st.sources].filter((s) => ALL_SOURCES.includes(s));
+
+// "BC Liquor - LDB $89.99 (2019)" for each store selling this cellar wine (the cheapest listing per store).
+function soldAtHtml(w) {
+  const ticked = storesTicked();
+  const best = new Map();
+  for (const s of storeMatchesOf(w.id)) {
+    if (ticked.length && !ticked.includes(s.source)) continue;
+    const cur = best.get(s.source), same = (x) => !w.size_ml || x.size_ml === w.size_ml; // same bottle size first
+    if (!cur || same(s) > same(cur) || (same(s) === same(cur) && s.price < cur.price)) best.set(s.source, s);
+  }
+  if (!best.size) return "";
+  return `<p class="wine-detail sold-at"><strong>Sold at:</strong> ${[...best.values()].map((s) =>
+    (s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">` : "<span>") +
+    `${esc(sourceLabel(s.source))} ${money(s.price)}${s.vintage ? ` (${esc(String(s.vintage))})` : ""}` +
+    (w.size_ml && s.size_ml && s.size_ml !== w.size_ml ? ` ${esc(sizeText(s))}` : "") +
+    (s.url ? "</a>" : "</span>")).join(" · ")}</p>`;
 }
 
 const cellarBadges = (w) => {
@@ -2106,12 +2161,10 @@ function wireEvents() {
     }
     if (group) {
       const set = { source: state.sources, country: state.countries, type: state.types, sweet: state.sweet }[group];
-      if (group === "source" && t.checked && [...set].some((s) => !ALL_SOURCES.includes(s))) { // leaving a cellar: back to the stores
-        for (const s of [...set]) if (!ALL_SOURCES.includes(s)) set.delete(s);
-        set.add(t.value);
-        state.bottleOnly = true;
-        if (state.sort === "cellar-score") state.sort = "price-asc";
+      if (group === "source" && cellarOn()) { // narrowing the cellar to wines this store sells
+        if (t.checked) set.add(t.value); else set.delete(t.value);
         state.shown = PAGE_SIZE;
+        $("result-count").textContent = `Loading ${sourceLabel(t.value)}…`;
         loadSource(t.value).then(() => { renderFooter(); renderAll(); });
         return;
       }
