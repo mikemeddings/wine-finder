@@ -342,6 +342,42 @@
     "note": "Dunnuck 96+ drink now decant",
     "date": "2026-10-24"
    }
+  },
+  "cellar-c1-158": {
+   "name": "Alain Voge Cornas Les Vieilles Fontaines 2009",
+   "claude": {
+    "points": 95,
+    "vintage": 2009,
+    "note": "Two 97s from critics community lower",
+    "date": "2026-10-24"
+   }
+  },
+  "cellar-c1-157": {
+   "name": "Alain Voge Cornas Les Vieilles Fontaines 2012",
+   "claude": {
+    "points": 94,
+    "vintage": 2012,
+    "note": "Community loves it critic score not found",
+    "date": "2026-10-24"
+   }
+  },
+  "cellar-c1-7": {
+   "name": "Château de Beaucastel Châteauneuf-du-Pape 2019",
+   "claude": {
+    "points": 94,
+    "vintage": 2019,
+    "note": "Consistent 95 to 97 critic scores",
+    "date": "2026-10-24"
+   }
+  },
+  "cellar-c1-138": {
+   "name": "Château de Saint Cosme Gigondas Le Claux 2015",
+   "claude": {
+    "points": 93,
+    "vintage": 2015,
+    "note": "Spectator 97 Parker score unclear",
+    "date": "2026-10-24"
+   }
   }
  }
 }
