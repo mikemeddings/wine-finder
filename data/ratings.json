@@ -153,6 +153,78 @@
     "note": "Polished Douro estate red best of list",
     "date": "2026-10-24"
    }
+  },
+  "bcl-25262": {
+   "name": "Setubal - Jose Maria Da Fonseca Periquita",
+   "claude": {
+    "points": 87,
+    "vintage": "NV",
+    "note": "Classic Castelao reliable value for decades",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-14977": {
+   "name": "Dao - Grao Vasco",
+   "claude": {
+    "points": 85,
+    "vintage": 2022,
+    "note": "Light soft unoaked Dao for everyday",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-273662": {
+   "name": "Tejo Reserva - Fiuza Escriba",
+   "claude": {
+    "points": 89,
+    "vintage": 2022,
+    "note": "Best value here give it air",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-736165": {
+   "name": "Lisboa - Casa Santos Lima Lab",
+   "claude": {
+    "points": 86,
+    "vintage": 2023,
+    "note": "Soft juicy crowd pleaser drink young",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-114322": {
+   "name": "Douro - Porca De Murca",
+   "claude": {
+    "points": 86,
+    "vintage": 2023,
+    "note": "Authentic rustic Douro for grilled meat",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-167370": {
+   "name": "Alentejano - Segredos De Sao Miguel",
+   "claude": {
+    "points": 84,
+    "vintage": "NV",
+    "note": "Smooth easy Alentejo thin critic coverage",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-966986": {
+   "name": "Douro - Vicente Faria Animus",
+   "claude": {
+    "points": 88,
+    "vintage": 2021,
+    "note": "Solid Douro blend decant an hour",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-498978": {
+   "name": "Lisboa - Mula Velha",
+   "claude": {
+    "points": 85,
+    "vintage": 2020,
+    "note": "Juicy everyday Lisboa red nothing more",
+    "date": "2026-10-24"
+   }
   }
  }
 }
