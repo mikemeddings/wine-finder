@@ -340,3 +340,5 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .typed-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 .typed-row input { flex: 1 1 18rem; font: inherit; min-height: 3rem; border: 2px solid var(--line); border-radius: 0.5rem; padding: 0.3rem 0.6rem; background: #fff; }
 #sl-add-hits { margin-top: 0.6rem; }
+.btn-vivino { background: #9b1b30; border-color: #9b1b30; color: #fff; }
+.btn-vivino:hover { background: #7d1626; filter: none; }

@@ -138,6 +138,11 @@ function cellarTrackerUrl(w) {
 function wineEnthusiastUrl(w) {
   return "https://www.wineenthusiast.com/?s=" + encodeURIComponent(searchName(w)) + "&search_type=ratings";
 }
+// Vivino's own search (it forwards to its "explore" page). A link only: Vivino's terms
+// forbid automated copying of its ratings, so we never read them into the page.
+function vivinoUrl(w) {
+  return "https://www.vivino.com/search/wines?q=" + encodeURIComponent(searchName(w));
+}
 
 // ---- Other stores ("Find it elsewhere") ------------------------------------------
 // Search links only — nothing is fetched from these sites. {q} is replaced by the
@@ -460,6 +465,7 @@ function wineCard(w) {
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "Add to Short List"}</button>
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
       <a class="btn ext btn-we" href="${wineEnthusiastUrl(w)}" target="_blank" rel="noopener">Wine Enthusiast</a>
+      <a class="btn ext btn-vivino" href="${vivinoUrl(w)}" target="_blank" rel="noopener">Vivino</a>
       ${retailer}
       <button type="button" class="btn btn-ew" data-ew="${esc(w.id)}" aria-expanded="false">Find it elsewhere</button>
     </div>
