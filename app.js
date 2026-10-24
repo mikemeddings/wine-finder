@@ -173,6 +173,7 @@ const STORE_GROUPS = [
 ];
 
 const storeUrl = (url, q) => url.replace("{q}", encodeURIComponent(q.trim()));
+const BC_SEARCH = "https://www.bcliquorstores.com/product-catalogue?search={q}";
 
 // Store searches work best with a few words: the producer, without the vintage.
 function storeSearchWords(w) {
@@ -1827,11 +1828,19 @@ function soldAtHtml(w) {
     if (!cur || same(s) > same(cur) || (same(s) === same(cur) && s.price < cur.price)) best.set(s.source, s);
   }
   if (!best.size) return "";
-  return `<p class="wine-detail sold-at"><strong>Sold at:</strong> ${[...best.values()].map((s) =>
-    (s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">` : "<span>") +
-    `${esc(sourceLabel(s.source))} ${money(s.price)}${s.vintage ? ` (${esc(String(s.vintage))})` : ""}` +
-    (w.size_ml && s.size_ml && s.size_ml !== w.size_ml ? ` ${esc(sizeText(s))}` : "") +
-    (s.url ? "</a>" : "</span>")).join(" · ")}</p>`;
+  // BC's catalogue has no product pages, so its price opens a BC search for that exact listing.
+  const linkOf = (s) => s.url || (s.source === "BC Liquor" ? storeUrl(BC_SEARCH, s.name.replace(/ - /g, " ")) : null);
+  const sold = [...best.values()].map((s) => {
+    const url = linkOf(s);
+    return (url ? `<a href="${esc(url)}" target="_blank" rel="noopener">` : "<span>") +
+      `${esc(sourceLabel(s.source))} ${money(s.price)}${s.vintage ? ` (${esc(String(s.vintage))})` : ""}` +
+      (w.size_ml && s.size_ml && s.size_ml !== w.size_ml ? ` ${esc(sizeText(s))}` : "") +
+      (url ? "</a>" : "</span>");
+  });
+  // A ticked store that doesn't carry it says so, so it's clear the store was checked.
+  const notSold = ALL_SOURCES.filter((src) => ticked.includes(src) && !best.has(src))
+    .map((src) => `<span class="not-sold">${esc(sourceLabel(src))}: not sold</span>`);
+  return `<p class="wine-detail sold-at"><strong>Sold at:</strong> ${[...sold, ...notSold].join(" · ")}</p>`;
 }
 
 const cellarBadges = (w) => {
