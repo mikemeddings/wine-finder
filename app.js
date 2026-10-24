@@ -1268,7 +1268,7 @@ function clearMyRating(id) {
 // until the person presses "Save these ratings".
 function parseSaveHash(hash) {
   const m = /^#save=([\s\S]*)$/.exec(hash || "");
-  if (!m) return null;
+  if (!m) return parseShareHash(hash);
   let raw = m[1].replace(/\+/g, " ");
   try { raw = decodeURIComponent(raw); } catch { /* keep as is */ }
   const items = [];
@@ -1288,6 +1288,34 @@ function parseSaveHash(hash) {
   return items;
 }
 
+// A link emailed by family (see emailRatings): Claude's and their own ratings, plus the name.
+function parseShareHash(hash) {
+  const m = /^#share=([\s\S]*)$/.exec(hash || "");
+  if (!m) return null;
+  let raw = m[1].replace(/\+/g, " ");
+  try { raw = decodeURIComponent(raw); } catch { /* keep as is */ }
+  const score = (s) => { const n = parseInt(s, 10); return /^\d{2,3}$/.test(s) && n >= 50 && n <= 100 ? n : null; };
+  const items = [];
+  for (const part of raw.split(";")) {
+    const [code = "", cp = "", vin = "", cnote = "", mp = "", mnote = "", name = ""] = part.split("~").map((s) => s.trim());
+    if (!/^(bcl|bsw|zyn|cellar|manual|typed)-[\w.-]{1,80}$/.test(code)) continue;
+    const claudeOk = cp === "" || score(cp) !== null, mine = score(mp);
+    if (!claudeOk) continue;
+    const hasClaude = cp !== "" || cnote !== "" || vin !== "";
+    if (!hasClaude && mine === null) continue;
+    items.push({
+      id: code, shared: true,
+      points: score(cp),
+      claude: hasClaude,
+      vintage: /^(19|20)\d\d$/.test(vin) ? +vin : /^nv$/i.test(vin) ? "NV" : null,
+      note: cnote.slice(0, 80) || null,
+      mine: mine === null ? null : { points: mine, note: mnote.slice(0, 80) || null },
+      name: name.slice(0, 60) || null,
+    });
+  }
+  return items;
+}
+
 let pendingSave = null;
 
 function offerSavedRatings() {
@@ -1295,28 +1323,96 @@ function offerSavedRatings() {
   if (!items) return;
   history.replaceState(null, "", location.pathname + location.search); // don't offer it again on reload
   pendingSave = items;
-  const nameOf = (id) => findWine(id)?.name || ratingOf(id).name;
-  $("save-q").textContent = items.length
-    ? `Save Claude's ratings for ${items.length} ${items.length === 1 ? "wine" : "wines"}?`
-    : "This link didn't contain any ratings that could be read.";
-  $("save-list").innerHTML = items.map((it) => `<li><strong>${esc(nameOf(it.id) || `Wine ${it.id} (not found on this computer)`)}</strong><br>
-      Claude's rating: <strong>${it.points ?? "no reviews found"}</strong>${it.vintage ? ` (${esc(String(it.vintage))})` : ""}${it.note ? ` · ${esc(it.note)}` : ""}</li>`).join("");
+  const shared = items.some((it) => it.shared);
+  const nameOf = (it) => findWine(it.id)?.name || ratingOf(it.id).name || it.name;
+  const n = `${items.length} ${items.length === 1 ? "wine" : "wines"}`;
+  $("save-q").textContent = !items.length ? "This link didn't contain any ratings that could be read."
+    : shared ? `Ratings emailed from family for ${n}. Save them?` : `Save Claude's ratings for ${n}?`;
+  $("save-list").innerHTML = items.map((it) => `<li><strong>${esc(nameOf(it) || `Wine ${it.id} (not found on this computer)`)}</strong>` +
+    (it.claude === false ? "" : `<br>Claude's rating: <strong>${it.points ?? "no reviews found"}</strong>${it.vintage ? ` (${esc(String(it.vintage))})` : ""}${it.note ? ` · ${esc(it.note)}` : ""}`) +
+    (it.mine ? `<br>Family member's own rating: <strong>${it.mine.points}</strong>${it.mine.note ? ` · ${esc(it.mine.note)}` : ""}` : "") +
+    `</li>`).join("");
+  const hasKey = !!storeGet(STORE.ghKey, "");
   $("save-help").hidden = items.length > 0;
   $("save-yes").hidden = items.length === 0;
+  $("save-yes").textContent = shared && hasKey ? "Save and publish for everyone" : "Save these ratings";
+  $("save-email").hidden = items.length === 0 || shared;
   $("save-dialog").showModal?.();
 }
 
-function confirmSavedRatings() {
-  for (const it of pendingSave || []) {
-    const name = findWine(it.id)?.name || ratingOf(it.id).name || it.id;
-    ratings[it.id] = { ...ratingOf(it.id), name,
-      claude: { points: it.points, vintage: it.vintage, note: it.note, date: todayIso() } };
+function confirmSavedRatings(then) {
+  const items = pendingSave || [];
+  for (const it of items) {
+    const name = findWine(it.id)?.name || ratingOf(it.id).name || it.name || it.id;
+    const r = { ...ratingOf(it.id), name };
+    if (it.claude !== false) r.claude = { points: it.points, vintage: it.vintage, note: it.note, date: todayIso() };
+    if (it.mine) r.mine = { ...it.mine, date: todayIso() };
+    ratings[it.id] = r;
   }
   saveRatings();
   pendingSave = null;
   $("save-dialog").close();
-  refreshRatedViews();
+  if (then === "email") { showView("mywines"); scrollToFamilyBox(); emailRatings(); }
+  else if (items.some((it) => it.shared)) {
+    // Ratings from family: take the website keeper straight to publishing them.
+    showView("mywines");
+    scrollToFamilyBox();
+    if (storeGet(STORE.ghKey, "")) publishFamilyRatings();
+    else frStatus("Saved. To share them with everyone, publish them here (a publishing key is needed), or use Download ratings.json.");
+  } else refreshRatedViews();
 }
+
+function scrollToFamilyBox() { document.querySelector(".fr-box")?.scrollIntoView({ block: "start" }); }
+
+// ---- Emailing ratings to the family ----------------------------------------------
+// Anyone can email the ratings on their computer (Claude's and their own) as one link:
+// <page>#share=CODE~CLAUDE~VINTAGE~CLAUDENOTE~MINE~MYNOTE~NAME;...
+// The website keeper clicks it, saves, and publishes them as Family ratings.
+const shareClean = (s, max) => String(s ?? "").replace(/[~;\r\n]/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
+
+function unpublishedIds() {
+  return Object.keys(ratings).filter((id) => {
+    const r = ratings[id], f = frOf(id);
+    return (r.claude && JSON.stringify(r.claude) !== JSON.stringify(f.claude)) ||
+      (r.mine && JSON.stringify(r.mine) !== JSON.stringify(f.family));
+  });
+}
+
+function shareLink(ids) {
+  const entries = ids.map((id) => {
+    const r = ratingOf(id), c = r.claude || {}, m = r.mine || {};
+    const name = findWine(id)?.name || r.name || "";
+    return [id, c.points ?? "", c.vintage ?? "", shareClean(c.note, 80), m.points ?? "", shareClean(m.note, 80),
+      shareClean(name, 60)].join("~");
+  });
+  return location.href.split("#")[0].split("?")[0] + "#share=" + encodeURIComponent(entries.join(";")).replace(/%20/g, "+");
+}
+
+async function emailRatings() {
+  const ids = unpublishedIds();
+  if (!ids.length) { frStatus("There are no new ratings on this computer to send."); return; }
+  const link = shareLink(ids);
+  const lines = ids.map((id) => {
+    const r = ratingOf(id), bits = [];
+    if (r.claude) bits.push(`Claude ${r.claude.points ?? "no reviews"}${r.claude.vintage ? ` (${r.claude.vintage})` : ""}`);
+    if (r.mine) bits.push(`mine ${r.mine.points}`);
+    return `- ${findWine(id)?.name || r.name || id}: ${bits.join(", ")}`;
+  });
+  const subject = `Wine ratings for the family Wine Finder (${ids.length} ${ids.length === 1 ? "wine" : "wines"})`;
+  const head = "Here are my wine ratings from Basil's Wine Finder.\n\n";
+  const tail = `\n\nClick this link to add them to the Wine Finder:\n${link}\n`;
+  let body = head + lines.join("\n") + tail;
+  if (body.length > 1700) body = head.trim() + tail; // long lists: the link alone carries everything
+  try { await navigator.clipboard.writeText(`${subject}\n\n${body}`); } catch { /* not allowed: the email is enough */ }
+  if (link.length > 1900) {
+    frStatus(`That's a lot of ratings for one email, so the message has been copied instead. Start a new email, paste it in (Ctrl+V) and send it.`);
+    return;
+  }
+  location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  frStatus("Your email program should open with the ratings in a new message. Choose who to send it to and press Send. " +
+    "(If no email opened, the message is also copied: start a new email, paste it in with Ctrl+V and send it.)");
+}
+
 
 // ---- Family ratings (FR): ratings published to the website for everyone -------------
 // data/ratings.json in the repository, read by every visitor's page. Only someone with
@@ -1353,11 +1449,7 @@ function mergedForPublish(base) {
   return out;
 }
 
-const unpublishedCount = () => Object.entries(ratings).filter(([id, r]) => {
-  const f = frOf(id);
-  return (r.claude && JSON.stringify(r.claude) !== JSON.stringify(f.claude)) ||
-    (r.mine && JSON.stringify(r.mine) !== JSON.stringify(f.family));
-}).length;
+const unpublishedCount = () => unpublishedIds().length;
 
 const ratingsFileText = (map) => JSON.stringify({ updated: todayIso(), ratings: map }, null, 1) + "\n";
 const toBase64 = (text) => { let s = ""; for (const b of new TextEncoder().encode(text)) s += String.fromCharCode(b); return btoa(s); };
@@ -1369,9 +1461,10 @@ function renderFamilyBox() {
   const n = unpublishedCount();
   const hasKey = !!storeGet(STORE.ghKey, "");
   $("fr-count").textContent = n
-    ? `${n} ${n === 1 ? "wine has" : "wines have"} ratings on this computer that aren't published yet.`
+    ? `${n} ${n === 1 ? "wine has" : "wines have"} ratings on this computer that aren't shared with the family yet.`
     : "Everything rated on this computer is already published (or nothing has been rated yet).";
   $("fr-publish").hidden = !hasKey;
+  $("fr-email").disabled = !n;
   $("fr-key-state").textContent = hasKey ? "A publishing key is saved on this computer." : "No publishing key on this computer.";
   $("fr-key-forget").hidden = !hasKey;
 }
@@ -1599,6 +1692,8 @@ function wireEvents() {
     else if (t.dataset.rateSave) saveMyRating(t.dataset.rateSave, t);
     else if (t.dataset.rateClear) clearMyRating(t.dataset.rateClear);
     else if (t.id === "save-yes") confirmSavedRatings();
+    else if (t.id === "save-email") confirmSavedRatings("email");
+    else if (t.id === "fr-email") emailRatings();
     else if (t.id === "save-no") { pendingSave = null; $("save-dialog").close(); }
     else if (t.id === "fr-publish") publishFamilyRatings();
     else if (t.id === "fr-download") downloadFamilyFile();
