@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-23.17">
+<link rel="stylesheet" href="app.css?v=2026-10-24.1">
 </head>
 <body>
 <header class="top">
@@ -224,7 +224,18 @@
   </div>
   <p id="sl-status" class="status" role="status"></p>
   <ol id="sl-list" class="sl-list"></ol>
-  <p id="sl-empty" class="empty" hidden>Your Short List for Claude is empty. Go to <button type="button" class="linklike" data-view="find">Find wines</button> and press “Add to Short List” on any wine.</p>
+  <p id="sl-empty" class="empty" hidden>Your Short List for Claude is empty. Go to <button type="button" class="linklike" data-view="find">Find wines</button> and press “Add to Short List” on any wine, or add one by name below.</p>
+
+  <section class="typed-box" aria-labelledby="sl-add-h">
+    <h3 id="sl-add-h">Add a wine by name</h3>
+    <p class="hint">For a wine that isn't in our store lists, such as one from the LCBO or a friend's recommendation.</p>
+    <label for="sl-add-q" class="mw-label">Wine name</label>
+    <div class="typed-row">
+      <input type="text" id="sl-add-q" autocomplete="off" spellcheck="false" placeholder="for example Zenato Alanera Rosso Veneto">
+      <button type="button" class="btn btn-typed" id="sl-add-btn">＋ Add to the Short List</button>
+    </div>
+    <div id="sl-add-hits" aria-live="polite"></div>
+  </section>
 </main>
 
 <footer class="foot">
@@ -245,6 +256,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-23.17"></script>
+<script src="app.js?v=2026-10-24.1"></script>
 </body>
 </html>

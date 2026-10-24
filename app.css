@@ -329,3 +329,14 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .mw-list { list-style: none; padding: 0; display: grid; gap: 0.8rem; }
 .mw-row { background: #fff; border: 2px solid #d8ccbb; border-left: 0.6rem solid var(--plum); border-radius: 0.75rem; padding: 0.8rem 1rem; }
 .mw-scores { color: var(--plum); }
+
+/* Wines added by name (not on our store lists) */
+.btn-typed { background: var(--plum); border-color: var(--plum); color: #fff; }
+.btn-typed:hover { background: #46205a; filter: none; }
+.btn-typed[aria-pressed="true"] { background: var(--plum-tint); color: var(--plum); }
+.typed-add { margin-top: 0.8rem; padding-top: 0.6rem; border-top: 2px dashed #b9d9d5; }
+.typed-box { margin-top: 1.5rem; background: var(--plum-tint); border: 2px solid var(--plum); border-radius: 0.75rem; padding: 0.9rem 1rem; }
+.typed-box h3 { margin: 0 0 0.3rem; color: var(--plum); font-size: 1.3rem; }
+.typed-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.typed-row input { flex: 1 1 18rem; font: inherit; min-height: 3rem; border: 2px solid var(--line); border-radius: 0.5rem; padding: 0.3rem 0.6rem; background: #fff; }
+#sl-add-hits { margin-top: 0.6rem; }

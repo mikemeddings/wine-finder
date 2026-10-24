@@ -222,16 +222,46 @@ const renderListHits = debounce((box) => {
   }
   const hits = listHits(q);
   const head = `<h3 class="ew-sub">On our store lists <span class="ew-note">(${esc(loadedSourceLabels())})</span></h3>`;
+  const byName = typedButton(q, hits.length ? "Or add it by name, as typed" : "Not on our lists? You can still ask Claude about it:");
   if (!hits.length) {
-    out.innerHTML = head + wait + `<p><strong>Not found on our lists.</strong> Try fewer words, or the store buttons below.</p>`;
+    out.innerHTML = head + wait + `<p><strong>Not found on our lists.</strong> Try fewer words, or the store buttons below.</p>` + byName;
     return;
   }
   const more = hits.length > HIT_LIMIT;
   out.innerHTML = head + wait +
     `<p>${hits.length === 1 ? "1 wine found" : `${hits.length} wines found`}${more ? `; here are the ${HIT_LIMIT} cheapest` : ""}.</p>
     <ul class="ew-hit-list">${hits.slice(0, HIT_LIMIT).map(hitRow).join("")}</ul>` +
-    (more ? `<button type="button" class="btn btn-ew" data-action="hits-in-list">Show all ${hits.length} in the main list</button>` : "");
+    (more ? `<button type="button" class="btn btn-ew" data-action="hits-in-list">Show all ${hits.length} in the main list</button>` : "") +
+    byName;
 }, 250);
+
+// ---- Wines added by name (not on any of our store lists) ----------------------------
+// Any wine can go on the Short List by its name, e.g. one found at the LCBO or
+// recommended by a friend; Claude is told it isn't on our lists.
+
+const typedId = (name) => "typed-" + fold(name).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const isOnList = (id) => shortlist.some((s) => s.id === id);
+
+function typedButton(name, lead) {
+  const on = isOnList(typedId(name));
+  return `<div class="typed-add"><p class="hint">${esc(lead)}</p>
+    <button type="button" class="btn btn-typed" data-typed="${esc(name)}" aria-pressed="${on}">${on
+      ? `✓ “${esc(name)}” is on the Short List`
+      : `＋ Add “${esc(name)}” to the Short List for Claude`}</button></div>`;
+}
+
+function addTypedWine(name) {
+  name = name.replace(/\s+/g, " ").trim();
+  if (!name) return false;
+  const id = typedId(name);
+  if (isOnList(id)) return false;
+  closeClaudeSteps();
+  const m = name.match(/\b(19\d\d|20[0-3]\d)\b/);
+  shortlist.push({ id, kind: "typed", source: "Added by name", name, vintage: m ? +m[1] : null,
+    country: "Country not stated", type: "Other", size_ml: null, pack: 1, price: null });
+  saveShortlist();
+  return true;
+}
 
 function showHitsInList() {
   const q = $("ew-top").querySelector(".ew-q").value.trim();
@@ -499,7 +529,10 @@ function refresh() {
 // "Portugal 7, Chile 5" — so wines left over from an earlier search are obvious.
 function shortlistCountries() {
   const n = new Map();
-  for (const w of shortlist) n.set(w.country, (n.get(w.country) || 0) + 1);
+  for (const w of shortlist) {
+    const c = w.kind === "typed" ? "added by name" : w.country;
+    n.set(c, (n.get(c) || 0) + 1);
+  }
   return [...n].sort((a, b) => b[1] - a[1]).map(([c, k]) => `${c} ${k}`).join(", ");
 }
 
@@ -522,13 +555,14 @@ function toggleShortlist(id) {
 
 // "$25.99 at BC Liquor - LDB", or "from Alex's cellar" for a wine with no shop price.
 function priceText(w) {
+  if (w.kind === "typed") return "added by name, not on my store lists";
   if (w.kind === "cellar" || w.price == null) return `from ${sourceLabel(w.source)}`;
   return `${money(w.price)} at ${sourceLabel(w.source)}`;
 }
 
 function wineLine(w, i) {
   const bits = [w.country !== "Country not stated" ? w.country : null, w.type !== "Other" ? w.type : null,
-    sizeText(w), priceText(w)];
+    w.size_ml ? sizeText(w) : null, priceText(w)];
   let line = `${i + 1}. ${w.name} — ${bits.filter(Boolean).join(", ")}`;
   if (w.vintage) line += `, vintage ${w.vintage}`;
   if (w.retailer_scores) line += `; ${w.retailer_scores}`;
@@ -549,8 +583,33 @@ function claudePrompt(mode = claudeMode) {
   const about = String(storeGet(STORE.aboutMe, "") || "").trim();
   return (mode === "rank" ? RANK_TEMPLATE : PROMPT_TEMPLATE)
     .replace("{ABOUT_ME}", about)
-    .replace("{WINES}", shortlist.map(wineLine).join("\n"))
+    .replace("{WINES}", shortlist.map(wineLine).join("\n") + (shortlist.some((w) => w.kind === "typed")
+      ? "\n\nThe wines marked “added by name” aren't on my store lists (BC Liquor, BSW, ZYN). If you know where they're sold in BC, Alberta or Ontario, please mention it."
+      : ""))
     .replace(/[ \t]+\n/g, "\n");
+}
+
+// Short List page: add a wine by name; as you type, say whether it's on our lists.
+const renderSlAddHits = debounce(() => {
+  const q = $("sl-add-q").value.trim();
+  const out = $("sl-add-hits");
+  if (q.length < 3) { out.innerHTML = ""; return; }
+  if (!allLoaded()) { loadAllSources().then(renderSlAddHits); out.innerHTML = `<p class="hint">Checking the store lists…</p>`; return; }
+  const hits = listHits(q);
+  out.innerHTML = hits.length
+    ? `<p><strong>Found on our lists (${hits.length}).</strong> You can add one of these, with its price, instead:</p>
+       <ul class="ew-hit-list">${hits.slice(0, 5).map(hitRow).join("")}</ul>
+       ${hits.length > 5 ? `<p class="hint">Showing the 5 cheapest. Try more words to narrow it down.</p>` : ""}`
+    : `<p><strong>Not on the BC Liquor, BSW or ZYN lists.</strong> It will be added by name, and Claude will be told so.</p>`;
+}, 300);
+
+function addFromShortlistBox() {
+  const q = $("sl-add-q").value.trim();
+  if (!q) { $("sl-add-q").focus(); return; }
+  setStatus(addTypedWine(q) ? `Added “${q}”.` : `“${q}” is already on the list.`);
+  $("sl-add-q").value = "";
+  $("sl-add-hits").innerHTML = "";
+  renderShortlist();
 }
 
 function renderShortlist() {
@@ -565,7 +624,7 @@ function renderShortlist() {
   $("sl-warning").textContent = `You have ${shortlist.length} wines. Claude works best with up to about 10 at a time — you can still ask about all of them.`;
   $("sl-list").innerHTML = shortlist.map((w) => `<li><div class="sl-row">
       <div><div class="sl-name">${esc(w.name)}</div>
-      <div>${esc([w.country, w.type !== "Other" ? w.type : null, w.vintage, sizeText(w)].filter(Boolean).join(" · "))}</div>
+      <div>${esc([w.country !== "Country not stated" ? w.country : null, w.type !== "Other" ? w.type : null, w.vintage, w.size_ml ? sizeText(w) : null].filter(Boolean).join(" · "))}</div>
       <div>${w.kind === "cellar" || w.price == null ? esc(priceText(w)) : `<strong>${money(w.price)}</strong> at ${esc(sourceLabel(w.source))}`}</div></div>
       <div class="sl-buttons">
         <button type="button" class="btn btn-ew" data-ew="${esc(w.id)}" aria-expanded="false">Find it elsewhere</button>
@@ -580,7 +639,7 @@ function renderShortlist() {
 function renderPrintArea() {
   $("print-area").innerHTML = shortlist.length
     ? `<h1>Wine short list</h1><ol>${shortlist.map((w) => `<li><span class="pa-name">${esc(w.name)}</span><br>
-        ${esc([w.country, w.type !== "Other" ? w.type : null, w.vintage, sizeText(w)].filter(Boolean).join(" · "))} — ${esc(priceText(w))}</li>`).join("")}</ol>
+        ${esc([w.country !== "Country not stated" ? w.country : null, w.type !== "Other" ? w.type : null, w.vintage, w.size_ml ? sizeText(w) : null].filter(Boolean).join(" · "))} — ${esc(priceText(w))}</li>`).join("")}</ol>
        <p class="pa-foot">Prices exclude tax; availability not guaranteed. Printed ${new Date().toLocaleDateString()}.</p>`
     : "<h1>Wine short list</h1><p>The list is empty.</p>";
 }
@@ -1209,6 +1268,7 @@ function wireEvents() {
         b.textContent = on ? "✓ On Short List (tap to remove)" : "Add to Short List";
         b.closest(".wine")?.classList.toggle("on-list", on);
       }
+      if (!$("view-shortlist").hidden) renderShortlist(); // added from the Short List page's own box
     } else if (t.dataset.remove) { toggleShortlist(t.dataset.remove); renderShortlist(); }
     else if (t.dataset.ew) toggleElsewhere(t);
     else if (t.dataset.target) stepPrice(t.dataset.target, +t.dataset.dir);
@@ -1219,6 +1279,11 @@ function wireEvents() {
     }
     else if (t.dataset.action === "hide-notice") closeClaudeSteps();
     else if (t.dataset.action === "hits-in-list") showHitsInList();
+    else if (t.dataset.typed != null) {
+      if (!addTypedWine(t.dataset.typed)) toggleShortlist(typedId(t.dataset.typed)); // pressed again: take it off
+      renderListHits(t.closest(".elsewhere"));
+    }
+    else if (t.id === "sl-add-btn") addFromShortlistBox();
     else if (t.dataset.action === "mw-confirm") confirmImport();
     else if (t.dataset.action === "mw-cancel-import") { mwPending = null; $("mw-preview").hidden = true; $("mw-file").value = ""; }
     else if (t.dataset.action === "mw-owner") { mwView.owner = t.dataset.owner; mwView.shown = MW_PAGE; renderMyWines(); }
@@ -1303,6 +1368,8 @@ function wireEvents() {
   });
 
   $("ew-top").innerHTML = elsewhereHtml("", "Wine name", true);
+  $("sl-add-q").addEventListener("input", renderSlAddHits);
+  $("sl-add-q").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); addFromShortlistBox(); } });
   document.addEventListener("input", (e) => {
     if (e.target.classList.contains("ew-q")) updateElsewhere(e.target.closest(".elsewhere"));
   });
