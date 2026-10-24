@@ -1,4 +1,158 @@
 {
-  "updated": null,
-  "ratings": {}
+ "updated": "2026-10-24",
+ "ratings": {
+  "bcl-220979": {
+   "name": "Cabernet Sauvignon - Haras De Pirque Hussonet Reserva",
+   "claude": {
+    "points": 91,
+    "vintage": 2021,
+    "note": "Organic Pirque Cabernet cedar and bay leaf",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-313346": {
+   "name": "Cabernet Sauvignon - Montgras Intriga Maipo",
+   "claude": {
+    "points": 89,
+    "vintage": 2021,
+    "note": "Old vine Maipo Cab solid value",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-845321": {
+   "name": "Chilean Red - Emiliana Coyam Colchagua",
+   "claude": {
+    "points": 94,
+    "vintage": 2022,
+    "note": "Biodynamic Colchagua blend the standout",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-681971": {
+   "name": "Pinot Noir - Ovorra Reserva Casablanca Valley",
+   "claude": {
+    "points": null,
+    "vintage": "NV",
+    "note": "No reviews found",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-708258": {
+   "name": "Syrah - Mayu Don Mauro Vineyard Gran Reserva",
+   "claude": {
+    "points": 90,
+    "vintage": 2021,
+    "note": "Peppery cool climate Elqui Syrah",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-322586": {
+   "name": "Cabernet Sauvignon - Montes Alpha Colchagua Valley",
+   "claude": {
+    "points": 91,
+    "vintage": 2022,
+    "note": "Classic Colchagua Cab reliable choice",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-337238": {
+   "name": "Cabernet Sauvignon - Concha Y Toro Marques De Casa Concha 20",
+   "claude": {
+    "points": 91,
+    "vintage": 2022,
+    "note": "Polished Puente Alto Cab",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-241362": {
+   "name": "Red Blend - Santa Carolina 150 Anniversary",
+   "claude": {
+    "points": 89,
+    "vintage": 2022,
+    "note": "Smooth anniversary blend crowd pleaser",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-274707": {
+   "name": "Cabernet Sauvignon - Santa Rita Cabernario No. 3",
+   "claude": {
+    "points": null,
+    "vintage": "NV",
+    "note": "No critic reviews found",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-275824": {
+   "name": "Cabernet Sauvignon - O-61",
+   "claude": {
+    "points": null,
+    "vintage": "NV",
+    "note": "No critic reviews found",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-62235": {
+   "name": "Alentejano - Casa Santos Lima Quid Pro Quo",
+   "claude": {
+    "points": 88,
+    "vintage": 2021,
+    "note": "Plush juicy everyday Alentejo red great value",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-364492": {
+   "name": "Lisboa Red Blend - Casa Santos Lima Traditional",
+   "claude": {
+    "points": 89,
+    "vintage": 2023,
+    "note": "Bright red fruit Lisboa blend strong value",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-192810": {
+   "name": "Lisboa - Casa Santos Lima Coccinela Organic",
+   "claude": {
+    "points": null,
+    "vintage": "NV",
+    "note": "No critic reviews found",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-95610": {
+   "name": "Douro - Quinta Dos Aciprestes",
+   "claude": {
+    "points": 89,
+    "vintage": 2022,
+    "note": "Classic old-vine Douro red solid value",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-188646": {
+   "name": "Beira Atlantico Baga Touriga Nacional - Luis Pato 2015",
+   "claude": {
+    "points": 88,
+    "vintage": 2015,
+    "note": "Earthy mature Baga blend decant drink now",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-303675": {
+   "name": "Douro - Iron Maiden Darkest Red",
+   "claude": {
+    "points": 89,
+    "vintage": 2021,
+    "note": "Dark spicy Douro red port-barrel richness",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-466709": {
+   "name": "Douro - Quinta Das Carvalhas",
+   "claude": {
+    "points": 90,
+    "vintage": 2021,
+    "note": "Polished Douro estate red best of list",
+    "date": "2026-10-24"
+   }
+  }
+ }
 }
