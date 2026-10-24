@@ -366,3 +366,8 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .fr-box { border-color: var(--green); }
 .fr-count { font-weight: 600; }
 #fr-key { flex: 1 1 18rem; font: inherit; min-height: 3rem; border: 2px solid var(--line); border-radius: 0.5rem; padding: 0.3rem 0.6rem; background: #fff; }
+
+/* Email chooser */
+.mail-choices { display: grid; gap: 0.5rem; margin: 0.75rem 0; }
+.mail-choice { display: flex; flex-direction: column; align-items: flex-start; text-align: left; width: 100%; }
+.mail-hint { font-size: 0.9em; font-weight: 400; opacity: 0.8; }

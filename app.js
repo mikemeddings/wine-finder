@@ -100,7 +100,7 @@ const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB" };
 const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn" };
 const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 50;
-const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey" };
+const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp" };
 
 // ---- Helpers -----------------------------------------------------------------
 
@@ -663,8 +663,6 @@ function renderShortlist() {
         <button type="button" class="btn" data-remove="${esc(w.id)}">Remove</button>
       </div>
     </div></li>`).join("");
-  $("sl-email").href = "mailto:?subject=" + encodeURIComponent("Wine short list") +
-    "&body=" + encodeURIComponent(shortlistText());
   renderPrintArea();
 }
 
@@ -1388,7 +1386,7 @@ function shareLink(ids) {
   return location.href.split("#")[0].split("?")[0] + "#share=" + encodeURIComponent(entries.join(";")).replace(/%20/g, "+");
 }
 
-async function emailRatings() {
+function emailRatings() {
   const ids = unpublishedIds();
   if (!ids.length) { frStatus("There are no new ratings on this computer to send."); return; }
   const link = shareLink(ids);
@@ -1403,14 +1401,7 @@ async function emailRatings() {
   const tail = `\n\nClick this link to add them to the Wine Finder:\n${link}\n`;
   let body = head + lines.join("\n") + tail;
   if (body.length > 1700) body = head.trim() + tail; // long lists: the link alone carries everything
-  try { await navigator.clipboard.writeText(`${subject}\n\n${body}`); } catch { /* not allowed: the email is enough */ }
-  if (link.length > 1900) {
-    frStatus(`That's a lot of ratings for one email, so the message has been copied instead. Start a new email, paste it in (Ctrl+V) and send it.`);
-    return;
-  }
-  location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  frStatus("Your email program should open with the ratings in a new message. Choose who to send it to and press Send. " +
-    "(If no email opened, the message is also copied: start a new email, paste it in with Ctrl+V and send it.)");
+  sendEmail(subject, body, frStatus);
 }
 
 
@@ -1539,6 +1530,58 @@ function forgetGhKey() {
   try { localStorage.removeItem(STORE.ghKey); } catch { /* ignore */ }
   frStatus("Key removed from this computer.");
   renderFamilyBox();
+}
+
+// ---- Email: each person picks the email they actually use -----------------------
+// A plain mailto: link opens whatever Windows thinks the email program is, which is
+// often an Outlook nobody set up. So every Email button asks, remembers the answer on
+// this computer, and also copies the message so it can always be pasted by hand.
+const enc = encodeURIComponent;
+const MAIL_APPS = [
+  { id: "gmail", label: "Gmail", hint: "opens in a new tab",
+    url: (s, b) => `https://mail.google.com/mail/?view=cm&fs=1&su=${enc(s)}&body=${enc(b)}` },
+  { id: "outlook", label: "Outlook.com or Hotmail", hint: "opens in a new tab",
+    url: (s, b) => `https://outlook.live.com/mail/0/deeplink/compose?subject=${enc(s)}&body=${enc(b)}` },
+  { id: "office", label: "Outlook for work or school (Microsoft 365)", hint: "opens in a new tab",
+    url: (s, b) => `https://outlook.office.com/mail/deeplink/compose?subject=${enc(s)}&body=${enc(b)}` },
+  { id: "app", label: "The email program on this computer", hint: "Thunderbird, the Outlook app, Apple Mail…",
+    mailto: (s, b) => `mailto:?subject=${enc(s)}&body=${enc(b)}` },
+  { id: "copy", label: "Just copy the message", hint: "then paste it into any email yourself" },
+];
+let pendingMail = null;
+
+function sendEmail(subject, body, report) {
+  pendingMail = { subject, body, report };
+  const last = storeGet(STORE.mailApp, "");
+  const apps = [...MAIL_APPS].sort((a, b) => (b.id === last) - (a.id === last));
+  $("mail-choices").innerHTML = apps.map((a) => `<button type="button" class="btn mail-choice${a.id === last ? " btn-primary" : ""}"
+      data-mail="${a.id}">${esc(a.label)}<span class="mail-hint">${esc(a.hint)}</span></button>`).join("");
+  $("mail-dialog").showModal?.();
+}
+
+function chooseMail(id) {
+  const app = MAIL_APPS.find((a) => a.id === id);
+  if (!app || !pendingMail) return;
+  const { subject, body, report } = pendingMail;
+  pendingMail = null;
+  storeSet(STORE.mailApp, id);
+  $("mail-dialog").close();
+  let msg;
+  if (app.url) {
+    const url = app.url(subject, body);
+    const win = window.open(url, "_blank"); // straight from the click, so it isn't blocked
+    if (win) win.opener = null;
+    msg = win ? `A new ${app.label} email opened in a new tab (sign in if it asks). Choose who to send it to and press Send.`
+      : "Your browser stopped the new tab from opening. The message is copied: open your email, start a new message, paste it in (Ctrl+V) and send it.";
+  } else if (app.mailto && app.mailto(subject, body).length < 1900) {
+    location.href = app.mailto(subject, body);
+    msg = "Your email program should open with a new message. If the wrong program opened (or none), press Email again and pick another choice. " +
+      "For Thunderbird, it must be set as this computer's email app (Windows Settings, Apps, Default apps, Thunderbird).";
+  } else {
+    msg = "The message is copied. Start a new email, paste it in (Ctrl+V), choose who to send it to and press Send.";
+  }
+  copyText(`${subject}\n\n${body}`);
+  report?.(msg);
 }
 
 // ---- Views -------------------------------------------------------------------
@@ -1694,6 +1737,9 @@ function wireEvents() {
     else if (t.id === "save-yes") confirmSavedRatings();
     else if (t.id === "save-email") confirmSavedRatings("email");
     else if (t.id === "fr-email") emailRatings();
+    else if (t.id === "sl-email") sendEmail("Wine short list", shortlistText(), setStatus);
+    else if (t.dataset.mail) chooseMail(t.dataset.mail);
+    else if (t.id === "mail-cancel") { pendingMail = null; $("mail-dialog").close(); }
     else if (t.id === "save-no") { pendingSave = null; $("save-dialog").close(); }
     else if (t.id === "fr-publish") publishFamilyRatings();
     else if (t.id === "fr-download") downloadFamilyFile();

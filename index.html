@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-24.6">
+<link rel="stylesheet" href="app.css?v=2026-10-24.7">
 </head>
 <body>
 <header class="top">
@@ -246,7 +246,7 @@
     <button type="button" class="btn btn-primary btn-big" id="ask-claude">Ask Claude about these</button>
     <button type="button" class="btn btn-big btn-rank" id="ask-claude-rank">Ask Claude to rank these by reviews</button>
     <button type="button" class="btn" id="sl-copy">Copy as text</button>
-    <a class="btn" id="sl-email" href="#">Email</a>
+    <button type="button" class="btn" id="sl-email">Email</button>
     <button type="button" class="btn" id="sl-print">Print</button>
     <button type="button" class="btn btn-danger" id="sl-clear">Clear the list</button>
   </div>
@@ -293,8 +293,18 @@
   </div>
 </dialog>
 
+<dialog id="mail-dialog" class="dialog" aria-labelledby="mail-q">
+  <p id="mail-q" class="dialog-q">Which email do you use?</p>
+  <div id="mail-choices" class="mail-choices"></div>
+  <p class="hint">Your choice is remembered on this computer and shown first next time. The message is also copied,
+    so you can always paste it (Ctrl+V) into an email yourself.</p>
+  <div class="dialog-actions">
+    <button type="button" class="btn" id="mail-cancel">Cancel</button>
+  </div>
+</dialog>
+
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-24.6"></script>
+<script src="app.js?v=2026-10-24.7"></script>
 </body>
 </html>
