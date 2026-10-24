@@ -100,7 +100,7 @@ const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB" };
 const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn" };
 const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 50;
-const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp" };
+const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames" };
 
 // ---- Helpers -----------------------------------------------------------------
 
@@ -467,7 +467,7 @@ function wineCard(w) {
     <h3 class="wine-name">${esc(w.name)}</h3>
     <div class="wine-price">${money(w.price)}</div>
     <p class="wine-facts">${typePill(w.type)} ${facts}</p>
-    <p class="wine-detail">${detail} ${badges}</p>${scores}${calgary}${ratingsHtml(w)}
+    <p class="wine-detail">${detail} ${badges}</p>${scores}${calgary}${ratingsHtml(w)}${cellarBadges(w)}
     <div class="wine-actions">
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "Add to Short List"}</button>
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
@@ -483,7 +483,7 @@ function wineCard(w) {
 let lastResults = [];
 
 function renderResults() {
-  lastResults = WINES.filter((w) => matches(w)).sort(SORTS[state.sort]);
+  lastResults = WINES.filter((w) => matches(w)).sort(currentSort());
   const n = lastResults.length;
   $("result-count").textContent = n === 1 ? "1 wine" : `${n.toLocaleString()} wines`;
 
@@ -828,7 +828,7 @@ function saveMyWines() {
 }
 
 function allMyWines() {
-  return [...Object.values(myWines.cellars).flatMap((c) => c.wines), ...myWines.manual];
+  return [...Object.values(myWines.cellars).flatMap((c) => c.wines), ...sharedCellarWines(), ...myWines.manual];
 }
 
 const findWine = (id) => WINES.find((x) => x.id === id) || allMyWines().find((x) => x.id === id) ||
@@ -953,13 +953,18 @@ async function readFileText(file) {
   return utf8.includes("\uFFFD") ? new TextDecoder("windows-1252").decode(buf) : utf8;
 }
 
+let mwFile = null;
+
 async function importCellarFile(file) {
+  mwFile = file;
   const owner = $("mw-owner").value.trim();
   const box = $("mw-preview");
   box.hidden = false;
   if (!owner) {
-    box.innerHTML = `<p><strong>Please type whose cellar this is first</strong> (for example Alex), then choose the file again.</p>`;
-    $("mw-owner").focus();
+    box.innerHTML = `<p class="big">Whose cellar is this?</p>
+      <div class="typed-row"><input type="text" id="mw-owner2" autocomplete="off" placeholder="a first name, for example Alex">
+      <button type="button" class="btn btn-primary" data-action="mw-owner-go">Continue</button></div>`;
+    $("mw-owner2").focus();
     return;
   }
   const res = readCellar(await readFileText(file), owner);
@@ -986,7 +991,9 @@ function confirmImport() {
   mwPending = null;
   $("mw-preview").hidden = true;
   $("mw-file").value = "";
-  if (saveMyWines()) mwStatus(`Saved ${owner}'s cellar: ${wines.length} wines.`);
+  if (saveMyWines()) mwStatus(`Saved ${owner}'s cellar: ${wines.length} wines.` + (storeGet(STORE.ghKey, "")
+    ? ` To show it to the whole family, press “Share ${owner}'s cellar with the family” below.` : ""));
+  cellarsChanged();
   mwView.owner = owner;
   renderMyWines();
 }
@@ -994,6 +1001,7 @@ function confirmImport() {
 function removeCellar(owner) {
   if (!window.confirm(`Remove ${owner}'s cellar (${myWines.cellars[owner].wines.length} wines) from this computer?`)) return;
   delete myWines.cellars[owner];
+  cellarsChanged();
   mwView.owner = "all";
   saveMyWines();
   renderMyWines();
@@ -1094,12 +1102,22 @@ function mwRow(w) {
 function renderMyWines() {
   const all = allMyWines();
   const owners = Object.entries(myWines.cellars);
+  const shared = visibleShared();
+  const keeper = !!storeGet(STORE.ghKey, "");
   const chip = (value, label, n) => `<button type="button" class="btn btn-mini" data-action="mw-owner" data-owner="${esc(value)}"
       aria-pressed="${mwView.owner === value}">${esc(label)} (${n})</button>`;
+  const mini = (action, data, label, cls = "") => `<button type="button" class="btn btn-mini ${cls}" data-action="${action}" ${data}>${esc(label)}</button>`;
   $("mw-owners").innerHTML = all.length ? chip("all", "All", all.length) +
     owners.map(([o, c]) => chip(o, `${o}'s cellar`, c.wines.length)).join("") +
+    shared.map(([slot, c]) => chip(cellarLabel(slot), `${cellarTitle(slot)} (shared)`, (c.wines || []).length)).join("") +
     (myWines.manual.length ? chip("manual", "Added by hand", myWines.manual.length) : "") +
-    owners.map(([o, c]) => `<button type="button" class="btn btn-mini btn-danger" data-action="mw-remove" data-owner="${esc(o)}">Remove ${esc(o)}'s cellar</button>`).join("")
+    `<span class="mw-owner-tools">` +
+    shared.map(([slot]) => mini("mw-name-cellar", `data-slot="${esc(slot)}"`, cellarNames()[slot] ? `Rename ${cellarTitle(slot)}` : `Name ${cellarTitle(slot)}`)).join("") +
+    (keeper ? owners.map(([o]) => mini("mw-share", `data-owner="${esc(o)}"`,
+      slotFor(o) ? `Update the shared copy of ${o}'s cellar` : `Share ${o}'s cellar with the family`, "btn-share")).join("") : "") +
+    (keeper ? Object.keys(sharedCellars).map((slot) => mini("mw-unshare", `data-slot="${esc(slot)}"`, `Stop sharing ${cellarTitle(slot)}`, "btn-danger")).join("") : "") +
+    owners.map(([o]) => mini("mw-remove", `data-owner="${esc(o)}"`, `Remove ${o}'s cellar`, "btn-danger")).join("") +
+    `</span>`
     : "";
   const words = fold(mwView.q).split(/\s+/).filter(Boolean);
   const list = all.filter((w) => {
@@ -1147,6 +1165,7 @@ async function restoreBackup(file) {
     if (!window.confirm(`Replace My wines with the ${n} wines${nr ? ` and ${nr} ratings` : ""} in this backup?`)) return;
     myWines = { cellars: mw.cellars, manual: mw.manual };
     saveMyWines();
+    cellarsChanged();
     if (nr) { ratings = data.ratings; saveRatings(); }
     mwView.owner = "all";
     renderMyWines();
@@ -1368,8 +1387,12 @@ function scrollToFamilyBox() { document.querySelector(".fr-box")?.scrollIntoView
 // The website keeper clicks it, saves, and publishes them as Family ratings.
 const shareClean = (s, max) => String(s ?? "").replace(/[~;\r\n]/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
 
+// Wines in a computer's own cellar copy have the owner's name in their code, so their
+// ratings stay on that computer (the shared copy's wines, cellar-c1-…, can be rated).
+const privateId = (id) => /^cellar-/.test(id) && !/^cellar-c\d+-/.test(id);
+
 function unpublishedIds() {
-  return Object.keys(ratings).filter((id) => {
+  return Object.keys(ratings).filter((id) => !privateId(id)).filter((id) => {
     const r = ratings[id], f = frOf(id);
     return (r.claude && JSON.stringify(r.claude) !== JSON.stringify(f.claude)) ||
       (r.mine && JSON.stringify(r.mine) !== JSON.stringify(f.family));
@@ -1431,6 +1454,7 @@ function mergedForPublish(base) {
   const out = JSON.parse(JSON.stringify(base || {}));
   const newer = (a, b) => !b || (a.date || "") >= (b.date || "");
   for (const [id, r] of Object.entries(ratings)) {
+    if (privateId(id)) continue;
     const e = out[id] || {};
     if (r.name) e.name = r.name;
     if (r.claude && newer(r.claude, e.claude)) e.claude = { ...r.claude };
@@ -1460,9 +1484,9 @@ function renderFamilyBox() {
   $("fr-key-forget").hidden = !hasKey;
 }
 
-async function ghFetch(method, body) {
+async function ghFetch(method, body, path = PUBLISH.path) {
   const key = storeGet(STORE.ghKey, "");
-  const url = `https://api.github.com/repos/${PUBLISH.owner}/${PUBLISH.repo}/contents/${PUBLISH.path}` +
+  const url = `https://api.github.com/repos/${PUBLISH.owner}/${PUBLISH.repo}/contents/${path}` +
     (method === "GET" ? `?ref=${PUBLISH.branch}&t=${Date.now()}` : "");
   const r = await fetch(url, {
     method,
@@ -1530,6 +1554,190 @@ function forgetGhKey() {
   try { localStorage.removeItem(STORE.ghKey); } catch { /* ignore */ }
   frStatus("Key removed from this computer.");
   renderFamilyBox();
+}
+
+// ---- Shared family cellars ---------------------------------------------------------
+// data/cellars.json holds the cellars the website keeper shared, trimmed for a public
+// file: no prices, bin locations, private notes or bottle counts, and no owner names.
+// Each cellar has a neutral key (c1, c2…) and each computer names it ("Jon") for itself.
+const CELLARS_PATH = "data/cellars.json";
+let sharedCellars = {};
+let sharedWinesCache = null, cellarIndex = null;
+const cellarMatchCache = new Map();
+const cellarNames = () => { const n = storeGet(STORE.cellarNames, {}); return n && typeof n === "object" ? n : {}; };
+const slotNumber = (slot) => slot.replace(/\D/g, "");
+const cellarLabel = (slot) => cellarNames()[slot] || `Cellar ${slotNumber(slot)}`;
+const cellarTitle = (slot) => (cellarNames()[slot] ? `${cellarNames()[slot]}'s cellar` : `Cellar ${slotNumber(slot)}`);
+const slotFor = (owner) => Object.keys(sharedCellars).find((s) => fold(cellarNames()[s] || "") === fold(owner));
+
+// Shared cellars this computer doesn't already have its own copy of.
+function visibleShared() {
+  const local = new Set(Object.keys(myWines.cellars).map(fold));
+  return Object.entries(sharedCellars).filter(([slot]) => !local.has(fold(cellarLabel(slot))));
+}
+
+function sharedCellarWines() {
+  sharedWinesCache ??= visibleShared().flatMap(([slot, c]) => (Array.isArray(c.wines) ? c.wines : [])
+    .filter((w) => w && w.id && w.name)
+    .map((w) => ({ ...w, kind: "cellar", owner: cellarLabel(slot), source: cellarTitle(slot), shared: slot })));
+  return sharedWinesCache;
+}
+
+function cellarsChanged() {
+  sharedWinesCache = null;
+  cellarIndex = null;
+  cellarMatchCache.clear();
+  updateCellarSorts();
+}
+
+const trimForShare = (wines, slot) => wines.map((w, i) => Object.fromEntries(Object.entries({
+  id: `cellar-${slot}-${i + 1}`, name: w.name, vintage: w.vintage, producer: w.producer,
+  region_or_grape: w.region_or_grape, varietal: w.varietal, country: w.country, type: w.type,
+  size_ml: w.size_ml, my_score: w.my_score, ct_score: w.ct_score, drink_from: w.drink_from, drink_to: w.drink_to,
+}).filter(([, v]) => v != null && v !== "")));
+
+// Read a JSON file in the repository, change it, write it back (once more if someone
+// else wrote at the same moment).
+async function ghUpdate(path, change, message) {
+  for (let attempt = 0; ; attempt++) {
+    const cur = await ghFetch("GET", null, path);
+    const data = JSON.parse(fromBase64(cur.content));
+    change(data);
+    try {
+      await ghFetch("PUT", { message, content: toBase64(JSON.stringify(data, null, 1) + "\n"), sha: cur.sha, branch: PUBLISH.branch }, path);
+      return data;
+    } catch (e) {
+      if (e.message !== "conflict" || attempt === 1) throw e;
+    }
+  }
+}
+
+async function shareCellar(owner) {
+  const c = myWines.cellars[owner];
+  if (!c) return;
+  if (!storeGet(STORE.ghKey, "")) { mwStatus("Only the person who looks after the website can share cellars (it needs the publishing key)."); return; }
+  let slot = slotFor(owner);
+  if (!slot) { let n = 1; while (sharedCellars[`c${n}`]) n++; slot = `c${n}`; }
+  mwStatus(`Sharing ${owner}'s cellar…`);
+  try {
+    const data = await ghUpdate(CELLARS_PATH, (d) => {
+      d.updated = todayIso();
+      d.cellars = d.cellars && typeof d.cellars === "object" ? d.cellars : {};
+      d.cellars[slot] = { updated: todayIso(), wines: trimForShare(c.wines, slot) };
+    }, `Share a family cellar (${c.wines.length} wines)`);
+    sharedCellars = data.cellars;
+    storeSet(STORE.cellarNames, { ...cellarNames(), [slot]: owner });
+    cellarsChanged();
+    renderMyWines();
+    mwStatus(`Shared ${owner}'s cellar: ${c.wines.length} wines, without prices, bin locations, notes or bottle counts. ` +
+      `On the website it's called “Cellar ${slotNumber(slot)}”; each family member can name it “${owner}” on their own computer.`);
+  } catch (e) {
+    mwStatus(`Not shared. ${e.message === "conflict" ? "Please try again in a minute." : e.message}`);
+  }
+}
+
+async function unshareCellar(slot) {
+  if (!window.confirm(`Stop sharing ${cellarTitle(slot)} with the family? It's removed from the website (not from anyone's own computer).`)) return;
+  try {
+    const data = await ghUpdate(CELLARS_PATH, (d) => { if (d.cellars) delete d.cellars[slot]; d.updated = todayIso(); },
+      "Stop sharing a family cellar");
+    sharedCellars = data.cellars || {};
+    cellarsChanged();
+    mwView.owner = "all";
+    renderMyWines();
+    mwStatus("That cellar is no longer shared on the website.");
+  } catch (e) {
+    mwStatus(`Not changed. ${e.message === "conflict" ? "Please try again in a minute." : e.message}`);
+  }
+}
+
+function nameCellar(slot) {
+  const name = window.prompt(`Whose cellar is ${cellarTitle(slot)}? Type a first name. It's kept on this computer only.`,
+    cellarNames()[slot] || "");
+  if (name == null) return;
+  const names = cellarNames();
+  if (name.trim()) names[slot] = name.trim().slice(0, 30); else delete names[slot];
+  storeSet(STORE.cellarNames, names);
+  cellarsChanged();
+  mwView.owner = "all";
+  renderMyWines();
+}
+
+// ---- "In Jon's cellar" on store wines ------------------------------------------------
+// Cellar names and store names are written differently, so this is a careful guess:
+// every distinctive word of the store's name must appear in the cellar wine's details,
+// and at least two of them in its name or producer.
+const MATCH_STOP = new Set(("red white rose wine wines blend vin vino the and del della des les las los " +
+  "chateau domaine bodega bodegas estate estates winery vineyard vineyards cellars reserve reserva sparkling dry brut").split(" "));
+const nameTokens = (s) => fold(s).split(/[^a-z0-9]+/).filter((t) => t.length >= 3 && !/^\d+$/.test(t) && !MATCH_STOP.has(t));
+
+function storeTokens(name) {
+  let n = String(name || "");
+  const i = n.indexOf(" - "); // BC Liquor names start like "Chilean Red - "
+  if (i > 0 && i < 30 && /\b(red|white|ros[eé]|sparkling|wine|fortified|dessert)\b/i.test(n.slice(0, i))) n = n.slice(i + 3);
+  return [...new Set(nameTokens(n))];
+}
+
+function buildCellarIndex() {
+  const idx = new Map();
+  for (const w of allMyWines()) {
+    if (w.kind !== "cellar") continue;
+    const nameT = new Set(nameTokens(`${w.name} ${w.producer || ""}`));
+    const all = new Set([...nameT, ...nameTokens(`${w.region_or_grape || ""} ${w.varietal || ""}`)]);
+    const e = { w, nameT, all };
+    for (const t of nameT) { if (!idx.has(t)) idx.set(t, []); idx.get(t).push(e); }
+  }
+  return idx;
+}
+
+// Store wine -> [{source: "Jon's cellar", vintages: [2016, 2018]}]
+function cellarMatches(w) {
+  if (!w || w.kind) return []; // only store wines
+  if (cellarMatchCache.has(w.id)) return cellarMatchCache.get(w.id);
+  cellarIndex ??= buildCellarIndex();
+  const S = storeTokens(w.name);
+  const bySource = new Map();
+  if (S.length >= 2 && cellarIndex.size) {
+    const seen = new Set();
+    for (const t of S) for (const e of cellarIndex.get(t) || []) {
+      if (seen.has(e)) continue;
+      seen.add(e);
+      if (!S.every((x) => e.all.has(x)) || S.filter((x) => e.nameT.has(x)).length < 2) continue;
+      if (!bySource.has(e.w.source)) bySource.set(e.w.source, new Set());
+      if (e.w.vintage) bySource.get(e.w.source).add(e.w.vintage);
+    }
+  }
+  const res = [...bySource].map(([source, v]) => ({ source, vintages: [...v].sort() }));
+  cellarMatchCache.set(w.id, res);
+  return res;
+}
+
+const cellarBadges = (w) => {
+  const m = cellarMatches(w);
+  return m.length ? `<p class="wine-detail">${m.map((x) => `<span class="badge badge-cellar">In ${esc(x.source)}` +
+    `${x.vintages.length ? ` (${esc(x.vintages.join(", "))})` : ""}</span>`).join(" ")}</p>` : "";
+};
+
+function cellarSources() {
+  return [...new Set(allMyWines().filter((w) => w.kind === "cellar").map((w) => w.source))].sort();
+}
+
+function updateCellarSorts() {
+  const sel = $("sort");
+  if (!sel) return;
+  for (const o of [...sel.options]) if (o.value.startsWith("cellar:")) o.remove();
+  for (const src of cellarSources()) sel.add(new Option(`In ${src} first`, `cellar:${src}`));
+  if (state.sort.startsWith("cellar:") && ![...sel.options].some((o) => o.value === state.sort)) state.sort = "price-asc";
+  sel.value = state.sort;
+}
+
+function currentSort() {
+  if (state.sort.startsWith("cellar:")) {
+    const src = state.sort.slice(7);
+    const has = (w) => (cellarMatches(w).some((m) => m.source === src) ? 0 : 1);
+    return (a, b) => has(a) - has(b) || SORTS["price-asc"](a, b);
+  }
+  return SORTS[state.sort] || SORTS["price-asc"];
 }
 
 // ---- Email: each person picks the email they actually use -----------------------
@@ -1749,6 +1957,13 @@ function wireEvents() {
     else if (t.dataset.action === "mw-cancel-import") { mwPending = null; $("mw-preview").hidden = true; $("mw-file").value = ""; }
     else if (t.dataset.action === "mw-owner") { mwView.owner = t.dataset.owner; mwView.shown = MW_PAGE; renderMyWines(); }
     else if (t.dataset.action === "mw-remove") removeCellar(t.dataset.owner);
+    else if (t.dataset.action === "mw-share") shareCellar(t.dataset.owner);
+    else if (t.dataset.action === "mw-unshare") unshareCellar(t.dataset.slot);
+    else if (t.dataset.action === "mw-name-cellar") nameCellar(t.dataset.slot);
+    else if (t.dataset.action === "mw-owner-go") {
+      const name = $("mw-owner2").value.trim();
+      if (name && mwFile) { $("mw-owner").value = name; importCellarFile(mwFile); } else $("mw-owner2").focus();
+    }
     else if (t.dataset.action === "mw-edit") editManual(t.dataset.id);
     else if (t.dataset.action === "mw-delete") deleteManual(t.dataset.id);
     else if (t.dataset.action === "mw-where") mwWhereCanIBuy(t.dataset.id);
@@ -1906,11 +2121,14 @@ async function init() {
   wireEvents();
   saveShortlist();
   try {
-    const [wines, meta, fr] = await Promise.all([
+    const [wines, meta, fr, cel] = await Promise.all([
       fetch("data/wines.json", FRESH).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }),
       fetch("data/meta.json", FRESH).then((r) => (r.ok ? r.json() : { sources: {} })).catch(() => ({ sources: {} })),
       fetch("data/ratings.json", FRESH).then((r) => (r.ok ? r.json() : {})).catch(() => ({})),
+      fetch(CELLARS_PATH, FRESH).then((r) => (r.ok ? r.json() : {})).catch(() => ({})),
     ]);
+    sharedCellars = cel && typeof cel.cellars === "object" && cel.cellars ? cel.cellars : {};
+    cellarsChanged();
     META = meta;
     familyRatings = fr && typeof fr.ratings === "object" && fr.ratings ? fr.ratings : {};
     addWines(wines);
