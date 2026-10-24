@@ -1393,7 +1393,7 @@ function offerSavedRatings() {
   history.replaceState(null, "", location.pathname + location.search); // don't offer it again on reload
   pendingSave = items;
   const shared = items.some((it) => it.shared);
-  const nameOf = (it) => findWine(it.id)?.name || ratingOf(it.id).name || it.name;
+  const nameOf = (it) => findWine(it.id)?.name || (sharedIdOf(it.id) && findWine(sharedIdOf(it.id))?.name) || ratingOf(it.id).name || it.name;
   const n = `${items.length} ${items.length === 1 ? "wine" : "wines"}`;
   $("save-q").textContent = !items.length ? "This link didn't contain any ratings that could be read."
     : shared ? `Ratings emailed from family for ${n}. Save them?` : `Save Claude's ratings for ${n}?`;
@@ -1412,6 +1412,7 @@ function offerSavedRatings() {
 function confirmSavedRatings(then) {
   const items = pendingSave || [];
   for (const it of items) {
+    if (!findWine(it.id) && sharedIdOf(it.id) && sharedIdOf(it.id) !== it.id) it.id = sharedIdOf(it.id);
     const name = findWine(it.id)?.name || ratingOf(it.id).name || it.name || it.id;
     const r = { ...ratingOf(it.id), name };
     if (it.claude !== false) r.claude = { points: it.points, vintage: it.vintage, note: it.note, date: todayIso() };
@@ -1443,8 +1444,32 @@ const shareClean = (s, max) => String(s ?? "").replace(/[~;\r\n]/g, " ").replace
 // ratings stay on that computer (the shared copy's wines, cellar-c1-…, can be rated).
 const privateId = (id) => /^cellar-/.test(id) && !/^cellar-c\d+-/.test(id);
 
+// A private cellar code (cellar-jon-154) -> the same wine in the shared copy (cellar-c1-154),
+// matched by name and vintage, so its ratings can be published. null if it isn't shared.
+const sharedIdCache = new Map();
+function sharedIdOf(id) {
+  if (!privateId(id)) return id;
+  if (sharedIdCache.has(id)) return sharedIdCache.get(id);
+  let out = null;
+  const key = (w) => `${fold(w.name)}|${w.vintage ?? ""}`;
+  const local = Object.values(myWines.cellars).flatMap((c) => c.wines).find((w) => w.id === id);
+  if (local) {
+    const own = slotFor(local.owner); // the owner's shared copy first, then any other
+    for (const slot of [own, ...Object.keys(sharedCellars)].filter(Boolean)) {
+      const hit = (sharedCellars[slot]?.wines || []).find((w) => key(w) === key(local));
+      if (hit) { out = hit.id; break; }
+    }
+  } else { // not on this computer: use the cellar this computer has named after the owner
+    const m = /^cellar-(.+)-(\d+)$/.exec(id);
+    const slot = m && Object.keys(sharedCellars).find((s) => slug(cellarNames()[s] || "") === m[1]);
+    if (slot && (sharedCellars[slot].wines || []).some((w) => w.id === `cellar-${slot}-${m[2]}`)) out = `cellar-${slot}-${m[2]}`;
+  }
+  sharedIdCache.set(id, out);
+  return out;
+}
+
 function unpublishedIds() {
-  return Object.keys(ratings).filter((id) => !privateId(id)).filter((id) => {
+  return Object.keys(ratings).filter((id) => !privateId(id) || sharedIdOf(id)).filter((id) => {
     const r = ratings[id], f = frOf(id);
     return (r.claude && JSON.stringify(r.claude) !== JSON.stringify(f.claude)) ||
       (r.mine && JSON.stringify(r.mine) !== JSON.stringify(f.family));
@@ -1488,7 +1513,7 @@ function emailRatings() {
 // and short notes, never people's names.
 const PUBLISH = { owner: "mikemeddings", repo: "wine-finder", path: "data/ratings.json", branch: "main" };
 let familyRatings = {};
-const frOf = (id) => familyRatings[id] || {};
+const frOf = (id) => familyRatings[id] || (privateId(id) && familyRatings[sharedIdOf(id)]) || {};
 const frScore = (id) => frOf(id).family?.points ?? frOf(id).claude?.points ?? null;
 
 function frHtml(w) {
@@ -1505,8 +1530,9 @@ function frHtml(w) {
 function mergedForPublish(base) {
   const out = JSON.parse(JSON.stringify(base || {}));
   const newer = (a, b) => !b || (a.date || "") >= (b.date || "");
-  for (const [id, r] of Object.entries(ratings)) {
-    if (privateId(id)) continue;
+  for (const [own, r] of Object.entries(ratings)) {
+    const id = sharedIdOf(own); // private cellar codes go out under the shared copy's code
+    if (!id) continue;
     const e = out[id] || {};
     if (r.name) e.name = r.name;
     if (r.claude && newer(r.claude, e.claude)) e.claude = { ...r.claude };
@@ -1647,6 +1673,7 @@ function cellarFindWines() {
 const findPool = () => (cellarOn() ? cellarFindWines() : WINES);
 
 function cellarsChanged() {
+  sharedIdCache.clear();
   cellarFindCache = null;
   storeMatchIndex = null;
   sharedWinesCache = null;
