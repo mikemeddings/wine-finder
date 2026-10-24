@@ -225,6 +225,51 @@
     "note": "Juicy everyday Lisboa red nothing more",
     "date": "2026-10-24"
    }
+  },
+  "bcl-384651": {
+   "name": "Douro - Quinta Do Vale Meao 2020",
+   "claude": {
+    "points": 97,
+    "vintage": 2020,
+    "note": "Iconic Douro Superior built for decades",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-284032": {
+   "name": "Dao Reserva - Vinha Paz Othon 2019",
+   "claude": {
+    "points": 90,
+    "vintage": 2019,
+    "note": "Savoury old-vine Dao decant first",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-284024": {
+   "name": "Dao Reserva - Vinha Paz 2021",
+   "claude": {
+    "points": null,
+    "vintage": 2021,
+    "note": "No 2021 reviews found",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-106674": {
+   "name": "Douro - Quinta Do Vale Meao Meandro",
+   "claude": {
+    "points": 90,
+    "vintage": 2022,
+    "note": "Great value second wine check vintage",
+    "date": "2026-10-24"
+   }
+  },
+  "bcl-284029": {
+   "name": "Dao - Vinha Paz Red Blend 2022",
+   "claude": {
+    "points": null,
+    "vintage": 2022,
+    "note": "No reviews found",
+    "date": "2026-10-24"
+   }
   }
  }
 }
