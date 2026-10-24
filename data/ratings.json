@@ -270,6 +270,78 @@
     "note": "No reviews found",
     "date": "2026-10-24"
    }
+  },
+  "cellar-c1-154": {
+   "name": "Domaine Pierre Usseglio & Fils Châteauneuf-du-Pape Réserve des Deux Frères 2016",
+   "claude": {
+    "points": 96,
+    "vintage": 2016,
+    "note": "Dunnuck 100 Falstaff 94 big oaky Grenache",
+    "date": "2026-10-24"
+   }
+  },
+  "cellar-c1-53": {
+   "name": "Emrich-Schönleber Monzinger Frühlingsplätzchen Riesling Spätlese 2015",
+   "claude": {
+    "points": null,
+    "vintage": 2015,
+    "note": "No reviews found this vintage",
+    "date": "2026-10-24"
+   }
+  },
+  "cellar-c1-150": {
+   "name": "Domaine Pierre Usseglio & Fils Châteauneuf-du-Pape Cuvée de mon Aïeul 2020",
+   "claude": {
+    "points": 95,
+    "vintage": 2020,
+    "note": "Dunnuck 97 still young decant",
+    "date": "2026-10-24"
+   }
+  },
+  "cellar-c1-121": {
+   "name": "Château de la Négly Coteaux du Languedoc La Clape Porte du Ciel 2016",
+   "claude": {
+    "points": 97,
+    "vintage": 2016,
+    "note": "Syrah powerhouse WA 97 Dunnuck 99",
+    "date": "2026-10-24"
+   }
+  },
+  "cellar-c1-79": {
+   "name": "Domaine Grand Veneur Châteauneuf-du-Pape Vieilles Vignes 2016",
+   "claude": {
+    "points": 97,
+    "vintage": 2016,
+    "note": "Benchmark vintage WA 98 Dunnuck 100",
+    "date": "2026-10-24"
+   }
+  },
+  "cellar-c1-86": {
+   "name": "Domaine Huet Vouvray Cuvée Constance 2009",
+   "claude": {
+    "points": 97,
+    "vintage": 2009,
+    "note": "Botrytis Chenin WE 99 Gilman 98",
+    "date": "2026-10-24"
+   }
+  },
+  "cellar-c1-83": {
+   "name": "Domaine Grand Veneur Châteauneuf-du-Pape Vieilles Vignes 2010",
+   "claude": {
+    "points": 96,
+    "vintage": 2010,
+    "note": "Parker 100 Dunnuck 99 but WS 93",
+    "date": "2026-10-24"
+   }
+  },
+  "cellar-c1-155": {
+   "name": "Domaine Pierre Usseglio & Fils Châteauneuf-du-Pape Réserve des Deux Frères 2015",
+   "claude": {
+    "points": 96,
+    "vintage": 2015,
+    "note": "Dunnuck 96+ drink now decant",
+    "date": "2026-10-24"
+   }
   }
  }
 }
