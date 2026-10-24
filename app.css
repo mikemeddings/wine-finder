@@ -342,3 +342,21 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 #sl-add-hits { margin-top: 0.6rem; }
 .btn-vivino { background: #9b1b30; border-color: #9b1b30; color: #fff; }
 .btn-vivino:hover { background: #7d1626; filter: none; }
+
+/* Ratings: Claude's rating and Your rating (points out of 100) */
+.wine-ratings { grid-column: 1 / -1; margin: 0.3rem 0 0; display: flex; flex-wrap: wrap; gap: 0.4rem 0.8rem; }
+.rating { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 0.5rem; border: 2px solid; }
+.rating strong { font-size: 1.15em; }
+.rating-claude { background: #fbe6d9; border-color: var(--claude); color: var(--claude-dark); }
+.rating-mine { background: var(--gold-tint); border-color: #b38a1d; color: var(--gold); }
+.rating-date { font-size: 0.9em; }
+.btn-rate { background: var(--gold-tint); border-color: #b38a1d; color: var(--gold); }
+.rate-panel { grid-column: 1 / -1; margin-top: 0.5rem; padding: 0.75rem; background: var(--gold-tint); border: 2px solid #b38a1d; border-radius: 0.6rem; }
+.rate-row { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: flex-end; }
+.rate-row label { font-weight: 600; display: flex; flex-direction: column; }
+.rate-row input { font: inherit; min-height: 3rem; border: 2px solid var(--line); border-radius: 0.5rem; padding: 0.3rem 0.6rem; background: #fff; }
+.rate-points { width: 8rem; }
+.rate-note-label { flex: 1 1 16rem; }
+.rate-msg { color: var(--danger); font-weight: 600; min-height: 1.2em; margin: 0.2rem 0; }
+.save-list { padding-left: 1.4rem; max-height: 50vh; overflow-y: auto; }
+.save-list li { margin-bottom: 0.5rem; }

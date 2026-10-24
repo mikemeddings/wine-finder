@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-24.2">
+<link rel="stylesheet" href="app.css?v=2026-10-24.4">
 </head>
 <body>
 <header class="top">
@@ -120,6 +120,8 @@
             <option value="vintage">Vintage: newest first</option>
             <option value="abv">Alcohol %: lowest first</option>
             <option value="sweet">Sweetness: sweetest first</option>
+            <option value="claude">Claude's rating: highest first</option>
+            <option value="mine">Your rating: highest first</option>
           </select>
         </label>
       </div>
@@ -254,8 +256,18 @@
   </div>
 </dialog>
 
+<dialog id="save-dialog" class="dialog" aria-labelledby="save-q">
+  <p id="save-q" class="dialog-q"></p>
+  <ul id="save-list" class="save-list"></ul>
+  <p id="save-help" class="hint" hidden>In Claude, you can ask: “Please make the save link again.”</p>
+  <div class="dialog-actions">
+    <button type="button" class="btn btn-primary" id="save-yes">Save these ratings</button>
+    <button type="button" class="btn" id="save-no" autofocus>Don't save</button>
+  </div>
+</dialog>
+
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-24.2"></script>
+<script src="app.js?v=2026-10-24.4"></script>
 </body>
 </html>

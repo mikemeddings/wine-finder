@@ -60,6 +60,8 @@ Along the way:
 
 Finally, after all the wines, finish with a short ranking of them by what reviewers say, as a numbered list: one line per wine with its price and where it's sold (as in my list), then its best-supported score, naming the source and the vintage it applies to. If the same wine appears twice, say how the two listings differ (store, size or price). Put any wine without reviews at the end and say so.
 
+{SAVE_LINK}
+
 My eyesight isn't what it was, so please keep it easy to read: a clear heading for each wine, short paragraphs of two or three sentences, and no tables.
 
 Please treat my list exactly as given — all of these wines, not just similar ones. The availability and prices above are from the stores' own lists (or our family's cellars), so you don't need to search for where to buy them.`;
@@ -75,6 +77,8 @@ Please:
 - Rank them from best reviewed to least, as a numbered list. Start each line with the wine, its price and where it's sold (as in my list). For every score, name the source and the vintage it applies to, and say so if that vintage differs from the one listed. If the same wine appears twice, say how the two listings differ (store, size or price).
 - If you can't find reviews for a wine, say so plainly and put it at the end rather than estimating.
 - Finish with a short note on value for money at the prices above.
+
+{SAVE_LINK}
 
 My eyesight isn't what it was, so please keep it easy to read: a clear heading for each wine, short paragraphs of two or three sentences, and no tables.
 
@@ -96,7 +100,7 @@ const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB" };
 const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn" };
 const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 50;
-const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines" };
+const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings" };
 
 // ---- Helpers -----------------------------------------------------------------
 
@@ -362,6 +366,8 @@ const SORTS = {
   vintage: (a, b) => (b.vintage ?? -1) - (a.vintage ?? -1) || a.price - b.price,
   abv: (a, b) => (a.abv ?? 99) - (b.abv ?? 99) || a.price - b.price,
   sweet: (a, b) => (b.sweetness ?? -1) - (a.sweetness ?? -1) || a.price - b.price, // not rated last
+  claude: (a, b) => (ratingOf(b.id).claude?.points ?? -1) - (ratingOf(a.id).claude?.points ?? -1) || a.price - b.price,
+  mine: (a, b) => (ratingOf(b.id).mine?.points ?? -1) - (ratingOf(a.id).mine?.points ?? -1) || a.price - b.price,
 };
 
 function countBy(skip, key) {
@@ -460,7 +466,7 @@ function wineCard(w) {
     <h3 class="wine-name">${esc(w.name)}</h3>
     <div class="wine-price">${money(w.price)}</div>
     <p class="wine-facts">${typePill(w.type)} ${facts}</p>
-    <p class="wine-detail">${detail} ${badges}</p>${scores}${calgary}
+    <p class="wine-detail">${detail} ${badges}</p>${scores}${calgary}${ratingsHtml(w)}
     <div class="wine-actions">
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "Add to Short List"}</button>
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
@@ -468,6 +474,7 @@ function wineCard(w) {
       <a class="btn ext btn-vivino" href="${vivinoUrl(w)}" target="_blank" rel="noopener">Vivino</a>
       ${retailer}
       <button type="button" class="btn btn-ew" data-ew="${esc(w.id)}" aria-expanded="false">Find it elsewhere</button>
+      ${rateButton(w)}
     </div>
   </article>`;
 }
@@ -566,7 +573,7 @@ function priceText(w) {
   return `${money(w.price)} at ${sourceLabel(w.source)}`;
 }
 
-function wineLine(w, i) {
+function wineLine(w, i, forClaude = false) {
   const bits = [w.country !== "Country not stated" ? w.country : null, w.type !== "Other" ? w.type : null,
     w.size_ml ? sizeText(w) : null, priceText(w)];
   let line = `${i + 1}. ${w.name} — ${bits.filter(Boolean).join(", ")}`;
@@ -574,6 +581,12 @@ function wineLine(w, i) {
   if (w.retailer_scores) line += `; ${w.retailer_scores}`;
   if (w.my_score != null) line += `; ${w.owner} scored it ${w.my_score}`;
   if (w.ct_score != null) line += `; CellarTracker community score ${w.ct_score}`;
+  if (forClaude) {
+    const r = ratingOf(w.id);
+    if (r.mine) line += `; my own rating: ${r.mine.points}/100`;
+    if (r.claude?.points) line += `; your earlier rating: ${r.claude.points}/100${r.claude.vintage ? ` for ${r.claude.vintage}` : ""}`;
+    line += ` [${w.id}]`;
+  }
   return line;
 }
 
@@ -585,11 +598,18 @@ function shortlistText() {
 
 let claudeMode = "about"; // "about" (tell me about these) or "rank" (rank by reviews)
 
+// Asks Claude to end with a link back to this page carrying its own ratings
+// (see offerSavedRatings). {BASE} becomes this page's address.
+const SAVE_LINK_TEMPLATE = `Last of all, please give me a link I can click to save your ratings. For each wine, give your own overall rating out of 100, based on what the reviewers say (your judgement, not a copy of any one critic's score). Build the link exactly like this, one entry per wine joined by semicolons:
+{BASE}#save=CODE~POINTS~VINTAGE~NOTE;CODE~POINTS~VINTAGE~NOTE
+CODE is the wine's code in square brackets in my list; POINTS is your rating (leave it empty if you found no reviews); VINTAGE is the vintage your rating is for, or NV; NOTE is up to eight words, with + instead of spaces and no semicolons or tildes. Show it as a link titled "Save these ratings to my Wine Finder".`;
+
 function claudePrompt(mode = claudeMode) {
   const about = String(storeGet(STORE.aboutMe, "") || "").trim();
   return (mode === "rank" ? RANK_TEMPLATE : PROMPT_TEMPLATE)
     .replace("{ABOUT_ME}", about)
-    .replace("{WINES}", shortlist.map(wineLine).join("\n") + (shortlist.some((w) => w.kind === "typed")
+    .replace("{SAVE_LINK}", SAVE_LINK_TEMPLATE.replace("{BASE}", location.href.split("#")[0].split("?")[0]))
+    .replace("{WINES}", shortlist.map((w, i) => wineLine(w, i, true)).join("\n") + (shortlist.some((w) => w.kind === "typed")
       ? "\n\nThe wines marked “added by name” aren't on my store lists (BC Liquor, BSW, ZYN). If you know where they're sold in BC, Alberta or Ontario, please mention it."
       : ""))
     .replace(/[ \t]+\n/g, "\n");
@@ -631,8 +651,10 @@ function renderShortlist() {
   $("sl-list").innerHTML = shortlist.map((w) => `<li><div class="sl-row">
       <div><div class="sl-name">${esc(w.name)}</div>
       <div>${esc([w.country !== "Country not stated" ? w.country : null, w.type !== "Other" ? w.type : null, w.vintage, w.size_ml ? sizeText(w) : null].filter(Boolean).join(" · "))}</div>
-      <div>${w.kind === "cellar" || w.price == null ? esc(priceText(w)) : `<strong>${money(w.price)}</strong> at ${esc(sourceLabel(w.source))}`}</div></div>
+      <div>${w.kind === "cellar" || w.price == null ? esc(priceText(w)) : `<strong>${money(w.price)}</strong> at ${esc(sourceLabel(w.source))}`}</div>
+      ${ratingsHtml(w)}</div>
       <div class="sl-buttons">
+        ${rateButton(w)}
         <button type="button" class="btn btn-ew" data-ew="${esc(w.id)}" aria-expanded="false">Find it elsewhere</button>
         <button type="button" class="btn" data-remove="${esc(w.id)}">Remove</button>
       </div>
@@ -1102,7 +1124,7 @@ function mwWhereCanIBuy(id) {
 }
 
 function downloadBackup() {
-  const blob = new Blob([JSON.stringify({ app: "wine-finder", saved: new Date().toISOString(), myWines }, null, 1)],
+  const blob = new Blob([JSON.stringify({ app: "wine-finder", saved: new Date().toISOString(), myWines, ratings }, null, 1)],
     { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -1119,9 +1141,11 @@ async function restoreBackup(file) {
     const mw = data.myWines || data;
     if (!mw || typeof mw.cellars !== "object" || !Array.isArray(mw.manual)) throw new Error("not a backup");
     const n = Object.values(mw.cellars).reduce((k, c) => k + c.wines.length, 0) + mw.manual.length;
-    if (!window.confirm(`Replace My wines with the ${n} wines in this backup?`)) return;
+    const nr = data.ratings && typeof data.ratings === "object" ? Object.keys(data.ratings).length : 0;
+    if (!window.confirm(`Replace My wines with the ${n} wines${nr ? ` and ${nr} ratings` : ""} in this backup?`)) return;
     myWines = { cellars: mw.cellars, manual: mw.manual };
     saveMyWines();
+    if (nr) { ratings = data.ratings; saveRatings(); }
     mwView.owner = "all";
     renderMyWines();
     mwStatus(`Restored ${n} wines from the backup.`);
@@ -1141,6 +1165,152 @@ function wireMyWines() {
   $("mw-more").addEventListener("click", () => { mwView.shown += MW_PAGE; renderMyWines(); });
   $("mw-backup").addEventListener("click", downloadBackup);
   $("mw-restore").addEventListener("change", (e) => { const f = e.target.files[0]; if (f) restoreBackup(f); });
+}
+
+// ---- Ratings: "Claude's rating" and "Your rating" (points out of 100) -----------------
+// Kept on this computer (localStorage) and in the backup file. Claude's rating arrives
+// through a "save" link at the end of Claude's answer; it is Claude's own overall
+// judgement after reading reviews, never a copy of a critic's score (critics' terms
+// forbid compiling their scores; see Design/CLAUDE.md §11).
+let ratings = {};
+
+function loadRatings() {
+  const r = storeGet(STORE.ratings, {});
+  ratings = r && typeof r === "object" && !Array.isArray(r) ? r : {};
+}
+function saveRatings() { storeSet(STORE.ratings, ratings); }
+const ratingOf = (id) => ratings[id] || {};
+const todayIso = () => new Date().toISOString().slice(0, 10);
+const shortDate = (iso) => {
+  const d = new Date(iso + "T12:00:00");
+  return isNaN(d) ? "" : d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+};
+
+function ratingsHtml(w) {
+  const r = ratingOf(w.id), parts = [];
+  if (r.claude) {
+    const c = r.claude;
+    parts.push(`<span class="rating rating-claude">Claude's rating <strong>${c.points ?? "no reviews found"}</strong>` +
+      `${c.vintage ? ` (${esc(String(c.vintage))})` : ""}${c.note ? ` · ${esc(c.note)}` : ""}` +
+      ` <span class="rating-date">${esc(shortDate(c.date))}</span></span>`);
+  }
+  if (r.mine) {
+    parts.push(`<span class="rating rating-mine">Your rating <strong>${r.mine.points}</strong>` +
+      `${r.mine.note ? ` · ${esc(r.mine.note)}` : ""}</span>`);
+  }
+  return parts.length ? `<p class="wine-ratings">${parts.join("")}</p>` : "";
+}
+
+function rateButton(w) {
+  const mine = ratingOf(w.id).mine;
+  return `<button type="button" class="btn btn-rate" data-rate="${esc(w.id)}" aria-expanded="false">${mine
+    ? `Your rating: ${mine.points}` : "☆ Your rating"}</button>`;
+}
+
+function toggleRatePanel(btn) {
+  const host = btn.closest(".wine, li");
+  const open = host.querySelector(".rate-panel");
+  if (open) { open.remove(); btn.setAttribute("aria-expanded", "false"); return; }
+  const id = btn.dataset.rate;
+  const mine = ratingOf(id).mine || {};
+  const panel = document.createElement("div");
+  panel.className = "rate-panel";
+  panel.innerHTML = `<div class="rate-row">
+      <label>Your rating, out of 100<input type="number" class="rate-points" inputmode="numeric" min="50" max="100" value="${mine.points ?? ""}" placeholder="e.g. 88"></label>
+      <label class="rate-note-label">Note (optional)<input type="text" class="rate-note" maxlength="80" value="${esc(mine.note || "")}" placeholder="e.g. lovely with lamb"></label>
+    </div>
+    <p class="hint">Most wines worth buying score between 80 and 95.</p>
+    <p class="rate-msg" role="status"></p>
+    <div class="rate-row">
+      <button type="button" class="btn btn-primary" data-rate-save="${esc(id)}">Save my rating</button>
+      ${mine.points ? `<button type="button" class="btn btn-danger" data-rate-clear="${esc(id)}">Remove my rating</button>` : ""}
+    </div>`;
+  host.appendChild(panel);
+  btn.setAttribute("aria-expanded", "true");
+  panel.querySelector(".rate-points").focus();
+}
+
+function refreshRatedViews() {
+  if (!$("view-shortlist").hidden) renderShortlist();
+  else if (!$("view-find").hidden) renderResults();
+}
+
+function saveMyRating(id, btn) {
+  const panel = btn.closest(".rate-panel");
+  const points = parseInt(panel.querySelector(".rate-points").value, 10);
+  if (!(points >= 50 && points <= 100)) {
+    panel.querySelector(".rate-msg").textContent = "Please enter a number from 50 to 100.";
+    panel.querySelector(".rate-points").focus();
+    return;
+  }
+  const w = findWine(id);
+  ratings[id] = { ...ratingOf(id), name: w?.name || ratingOf(id).name || id,
+    mine: { points, note: panel.querySelector(".rate-note").value.trim().slice(0, 80) || null, date: todayIso() } };
+  saveRatings();
+  refreshRatedViews();
+}
+
+function clearMyRating(id) {
+  const r = { ...ratingOf(id) };
+  delete r.mine;
+  if (r.claude) ratings[id] = r; else delete ratings[id];
+  saveRatings();
+  refreshRatedViews();
+}
+
+// The link Claude makes: <page>#save=CODE~POINTS~VINTAGE~NOTE;CODE~...
+// It comes from Claude's answer, so every field is checked and nothing is saved
+// until the person presses "Save these ratings".
+function parseSaveHash(hash) {
+  const m = /^#save=([\s\S]*)$/.exec(hash || "");
+  if (!m) return null;
+  let raw = m[1].replace(/\+/g, " ");
+  try { raw = decodeURIComponent(raw); } catch { /* keep as is */ }
+  const items = [];
+  for (const part of raw.split(";")) {
+    const [code = "", pts = "", vin = "", ...rest] = part.split("~").map((s) => s.trim());
+    if (!/^(bcl|bsw|zyn|cellar|manual|typed)-[\w.-]{1,80}$/.test(code)) continue;
+    const n = parseInt(pts, 10);
+    const points = /^\d{2,3}$/.test(pts) && n >= 50 && n <= 100 ? n : null;
+    if (pts && points === null) continue; // a score we can't trust: skip rather than guess
+    items.push({
+      id: code,
+      points,
+      vintage: /^(19|20)\d\d$/.test(vin) ? +vin : /^nv$/i.test(vin) ? "NV" : null,
+      note: rest.join(" ").replace(/\s+/g, " ").slice(0, 80) || null,
+    });
+  }
+  return items;
+}
+
+let pendingSave = null;
+
+function offerSavedRatings() {
+  const items = parseSaveHash(location.hash);
+  if (!items) return;
+  history.replaceState(null, "", location.pathname + location.search); // don't offer it again on reload
+  pendingSave = items;
+  const nameOf = (id) => findWine(id)?.name || ratingOf(id).name;
+  $("save-q").textContent = items.length
+    ? `Save Claude's ratings for ${items.length} ${items.length === 1 ? "wine" : "wines"}?`
+    : "This link didn't contain any ratings that could be read.";
+  $("save-list").innerHTML = items.map((it) => `<li><strong>${esc(nameOf(it.id) || `Wine ${it.id} (not found on this computer)`)}</strong><br>
+      Claude's rating: <strong>${it.points ?? "no reviews found"}</strong>${it.vintage ? ` (${esc(String(it.vintage))})` : ""}${it.note ? ` · ${esc(it.note)}` : ""}</li>`).join("");
+  $("save-help").hidden = items.length > 0;
+  $("save-yes").hidden = items.length === 0;
+  $("save-dialog").showModal?.();
+}
+
+function confirmSavedRatings() {
+  for (const it of pendingSave || []) {
+    const name = findWine(it.id)?.name || ratingOf(it.id).name || it.id;
+    ratings[it.id] = { ...ratingOf(it.id), name,
+      claude: { points: it.points, vintage: it.vintage, note: it.note, date: todayIso() } };
+  }
+  saveRatings();
+  pendingSave = null;
+  $("save-dialog").close();
+  refreshRatedViews();
 }
 
 // ---- Views -------------------------------------------------------------------
@@ -1290,6 +1460,11 @@ function wireEvents() {
       renderListHits(t.closest(".elsewhere"));
     }
     else if (t.id === "sl-add-btn") addFromShortlistBox();
+    else if (t.dataset.rate) toggleRatePanel(t);
+    else if (t.dataset.rateSave) saveMyRating(t.dataset.rateSave, t);
+    else if (t.dataset.rateClear) clearMyRating(t.dataset.rateClear);
+    else if (t.id === "save-yes") confirmSavedRatings();
+    else if (t.id === "save-no") { pendingSave = null; $("save-dialog").close(); }
     else if (t.dataset.action === "mw-confirm") confirmImport();
     else if (t.dataset.action === "mw-cancel-import") { mwPending = null; $("mw-preview").hidden = true; $("mw-file").value = ""; }
     else if (t.dataset.action === "mw-owner") { mwView.owner = t.dataset.owner; mwView.shown = MW_PAGE; renderMyWines(); }
@@ -1447,6 +1622,7 @@ function loadAllSources() {
 
 async function init() {
   loadMyWines();
+  loadRatings();
   wireEvents();
   saveShortlist();
   try {
@@ -1467,6 +1643,8 @@ async function init() {
   renderFooter();
   renderAll();
   updatePickCounts();
+  offerSavedRatings();
+  window.addEventListener("hashchange", offerSavedRatings);
   setTimeout(() => loadAllSources().then(() => { updatePickCounts(); renderSources(); }), 800);
 }
 
