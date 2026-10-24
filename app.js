@@ -325,6 +325,7 @@ function defaultState() {
     names: null,    // famous-wine phrases (an Icons pick)
     minAge: null,   // vintage at least this many years old
     pickLabel: "",  // the quick pick that set these filters, for the "Showing:" line
+    cellar: "",     // only store wines that look like a wine in this cellar ("Jon's cellar")
     sort: "price-asc",
     shown: PAGE_SIZE,
   };
@@ -344,6 +345,7 @@ function matches(w, skip, st = state) {
   if (st.bottleOnly && w.size_ml !== 750) return false;
   if (st.newOnly && !w.new_since_last) return false;
   if (st.topOnly && !w.retailer_scores) return false;
+  if (st.cellar && !cellarMatches(w).some((m) => m.source === st.cellar)) return false;
   if (st.minAge && !(w.vintage && w.vintage <= THIS_YEAR - st.minAge)) return false;
   if (st.names && !st.names.some((n) => w._w.includes(n))) return false;
   if (w.sweetness == null) {
@@ -393,14 +395,21 @@ function renderSources() {
     $("source-legend").textContent = "Wines listed here";
     $("source-list").innerHTML = `<p class="source-only">${have.map(sourceBadge).join(" ")}</p>
       <p class="hint">Looking for another store?</p>
-      <button type="button" class="btn btn-ew" data-action="goto-ew">Where can I buy…? ↑</button>`;
+      <button type="button" class="btn btn-ew" data-action="goto-ew">Where can I buy…? ↑</button>` + cellarFilterHtml();
     return;
   }
   $("source-legend").textContent = "Sold by";
   $("source-list").innerHTML = have.map((s) => checkbox("source", s, state.sources.has(s), sourceBadge(s), null)).join("") +
     (have.includes("ZYN") ? `<label class="check check-strong"><input type="checkbox" id="top-only"${state.topOnly ? " checked" : ""}>
        Only ZYN's “90+ point wines under $35”</label>
-       <p class="hint">ZYN's own list of wines rated 90 or more, priced under $35.</p>` : "");
+       <p class="hint">ZYN's own list of wines rated 90 or more, priced under $35.</p>` : "") + cellarFilterHtml();
+}
+
+function cellarFilterHtml() {
+  const srcs = cellarSources();
+  return srcs.map((s) => `<label class="check check-strong"><input type="checkbox" data-cellar-only="${esc(s)}"${state.cellar === s ? " checked" : ""}>
+      Only wines in ${esc(s)}</label>`).join("") + (srcs.length
+    ? `<p class="hint">Store wines that look like a wine in that cellar (a best guess from the names). Tick BSW and ZYN too to search every store. The whole cellar is on My wines.</p>` : "");
 }
 
 function renderCountries() {
@@ -450,7 +459,7 @@ function syncInputs() {
 
 function filtersOnCount() {
   return state.countries.size + state.types.size + state.sweet.size + (state.priceFrom != null) +
-    (state.priceTo != null) + !!state.q + state.newOnly + state.topOnly + !state.bottleOnly + !state.notRated;
+    (state.priceTo != null) + !!state.q + state.newOnly + state.topOnly + !!state.cellar + !state.bottleOnly + !state.notRated;
 }
 
 // ---- Rendering: results --------------------------------------------------------
@@ -500,6 +509,7 @@ function renderResults() {
   parts.push(state.bottleOnly ? "750 ml bottles" : "all sizes");
   if (state.newOnly) parts.push("new on the latest BC list");
   if (state.topOnly) parts.push("ZYN's 90+ under $35 list");
+  if (state.cellar) parts.push(`in ${esc(state.cellar)}`);
   if (state.minAge) parts.push(`${state.minAge} years or older`);
   if (state.names) parts.push(`famous wines (${esc(state.pickLabel)})`);
   if (state.sources.size > 1) parts.push([...state.sources].map(sourceLabel).map(esc).join(", "));
@@ -1666,9 +1676,16 @@ function nameCellar(slot) {
 // ---- "In Jon's cellar" on store wines ------------------------------------------------
 // Cellar names and store names are written differently, so this is a careful guess:
 // every distinctive word of the store's name must appear in the cellar wine's details,
-// and at least two of them in its name or producer.
+// at least two of them in its name or producer, and at least one of those must be
+// neither a grape nor a place ("Cabernet Sauvignon - O-61" is not Jon's Don Melchor). When the
+// cellar wine has its own name (Oculus), the store's name must have it too.
 const MATCH_STOP = new Set(("red white rose wine wines blend vin vino the and del della des les las los " +
   "chateau domaine bodega bodegas estate estates winery vineyard vineyards cellars reserve reserva sparkling dry brut").split(" "));
+const GRAPE_WORDS = new Set(("cabernet sauvignon merlot pinot noir grigio gris blanc franc chardonnay syrah shiraz " +
+  "malbec carmenere tempranillo sangiovese nebbiolo zinfandel primitivo riesling gewurztraminer petit petite verdot " +
+  "grenache garnacha mourvedre monastrell viognier semillon muscat moscato chenin gamay barbera touriga nacional " +
+  "nero davola montepulciano verdejo albarino godello mencia corvina aglianico dolcetto torrontes tannat pinotage " +
+  "marsanne roussanne cinsault carignan carinena mataro trebbiano vermentino gruner veltliner").split(" "));
 const nameTokens = (s) => fold(s).split(/[^a-z0-9]+/).filter((t) => t.length >= 3 && !/^\d+$/.test(t) && !MATCH_STOP.has(t));
 
 function storeTokens(name) {
@@ -1683,8 +1700,12 @@ function buildCellarIndex() {
   for (const w of allMyWines()) {
     if (w.kind !== "cellar") continue;
     const nameT = new Set(nameTokens(`${w.name} ${w.producer || ""}`));
-    const all = new Set([...nameT, ...nameTokens(`${w.region_or_grape || ""} ${w.varietal || ""}`)]);
-    const e = { w, nameT, all };
+    const generic = new Set(nameTokens(`${w.region_or_grape || ""} ${w.varietal || ""} ${w.country || ""}`));
+    const all = new Set([...nameT, ...generic]);
+    // Words that name this particular wine (Oculus, Tignanello), beyond producer, grape and place.
+    const prodT = new Set(nameTokens(w.producer || ""));
+    const specific = [...nameT].filter((t) => !prodT.has(t) && !generic.has(t) && !GRAPE_WORDS.has(t));
+    const e = { w, nameT, all, generic, specific };
     for (const t of nameT) { if (!idx.has(t)) idx.set(t, []); idx.get(t).push(e); }
   }
   return idx;
@@ -1703,6 +1724,8 @@ function cellarMatches(w) {
       if (seen.has(e)) continue;
       seen.add(e);
       if (!S.every((x) => e.all.has(x)) || S.filter((x) => e.nameT.has(x)).length < 2) continue;
+      if (!S.some((x) => e.nameT.has(x) && !e.generic.has(x) && !GRAPE_WORDS.has(x))) continue;
+      if (e.specific.length && !S.some((x) => e.specific.includes(x))) continue; // same producer, different wine
       if (!bySource.has(e.w.source)) bySource.set(e.w.source, new Set());
       if (e.w.vintage) bySource.get(e.w.source).add(e.w.vintage);
     }
@@ -1729,6 +1752,8 @@ function updateCellarSorts() {
   for (const src of cellarSources()) sel.add(new Option(`In ${src} first`, `cellar:${src}`));
   if (state.sort.startsWith("cellar:") && ![...sel.options].some((o) => o.value === state.sort)) state.sort = "price-asc";
   sel.value = state.sort;
+  if (state.cellar && !cellarSources().includes(state.cellar)) state.cellar = "";
+  if (WINES.length) renderSources();
 }
 
 function currentSort() {
@@ -2027,6 +2052,11 @@ function wireEvents() {
         loadSource(t.value).then(() => { renderFooter(); refresh(); });
         return;
       }
+    } else if (t.dataset.cellarOnly != null) {
+      state.cellar = t.checked ? t.dataset.cellarOnly : "";
+      state.shown = PAGE_SIZE;
+      renderSources();
+      refresh();
     } else if (t.id === "top-only") {
       state.topOnly = t.checked;
       if (t.checked && !state.sources.has("ZYN")) { // the list is ZYN's, so show ZYN's wines
