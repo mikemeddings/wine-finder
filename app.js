@@ -103,7 +103,7 @@ const ALL_SOURCES = ["BC Liquor", "BSW Liquor", "ZYN"];
 const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB" };
 const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn" };
 const CALGARY = new Set(["BSW Liquor", "ZYN"]);
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 100;
 const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk", dineHistory: "wf.dineHistory" };
 
 // ---- Helpers -----------------------------------------------------------------
@@ -523,7 +523,7 @@ function cellarCard(w) {
     w.drink_from || w.drink_to ? esc(`Drink ${w.drink_from ?? "now"}–${w.drink_to ?? "?"}`) : null].filter(Boolean).join(" · ");
   return `<article class="wine wine-${esc(w.type)} wine-cellar${on ? " on-list" : ""}">
     <h3 class="wine-name">${esc(w.name)}</h3>
-    <div class="wine-price wine-price-cellar">In the cellar</div>
+    <div class="wine-price wine-price-cellar">In ${esc(w.source)}</div>
     <p class="wine-facts">${typePill(w.type)} ${facts}</p>
     <p class="wine-detail"><span class="badge badge-cellar">${esc(w.source)}</span>${w.size_ml && w.size_ml !== 750 ? ` ${esc(sizeText(w))}` : ""}</p>
     ${scores ? `<p class="wine-detail mw-scores">${scores}</p>` : ""}${soldAtHtml(w)}${ratingsHtml(w)}${familyLinksHtml(w)}
@@ -588,9 +588,9 @@ function renderResults() {
   if (state.minAge) parts.push(`${state.minAge} years or older`);
   if (state.names) parts.push(`famous wines (${esc(state.pickLabel)})`);
   if (cellarOn()) {
-    const stores = storesTicked();
+    const stores = storesTicked(), cellarsTicked = state.sources.size - stores.length;
     parts.unshift([...state.sources].filter((s) => !ALL_SOURCES.includes(s)).map(esc).join(", ") +
-      (stores.length ? `, sold by ${stores.map(sourceLabel).map(esc).join(" or ")}` : " (the whole cellar)"));
+      (stores.length ? `, sold by ${stores.map(sourceLabel).map(esc).join(" or ")}` : cellarsTicked > 1 ? " (the whole cellars)" : " (the whole cellar)"));
   } else if (state.sources.size > 1) parts.unshift([...state.sources].map(sourceLabel).map(esc).join(", "));
   $("active-filters").innerHTML = `<strong>Showing:</strong> ${parts.join(" · ")}`;
 
@@ -1904,9 +1904,10 @@ function buildCellarIndex() {
   return idx;
 }
 
-// Store wine -> [{source: "Jon's cellar", vintages: [2016, 2018]}]
+// Store wine -> [{source: "Jon's cellar", vintages: [2016, 2018]}]. A cellar wine gets the
+// other cellars that have the same wine (any vintage), never its own cellar.
 function cellarMatches(w) {
-  if (!w || (w.kind && w.kind !== "typed")) return []; // store wines and wines added by name
+  if (!w || (w.kind && w.kind !== "typed" && w.kind !== "cellar")) return []; // store, typed and cellar wines
   if (cellarMatchCache.has(w.id)) return cellarMatchCache.get(w.id);
   cellarIndex ??= buildCellarIndex();
   const S = storeTokens(w.name);
@@ -1916,6 +1917,7 @@ function cellarMatches(w) {
     for (const t of S) for (const e of cellarIndex.get(t) || []) {
       if (seen.has(e)) continue;
       seen.add(e);
+      if (w.kind === "cellar" && e.w.source === w.source) continue;
       if (!S.every((x) => e.all.has(x)) || S.filter((x) => e.nameT.has(x)).length < 2) continue;
       if (!S.some((x) => e.nameT.has(x) && !e.generic.has(x) && !GRAPE_WORDS.has(x))) continue;
       if (e.specific.length && !S.some((x) => e.specific.includes(x))) continue; // same producer, different wine
@@ -2026,7 +2028,7 @@ function relatedRatings(w) {
 }
 
 function familyLinksHtml(w) {
-  const badges = cellarMatches(w).map((m) => `<span class="badge badge-cellar">In ${esc(m.source)}` +
+  const badges = cellarMatches(w).map((m) => `<span class="badge badge-cellar">${w.kind === "cellar" ? "Also in" : "In"} ${esc(m.source)}` +
     `${m.vintages.length ? ` (${esc(m.vintages.join(", "))})` : ""}</span>`);
   const rel = relatedRatings(w).map(({ f, label }) => {
     const c = f.claude, fam = f.family;
@@ -3143,12 +3145,14 @@ function wireEvents() {
   document.querySelector(".filters").addEventListener("change", (e) => {
     const t = e.target;
     const group = t.dataset.group;
-    if (group === "cellar") { // a cellar replaces the store list; unticking goes back to the stores
-      if (t.checked) {
+    if (group === "cellar") { // cellars replace the store list; unticking the last goes back to the stores
+      if (t.checked && cellarOn()) state.sources.add(t.value); // another cellar alongside
+      else if (t.checked) {
         state.sources = new Set([t.value]);
         state.bottleOnly = false;
         if (state.sorts[0].startsWith("price")) state.sorts = ["ct-desc", "vintage-desc", ""];
-      } else {
+      } else if ((state.sources.delete(t.value), cellarOn())) { /* other cellars still ticked */ }
+      else {
         state.sources = new Set(["BC Liquor"]);
         state.bottleOnly = true;
         if (state.sorts[0] === "ct-desc") state.sorts = ["price-asc", "", ""];
