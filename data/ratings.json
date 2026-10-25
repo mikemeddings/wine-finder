@@ -387,6 +387,15 @@
     "note": "Languedoc benchmark Syrah powerful and long lived",
     "date": "2026-10-25"
    }
+  },
+  "typed-losada-vinos-de-finca-mencia-bierzo-altos-de-losada-la-bienquerida": {
+   "name": "Losada Vinos de Finca Mencía Bierzo Altos de Losada La Bienquerida",
+   "claude": {
+    "points": 93,
+    "vintage": 2022,
+    "note": "Old-vine slate Mencia decant or cellar to 2034",
+    "date": "2026-10-25"
+   }
   }
  }
 }
