@@ -2059,10 +2059,25 @@ function currentSort() {
 const DINE_CHOICES = {
   food: ["Red meat", "Lamb", "Fish", "Seafood", "Chicken", "Pork", "Pasta", "Pizza", "Cheese", "Vegetarian", "Spicy food"],
   colour: ["Any", "Red", "White", "Rosé", "Sparkling"],
-  budget: ["Any", "Under $60", "$60–100", "$100–150", "Over $150"],
-  serve: ["Bottle", "By the glass"],
+  serve: ["Either", "Bottle", "By the glass"],
 };
-const dine = { food: new Set(), colour: "Any", budget: "Any", serve: "Bottle" };
+// Budget: two sliders (lowest, highest); the buttons are presets that move them. The top of
+// the scale means "no limit". Glass prices get their own, smaller scale.
+const DINE_SCALE = {
+  bottle: { max: 300, step: 5, presets: [["Any", 0, 300], ["Under $60", 0, 60], ["$60–100", 60, 100], ["$100–150", 100, 150], ["Over $150", 150, 300]] },
+  glass: { max: 40, step: 1, presets: [["Any", 0, 40], ["Under $12", 0, 12], ["$12–18", 12, 18], ["$18–25", 18, 25], ["Over $25", 25, 40]] },
+};
+const dine = { food: new Set(), colour: "Any", serve: "Either", lo: 0, hi: 300 };
+const dineScale = () => DINE_SCALE[dine.serve === "By the glass" ? "glass" : "bottle"];
+
+// "$30 to $100", "up to $60", "$150 or more", or "" for no budget.
+function dineBudgetText() {
+  const { max } = dineScale();
+  if (dine.lo <= 0 && dine.hi >= max) return "";
+  if (dine.lo <= 0) return `up to $${dine.hi}`;
+  if (dine.hi >= max) return `$${dine.lo} or more`;
+  return `$${dine.lo} to $${dine.hi}`;
+}
 
 const DINE_TEMPLATE = `I'm at a restaurant and I'm attaching a photo of the wine list. Please read every wine and price on it, then help me choose. {CHOICES} {ABOUT_ME}
 
@@ -2074,7 +2089,7 @@ Please:
 
 At the very end, below a horizontal line (---), write this link as the largest heading (one #), exactly in this form: first the count, then one entry per pick in the same order, all joined by semicolons:
 # [🍷 Back to my Wine Finder with tonight's picks]({BASE}#dine=READ~UNREAD;NAME~PRICE~SCORE~CRITICS~STORE~WHAT~WHY~VALUE;NAME~PRICE~SCORE~CRITICS~STORE~WHAT~WHY~VALUE)
-READ is how many wines you could read, and UNREAD how many you couldn't (0 if none). For each pick: NAME is the wine as written on the list (with its vintage if shown); PRICE is the list price as a plain number; SCORE is the best critic score you know as a number out of 100, or empty; CRITICS is who gave it and for which vintage, up to eight words, or empty; STORE is the usual store price, up to six words, or empty; WHAT is what the wine is, up to thirty words; WHY is why it suits my meal and budget, up to twenty words; VALUE is your verdict on the price, up to twelve words. Use + instead of spaces, and no semicolons or tildes anywhere inside the entries. Under the link, in bold: "Tap this to see tonight's picks in your Wine Finder."`;
+READ is how many wines you could read, and UNREAD how many you couldn't (0 if none). For each pick: NAME is the wine as written on the list (with its vintage if shown); PRICE is the price as on the list, for example 63, or glass 14 bottle 63 when it's offered both ways (up to six words); SCORE is the best critic score you know as a number out of 100, or empty; CRITICS is who gave it and for which vintage, up to eight words, or empty; STORE is the usual store price, up to six words, or empty; WHAT is what the wine is, up to thirty words; WHY is why it suits my meal and budget, up to twenty words; VALUE is your verdict on the price, up to twelve words. Use + instead of spaces, and no semicolons or tildes anywhere inside the entries. Under the link, in bold: "Tap this to see tonight's picks in your Wine Finder."`;
 
 function dinePrompt() {
   const bits = [];
@@ -2082,8 +2097,17 @@ function dinePrompt() {
   if (typed) food.push(typed);
   if (food.length) bits.push(`I'm eating: ${food.join(", ").toLowerCase()}.`);
   if (dine.colour !== "Any") bits.push(`I'd like ${dine.colour === "Sparkling" ? "a sparkling wine" : `a ${dine.colour.toLowerCase()}`}.`);
-  if (dine.budget !== "Any") bits.push(`My budget for the bottle is ${dine.budget.replace("Under", "under").replace("Over", "over")}.`);
-  if (dine.serve === "By the glass") bits.push("I'd like wine by the glass, not a whole bottle.");
+  const budget = dineBudgetText();
+  if (dine.serve === "By the glass") {
+    bits.push("I'd like wine by the glass, not a whole bottle.");
+    if (budget) bits.push(`My budget is ${budget} a glass.`);
+  } else if (dine.serve === "Bottle") {
+    bits.push("I'd like a bottle.");
+    if (budget) bits.push(`My budget is ${budget} a bottle.`);
+  } else {
+    bits.push("I'm happy with wine by the glass or a bottle: consider both, say for each pick whether it's by the glass or a bottle, and if a wine is offered both ways, give both prices.");
+    if (budget) bits.push(`My budget is ${budget} for a bottle (glass prices can be anything sensible).`);
+  }
   const about = String(storeGet(STORE.aboutMe, "") || "").trim();
   return DINE_TEMPLATE
     .replace("{CHOICES}", bits.join(" "))
@@ -2094,23 +2118,56 @@ function dinePrompt() {
 function renderDine() {
   const chip = (group, v, on) => `<button type="button" class="btn chip" data-dine-group="${group}" data-value="${esc(v)}" aria-pressed="${on}">${esc(v)}</button>`;
   $("dine-food").innerHTML = DINE_CHOICES.food.map((v) => chip("food", v, dine.food.has(v))).join("");
-  for (const g of ["colour", "budget", "serve"]) $(`dine-${g}`).innerHTML = DINE_CHOICES[g].map((v) => chip(g, v, dine[g] === v)).join("");
+  for (const g of ["colour", "serve"]) $(`dine-${g}`).innerHTML = DINE_CHOICES[g].map((v) => chip(g, v, dine[g] === v)).join("");
+  const sc = dineScale();
+  for (const id of ["dine-lo", "dine-hi"]) { $(id).max = sc.max; $(id).step = sc.step; }
+  $("dine-lo").value = dine.lo;
+  $("dine-hi").value = dine.hi;
+  showDineBudget();
   $("dine-reopen").hidden = !storeGet(STORE.dine, null);
 }
 
 function dineChoose(group, value) {
   if (group === "food") { if (dine.food.has(value)) dine.food.delete(value); else dine.food.add(value); }
-  else dine[group] = value;
+  else if (group === "budget") { const pr = dineScale().presets.find((x) => x[0] === value); if (pr) [, dine.lo, dine.hi] = pr; }
+  else {
+    const scaleBefore = dineScale();
+    dine[group] = value;
+    if (dineScale() !== scaleBefore) { dine.lo = 0; dine.hi = dineScale().max; } // glass and bottle prices differ
+  }
   renderDine();
 }
+
+// The numbers above the sliders, and which preset (if any) matches them.
+function showDineBudget() {
+  const sc = dineScale(), unit = dine.serve === "By the glass" ? " a glass" : " a bottle";
+  $("dine-lo-v").textContent = `$${dine.lo}`;
+  $("dine-hi-v").textContent = dine.hi >= sc.max ? "no limit" : `$${dine.hi}`;
+  $("dine-budget-unit").textContent = unit;
+  $("dine-budget").innerHTML = sc.presets.map(([label, lo, hi]) => `<button type="button" class="btn chip" data-dine-group="budget" data-value="${esc(label)}" aria-pressed="${dine.lo === lo && dine.hi === hi}">${esc(label)}</button>`).join("");
+}
+
+// Dragging a slider: the two can't cross; the other one moves along.
+function dineSlide(which) {
+  const v = +$(which === "lo" ? "dine-lo" : "dine-hi").value;
+  if (which === "lo") { dine.lo = v; if (dine.hi < v) dine.hi = v; } else { dine.hi = v; if (dine.lo > v) dine.lo = v; }
+  $("dine-lo").value = dine.lo;
+  $("dine-hi").value = dine.hi;
+  showDineBudget();
+}
+document.addEventListener("input", (e) => {
+  if (e.target.id === "dine-lo") dineSlide("lo");
+  else if (e.target.id === "dine-hi") dineSlide("hi");
+});
 
 // "Fish, white, $60–100": what was asked for, shown with the picks.
 function dineAskText() {
   const food = [...dine.food], typed = $("dine-food-text").value.trim();
   if (typed) food.push(typed);
+  const budget = dineBudgetText();
   return [food.join(", ").toLowerCase(), dine.colour !== "Any" ? dine.colour.toLowerCase() : "",
-    dine.budget !== "Any" ? dine.budget.replace("Under", "under").replace("Over", "over") : "",
-    dine.serve === "By the glass" ? "by the glass" : ""].filter(Boolean).join(", ");
+    budget ? `${budget} ${dine.serve === "By the glass" ? "a glass" : "a bottle"}` : "",
+    dine.serve === "By the glass" ? "by the glass" : dine.serve === "Bottle" ? "a bottle" : ""].filter(Boolean).join(", ");
 }
 
 async function dineGo() {
@@ -2153,8 +2210,8 @@ function parseDineHash(hash) {
     const f = part.split("~");
     const name = clip(f[0], 120);
     if (!name) continue;
-    const p = parseFloat((f[1] || "").replace(/[^0-9.]/g, "")), sc = parseInt(f[2], 10);
-    const pick = { name, price: p > 0 && p < 100000 ? p : null, score: sc >= 50 && sc <= 100 ? sc : null };
+    const sc = parseInt(f[2], 10);
+    const pick = { name, price: clip(f[1], 40), score: sc >= 50 && sc <= 100 ? sc : null };
     if (f.length <= 4) pick.why = clip(f.slice(3).join(" "), 160); // an older, shorter link
     else Object.assign(pick, { critics: clip(f[3], 100), store: clip(f[4], 60), what: clip(f[5], 300),
       why: clip(f[6], 200), value: clip(f[7], 120) });
@@ -2174,7 +2231,15 @@ function showDinePicks(d) {
   $("dine-intro").innerHTML = n ? `${read}Claude ${d.read != null ? "read them all and " : ""}chose the <strong>${n === 1 ? "best one" : `${n} best`}</strong>` +
     `${d.ask ? ` for ${esc(d.ask)}` : ""}.` : "";
   const fam = (p) => familyLinksHtml({ id: `dine:${fold(p.name)}`, name: p.name });
-  const price = (p) => (p.price != null ? ` · <span class="dine-price">$${esc(String(p.price))}</span>` : "");
+  // "63" -> "$63"; "glass 14 bottle 63" -> "🥂 glass $14 · 🍾 bottle $63"
+  const price = (p) => {
+    if (p.price == null || p.price === "") return "";
+    const t = String(p.price).replace(/\$/g, "");
+    const money = (n) => `<span class="dine-price">$${esc(n)}</span>`;
+    const g = /glass\D{0,3}([\d.]+)/i.exec(t), b = /bottle\D{0,3}([\d.]+)/i.exec(t);
+    if (g || b) return " · " + [g ? `🥂 glass ${money(g[1])}` : "", b ? `🍾 bottle ${money(b[1])}` : ""].filter(Boolean).join(" · ");
+    return /^[\d.]+$/.test(t.trim()) ? ` · ${money(t.trim())}` : ` · <span class="dine-price">${esc(t)}</span>`;
+  };
   $("dine-rank").innerHTML = n ? d.picks.map((p) => `<li><strong>${esc(p.name)}</strong>${price(p)}` +
     `${p.score != null ? ` · Critics ${p.score}` : ""}</li>`).join("") : "<li>The link didn't contain any picks that could be read.</li>";
   const row = (label, text) => (text ? `<p><strong>${label}:</strong> ${esc(text)}</p>` : "");

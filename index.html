@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-25.15">
+<link rel="stylesheet" href="app.css?v=2026-10-25.16">
 </head>
 <body>
 <header class="top">
@@ -276,10 +276,16 @@
     <input type="text" id="dine-food-text" class="dine-text" autocomplete="off" placeholder="or type it, for example duck with cherries">
     <h3>Colour</h3>
     <div id="dine-colour" class="chips"></div>
-    <h3>Budget</h3>
-    <div id="dine-budget" class="chips"></div>
     <h3>Bottle or glass?</h3>
     <div id="dine-serve" class="chips"></div>
+    <h3>Budget<span id="dine-budget-unit" class="hint-inline"></span></h3>
+    <div class="dine-sliders">
+      <label for="dine-lo">Lowest: <strong id="dine-lo-v"></strong></label>
+      <input type="range" id="dine-lo" min="0" max="300" step="5" value="0">
+      <label for="dine-hi">Highest: <strong id="dine-hi-v"></strong></label>
+      <input type="range" id="dine-hi" min="0" max="300" step="5" value="300">
+    </div>
+    <div id="dine-budget" class="chips"></div>
     <p class="dine-actions">
       <button type="button" class="btn btn-primary btn-big" id="dine-go">Open Claude</button>
       <button type="button" class="btn" id="dine-reopen" hidden>Show tonight's picks again</button>
@@ -412,6 +418,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-25.15"></script>
+<script src="app.js?v=2026-10-25.16"></script>
 </body>
 </html>
