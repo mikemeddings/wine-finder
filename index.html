@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-25.13">
+<link rel="stylesheet" href="app.css?v=2026-10-25.15">
 </head>
 <body>
 <header class="top">
@@ -372,9 +372,13 @@
 </dialog>
 
 <dialog id="dine-dialog" class="dialog dialog-wide" aria-labelledby="dine-title">
-  <h2 id="dine-title" class="notes-title">🍷 Tonight's picks</h2>
+  <h2 id="dine-title" class="notes-title" tabindex="-1">🍷 Tonight's picks</h2>
   <p id="dine-when" class="note-meta"></p>
-  <ol id="dine-list" class="dine-list"></ol>
+  <p id="dine-intro" class="dine-intro"></p>
+  <h3 class="dine-sub">The ranking</h3>
+  <ol id="dine-rank" class="dine-rank"></ol>
+  <h3 id="dine-details-h" class="dine-sub">The details</h3>
+  <div id="dine-list" class="dine-list"></div>
   <div class="dialog-actions">
     <button type="button" class="btn btn-primary" id="dine-close">Close</button>
   </div>
@@ -408,6 +412,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-25.13"></script>
+<script src="app.js?v=2026-10-25.15"></script>
 </body>
 </html>

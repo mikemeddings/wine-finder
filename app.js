@@ -104,7 +104,7 @@ const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB" };
 const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn" };
 const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 50;
-const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine" };
+const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk" };
 
 // ---- Helpers -----------------------------------------------------------------
 
@@ -2067,14 +2067,14 @@ const dine = { food: new Set(), colour: "Any", budget: "Any", serve: "Bottle" };
 const DINE_TEMPLATE = `I'm at a restaurant and I'm attaching a photo of the wine list. Please read every wine and price on it, then help me choose. {CHOICES} {ABOUT_ME}
 
 Please:
-- Recommend your top 3 wines from this list only, best first. For each: the wine exactly as written on the list, its price on the list, what critics say about it in your own words (with a score, its source and the vintage it's for, if you know one), and one or two lines on why it suits my food and budget.
-- Say whether each price looks fair compared with what the bottle usually costs in a store (restaurants often charge two to three times the store price).
+- Start by saying how many wines you could read on the list, and how many (if any) you couldn't read.
+- Then recommend your top 5 wines from this list only, best first (fewer if fewer suit my food and budget). For each: the wine exactly as written on the list and its price on the list; what it is, in two or three sentences; what critics say about it, in your own words, with a score, its source and the vintage it's for, if you know one; why it suits my food and budget; and whether the price is fair compared with what the bottle usually costs in a store (restaurants often charge two to three times the store price).
 - If you can't read part of the photo, say so rather than guessing.
-- Keep it short and easy to read on a phone: I'm at the table. A clear heading for each pick, and no tables.
+- Keep it easy to read on a phone: I'm at the table. A clear heading for each pick, and no tables.
 
-At the very end, below a horizontal line (---), write this link as the largest heading (one #), exactly in this form, one entry per pick in the same order, joined by semicolons:
-# [🍷 Back to my Wine Finder with tonight's picks]({BASE}#dine=NAME~PRICE~SCORE~WHY;NAME~PRICE~SCORE~WHY)
-NAME is the wine as written on the list (with its vintage if shown); PRICE is the list price as a plain number; SCORE is the best critic score you know as a number out of 100, or leave it empty; WHY is up to twelve words. Use + instead of spaces, and no semicolons or tildes. Under the link, in bold: "Tap this to see tonight's picks in your Wine Finder."`;
+At the very end, below a horizontal line (---), write this link as the largest heading (one #), exactly in this form: first the count, then one entry per pick in the same order, all joined by semicolons:
+# [🍷 Back to my Wine Finder with tonight's picks]({BASE}#dine=READ~UNREAD;NAME~PRICE~SCORE~CRITICS~STORE~WHAT~WHY~VALUE;NAME~PRICE~SCORE~CRITICS~STORE~WHAT~WHY~VALUE)
+READ is how many wines you could read, and UNREAD how many you couldn't (0 if none). For each pick: NAME is the wine as written on the list (with its vintage if shown); PRICE is the list price as a plain number; SCORE is the best critic score you know as a number out of 100, or empty; CRITICS is who gave it and for which vintage, up to eight words, or empty; STORE is the usual store price, up to six words, or empty; WHAT is what the wine is, up to thirty words; WHY is why it suits my meal and budget, up to twenty words; VALUE is your verdict on the price, up to twelve words. Use + instead of spaces, and no semicolons or tildes anywhere inside the entries. Under the link, in bold: "Tap this to see tonight's picks in your Wine Finder."`;
 
 function dinePrompt() {
   const bits = [];
@@ -2104,7 +2104,17 @@ function dineChoose(group, value) {
   renderDine();
 }
 
+// "Fish, white, $60–100": what was asked for, shown with the picks.
+function dineAskText() {
+  const food = [...dine.food], typed = $("dine-food-text").value.trim();
+  if (typed) food.push(typed);
+  return [food.join(", ").toLowerCase(), dine.colour !== "Any" ? dine.colour.toLowerCase() : "",
+    dine.budget !== "Any" ? dine.budget.replace("Under", "under").replace("Over", "over") : "",
+    dine.serve === "By the glass" ? "by the glass" : ""].filter(Boolean).join(", ");
+}
+
 async function dineGo() {
+  storeSet(STORE.dineAsk, { ask: dineAskText(), at: new Date().toISOString() });
   const prompt = dinePrompt();
   const { url, prefilled } = claudeLink(prompt);
   let copied = false, win;
@@ -2129,35 +2139,64 @@ function parseDineHash(hash) {
   if (!m) return null;
   let raw = m[1].replace(/\+/g, " ");
   try { raw = decodeURIComponent(raw); } catch { /* keep as is */ }
-  const picks = [];
-  for (const part of raw.split(";").slice(0, 5)) {
-    const [name = "", price = "", score = "", ...why] = part.split("~").map((s) => s.replace(/\s+/g, " ").trim());
-    if (!name) continue;
-    const p = parseFloat(price.replace(/[^0-9.]/g, "")), sc = parseInt(score, 10);
-    picks.push({ name: name.slice(0, 120), price: p > 0 && p < 100000 ? p : null,
-      score: sc >= 50 && sc <= 100 ? sc : null, why: why.join(" ").slice(0, 160) || null });
+  const parts = raw.split(";");
+  const clip = (t, n) => (t || "").replace(/\s+/g, " ").trim().slice(0, n) || null;
+  let read = null, unread = null;
+  const head = parts[0].split("~").map((t) => t.trim());
+  if (head.length <= 2 && head.every((t) => /^\d{0,3}$/.test(t))) { // the count: READ~UNREAD
+    read = head[0] ? +head[0] : null;
+    unread = head[1] ? +head[1] : null;
+    parts.shift();
   }
-  return picks;
+  const picks = [];
+  for (const part of parts.slice(0, 5)) {
+    const f = part.split("~");
+    const name = clip(f[0], 120);
+    if (!name) continue;
+    const p = parseFloat((f[1] || "").replace(/[^0-9.]/g, "")), sc = parseInt(f[2], 10);
+    const pick = { name, price: p > 0 && p < 100000 ? p : null, score: sc >= 50 && sc <= 100 ? sc : null };
+    if (f.length <= 4) pick.why = clip(f.slice(3).join(" "), 160); // an older, shorter link
+    else Object.assign(pick, { critics: clip(f[3], 100), store: clip(f[4], 60), what: clip(f[5], 300),
+      why: clip(f[6], 200), value: clip(f[7], 120) });
+    picks.push(pick);
+  }
+  return { read, unread, picks };
 }
 
 function showDinePicks(d) {
   if (!d || !Array.isArray(d.picks)) return;
-  $("dine-when").textContent = d.date ? `Picked ${shortDate(d.date)}` : "";
-  $("dine-list").innerHTML = d.picks.length ? d.picks.map((p) => {
-    const w = { id: `dine:${fold(p.name)}`, name: p.name };
-    return `<li><div class="dine-pick"><strong>${esc(p.name)}</strong>${p.price != null ? ` · <span class="dine-price">$${esc(String(p.price))}</span>` : ""}</div>
-      ${p.score != null ? `<div>Critics: about <strong>${p.score}</strong></div>` : ""}
-      ${p.why ? `<div class="dine-why">${esc(p.why)}</div>` : ""}
-      ${familyLinksHtml(w)}</li>`;
-  }).join("") : "<li>The link didn't contain any picks that could be read.</li>";
+  const n = d.picks.length;
+  const when = d.at ? new Date(d.at) : null;
+  $("dine-when").textContent = when && !isNaN(when)
+    ? `Picked ${when.toLocaleDateString(undefined, { day: "numeric", month: "short" })} at ${when.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })}`
+    : d.date ? `Picked ${shortDate(d.date)}` : "";
+  const read = d.read != null ? `Your photo showed <strong>${d.read} wines</strong>${d.unread ? ` (${d.unread} couldn't be read)` : ""}. ` : "";
+  $("dine-intro").innerHTML = n ? `${read}Claude ${d.read != null ? "read them all and " : ""}chose the <strong>${n === 1 ? "best one" : `${n} best`}</strong>` +
+    `${d.ask ? ` for ${esc(d.ask)}` : ""}.` : "";
+  const fam = (p) => familyLinksHtml({ id: `dine:${fold(p.name)}`, name: p.name });
+  const price = (p) => (p.price != null ? ` · <span class="dine-price">$${esc(String(p.price))}</span>` : "");
+  $("dine-rank").innerHTML = n ? d.picks.map((p) => `<li><strong>${esc(p.name)}</strong>${price(p)}` +
+    `${p.score != null ? ` · Critics ${p.score}` : ""}</li>`).join("") : "<li>The link didn't contain any picks that could be read.</li>";
+  const row = (label, text) => (text ? `<p><strong>${label}:</strong> ${esc(text)}</p>` : "");
+  $("dine-list").innerHTML = d.picks.map((p, i) => `<section class="dine-detail">
+      <h3>${i + 1}. ${esc(p.name)}${price(p)}</h3>
+      ${p.what ? `<p>${esc(p.what)}</p>` : ""}
+      ${row("Critics", [p.score != null ? `about ${p.score}` : "", p.critics].filter(Boolean).join(", "))}
+      ${row("With your meal", p.why)}
+      ${row("Value", [p.value, p.store ? `(in stores: ${p.store})` : ""].filter(Boolean).join(" "))}
+      ${fam(p)}</section>`).join("");
+  $("dine-details-h").hidden = !n;
   $("dine-dialog").showModal?.();
+  $("dine-title").focus(); // open at the top (the ranking), not scrolled down to Close
+  $("dine-dialog").scrollTop = 0;
 }
 
 function offerDinePicks() {
-  const picks = parseDineHash(location.hash);
-  if (!picks) return;
+  const got = parseDineHash(location.hash);
+  if (!got) return;
   history.replaceState(null, "", location.pathname + location.search);
-  const d = { date: todayIso(), picks };
+  const asked = storeGet(STORE.dineAsk, null) || {};
+  const d = { ...got, date: todayIso(), at: new Date().toISOString(), ask: asked.ask || "" };
   storeSet(STORE.dine, d); // kept on this phone until the next restaurant visit
   showDinePicks(d);
 }
