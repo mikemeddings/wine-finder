@@ -2749,11 +2749,31 @@ function chooseMail(id) {
 
 // ---- Views -------------------------------------------------------------------
 
+// ⓘ beside each section heading: jumps to that section's help.
+const HELP_LINKS = [["#quick-h", "help-find"], ["#filters-h", "help-find"], ["#ew-h", "help-where"],
+  ["#cellar-filter legend", "help-cellars"], ["#view-shortlist .research-head h2", "help-research"], ["#sl-add-h", "help-research"],
+  ["#view-dine .research-head h2", "help-dine"], ["#dine-recent-h", "help-dine"], ["#inbox-h", "help-keeper"],
+  ["#fr-h", "help-ratings"], ["#mw-import-h", "help-mywines"], ["#mw-add-h", "help-mywines"], ["#mw-backup-h", "help-mywines"]];
+function addHelpButtons() {
+  for (const [sel, topic] of HELP_LINKS) {
+    const el = document.querySelector(sel);
+    if (!el || el.querySelector(".help-i")) continue;
+    el.insertAdjacentHTML("beforeend", ` <button type="button" class="help-i" data-help="${topic}" aria-label="Help with this section">ⓘ</button>`);
+  }
+}
+function openHelp(topic) {
+  showView("help");
+  const el = topic && $(topic);
+  if (el) el.scrollIntoView({ block: "start" }); else $("help-top").focus();
+}
+
 function showView(name) {
   $("view-find").hidden = name !== "find";
   $("view-shortlist").hidden = name !== "shortlist";
   $("view-mywines").hidden = name !== "mywines";
   $("view-dine").hidden = name !== "dine";
+  $("view-help").hidden = name !== "help";
+  for (const el of document.querySelectorAll(".help-keeper")) el.hidden = !isKeeper(); // the keeper's topic: keeper's computer only
   for (const b of document.querySelectorAll(".view-btn")) b.setAttribute("aria-pressed", String(b.dataset.view === name));
   if (name === "shortlist") renderShortlist();
   else if (name === "mywines") { renderMyWines(); renderFamilyBox(); loadInbox(); }
@@ -2908,6 +2928,7 @@ function wireEvents() {
     else if (t.dataset.dineGroup) dineChoose(t.dataset.dineGroup, t.dataset.value);
     else if (t.id === "dine-go") dineGo();
     else if (t.id === "btn-tonight") showDinePicks(dineHistory()[0]);
+    else if (t.dataset.help) { e.preventDefault(); openHelp(t.dataset.help); }
     else if (t.dataset.dineHist != null) showDinePicks(dineHistory()[+t.dataset.dineHist]);
     else if (t.id === "dine-close") $("dine-dialog").close();
     else if (t.id === "notes-close") $("notes-dialog").close();
@@ -3145,6 +3166,7 @@ async function init() {
   offerSavedRatings();
   offerDinePicks();
   renderDineRecall();
+  addHelpButtons();
   window.addEventListener("hashchange", offerSavedRatings);
   setTimeout(() => loadAllSources().then(() => { updatePickCounts(); renderSources(); }), 800);
 }

@@ -476,3 +476,20 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .dine-recent-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
 .dine-recent-btn { width: 100%; text-align: left; font-size: 1.05rem; line-height: 1.35; }
 .hit-buttons { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; justify-content: flex-end; }
+
+/* Help */
+.btn-help { background: #e7eef8; border-color: #e7eef8; color: #1f3d6b; }
+.help-i { font: inherit; font-size: 0.75em; line-height: 1; width: 1.7em; height: 1.7em; padding: 0; margin-left: 0.35em;
+  border: 2px solid currentColor; border-radius: 50%; background: transparent; color: inherit; cursor: pointer; vertical-align: middle; opacity: 0.85; }
+.help-i:hover, .help-i:focus { opacity: 1; background: rgba(255, 255, 255, 0.25); }
+.help-i-sample { display: inline-block; border: 2px solid currentColor; border-radius: 50%; width: 1.5em; text-align: center; }
+.help-head { background: #1f3d6b; }
+.help { font-size: 1.15rem; line-height: 1.6; }
+.help-contents { background: #e7eef8; border-radius: 0.6rem; padding: 0.4rem 1rem; margin-bottom: 1rem; }
+.help-contents a { font-weight: 700; color: #1f3d6b; }
+.help-topic { background: var(--panel, #fff); border: 1px solid var(--line); border-radius: 0.6rem; padding: 0.4rem 1.1rem 0.6rem; margin-bottom: 1rem; scroll-margin-top: 1rem; }
+.help-topic h3 { color: #1f3d6b; font-size: 1.35rem; }
+.help-topic .save-steps-img { max-width: 40rem; }
+.help-back { text-align: right; margin: 0.3rem 0 0; }
+.help-faq dt { font-weight: 700; margin-top: 0.6rem; }
+.help-faq dd { margin-left: 1rem; }

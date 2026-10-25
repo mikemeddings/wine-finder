@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-25.28">
+<link rel="stylesheet" href="app.css?v=2026-10-25.29">
 </head>
 <body>
 <header class="top">
@@ -19,6 +19,7 @@
     <button type="button" class="btn-research" data-view="shortlist" data-focus="sl-add-q">🔎 Research a wine</button>
     <button type="button" class="btn-research btn-dine" data-view="dine">🍽️ At a restaurant</button>
     <button type="button" class="btn-research btn-tonight" id="btn-tonight" hidden>🍷 Tonight's picks</button>
+    <button type="button" class="btn-research btn-help" data-view="help">❓ Help</button>
   </nav>
   <button type="button" class="btn btn-reset" id="start-over">Start over</button>
 </header>
@@ -267,6 +268,162 @@
   </section>
 </main>
 
+<main id="view-help" class="help" hidden>
+  <header class="research-head help-head">
+    <h2 id="help-top" tabindex="-1">❓ Help: how Basil's Wine Finder works</h2>
+    <p>Tap a topic to jump to it. Every section of the site also has a small <span class="help-i-sample">ⓘ</span> button that brings you straight to its help.</p>
+  </header>
+
+  <nav class="help-contents" aria-label="Help topics">
+    <ol>
+      <li><a href="#help-find">Finding wines</a></li>
+      <li><a href="#help-where">Where can I buy…?</a></li>
+      <li><a href="#help-research">Research a wine with Claude</a></li>
+      <li><a href="#help-dine">At a restaurant</a></li>
+      <li><a href="#help-cellars">Family cellars</a></li>
+      <li><a href="#help-ratings">Ratings explained</a></li>
+      <li><a href="#help-mywines">My wines</a></li>
+      <li class="help-keeper"><a href="#help-keeper">For the website keeper</a></li>
+      <li><a href="#help-faq">Questions and fixes</a></li>
+    </ol>
+  </nav>
+
+  <section id="help-find" class="help-topic">
+    <h3>Finding wines</h3>
+    <p><strong>Quick picks</strong> are ready-made selections, such as “Portugal reds $20–50”. One tap shows them; the number tells you how many wines there are. <strong>Famous wines</strong> look for well-known names (Sassicaia, Penfolds Grange…) in every store.</p>
+    <p><strong>Filters</strong> (on the left; on a phone, tap “Show filters”) narrow the list:</p>
+    <ul>
+      <li><strong>Search words</strong>: a name, producer, region or grape.</li>
+      <li><strong>Sold by</strong>: BC Liquor – LDB, and the Calgary stores BSW Liquor and ZYN (check shipping to BC).</li>
+      <li><strong>Country</strong>, <strong>Type of wine</strong>, <strong>Price</strong> (the − and + buttons jump between common prices) and <strong>Sweetness</strong>.</li>
+    </ul>
+    <p>The <strong>Showing:</strong> line sums up what you've chosen. <strong>Sort by</strong> puts the list in order: price, name, country, vintage, sweetness, Claude's rating, your rating, family rating, “In Jon's cellar first” and more.</p>
+    <p>Each <strong>wine card</strong> shows the price, the store, the alcohol and sweetness, and any family ratings. Its buttons:</p>
+    <ul>
+      <li><strong>＋ Add to Short List for Claude Research</strong>: puts the wine on your list for Claude (see topic 3).</li>
+      <li><strong>Find it elsewhere</strong>: buttons to search other stores for this wine.</li>
+      <li><strong>CellarTracker, Wine Enthusiast, Vivino</strong>: open those websites' reviews in a new tab.</li>
+      <li><strong>☆ Your rating</strong>: give the wine your own score out of 100.</li>
+      <li><strong>📖 Claude Research Results</strong>: appears when someone in the family has had Claude research this wine. Tap it to read the full write-up.</li>
+    </ul>
+    <p><strong>Start over</strong> (top right) clears all the filters. It asks before emptying your Short List.</p>
+    <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+
+  <section id="help-where" class="help-topic">
+    <h3>Where can I buy…?</h3>
+    <p>Type the name of a wine someone recommended. Fewer words find more: the producer's name is usually enough. You'll see:</p>
+    <ul>
+      <li><strong>In the family's wines</strong>: the wine in a family cellar, or already researched by the family, with its ratings and a 📖 button. Check here before paying for a new Claude run.</li>
+      <li><strong>On our store lists</strong>: where BC Liquor, BSW or ZYN sell it, and the price.</li>
+      <li><strong>Or add it by name</strong>: puts it on the Short List for Claude even if no store has it.</li>
+      <li><strong>Search other stores</strong>: buttons that open each store's own search (Everything Wine, Liberty, Marquis, the LCBO, and two Swiss shops).</li>
+    </ul>
+    <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+
+  <section id="help-research" class="help-topic">
+    <h3>Research a wine with Claude</h3>
+    <p>Claude looks up each wine's reviews, background and history, suggests food to go with it, and gives its own score out of 100. Open it with <strong>🔎 Research a wine</strong> or <strong>Short List for Claude</strong> at the top.</p>
+    <ol>
+      <li><strong>Add wines</strong>: type a name in the box, or press “＋ Add to Short List for Claude Research” on any wine.</li>
+      <li><strong>Ask Claude</strong>: press <strong>② Ask Claude about these</strong> (or “rank these by reviews”). Claude opens in a new tab with the question already written; press Enter to send it. Claude's note “Use caution before running this prompt” appears for every question that arrives this way; this one is fine to send.</li>
+      <li><strong>Save the research</strong>: when Claude finishes, two clicks:
+        <img class="save-steps-img" src="images/save-steps.png?v=3" alt="Step 1: click the copy icon (two folders on top of each other) on the far left of the grey row under Claude's answer. Step 2: click the 💾 Save these ratings to my Wine Finder link."></li>
+    </ol>
+    <p>The Wine Finder opens a box. When it shows <strong>✅ Claude's write-up found</strong>, press <strong>Save</strong> (it asks your first name the first time). If it shows ❌, go back to Claude and click the copy icon: the box notices by itself.</p>
+    <p>After saving, the ratings and Claude's whole write-up are kept on your computer and sent to the website keeper. Once published, everyone sees the <strong>FR</strong> rating and a <strong>📖 Claude Research Results</strong> button on that wine.</p>
+    <p>The Short List also has <strong>Copy as text</strong>, <strong>Email</strong> (you choose your email: Gmail, Outlook, the computer's own email program…), <strong>Print</strong> and <strong>Clear the list</strong>.</p>
+    <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+
+  <section id="help-dine" class="help-topic">
+    <h3>🍽️ At a restaurant</h3>
+    <p>Photograph the wine list, and Claude picks the best wines on it for your meal and budget. It uses your own Claude, so there's no extra cost.</p>
+    <ol>
+      <li>Tap what you're eating (or type it), the colour, <strong>Bottle, By the glass or Either</strong>, and your budget. Slide <strong>Lowest</strong> and <strong>Highest</strong>, or tap a quick button. All the way right means no limit.</li>
+      <li>Tap <strong>Open Claude</strong>. In Claude, tap <strong>＋</strong> or <strong>📷</strong>, take a photo of the wine list (straight on), and send.</li>
+      <li>At the end of Claude's answer, tap <strong>🍷 Back to my Wine Finder with tonight's picks</strong>.</li>
+    </ol>
+    <p><strong>Tonight's picks</strong> shows how many wines Claude read, its ranking, the <strong>⛔ Wines to skip</strong> and the details of each pick. The skip tags mean:
+      <span class="skip-tag skip-over">Overpriced</span> a big markup,
+      <span class="skip-tag skip-food">Wrong for your food</span>,
+      <span class="skip-tag skip-weak">Weak reviews</span>,
+      <span class="skip-tag skip-past">Past its best</span> too old.</p>
+    <p>To see them again later: tap <strong>🍷 Tonight's picks</strong> at the top (on the day), or <strong>Your recent picks</strong> on the restaurant page (the last 5). They're kept on that phone only.</p>
+    <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+
+  <section id="help-cellars" class="help-topic">
+    <h3>Family cellars</h3>
+    <p>The <strong>Family cellars</strong> box at the top of the filters lists the family's cellars, such as Jon's.</p>
+    <ul>
+      <li>Tick <strong>Jon's cellar</strong> to see everything in it, including wines bought from wineries.</li>
+      <li>Then tick stores under <strong>Sold by</strong> to see only the ones those stores sell. Each wine shows <strong>Sold at:</strong> with the store's price, or “not sold”.</li>
+      <li>Store wines that match a cellar wine show a badge such as <strong>In Jon's cellar (2016)</strong>. Sort by “In Jon's cellar first” to bring them to the top.</li>
+      <li>On a new computer a shared cellar appears as “Cellar 1”: press <strong>Whose is Cellar 1? Name it</strong> once and type the name.</li>
+    </ul>
+    <p>Only wine names and scores are shared: never prices, bin locations, notes or bottle counts.</p>
+    <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+
+  <section id="help-ratings" class="help-topic">
+    <h3>Ratings explained</h3>
+    <p>All scores are out of 100.</p>
+    <ul>
+      <li><span class="rating rating-fr">FR <strong>96</strong> (Claude)</span> Claude's score, shared with the whole family.</li>
+      <li><span class="rating rating-fr">FR <strong>90</strong> (family)</span> a family member's own score, shared.</li>
+      <li><span class="rating rating-claude">Claude's rating <strong>94</strong></span> Claude's score saved on this computer, not shared yet.</li>
+      <li><span class="rating rating-mine">Your rating <strong>88</strong></span> your own score on this computer (the ☆ button).</li>
+    </ul>
+    <p>A rating marked <strong>“researched as …”</strong> or <strong>“rated as … (BC Liquor)”</strong> was given to the same wine under a slightly different name, often a different vintage. Critics' scores, with who gave them and for which vintage, are in Claude's write-ups (📖).</p>
+    <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+
+  <section id="help-mywines" class="help-topic">
+    <h3>My wines</h3>
+    <ul>
+      <li><strong>Import a cellar from CellarTracker</strong>: get the file from CellarTracker (the steps are on the page), type whose cellar it is, and choose the file. To share your cellar with the family, just email that file to the website keeper.</li>
+      <li><strong>Add a wine by hand</strong>: for a wine from an importer, a private store or someone's cellar.</li>
+      <li>The list appears when you press a cellar's button, or search. Sort it by name, score, vintage or drink-by date.</li>
+      <li><strong>Backup</strong>: My wines and your ratings live in this browser only. “Save a backup file” now and then; “Restore” moves them to another computer.</li>
+    </ul>
+    <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+
+  <section id="help-keeper" class="help-topic help-keeper">
+    <h3>For the website keeper</h3>
+    <ul>
+      <li><strong>Family inbox</strong>: research saved by the family arrives here, and an email tells you. <strong>Read</strong> it, <strong>Publish</strong> it (rating and write-up go on the website), or <strong>Ignore</strong> it. <strong>Publish all</strong> does every waiting item at once.</li>
+      <li><strong>Your own ratings (FR)</strong>: “Publish the ratings on this computer” shares ratings you made yourself. Your own Saves from Claude publish straight away.</li>
+      <li><strong>Sharing cellars</strong>: after importing a family member's file, “Share … with the family”; later “Update the shared copy”, “Take … off the website”, or “Remove my private copy” (the family keeps the shared one).</li>
+      <li><strong>Keys</strong>: the publishing key (GitHub) and the inbox key are kept in this browser only. Never paste them anywhere else.</li>
+    </ul>
+    <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+
+  <section id="help-faq" class="help-topic">
+    <h3>Questions and fixes</h3>
+    <dl class="help-faq">
+      <dt>The Email button opened the wrong email program.</dt>
+      <dd>It asks which email you use: choose yours (Gmail, Outlook.com…). For Thunderbird, make it this computer's email app in Windows Settings → Apps → Default apps.</dd>
+      <dt>“Claude's write-up hasn't been copied yet.”</dt>
+      <dd>Go back to the Claude tab and click the copy icon: two folders on top of each other, on the far left of the grey row under Claude's answer. Then come back.</dd>
+      <dt>Claude's message box was empty (in the Claude app).</dt>
+      <dd>The question is also copied: tap in the message box and paste.</dd>
+      <dt>A second Wine Finder tab opened.</dt>
+      <dd>The older one closes itself, or says it can be closed. Everything is saved.</dd>
+      <dt>My restaurant picks disappeared.</dt>
+      <dd>Tap 🍷 Tonight's picks at the top, or see Your recent picks on the restaurant page, on the same phone.</dd>
+      <dt>The text is too small.</dt>
+      <dd>On a computer hold Ctrl and press +; on a phone, spread two fingers.</dd>
+      <dt>Are the prices current?</dt>
+      <dd>Prices exclude tax and availability isn't guaranteed. The store lists are refreshed every three months; the date is at the bottom of each page.</dd>
+    </dl>
+    <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+</main>
+
 <main id="view-dine" hidden>
   <header class="research-head dine-head">
     <h2>🍽️ At a restaurant</h2>
@@ -425,6 +582,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-25.28"></script>
+<script src="app.js?v=2026-10-25.29"></script>
 </body>
 </html>
