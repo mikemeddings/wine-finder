@@ -79,14 +79,8 @@ function notify_(from, items) {
     const who = String(from || 'Someone').slice(0, 30);
     MailApp.sendEmail(Session.getEffectiveUser().getEmail(),
       'Wine Finder: ' + who + ' researched ' + (lines.length === 1 ? String(items[0].name || 'a wine').slice(0, 80) : lines.length + ' wines'),
-      who + ' saved Claude research in Basil's Wine Finder:
-
-' + lines.join('
-') +
-      '
-
-Open your Wine Finder, go to My wines, and publish it from the Family inbox:
-https://mikemeddings.github.io/wine-finder/');
+      who + " saved Claude research in Basil's Wine Finder:\n\n" + lines.join('\n') +
+      '\n\nOpen your Wine Finder, go to My wines, and publish it from the Family inbox:\nhttps://mikemeddings.github.io/wine-finder/');
   } catch (e) {
     // the row is saved either way; a missing email isn't worth failing over
   }
