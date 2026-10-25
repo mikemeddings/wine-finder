@@ -156,6 +156,10 @@ function vivinoUrl(w) {
 // Search links only — nothing is fetched from these sites. {q} is replaced by the
 // search words. Each link was tested on 2026-10-23 (see Design/CLAUDE.md §11).
 const STORE_GROUPS = [
+  // Vessel's terms forbid crawling or scraping, so it's a search link only (not in "Sold by").
+  { place: "Victoria", note: "Vessel Liquor, 1609 Fort St.", stores: [
+    { name: "Vessel Liquor", url: "https://vesselliquor.com/search?q={q}" },
+  ] },
   { place: "Alberta", note: "Calgary stores — check shipping to BC.", stores: [
     { name: "BSW Liquor", url: "https://www.bswliquor.com/search?q={q}" },
     { name: "ZYN", url: "https://zyn.ca/search?q={q}" },
