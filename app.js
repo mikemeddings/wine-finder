@@ -1628,6 +1628,7 @@ function renderFamilyBox() {
     : "Everything rated on this computer is already published (or nothing has been rated yet).";
   $("fr-publish").hidden = !hasKey;
   $("fr-email").disabled = !n;
+  $("fr-publish").disabled = !n;
   $("fr-key-state").textContent = hasKey ? "A publishing key is saved on this computer." : "No publishing key on this computer.";
   $("fr-key-forget").hidden = !hasKey;
 }
@@ -2619,6 +2620,8 @@ async function loadInbox() {
     inboxItems = (await inboxCall({ action: "list" })).items || [];
     $("inbox-state").textContent = inboxItems.length
       ? `${inboxItems.length} new from the family, waiting for you to publish.` : "Nothing new from the family.";
+    $("inbox-all").hidden = inboxItems.length < 2;
+    $("inbox-all").textContent = `Publish all ${inboxItems.length}`;
     $("inbox-list").innerHTML = inboxItems.map((it) => {
       const c = it.details?.claude, m = it.details?.mine;
       return `<li class="inbox-item"><div><strong>${esc(it.name || it.id)}</strong><br>
@@ -2633,6 +2636,28 @@ async function loadInbox() {
   }
 }
 
+const inboxToResearch = (it) => ({ id: it.id, name: it.name, claude: it.details?.claude || null, mine: it.details?.mine || null,
+  writeup: it.writeup || "", from: it.from, date: String(it.received).slice(0, 10) });
+
+// Everything waiting, in one go: one update to the ratings, each write-up, then each row marked.
+async function inboxPublishAll() {
+  const items = [...inboxItems];
+  if (!items.length) return;
+  $("inbox-all").disabled = true;
+  $("inbox-state").textContent = `Publishing ${items.length}…`;
+  try {
+    await publishResearch(items.map(inboxToResearch));
+    for (const it of items) await inboxCall({ action: "mark", row: it.row, status: "published" });
+    await loadInbox();
+    $("inbox-state").textContent += ` Published ${items.length}; everyone sees them after reloading.`;
+    renderFamilyBox();
+  } catch (e) {
+    $("inbox-state").textContent = `Not done. ${e.message === "conflict" ? "Please try again in a minute." : e.message}`;
+  } finally {
+    $("inbox-all").disabled = false;
+  }
+}
+
 async function inboxAct(row, what) {
   const it = inboxItems.find((x) => String(x.row) === String(row));
   if (!it) return;
@@ -2640,8 +2665,7 @@ async function inboxAct(row, what) {
   $("inbox-state").textContent = what === "publish" ? `Publishing ${it.name}…` : "Ignoring…";
   try {
     if (what === "publish") {
-      await publishResearch([{ id: it.id, name: it.name, claude: it.details?.claude || null, mine: it.details?.mine || null,
-        writeup: it.writeup || "", from: it.from, date: String(it.received).slice(0, 10) }]);
+      await publishResearch([inboxToResearch(it)]);
     }
     await inboxCall({ action: "mark", row: it.row, status: what === "publish" ? "published" : "ignored" });
     await loadInbox();
@@ -2891,6 +2915,7 @@ function wireEvents() {
     else if (t.dataset.inboxPublish) inboxAct(t.dataset.inboxPublish, "publish");
     else if (t.dataset.inboxIgnore) inboxAct(t.dataset.inboxIgnore, "ignore");
     else if (t.id === "inbox-refresh") loadInbox();
+    else if (t.id === "inbox-all") inboxPublishAll();
     else if (t.id === "inbox-key-save") saveInboxKey();
     else if (t.id === "stale-reload") location.reload();
     else if (t.dataset.action === "mw-hide") { mwView.open = false; renderMyWines(); }

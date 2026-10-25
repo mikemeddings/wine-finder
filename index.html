@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-25.27">
+<link rel="stylesheet" href="app.css?v=2026-10-25.28">
 </head>
 <body>
 <header class="top">
@@ -156,6 +156,7 @@
   <section class="mw-box inbox-box" id="inbox-box" aria-labelledby="inbox-h" hidden>
     <h3 id="inbox-h">Family inbox</h3>
     <p id="inbox-state" class="fr-count"></p>
+    <button type="button" class="btn btn-primary btn-big" id="inbox-all" hidden>Publish all</button>
     <ul id="inbox-list" class="inbox-list"></ul>
     <button type="button" class="btn" id="inbox-refresh">Check for new research</button>
     <details class="mw-how"><summary>Inbox key (website keeper only)</summary>
@@ -169,14 +170,14 @@
   </section>
 
   <section class="mw-box fr-box" aria-labelledby="fr-h">
-    <h3 id="fr-h">Family ratings (FR)</h3>
+    <h3 id="fr-h">Your own ratings (FR)</h3>
     <p>When you save Claude's ratings, they and Claude's write-up go to the person who looks after the website
       automatically, and everyone then sees them as <strong>FR</strong>. Your own ratings (☆ Your rating) can be sent
       here, by email.</p>
     <p id="fr-count" class="fr-count"></p>
     <div class="sl-actions">
       <button type="button" class="btn btn-primary" id="fr-email">Email my ratings to family</button>
-      <button type="button" class="btn btn-primary" id="fr-publish" hidden>Publish as Family ratings</button>
+      <button type="button" class="btn btn-primary" id="fr-publish" hidden>Publish the ratings on this computer</button>
     </div>
     <p id="fr-status" class="status" role="status"></p>
     <details class="mw-how"><summary>Publishing key (website keeper only)</summary>
@@ -424,6 +425,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-25.27"></script>
+<script src="app.js?v=2026-10-25.28"></script>
 </body>
 </html>
