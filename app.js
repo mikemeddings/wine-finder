@@ -663,9 +663,12 @@ let claudeMode = "about"; // "about" (tell me about these) or "rank" (rank by re
 // (see offerSavedRatings). {BASE} becomes this page's address.
 const SAVE_LINK_TEMPLATE = `Last of all, please give me a link I can click to save your ratings. For each wine, give your own overall rating out of 100, based on what the reviewers say (your judgement, not a copy of any one critic's score). The link is easy to miss, so:
 - Make the very first line of your answer, once only: "Your save link is at the bottom of this answer."
-- Put the link at the very end, after everything else including your sources, below a horizontal line (---). Above it, put the line "⬇️ Your save link ⬇️" in bold. Then write the link as the largest heading (one #), itself the link, exactly in this form, one entry per wine joined by semicolons:
+- Put the link at the very end, after everything else including your sources, below a horizontal line (---). Above it, write these three lines exactly, each in bold:
+"⬇️ To save this research: 2 clicks ⬇️"
+"Step 1: click the copy icon (two small squares) in the grey row below the “Create a doc” button."
+"Step 2: then click this link:"
+Then write the link as the largest heading (one #), itself the link, exactly in this form, one entry per wine joined by semicolons:
 # [💾 Save these ratings to my Wine Finder]({BASE}#save=CODE~POINTS~VINTAGE~NOTE;CODE~POINTS~VINTAGE~NOTE)
-- Under it, in bold: "First press the copy button under this answer (two small squares), then click the link above to keep these ratings and this write-up in your Wine Finder."
 - Then, in italics: "(The “Create a doc” button below is Claude's own. It makes a document of this answer to keep or send. It doesn't save your ratings.)"
 - End with one more horizontal line (---), so the save link stands apart from the buttons under the answer.
 CODE is the wine's code in square brackets in my list; POINTS is your rating (leave it empty if you found no reviews); VINTAGE is the vintage your rating is for, or NV; NOTE is up to eight words, with + instead of spaces and no semicolons or tildes.`;
@@ -1408,11 +1411,13 @@ function parseShareHash(hash) {
 }
 
 let pendingSave = null;
-let saveAnyway = false; // "Save without the write-up" was pressed
+let pendingHash = "";   // the save link that opened the box: the copied answer must contain it
+let writeupText = "";   // Claude's whole answer, once found
 
 function offerSavedRatings() {
   const items = parseSaveHash(location.hash);
   if (!items) return;
+  pendingHash = location.hash;
   history.replaceState(null, "", location.pathname + location.search); // don't offer it again on reload
   pendingSave = items;
   const shared = items.some((it) => it.shared);
@@ -1432,11 +1437,10 @@ function offerSavedRatings() {
   $("save-result").innerHTML = "";
   $("save-writeup").hidden = items.length === 0 || shared;
   $("save-writeup-text").value = "";
-  $("save-writeup-state").textContent = "It's picked up from Claude's copy button when you press Save.";
+  writeupText = "";
   $("save-name-row").hidden = !!myName();
-  $("save-howto").hidden = $("save-anyway").hidden = true;
-  saveAnyway = false;
   $("save-dialog").showModal?.();
+  if (!$("save-writeup").hidden) { showWriteupState(); checkWriteup(); }
 }
 
 async function confirmSavedRatings() {
@@ -1448,20 +1452,9 @@ async function confirmSavedRatings() {
     if (!n) { $("save-result").textContent = "Please type your first name first."; $("save-name").focus(); return; }
     storeSet(STORE.myName, n.slice(0, 30));
   }
-  // Claude's write-up: pasted into the box, or read from what Claude's copy button copied.
   const ids = items.map((it) => it.id);
-  let text = $("save-writeup-text").value.trim();
-  if (!text && !$("save-writeup").hidden) {
-    try { const clip = await navigator.clipboard.readText(); if (looksLikeClaudeAnswer(clip, ids)) text = clip; } catch { /* not allowed */ }
-  }
-  if (!text && !$("save-writeup").hidden && !saveAnyway) {
-    $("save-howto").hidden = false;
-    $("save-anyway").hidden = false;
-    $("save-yes").textContent = "Save again";
-    $("save-result").textContent = "";
-    $("save-howto").scrollIntoView({ block: "nearest" });
-    return;
-  }
+  if (!$("save-writeup").hidden && !writeupText) { showWriteupState(); return; } // Save isn't shown then, but just in case
+  const text = writeupText;
   const parts = text ? splitWriteup(text, ids) : {};
   const today = todayIso(), from = myName(), notes = localNotes();
   const send = [];
@@ -1503,7 +1496,7 @@ async function confirmSavedRatings() {
   }
   $("save-yes").textContent = "Close";
   $("save-yes").dataset.done = "1";
-  $("save-no").hidden = $("save-anyway").hidden = $("save-howto").hidden = true;
+  $("save-no").hidden = $("save-howto").hidden = true;
   refreshRatedViews();
 }
 
@@ -2120,7 +2113,7 @@ function mdToHtml(md) {
 // link and its notes, "Where to buy", the ranking and "My rating" (the rating is kept apart).
 function splitWriteup(text, ids) {
   const lines = String(text || "").replace(/\r/g, "").split("\n")
-    .filter((l) => !/save link is at the bottom|your save link|save these ratings to my wine finder|click this to keep these ratings|first press the copy button|create a doc/i.test(l));
+    .filter((l) => !/save link is at the bottom|your save link|save these ratings to my wine finder|click this to keep these ratings|first press the copy button|create a doc|to save this research|^\W*step [12]:/i.test(l));
   const isHead = (l) => /^#{1,6}\s/.test(l.trim());
   const DROP = /where to buy|ranking by what reviewers say|^#{1,6}\s*my rating/i;
   const srcAt = lines.findIndex((l) => /^(#{1,6}\s*)?\**sources:?\**\s*$/i.test(l.trim()));
@@ -2154,8 +2147,51 @@ function splitWriteup(text, ids) {
   return out;
 }
 
-const looksLikeClaudeAnswer = (t, ids) => typeof t === "string" && t.length > 300 &&
-  (ids.some((id) => t.includes(id)) || /save these ratings|from the history books|practical note/i.test(t));
+// The copied text must be this answer: it contains the save link that opened the box
+// (or, if the link's characters were changed on the way, every wine's code and a save link).
+function isThisAnswer(t, ids) {
+  if (typeof t !== "string" || t.length < 300) return false;
+  const hash = pendingHash.replace(/^#/, "");
+  let decoded = hash;
+  try { decoded = decodeURIComponent(hash.replace(/\+/g, " ")); } catch { /* keep as is */ }
+  const flat = (s) => s.replace(/\+|%20/g, " ");
+  return (hash && (t.includes(hash) || flat(t).includes(flat(decoded)))) ||
+    (/#save=/.test(t) && ids.every((id) => t.includes(id)));
+}
+
+// Save shows only once Claude's write-up for this answer has been found.
+function showWriteupState() {
+  const found = !!writeupText, done = !!$("save-yes").dataset.done;
+  $("save-writeup-state").innerHTML = found
+    ? "✅ <strong>Claude's write-up found.</strong> Press Save to keep it with the ratings."
+    : "❌ <strong>Claude's write-up hasn't been copied yet.</strong>";
+  $("save-howto").hidden = found || done;
+  if (!done) $("save-yes").hidden = !found;
+}
+
+async function checkWriteup(fromButton = false) {
+  if (!$("save-dialog").open || $("save-writeup").hidden || writeupText) return;
+  const ids = (pendingSave || []).map((it) => it.id);
+  const pasted = $("save-writeup-text").value.trim();
+  if (isThisAnswer(pasted, ids)) writeupText = pasted;
+  else {
+    try {
+      const clip = await navigator.clipboard.readText();
+      if (isThisAnswer(clip, ids)) writeupText = clip;
+      else if (fromButton) $("save-result").textContent = clip.trim()
+        ? "What's copied isn't this Claude answer. Go back to Claude and click the copy icon under this answer."
+        : "Nothing is copied yet. Go back to Claude and click the copy icon under its answer.";
+    } catch {
+      if (fromButton) $("save-result").textContent = "The browser didn't allow checking. Paste Claude's answer in the box below instead.";
+    }
+  }
+  if (writeupText) $("save-result").textContent = "";
+  showWriteupState();
+}
+// Coming back from the Claude tab, or pasting: look again.
+window.addEventListener("focus", () => checkWriteup());
+document.addEventListener("input", (e) => { if (e.target.id === "save-writeup-text") checkWriteup(); });
+document.addEventListener("visibilitychange", () => { if (!document.hidden) checkWriteup(); });
 
 async function sendToInbox(items, from) {
   const r = await fetch(INBOX_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -2511,7 +2547,7 @@ function wireEvents() {
     else if (t.dataset.rateSave) saveMyRating(t.dataset.rateSave, t);
     else if (t.dataset.rateClear) clearMyRating(t.dataset.rateClear);
     else if (t.id === "save-yes") confirmSavedRatings();
-    else if (t.id === "save-anyway") { saveAnyway = true; $("save-howto").hidden = true; confirmSavedRatings(); }
+    else if (t.id === "save-check") checkWriteup(true);
     else if (t.id === "save-email-fallback") { $("save-dialog").close(); showView("mywines"); scrollToFamilyBox(); emailRatings(); }
     else if (t.dataset.notes) openNotes(t.dataset.notes);
     else if (t.id === "notes-close") $("notes-dialog").close();

@@ -432,3 +432,4 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .save-steps-img { display: block; width: 100%; max-width: 46rem; height: auto; margin: 0.75rem 0; border-radius: 0.6rem; }
 .research-head .save-steps-img { max-width: 34rem; background: #fff; }
 .save-howto { background: #fff3c4; border: 2px solid #8a5a14; border-radius: 0.6rem; padding: 0.6rem 0.8rem; margin: 0.5rem 0; }
+.writeup-state { font-size: 1.1rem; margin: 0.2rem 0 0.4rem; }
