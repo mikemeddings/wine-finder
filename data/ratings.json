@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-24",
+ "updated": "2026-10-25",
  "ratings": {
   "bcl-220979": {
    "name": "Cabernet Sauvignon - Haras De Pirque Hussonet Reserva",
@@ -377,6 +377,15 @@
     "vintage": 2015,
     "note": "Spectator 97 Parker score unclear",
     "date": "2026-10-24"
+   }
+  },
+  "typed-negly-porte-du-ciel": {
+   "name": "Negly Porte du Ciel",
+   "claude": {
+    "points": 96,
+    "vintage": 2016,
+    "note": "Languedoc benchmark Syrah powerful and long lived",
+    "date": "2026-10-25"
    }
   }
  }
