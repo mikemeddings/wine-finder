@@ -393,7 +393,16 @@
    "claude": {
     "points": 93,
     "vintage": 2022,
-    "note": "Old-vine slate Mencia decant or cellar to 2034",
+    "note": "Century-old slate Mencia fresh and mineral",
+    "date": "2026-10-25"
+   }
+  },
+  "typed-2010-chateau-de-beaucastel-chateauneuf-du-pape-hommage-a-jacques-perrin": {
+   "name": "2010 Château de Beaucastel Châteauneuf-du-Pape Hommage à Jacques Perrin",
+   "claude": {
+    "points": 98,
+    "vintage": 2010,
+    "note": "Monumental Mourvedre Parker 100 still opening",
     "date": "2026-10-25"
    }
   }
