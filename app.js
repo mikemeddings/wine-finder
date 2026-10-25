@@ -1961,7 +1961,8 @@ function sameWineName(a, b) {
   const [small, big] = A.length <= B.length ? [A, B] : [B, A];
   const smallSet = new Set(small), bigSet = new Set(big);
   return small.length >= 2 && small.every((t) => bigSet.has(t)) && styleOf(a) === styleOf(b) &&
-    big.filter((t) => !smallSet.has(t)).every(isPlaceWord);
+    big.filter((t) => !smallSet.has(t)).every(isPlaceWord) &&
+    small.some((t) => !isPlaceWord(t)); // a name, not just "Cabernet Sauvignon" or a region
 }
 
 // Ratings the family gave this wine under its other records (cellar entries, names typed).
@@ -1977,6 +1978,14 @@ function relatedRatings(w) {
     if (seen.has(id) || !id.startsWith("typed-") || !r.name || !sameWineName(w.name, r.name)) continue;
     seen.add(id);
     out.push({ f: r, label: `researched as “${r.name}”` });
+  }
+  // ratings given to a store's listing of the same wine (BC Liquor, BSW, ZYN)
+  const STORE_OF = { bcl: "BC Liquor - LDB", bsw: "BSW Liquor", zyn: "ZYN" };
+  for (const [id, r] of Object.entries(familyRatings)) {
+    const store = STORE_OF[id.split("-")[0]];
+    if (seen.has(id) || !store || !r.name || !sameWineName(w.name, r.name)) continue;
+    seen.add(id);
+    out.push({ f: r, label: `rated as “${r.name}” (${store})` });
   }
   return out;
 }
