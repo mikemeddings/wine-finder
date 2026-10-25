@@ -2098,7 +2098,7 @@ Please:
 
 At the very end, below a horizontal line (---), write this link as the largest heading (one #), exactly in this form: first the count, then one entry per pick in the same order, all joined by semicolons:
 # [🍷 Back to my Wine Finder with tonight's picks]({BASE}#dine=READ~UNREAD;NAME~PRICE~SCORE~CRITICS~STORE~WHAT~WHY~VALUE;NAME~PRICE~SCORE~CRITICS~STORE~WHAT~WHY~VALUE)
-READ is how many wines you could read, and UNREAD how many you couldn't (0 if none). For each pick: NAME is the wine as written on the list (with its vintage if shown); PRICE is the price as on the list, for example 63, or glass 14 bottle 63 when it's offered both ways (up to six words); SCORE is the best critic score you know as a number out of 100, or empty; CRITICS is who gave it and for which vintage, up to eight words, or empty; STORE is the usual store price, up to six words, or empty; WHAT is what the wine is, up to thirty words; WHY is why it suits my meal and budget, up to twenty words; VALUE is your verdict on the price, up to twelve words. Use + instead of spaces, and no semicolons or tildes anywhere inside the entries. Under the link, in bold: "Tap this to see tonight's picks in your Wine Finder."`;
+READ is how many wines you could read, and UNREAD how many you couldn't (0 if none). For each pick: NAME is the wine as written on the list (with its vintage if shown); PRICE is the price as on the list, for example 63, or glass 5 oz 12 8 oz 19 bottle 54 (up to ten words); SCORE is the best critic score you know as a number out of 100, or empty; CRITICS is who gave it and for which vintage, up to eight words, or empty; STORE is the usual store price, up to six words, or empty; WHAT is what the wine is, up to thirty words; WHY is why it suits my meal and budget, up to twenty words; VALUE is your verdict on the price, up to twelve words. Use + instead of spaces, and no semicolons or tildes anywhere inside the entries. Under the link, in bold: "Tap this to see tonight's picks in your Wine Finder."`;
 
 function dinePrompt() {
   const bits = [];
@@ -2240,14 +2240,15 @@ function showDinePicks(d) {
   $("dine-intro").innerHTML = n ? `${read}Claude ${d.read != null ? "read them all and " : ""}chose the <strong>${n === 1 ? "best one" : `${n} best`}</strong>` +
     `${d.ask ? ` for ${esc(d.ask)}` : ""}.` : "";
   const fam = (p) => familyLinksHtml({ id: `dine:${fold(p.name)}`, name: p.name });
-  // "63" -> "$63"; "glass 14 bottle 63" -> "🥂 glass $14 · 🍾 bottle $63"
+  // The price as Claude wrote it, with "$" on the amounts but not on sizes:
+  // "glass 5 oz 11 8 oz 18 bottle 63" -> "🥂 glass 5 oz $11 · 8 oz $18 · 🍾 bottle $63"
   const price = (p) => {
     if (p.price == null || p.price === "") return "";
-    const t = String(p.price).replace(/\$/g, "");
-    const money = (n) => `<span class="dine-price">$${esc(n)}</span>`;
-    const g = /glass\D{0,3}([\d.]+)/i.exec(t), b = /bottle\D{0,3}([\d.]+)/i.exec(t);
-    if (g || b) return " · " + [g ? `🥂 glass ${money(g[1])}` : "", b ? `🍾 bottle ${money(b[1])}` : ""].filter(Boolean).join(" · ");
-    return /^[\d.]+$/.test(t.trim()) ? ` · ${money(t.trim())}` : ` · <span class="dine-price">${esc(t)}</span>`;
+    let t = esc(String(p.price).replace(/\$/g, "").replace(/\s+/g, " ").trim());
+    t = t.replace(/(?<![\d.])(\d+(?:\.\d+)?)(?![\d.])(?!\s*(?:oz|ml|cl|l\b|%))/gi, '<span class="dine-price">$$$1</span>');
+    t = t.replace(/\bglass\b/i, "🥂 glass").replace(/\bbottle\b/i, "🍾 bottle")
+      .replace(/(<\/span>)\s+(?=\d+\s*(?:oz|ml|cl)|🍾)/g, "$1 · ");
+    return ` · ${t}`;
   };
   $("dine-rank").innerHTML = n ? d.picks.map((p) => `<li><strong>${esc(p.name)}</strong>${price(p)}` +
     `${p.score != null ? ` · Critics ${p.score}` : ""}</li>`).join("") : "<li>The link didn't contain any picks that could be read.</li>";
