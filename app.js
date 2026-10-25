@@ -1420,7 +1420,7 @@ function offerSavedRatings() {
   const items = parseSaveHash(location.hash);
   if (!items) return;
   pendingHash = location.hash;
-  history.replaceState(null, "", location.pathname + location.search); // don't offer it again on reload
+  history.replaceState(history.state, "", location.pathname + location.search); // don't offer it again on reload
   pendingSave = items;
   const shared = items.some((it) => it.shared);
   const nameOf = (it) => findWine(it.id)?.name || (sharedIdOf(it.id) && findWine(sharedIdOf(it.id))?.name) || ratingOf(it.id).name || it.name;
@@ -2331,7 +2331,7 @@ function renderDineRecall() {
 function offerDinePicks() {
   const got = parseDineHash(location.hash);
   if (!got) return;
-  history.replaceState(null, "", location.pathname + location.search);
+  history.replaceState(history.state, "", location.pathname + location.search);
   const asked = storeGet(STORE.dineAsk, null) || {};
   const d = { ...got, date: todayIso(), at: new Date().toISOString(), ask: asked.ask || "" };
   const before = dineHistory(); // read first: it falls back to STORE.dine, which is about to change
@@ -2761,32 +2761,35 @@ function addHelpButtons() {
     el.insertAdjacentHTML("beforeend", ` <button type="button" class="help-i" data-help="${topic}" aria-label="Help with this section">ⓘ</button>`);
   }
 }
-// Help remembers where it was opened from, so the browser's Back button (or the phone's
-// back gesture) and the "Back to where you were" button return to that spot.
+// Each page change is a step in the browser's history, so Back (or the phone's back
+// gesture) returns to the previous page at the same scroll position, and Forward works too.
 const VIEWS = ["find", "shortlist", "mywines", "dine", "help"];
 const currentView = () => VIEWS.find((v) => !$(`view-${v}`).hidden) || "find";
-let helpReturn = null;
+let navDepth = 0; // steps taken inside the Wine Finder, so "Back" never leaves the site by surprise
 
 function openHelp(topic) {
-  const from = currentView();
-  if (from !== "help") {
-    helpReturn = { view: from, y: window.scrollY };
-    history.pushState({ wfHelp: true }, "", location.pathname + location.search);
-  }
   showView("help");
   const el = topic && $(topic);
   if (el) el.scrollIntoView({ block: "start" }); else $("help-top").focus();
 }
 
-function leaveHelp() {
-  const r = helpReturn || { view: "find", y: 0 };
-  helpReturn = null;
-  showView(r.view);
-  window.scrollTo(0, r.y);
-}
-window.addEventListener("popstate", () => { if (!$("view-help").hidden) leaveHelp(); });
+function goBack() { if (navDepth > 0) history.back(); else showView("find"); }
 
-function showView(name) {
+window.addEventListener("popstate", (e) => {
+  const st = e.state;
+  if (!st || !st.wfView) return;
+  navDepth = Math.max(0, navDepth - 1);
+  showView(st.wfView, true);
+  window.scrollTo(0, st.y || 0);
+});
+
+function showView(name, fromHistory = false) {
+  const prev = currentView();
+  if (!fromHistory && prev !== name) {
+    history.replaceState({ ...(history.state || {}), wfView: prev, y: window.scrollY }, ""); // where we were
+    history.pushState({ wfView: name, y: 0 }, "", location.pathname + location.search);
+    navDepth++;
+  }
   $("view-find").hidden = name !== "find";
   $("view-shortlist").hidden = name !== "shortlist";
   $("view-mywines").hidden = name !== "mywines";
@@ -2948,7 +2951,7 @@ function wireEvents() {
     else if (t.id === "dine-go") dineGo();
     else if (t.id === "btn-tonight") showDinePicks(dineHistory()[0]);
     else if (t.dataset.help) { e.preventDefault(); openHelp(t.dataset.help); }
-    else if (t.id === "help-back") { if (history.state?.wfHelp) history.back(); else leaveHelp(); }
+    else if (t.id === "help-back") goBack();
     else if (t.dataset.dineHist != null) showDinePicks(dineHistory()[+t.dataset.dineHist]);
     else if (t.id === "dine-close") $("dine-dialog").close();
     else if (t.id === "notes-close") $("notes-dialog").close();
@@ -3182,6 +3185,7 @@ async function init() {
   renderFooter();
   renderAll();
   updatePickCounts();
+  if (!history.state?.wfView) history.replaceState({ wfView: currentView(), y: 0 }, "");
   if (/^#(save|share|dine)=/.test(location.hash)) announceNewerTab(); // older Wine Finder tabs step aside
   offerSavedRatings();
   offerDinePicks();
