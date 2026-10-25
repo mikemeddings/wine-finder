@@ -379,7 +379,9 @@ const SORTS = {
   vintage: (a, b) => (b.vintage ?? -1) - (a.vintage ?? -1) || a.price - b.price,
   abv: (a, b) => (a.abv ?? 99) - (b.abv ?? 99) || a.price - b.price,
   sweet: (a, b) => (b.sweetness ?? -1) - (a.sweetness ?? -1) || a.price - b.price, // not rated last
-  claude: (a, b) => (ratingOf(b.id).claude?.points ?? -1) - (ratingOf(a.id).claude?.points ?? -1) || a.price - b.price,
+  // Claude's score from any family research: this computer's latest, else the published one,
+  // so the order is the same on every computer. Wines without a price (cellar wines) go last on ties.
+  claude: (a, b) => (claudeScore(b) ?? -1) - (claudeScore(a) ?? -1) || (a.price ?? 1e9) - (b.price ?? 1e9),
   mine: (a, b) => (ratingOf(b.id).mine?.points ?? -1) - (ratingOf(a.id).mine?.points ?? -1) || a.price - b.price,
   family: (a, b) => (frScore(b.id) ?? -1) - (frScore(a.id) ?? -1) || a.price - b.price,
 };
@@ -1585,6 +1587,7 @@ const PUBLISH = { owner: "mikemeddings", repo: "wine-finder", path: "data/rating
 let familyRatings = {};
 const frOf = (id) => familyRatings[id] || (privateId(id) && familyRatings[sharedIdOf(id)]) || {};
 const frScore = (id) => frOf(id).family?.points ?? frOf(id).claude?.points ?? null;
+const claudeScore = (w) => ratingOf(w.id).claude?.points ?? frOf(w.id).claude?.points ?? null;
 
 function frHtml(w) {
   const f = frOf(w.id), parts = [];
