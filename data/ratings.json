@@ -477,6 +477,69 @@
     "note": "Dunnuck and Advocate 97 in prime now",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-9": {
+   "name": "Château de Beaucastel Châteauneuf-du-Pape 2016",
+   "claude": {
+    "points": 97,
+    "vintage": 2016,
+    "note": "Suckling 99 best since 1989 1990",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-80": {
+   "name": "Domaine Grand Veneur Châteauneuf-du-Pape Vieilles Vignes 2015",
+   "claude": {
+    "points": 96,
+    "vintage": 2015,
+    "note": "Dunnuck 97 Mourvedre rich in prime",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-78": {
+   "name": "Domaine Grand Veneur Châteauneuf-du-Pape Vieilles Vignes 2017",
+   "claude": {
+    "points": 96,
+    "vintage": 2017,
+    "note": "Dunnuck 97 plus Advocate 96 opulent",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-152": {
+   "name": "Domaine Pierre Usseglio & Fils Châteauneuf-du-Pape Cuvée de mon Aïeul 2016",
+   "claude": {
+    "points": 97,
+    "vintage": 2016,
+    "note": "Dunnuck 100 Enthusiast 99 drink by 2030",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-153": {
+   "name": "Domaine Pierre Usseglio & Fils Châteauneuf-du-Pape Cuvée de mon Aïeul 2015",
+   "claude": {
+    "points": 94,
+    "vintage": 2015,
+    "note": "Dunnuck 97 Advocate 91 very ripe",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-151": {
+   "name": "Domaine Pierre Usseglio & Fils Châteauneuf-du-Pape Cuvée de mon Aïeul 2017",
+   "claude": {
+    "points": 95,
+    "vintage": 2017,
+    "note": "Spectator 96 tiny coulure yields intense",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-139": {
+   "name": "Château de Saint Cosme Gigondas Le Claux 2012",
+   "claude": {
+    "points": 94,
+    "vintage": 2012,
+    "note": "Advocate 96 Spectator 95 at its peak",
+    "date": "2026-10-25"
+   }
   }
  }
 }
