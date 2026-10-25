@@ -233,7 +233,8 @@ const renderListHits = debounce((box) => {
     wait = `<p class="hint">Still loading the other stores' lists…</p>`;
   }
   const hits = listHits(q);
-  const head = `<h3 class="ew-sub">On our store lists <span class="ew-note">(${esc(loadedSourceLabels())})</span></h3>`;
+  const fam = familyHitsHtml(q);
+  const head = fam + `<h3 class="ew-sub">On our store lists <span class="ew-note">(${esc(loadedSourceLabels())})</span></h3>`;
   const byName = typedButton(q, hits.length ? "Or add it by name, as typed" : "Not on our lists? You can still ask Claude about it:");
   if (!hits.length) {
     out.innerHTML = head + wait + `<p><strong>Not found on our lists.</strong> Try fewer words, or the store buttons below.</p>` + byName;
@@ -492,7 +493,7 @@ function cellarCard(w) {
     <div class="wine-price wine-price-cellar">In the cellar</div>
     <p class="wine-facts">${typePill(w.type)} ${facts}</p>
     <p class="wine-detail"><span class="badge badge-cellar">${esc(w.source)}</span>${w.size_ml && w.size_ml !== 750 ? ` ${esc(sizeText(w))}` : ""}</p>
-    ${scores ? `<p class="wine-detail mw-scores">${scores}</p>` : ""}${soldAtHtml(w)}${ratingsHtml(w)}
+    ${scores ? `<p class="wine-detail mw-scores">${scores}</p>` : ""}${soldAtHtml(w)}${ratingsHtml(w)}${familyLinksHtml(w)}
     <div class="wine-actions">
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
       <button type="button" class="btn btn-ew" data-action="mw-where" data-id="${esc(w.id)}">Where can I buy it?</button>
@@ -517,7 +518,7 @@ function wineCard(w) {
     <h3 class="wine-name">${esc(w.name)}</h3>
     <div class="wine-price">${money(w.price)}</div>
     <p class="wine-facts">${typePill(w.type)} ${facts}</p>
-    <p class="wine-detail">${detail} ${badges}</p>${scores}${calgary}${ratingsHtml(w)}${cellarBadges(w)}
+    <p class="wine-detail">${detail} ${badges}</p>${scores}${calgary}${ratingsHtml(w)}${familyLinksHtml(w)}
     <div class="wine-actions">
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
@@ -637,6 +638,8 @@ function wineLine(w, i, forClaude = false) {
   if (w.my_score != null) line += `; ${w.owner} scored it ${w.my_score}`;
   if (w.ct_score != null) line += `; CellarTracker community score ${w.ct_score}`;
   if (forClaude) {
+    const inCellars = cellarMatches(w).map((m) => `${m.source}${m.vintages.length ? ` has the ${m.vintages.join(", ")}` : ""}`);
+    if (inCellars.length) line += `; in our family's cellars: ${inCellars.join("; ")}`;
     const r = ratingOf(w.id);
     // Claude's own earlier scores are left out so it judges afresh; people's own points are useful context.
     if (r.mine) line += `; my own rating: ${r.mine.points}/100`;
@@ -684,11 +687,11 @@ const renderSlAddHits = debounce(() => {
   if (q.length < 3) { out.innerHTML = ""; return; }
   if (!allLoaded()) { loadAllSources().then(renderSlAddHits); out.innerHTML = `<p class="hint">Checking the store lists…</p>`; return; }
   const hits = listHits(q);
-  out.innerHTML = hits.length
-    ? `<p><strong>Found on our lists (${hits.length}).</strong> You can add one of these, with its price, instead:</p>
+  out.innerHTML = familyHitsHtml(q) + (hits.length
+    ? `<p><strong>Found on our store lists (${hits.length}).</strong> You can add one of these, with its price, instead:</p>
        <ul class="ew-hit-list">${hits.slice(0, 5).map(hitRow).join("")}</ul>
        ${hits.length > 5 ? `<p class="hint">Showing the 5 cheapest. Try more words to narrow it down.</p>` : ""}`
-    : `<p><strong>Not on the BC Liquor, BSW or ZYN lists.</strong> It will be added by name, and Claude will be told so.</p>`;
+    : `<p><strong>Not on the BC Liquor, BSW or ZYN lists.</strong> If it's not in the family's wines above either, it will be added by name, and Claude will be told so.</p>`);
 }, 300);
 
 function addFromShortlistBox() {
@@ -714,7 +717,7 @@ function renderShortlist() {
       <div><div class="sl-name">${esc(w.name)}</div>
       <div>${esc([w.country !== "Country not stated" ? w.country : null, w.type !== "Other" ? w.type : null, w.vintage, w.size_ml ? sizeText(w) : null].filter(Boolean).join(" · "))}</div>
       <div>${w.kind === "cellar" || w.price == null ? esc(priceText(w)) : `<strong>${money(w.price)}</strong> at ${esc(sourceLabel(w.source))}`}</div>
-      ${ratingsHtml(w)}</div>
+      ${ratingsHtml(w)}${w.kind === "cellar" ? "" : familyLinksHtml(w)}</div>
       <div class="sl-buttons">
         ${rateButton(w)}
         <button type="button" class="btn btn-ew" data-ew="${esc(w.id)}" aria-expanded="false">Find it elsewhere</button>
@@ -1809,7 +1812,7 @@ function buildCellarIndex() {
 
 // Store wine -> [{source: "Jon's cellar", vintages: [2016, 2018]}]
 function cellarMatches(w) {
-  if (!w || w.kind) return []; // only store wines
+  if (!w || (w.kind && w.kind !== "typed")) return []; // store wines and wines added by name
   if (cellarMatchCache.has(w.id)) return cellarMatchCache.get(w.id);
   cellarIndex ??= buildCellarIndex();
   const S = storeTokens(w.name);
@@ -1878,11 +1881,82 @@ function soldAtHtml(w) {
   return `<p class="wine-detail sold-at"><strong>Sold at:</strong> ${[...sold, ...notSold].join(" · ")}</p>`;
 }
 
-const cellarBadges = (w) => {
-  const m = cellarMatches(w);
-  return m.length ? `<p class="wine-detail">${m.map((x) => `<span class="badge badge-cellar">In ${esc(x.source)}` +
-    `${x.vintages.length ? ` (${esc(x.vintages.join(", "))})` : ""}</span>`).join(" ")}</p>` : "";
-};
+
+// ---- One wine, one record --------------------------------------------------------
+// The same wine turns up under several names: a store listing, a family cellar entry,
+// and whatever someone typed when researching it. These link them, so a wine already
+// in a cellar or already researched is found (and its ratings shown) instead of being
+// researched again under a new name.
+
+// Two names for the same wine: every distinctive word of the shorter is in the longer
+// (at least two of them), and they agree on style words (Riserva, Amarone, Blanc…).
+function sameWineName(a, b) {
+  const A = storeTokens(a), B = storeTokens(b);
+  const [small, big] = A.length <= B.length ? [A, new Set(B)] : [B, new Set(A)];
+  return small.length >= 2 && small.every((t) => big.has(t)) && styleOf(a) === styleOf(b);
+}
+
+// Ratings the family gave this wine under its other records (cellar entries, names typed).
+function relatedRatings(w) {
+  const seen = new Set([w.id]), out = [];
+  for (const id of cellarMatches(w).ids || []) {
+    if (seen.has(id)) continue;
+    seen.add(id);
+    const f = frOf(id), c = cellarFindWines().find((x) => x.id === id);
+    if (f.claude || f.family) out.push({ f, label: c ? `${c.source}${c.vintage ? `, ${c.vintage}` : ""}` : "a family cellar" });
+  }
+  for (const [id, r] of Object.entries(familyRatings)) {
+    if (seen.has(id) || !id.startsWith("typed-") || !r.name || !sameWineName(w.name, r.name)) continue;
+    seen.add(id);
+    out.push({ f: r, label: `researched as “${r.name}”` });
+  }
+  return out;
+}
+
+function familyLinksHtml(w) {
+  const badges = cellarMatches(w).map((m) => `<span class="badge badge-cellar">In ${esc(m.source)}` +
+    `${m.vintages.length ? ` (${esc(m.vintages.join(", "))})` : ""}</span>`);
+  const rel = relatedRatings(w).map(({ f, label }) => {
+    const c = f.claude, fam = f.family;
+    return `<span class="rating rating-fr rating-related">FR <strong>${fam ? fam.points : c?.points ?? "no reviews"}</strong> ` +
+      `(${fam ? "family" : "Claude"})${!fam && c?.vintage ? ` · ${esc(String(c.vintage))}` : ""} · ${esc(label)}</span>`;
+  });
+  return badges.length || rel.length ? `<p class="wine-detail family-links">${[...badges, ...rel].join(" ")}</p>` : "";
+}
+
+// Name searches: wines in the family cellars and wines already researched by name.
+function familyHits(q) {
+  const cellarIds = new Set(cellarMatches({ id: `q:${fold(q)}`, name: q }).ids || []);
+  const words = fold(q).split(/\s+/).filter((t) => t.length > 2);
+  for (const w of cellarFindWines()) if (words.length && words.every((t) => w._s.includes(t))) cellarIds.add(w.id);
+  const cellar = cellarFindWines().filter((w) => cellarIds.has(w.id))
+    .sort((a, b) => a.name.localeCompare(b.name) || (a.vintage ?? 0) - (b.vintage ?? 0));
+  const typed = new Map();
+  for (const [id, r] of [...Object.entries(familyRatings), ...Object.entries(ratings)]) {
+    if (id.startsWith("typed-") && r.name && !typed.has(id) && sameWineName(q, r.name)) typed.set(id, r.name);
+  }
+  return { cellar, typed: [...typed].map(([id, name]) => ({ id, name })) };
+}
+
+function familyHitsHtml(q) {
+  const { cellar, typed } = familyHits(q);
+  if (!cellar.length && !typed.length) return "";
+  const addBtn = (attr, on) => `<button type="button" class="btn btn-add" ${attr} aria-pressed="${on}">${on
+    ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>`;
+  const rows = [
+    ...cellar.slice(0, 6).map((w) => `<li class="ew-hit"><div><div class="sl-name">${esc(w.name)}</div>
+        <div><span class="badge badge-cellar">In ${esc(w.source)}</span></div>${ratingsHtml(w)}${soldAtHtml(w)}</div>
+        ${addBtn(`data-add="${esc(w.id)}"`, isOnList(w.id))}</li>`),
+    ...typed.map((t) => `<li class="ew-hit"><div><div class="sl-name">${esc(t.name)}</div>
+        <div class="hint">Already researched by the family</div>${ratingsHtml({ id: t.id })}</div>
+        <button type="button" class="btn btn-typed" data-typed="${esc(t.name)}" aria-pressed="${isOnList(t.id)}">${isOnList(t.id)
+          ? "✓ On the Short List" : "＋ Add to Short List for Claude Research"}</button></li>`),
+  ];
+  return `<h3 class="ew-sub">In the family's wines</h3>
+    <p class="hint">Found in a family cellar or already researched. Adding one of these keeps its ratings together.</p>
+    <ul class="ew-hit-list family-hit-list">${rows.join("")}</ul>${cellar.length > 6 ? `<p class="hint">Showing 6 of ${cellar.length}. Try more words to narrow it down.</p>` : ""}`;
+}
+
 
 function cellarSources() {
   return [...new Set(allMyWines().filter((w) => w.kind === "cellar").map((w) => w.source))].sort();
@@ -2106,7 +2180,9 @@ function wireEvents() {
     else if (t.dataset.action === "hits-in-list") showHitsInList();
     else if (t.dataset.typed != null) {
       if (!addTypedWine(t.dataset.typed)) toggleShortlist(typedId(t.dataset.typed)); // pressed again: take it off
-      renderListHits(t.closest(".elsewhere"));
+      const box = t.closest(".elsewhere");
+      if (box) renderListHits(box); else renderSlAddHits(); // the Short List page has its own name box
+      if (!$("view-shortlist").hidden) renderShortlist();
     }
     else if (t.id === "sl-add-btn") addFromShortlistBox();
     else if (t.dataset.rate) toggleRatePanel(t);
