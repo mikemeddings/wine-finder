@@ -1,4 +1,15 @@
 {
- "updated": null,
- "notes": {}
+ "updated": "2026-10-25",
+ "notes": {
+  "typed-losada-vinos-de-finca-mencia-bierzo-altos-de-losada-la-bienquerida": {
+   "name": "Losada Vinos de Finca Mencía Bierzo Altos de Losada La Bienquerida",
+   "from": "Mike",
+   "date": "2026-10-25"
+  },
+  "typed-2010-chateau-de-beaucastel-chateauneuf-du-pape-hommage-a-jacques-perrin": {
+   "name": "2010 Château de Beaucastel Châteauneuf-du-Pape Hommage à Jacques Perrin",
+   "from": "Mike",
+   "date": "2026-10-25"
+  }
+ }
 }
