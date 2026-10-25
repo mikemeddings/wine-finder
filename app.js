@@ -2093,12 +2093,13 @@ const DINE_TEMPLATE = `I'm at a restaurant and I'm attaching a photo of the wine
 Please:
 - Start by saying how many wines you could read on the list, and how many (if any) you couldn't read.
 - Then recommend your top 5 wines from this list only, best first (fewer if fewer suit my food and budget). For each: the wine exactly as written on the list and its price on the list; what it is, in two or three sentences; what critics say about it, in your own words, with a score, its source and the vintage it's for, if you know one; why it suits my food and budget; and whether the price is fair compared with what the bottle usually costs in a store (restaurants often charge two to three times the store price).
+- Then, under the heading "Wines to skip", list up to 5 wines on this list I should avoid for this meal and budget (never one of your picks, and fewer if few deserve it). Give each one reason, exactly one of: Overpriced, Wrong for your food, Weak reviews, Past its best, and one sentence why.
 - If you can't read part of the photo, say so rather than guessing.
 - Keep it easy to read on a phone: I'm at the table. A clear heading for each pick, and no tables.
 
 At the very end, below a horizontal line (---), write this link as the largest heading (one #), exactly in this form: first the count, then one entry per pick in the same order, all joined by semicolons:
-# [🍷 Back to my Wine Finder with tonight's picks]({BASE}#dine=READ~UNREAD;NAME~PRICE~SCORE~CRITICS~STORE~WHAT~WHY~VALUE;NAME~PRICE~SCORE~CRITICS~STORE~WHAT~WHY~VALUE)
-READ is how many wines you could read, and UNREAD how many you couldn't (0 if none). For each pick: NAME is the wine as written on the list (with its vintage if shown); PRICE is the price as on the list, for example 63, or glass 5 oz 12 8 oz 19 bottle 54 (up to ten words); SCORE is the best critic score you know as a number out of 100, or empty; CRITICS is what critics say, with who gave the score and for which vintage, up to twenty-five words, or empty; STORE is the usual store price, up to ten words, or empty; WHAT is what the wine is, up to sixty words; WHY is why it suits my meal and budget, up to thirty-five words; VALUE is your verdict on the price, with the sums, up to twenty-five words. For WHAT, CRITICS, WHY and VALUE, reuse the sentences you wrote above for that pick, shortened only if needed. Use + instead of spaces, and no semicolons or tildes anywhere inside the entries. Under the link, in bold: "Tap this to see tonight's picks in your Wine Finder."`;
+# [🍷 Back to my Wine Finder with tonight's picks]({BASE}#dine=READ~UNREAD;NAME~PRICE~SCORE~CRITICS~STORE~WHAT~WHY~VALUE;NAME~PRICE~SCORE~CRITICS~STORE~WHAT~WHY~VALUE;SKIP;NAME~PRICE~REASON~WHY;NAME~PRICE~REASON~WHY)
+READ is how many wines you could read, and UNREAD how many you couldn't (0 if none). For each pick: NAME is the wine as written on the list (with its vintage if shown); PRICE is the price as on the list, for example 63, or glass 5 oz 12 8 oz 19 bottle 54 (up to ten words); SCORE is the best critic score you know as a number out of 100, or empty; CRITICS is what critics say, with who gave the score and for which vintage, up to twenty-five words, or empty; STORE is the usual store price, up to ten words, or empty; WHAT is what the wine is, up to sixty words; WHY is why it suits my meal and budget, up to thirty-five words; VALUE is your verdict on the price, with the sums, up to twenty-five words. For WHAT, CRITICS, WHY and VALUE, reuse the sentences you wrote above for that pick, shortened only if needed. After the picks, write the word SKIP, then one entry per wine to skip: NAME and PRICE as above, REASON exactly one of Overpriced, Wrong for your food, Weak reviews, Past its best, and WHY up to fifteen words (leave out SKIP and its entries if there are none). Use + instead of spaces, and no semicolons or tildes anywhere inside the entries. Under the link, in bold: "Tap this to see tonight's picks in your Wine Finder."`;
 
 function dinePrompt() {
   const bits = [];
@@ -2217,11 +2218,25 @@ function parseDineHash(hash) {
   // A stray semicolon inside a sentence would split a pick: each pick has a known number
   // of fields (8, or 4 in older links), so pieces are joined back until they're complete.
   const tildes = (t) => (t.match(/~/g) || []).length;
-  const need = read != null || parts.some((t) => tildes(t) > 3) ? 7 : 3; // newer links start with the count
-  const entries = [];
-  for (const part of parts) {
-    if (entries.length && tildes(entries[entries.length - 1]) < need) entries[entries.length - 1] += `;${part}`;
-    else entries.push(part);
+  const skipAt = parts.findIndex((t) => /^\s*skip\s*$/i.test(t));
+  const pickParts = skipAt >= 0 ? parts.slice(0, skipAt) : parts;
+  const skipParts = skipAt >= 0 ? parts.slice(skipAt + 1) : [];
+  const join = (list, need) => {
+    const out = [];
+    for (const part of list) {
+      // still short of its fields, or a piece with no fields at all (the rest of a sentence)
+      if (out.length && (tildes(out[out.length - 1]) < need || !tildes(part))) out[out.length - 1] += `;${part}`;
+      else out.push(part);
+    }
+    return out;
+  };
+  const need = read != null || pickParts.some((t) => tildes(t) > 3) ? 7 : 3; // newer links start with the count
+  const entries = join(pickParts, need);
+  const skips = [];
+  for (const part of join(skipParts, 3).slice(0, 5)) {
+    const f = part.split("~");
+    const name = clip(f[0], 120);
+    if (name) skips.push({ name, price: clip(f[1], 40), reason: clip(f[2], 40), why: clip(f.slice(3).join(" "), 200) });
   }
   const picks = [];
   for (const part of entries.slice(0, 5)) {
@@ -2235,7 +2250,7 @@ function parseDineHash(hash) {
       why: clip(f[6], 350), value: clip(f[7], 250) });
     picks.push(pick);
   }
-  return { read, unread, picks };
+  return { read, unread, picks, skips };
 }
 
 function showDinePicks(d) {
@@ -2261,6 +2276,13 @@ function showDinePicks(d) {
   };
   $("dine-rank").innerHTML = n ? d.picks.map((p) => `<li><strong>${esc(p.name)}</strong>${price(p)}` +
     `${p.score != null ? ` · Critics ${p.score}` : ""}</li>`).join("") : "<li>The link didn't contain any picks that could be read.</li>";
+  const skips = Array.isArray(d.skips) ? d.skips : [];
+  const REASON_CLASS = [[/overpriced/i, "over"], [/food/i, "food"], [/review/i, "weak"], [/past|old|tired/i, "past"]];
+  const tag = (r) => (r ? `<span class="skip-tag skip-${(REASON_CLASS.find(([re]) => re.test(r)) || [, "weak"])[1]}">${esc(r)}</span>` : "");
+  $("dine-skip").hidden = !skips.length;
+  $("dine-skip").innerHTML = skips.length ? `<h3 class="dine-sub skip-h">⛔ Wines to skip</h3><ul class="skip-list">${skips.map((k) =>
+    `<li><span class="skip-x" aria-hidden="true">✕</span><div><strong>${esc(k.name)}</strong>${price(k)} ${tag(k.reason)}` +
+    `${k.why ? `<div class="skip-why">${esc(k.why)}</div>` : ""}</div></li>`).join("")}</ul>` : "";
   const row = (label, text) => (text ? `<p><strong>${label}:</strong> ${esc(text)}</p>` : "");
   $("dine-list").innerHTML = d.picks.map((p, i) => `<section class="dine-detail">
       <h3>${i + 1}. ${esc(p.name)}${price(p)}</h3>

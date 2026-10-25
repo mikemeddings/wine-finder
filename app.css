@@ -456,3 +456,16 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .dine-detail p { margin: 0.25rem 0; }
 .dine-sliders { display: grid; gap: 0.2rem; max-width: 30rem; margin-bottom: 0.6rem; font-size: 1.1rem; }
 .dine-sliders input[type="range"] { width: 100%; height: 2.4rem; accent-color: #2f5a24; }
+
+/* Wines to skip */
+.dine-skip { background: #fdecec; border: 2px solid #c0392b; border-radius: 0.6rem; padding: 0.4rem 0.8rem 0.6rem; margin: 0.8rem 0; }
+.dine-skip .skip-h { color: #a12a1e; margin-top: 0.3rem; }
+.skip-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.6rem; font-size: 1.1rem; }
+.skip-list li { display: flex; gap: 0.5rem; align-items: flex-start; }
+.skip-x { color: #c0392b; font-weight: 700; font-size: 1.3rem; line-height: 1.2; }
+.skip-why { font-style: italic; color: #5a2a24; }
+.skip-tag { display: inline-block; font-size: 0.85rem; font-weight: 700; padding: 0.05rem 0.5rem; border-radius: 1rem; color: #fff; white-space: nowrap; }
+.skip-over { background: #d35400; }
+.skip-food { background: #7d3c98; }
+.skip-weak { background: #6b6b6b; }
+.skip-past { background: #7b4a12; }
