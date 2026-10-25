@@ -433,3 +433,18 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .research-head .save-steps-img { max-width: 34rem; background: #fff; }
 .save-howto { background: #fff3c4; border: 2px solid #8a5a14; border-radius: 0.6rem; padding: 0.6rem 0.8rem; margin: 0.5rem 0; }
 .writeup-state { font-size: 1.1rem; margin: 0.2rem 0 0.4rem; }
+
+/* At a restaurant */
+.btn-dine { background: #e8f1e4; border-color: #e8f1e4; color: #24451a; }
+.dine-head { background: #2f5a24; }
+.dine-box h3 { margin: 1rem 0 0.4rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.chip { font-size: 1.05rem; padding: 0.45rem 0.9rem; border-radius: 2rem; }
+.chip[aria-pressed="true"] { background: #2f5a24; border-color: #2f5a24; color: #fff; }
+.dine-text { width: 100%; max-width: 32rem; font: inherit; min-height: 2.8rem; margin-top: 0.5rem; padding: 0.2rem 0.6rem; border: 2px solid var(--line); border-radius: 0.5rem; }
+.dine-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
+.dine-list { padding-left: 1.4rem; font-size: 1.15rem; line-height: 1.5; }
+.dine-list li { margin-bottom: 0.9rem; }
+.dine-price { font-weight: 700; color: var(--wine); }
+.dine-why { font-style: italic; }
+.dine-list .badge, .family-links .badge { white-space: normal; }

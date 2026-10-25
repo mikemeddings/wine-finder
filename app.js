@@ -104,7 +104,7 @@ const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB" };
 const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn" };
 const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 50;
-const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey" };
+const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine" };
 
 // ---- Helpers -----------------------------------------------------------------
 
@@ -1742,6 +1742,7 @@ function cellarFindWines() {
 const findPool = () => (cellarOn() ? cellarFindWines() : WINES);
 
 function cellarsChanged() {
+  placeWords = null;
   sharedIdCache.clear();
   cellarFindCache = null;
   storeMatchIndex = null;
@@ -1948,10 +1949,19 @@ function soldAtHtml(w) {
 
 // Two names for the same wine: every distinctive word of the shorter is in the longer
 // (at least two of them), and they agree on style words (Riserva, Amarone, Blanc…).
+// The longer name may only add place or grape words ("Coteaux du Languedoc", "Mencía"),
+// never words naming another bottling: plain Beaucastel is not the Hommage à Jacques Perrin.
+let placeWords = null;
+const isPlaceWord = (t) => {
+  placeWords ??= new Set(cellarFindWines().flatMap((w) => nameTokens(`${w.region_or_grape || ""} ${w.varietal || ""} ${w.country || ""}`)));
+  return placeWords.has(t) || GRAPE_WORDS.has(t);
+};
 function sameWineName(a, b) {
   const A = storeTokens(a), B = storeTokens(b);
-  const [small, big] = A.length <= B.length ? [A, new Set(B)] : [B, new Set(A)];
-  return small.length >= 2 && small.every((t) => big.has(t)) && styleOf(a) === styleOf(b);
+  const [small, big] = A.length <= B.length ? [A, B] : [B, A];
+  const smallSet = new Set(small), bigSet = new Set(big);
+  return small.length >= 2 && small.every((t) => bigSet.has(t)) && styleOf(a) === styleOf(b) &&
+    big.filter((t) => !smallSet.has(t)).every(isPlaceWord);
 }
 
 // Ratings the family gave this wine under its other records (cellar entries, names typed).
@@ -2040,6 +2050,116 @@ function currentSort() {
     return (a, b) => has(a) - has(b) || SORTS["price-asc"](a, b);
   }
   return SORTS[state.sort] || SORTS["price-asc"];
+}
+
+// ---- At a restaurant: a photo of the wine list, Claude's picks, back in the Wine Finder ----
+// Uses each person's own Claude (claude.ai), so there are no API keys or fees. Claude's
+// answer ends with a link back here that carries a short summary of its picks (a few
+// hundred characters, small enough for a link), shown as "Tonight's picks".
+const DINE_CHOICES = {
+  food: ["Red meat", "Lamb", "Fish", "Seafood", "Chicken", "Pork", "Pasta", "Pizza", "Cheese", "Vegetarian", "Spicy food"],
+  colour: ["Any", "Red", "White", "Rosé", "Sparkling"],
+  budget: ["Any", "Under $60", "$60–100", "$100–150", "Over $150"],
+  serve: ["Bottle", "By the glass"],
+};
+const dine = { food: new Set(), colour: "Any", budget: "Any", serve: "Bottle" };
+
+const DINE_TEMPLATE = `I'm at a restaurant and I'm attaching a photo of the wine list. Please read every wine and price on it, then help me choose. {CHOICES} {ABOUT_ME}
+
+Please:
+- Recommend your top 3 wines from this list only, best first. For each: the wine exactly as written on the list, its price on the list, what critics say about it in your own words (with a score, its source and the vintage it's for, if you know one), and one or two lines on why it suits my food and budget.
+- Say whether each price looks fair compared with what the bottle usually costs in a store (restaurants often charge two to three times the store price).
+- If you can't read part of the photo, say so rather than guessing.
+- Keep it short and easy to read on a phone: I'm at the table. A clear heading for each pick, and no tables.
+
+At the very end, below a horizontal line (---), write this link as the largest heading (one #), exactly in this form, one entry per pick in the same order, joined by semicolons:
+# [🍷 Back to my Wine Finder with tonight's picks]({BASE}#dine=NAME~PRICE~SCORE~WHY;NAME~PRICE~SCORE~WHY)
+NAME is the wine as written on the list (with its vintage if shown); PRICE is the list price as a plain number; SCORE is the best critic score you know as a number out of 100, or leave it empty; WHY is up to twelve words. Use + instead of spaces, and no semicolons or tildes. Under the link, in bold: "Tap this to see tonight's picks in your Wine Finder."`;
+
+function dinePrompt() {
+  const bits = [];
+  const food = [...dine.food], typed = $("dine-food-text").value.trim();
+  if (typed) food.push(typed);
+  if (food.length) bits.push(`I'm eating: ${food.join(", ").toLowerCase()}.`);
+  if (dine.colour !== "Any") bits.push(`I'd like ${dine.colour === "Sparkling" ? "a sparkling wine" : `a ${dine.colour.toLowerCase()}`}.`);
+  if (dine.budget !== "Any") bits.push(`My budget for the bottle is ${dine.budget.replace("Under", "under").replace("Over", "over")}.`);
+  if (dine.serve === "By the glass") bits.push("I'd like wine by the glass, not a whole bottle.");
+  const about = String(storeGet(STORE.aboutMe, "") || "").trim();
+  return DINE_TEMPLATE
+    .replace("{CHOICES}", bits.join(" "))
+    .replace("{ABOUT_ME}", about ? `About me: ${about}` : "")
+    .replace("{BASE}", location.href.split("#")[0].split("?")[0]);
+}
+
+function renderDine() {
+  const chip = (group, v, on) => `<button type="button" class="btn chip" data-dine-group="${group}" data-value="${esc(v)}" aria-pressed="${on}">${esc(v)}</button>`;
+  $("dine-food").innerHTML = DINE_CHOICES.food.map((v) => chip("food", v, dine.food.has(v))).join("");
+  for (const g of ["colour", "budget", "serve"]) $(`dine-${g}`).innerHTML = DINE_CHOICES[g].map((v) => chip(g, v, dine[g] === v)).join("");
+  $("dine-reopen").hidden = !storeGet(STORE.dine, null);
+}
+
+function dineChoose(group, value) {
+  if (group === "food") { if (dine.food.has(value)) dine.food.delete(value); else dine.food.add(value); }
+  else dine[group] = value;
+  renderDine();
+}
+
+async function dineGo() {
+  const prompt = dinePrompt();
+  const { url, prefilled } = claudeLink(prompt);
+  let copied = false, win;
+  const open = () => { win = window.open(url, "_blank"); if (win) win.opener = null; };
+  if (prefilled) { open(); copied = await copyText(prompt); } else { copied = await copyText(prompt); open(); }
+  const steps = $("dine-steps");
+  steps.hidden = false;
+  steps.innerHTML = win ? `<ol class="steps dine-steps-list">
+      <li><strong>Claude is open in a new tab</strong> with your question already written.${copied ? " If its message box is empty, tap in it and paste: the question is copied." : ""}</li>
+      <li>In Claude, tap <strong>＋</strong> or <strong>📷</strong> (at the left of the message box), <strong>take a photo of the wine list</strong> (straight on, the part you're interested in), then send.</li>
+      <li>When Claude finishes, tap <strong>🍷 Back to my Wine Finder with tonight's picks</strong> at the very bottom of its answer.</li>
+    </ol>`
+    : `Your browser stopped the new tab from opening. <a href="${esc(url)}" target="_blank" rel="noopener">Open Claude here</a>.`;
+  $("dine-go").textContent = "Open Claude again";
+  steps.scrollIntoView({ block: "nearest" });
+}
+
+// The link back: #dine=NAME~PRICE~SCORE~WHY;...  It comes from Claude's answer, so every
+// field is checked and kept short.
+function parseDineHash(hash) {
+  const m = /^#dine=([\s\S]*)$/.exec(hash || "");
+  if (!m) return null;
+  let raw = m[1].replace(/\+/g, " ");
+  try { raw = decodeURIComponent(raw); } catch { /* keep as is */ }
+  const picks = [];
+  for (const part of raw.split(";").slice(0, 5)) {
+    const [name = "", price = "", score = "", ...why] = part.split("~").map((s) => s.replace(/\s+/g, " ").trim());
+    if (!name) continue;
+    const p = parseFloat(price.replace(/[^0-9.]/g, "")), sc = parseInt(score, 10);
+    picks.push({ name: name.slice(0, 120), price: p > 0 && p < 100000 ? p : null,
+      score: sc >= 50 && sc <= 100 ? sc : null, why: why.join(" ").slice(0, 160) || null });
+  }
+  return picks;
+}
+
+function showDinePicks(d) {
+  if (!d || !Array.isArray(d.picks)) return;
+  $("dine-when").textContent = d.date ? `Picked ${shortDate(d.date)}` : "";
+  $("dine-list").innerHTML = d.picks.length ? d.picks.map((p) => {
+    const w = { id: `dine:${fold(p.name)}`, name: p.name };
+    return `<li><div class="dine-pick"><strong>${esc(p.name)}</strong>${p.price != null ? ` · <span class="dine-price">$${esc(String(p.price))}</span>` : ""}</div>
+      ${p.score != null ? `<div>Critics: about <strong>${p.score}</strong></div>` : ""}
+      ${p.why ? `<div class="dine-why">${esc(p.why)}</div>` : ""}
+      ${familyLinksHtml(w)}</li>`;
+  }).join("") : "<li>The link didn't contain any picks that could be read.</li>";
+  $("dine-dialog").showModal?.();
+}
+
+function offerDinePicks() {
+  const picks = parseDineHash(location.hash);
+  if (!picks) return;
+  history.replaceState(null, "", location.pathname + location.search);
+  const d = { date: todayIso(), picks };
+  storeSet(STORE.dine, d); // kept on this phone until the next restaurant visit
+  showDinePicks(d);
 }
 
 // ---- Claude Research Results: Claude's full write-ups, kept and shared ----------------
@@ -2431,9 +2551,11 @@ function showView(name) {
   $("view-find").hidden = name !== "find";
   $("view-shortlist").hidden = name !== "shortlist";
   $("view-mywines").hidden = name !== "mywines";
+  $("view-dine").hidden = name !== "dine";
   for (const b of document.querySelectorAll(".view-btn")) b.setAttribute("aria-pressed", String(b.dataset.view === name));
   if (name === "shortlist") renderShortlist();
   else if (name === "mywines") { renderMyWines(); renderFamilyBox(); loadInbox(); }
+  else if (name === "dine") renderDine();
   else renderResults();
   window.scrollTo(0, 0);
 }
@@ -2581,6 +2703,10 @@ function wireEvents() {
     else if (t.id === "save-check") checkWriteup(true);
     else if (t.id === "save-email-fallback") { $("save-dialog").close(); showView("mywines"); scrollToFamilyBox(); emailRatings(); }
     else if (t.dataset.notes) openNotes(t.dataset.notes);
+    else if (t.dataset.dineGroup) dineChoose(t.dataset.dineGroup, t.dataset.value);
+    else if (t.id === "dine-go") dineGo();
+    else if (t.id === "dine-reopen") showDinePicks(storeGet(STORE.dine, null));
+    else if (t.id === "dine-close") $("dine-dialog").close();
     else if (t.id === "notes-close") $("notes-dialog").close();
     else if (t.dataset.inboxRead) inboxAct(t.dataset.inboxRead, "read");
     else if (t.dataset.inboxPublish) inboxAct(t.dataset.inboxPublish, "publish");
@@ -2811,8 +2937,9 @@ async function init() {
   renderFooter();
   renderAll();
   updatePickCounts();
-  if (/^#(save|share)=/.test(location.hash)) announceNewerTab(); // older Wine Finder tabs step aside
+  if (/^#(save|share|dine)=/.test(location.hash)) announceNewerTab(); // older Wine Finder tabs step aside
   offerSavedRatings();
+  offerDinePicks();
   window.addEventListener("hashchange", offerSavedRatings);
   setTimeout(() => loadAllSources().then(() => { updatePickCounts(); renderSources(); }), 800);
 }

@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-25.11">
+<link rel="stylesheet" href="app.css?v=2026-10-25.13">
 </head>
 <body>
 <header class="top">
@@ -17,6 +17,7 @@
     <button type="button" class="view-btn" data-view="mywines" aria-pressed="false">My wines</button>
     <button type="button" class="view-btn" data-view="shortlist" aria-pressed="false">Short List for Claude: <span class="sl-count">0</span></button>
     <button type="button" class="btn-research" data-view="shortlist" data-focus="sl-add-q">🔎 Research a wine</button>
+    <button type="button" class="btn-research btn-dine" data-view="dine">🍽️ At a restaurant</button>
   </nav>
   <button type="button" class="btn btn-reset" id="start-over">Start over</button>
 </header>
@@ -264,6 +265,29 @@
   </section>
 </main>
 
+<main id="view-dine" hidden>
+  <header class="research-head dine-head">
+    <h2>🍽️ At a restaurant</h2>
+    <p>Take a photo of the wine list, and Claude picks the best wines on it for your meal and budget.</p>
+  </header>
+  <section class="mw-box dine-box">
+    <h3>What are you eating? <span class="hint-inline">(tap any)</span></h3>
+    <div id="dine-food" class="chips"></div>
+    <input type="text" id="dine-food-text" class="dine-text" autocomplete="off" placeholder="or type it, for example duck with cherries">
+    <h3>Colour</h3>
+    <div id="dine-colour" class="chips"></div>
+    <h3>Budget</h3>
+    <div id="dine-budget" class="chips"></div>
+    <h3>Bottle or glass?</h3>
+    <div id="dine-serve" class="chips"></div>
+    <p class="dine-actions">
+      <button type="button" class="btn btn-primary btn-big" id="dine-go">Open Claude</button>
+      <button type="button" class="btn" id="dine-reopen" hidden>Show tonight's picks again</button>
+    </p>
+    <div id="dine-steps" class="notice" role="status" hidden></div>
+  </section>
+</main>
+
 <main id="view-shortlist" hidden>
   <header class="research-head">
     <h2>Research wines with Claude</h2>
@@ -347,6 +371,15 @@
   </div>
 </dialog>
 
+<dialog id="dine-dialog" class="dialog dialog-wide" aria-labelledby="dine-title">
+  <h2 id="dine-title" class="notes-title">🍷 Tonight's picks</h2>
+  <p id="dine-when" class="note-meta"></p>
+  <ol id="dine-list" class="dine-list"></ol>
+  <div class="dialog-actions">
+    <button type="button" class="btn btn-primary" id="dine-close">Close</button>
+  </div>
+</dialog>
+
 <dialog id="notes-dialog" class="dialog dialog-wide" aria-labelledby="notes-title">
   <h2 id="notes-title" class="notes-title"></h2>
   <div id="notes-body" class="notes-body"></div>
@@ -375,6 +408,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-25.11"></script>
+<script src="app.js?v=2026-10-25.13"></script>
 </body>
 </html>
