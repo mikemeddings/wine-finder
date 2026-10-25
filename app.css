@@ -469,3 +469,9 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .skip-food { background: #7d3c98; }
 .skip-weak { background: #6b6b6b; }
 .skip-past { background: #7b4a12; }
+
+/* Recalling restaurant picks */
+.btn-tonight { background: #fde3ea; border-color: #fde3ea; color: #7a1f2b; }
+.dine-recent { border-color: #7a1f2b; }
+.dine-recent-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
+.dine-recent-btn { width: 100%; text-align: left; font-size: 1.05rem; line-height: 1.35; }

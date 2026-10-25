@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-25.24">
+<link rel="stylesheet" href="app.css?v=2026-10-25.26">
 </head>
 <body>
 <header class="top">
@@ -18,6 +18,7 @@
     <button type="button" class="view-btn" data-view="shortlist" aria-pressed="false">Short List for Claude: <span class="sl-count">0</span></button>
     <button type="button" class="btn-research" data-view="shortlist" data-focus="sl-add-q">🔎 Research a wine</button>
     <button type="button" class="btn-research btn-dine" data-view="dine">🍽️ At a restaurant</button>
+    <button type="button" class="btn-research btn-tonight" id="btn-tonight" hidden>🍷 Tonight's picks</button>
   </nav>
   <button type="button" class="btn btn-reset" id="start-over">Start over</button>
 </header>
@@ -270,6 +271,11 @@
     <h2>🍽️ At a restaurant</h2>
     <p>Take a photo of the wine list, and Claude picks the best wines on it for your meal and budget.</p>
   </header>
+  <section id="dine-recent" class="mw-box dine-recent" aria-labelledby="dine-recent-h" hidden>
+    <h3 id="dine-recent-h">🍷 Your recent picks</h3>
+    <p class="hint">Tap one to see it again. The last 5 are kept on this phone.</p>
+    <ul id="dine-recent-list" class="dine-recent-list"></ul>
+  </section>
   <section class="mw-box dine-box">
     <h3>What are you eating? <span class="hint-inline">(tap any)</span></h3>
     <div id="dine-food" class="chips"></div>
@@ -288,7 +294,6 @@
     <div id="dine-budget" class="chips"></div>
     <p class="dine-actions">
       <button type="button" class="btn btn-primary btn-big" id="dine-go">Open Claude</button>
-      <button type="button" class="btn" id="dine-reopen" hidden>Show tonight's picks again</button>
     </p>
     <div id="dine-steps" class="notice" role="status" hidden></div>
   </section>
@@ -419,6 +424,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-25.24"></script>
+<script src="app.js?v=2026-10-25.26"></script>
 </body>
 </html>

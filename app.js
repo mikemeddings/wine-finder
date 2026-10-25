@@ -104,7 +104,7 @@ const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB" };
 const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn" };
 const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 50;
-const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk" };
+const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk", dineHistory: "wf.dineHistory" };
 
 // ---- Helpers -----------------------------------------------------------------
 
@@ -2134,7 +2134,7 @@ function renderDine() {
   $("dine-lo").value = dine.lo;
   $("dine-hi").value = dine.hi;
   showDineBudget();
-  $("dine-reopen").hidden = !storeGet(STORE.dine, null);
+  renderDineRecall();
 }
 
 function dineChoose(group, value) {
@@ -2297,13 +2297,43 @@ function showDinePicks(d) {
   $("dine-dialog").scrollTop = 0;
 }
 
+// The last 5 restaurant results, newest first (on this phone only).
+function dineHistory() {
+  let h = storeGet(STORE.dineHistory, null);
+  if (!Array.isArray(h)) { const last = storeGet(STORE.dine, null); h = last ? [last] : []; } // from before the history
+  return h.filter((d) => d && Array.isArray(d.picks)).slice(0, 5);
+}
+const isToday = (d) => d && (d.at ? new Date(d.at).toDateString() === new Date().toDateString() : d.date === todayIso());
+
+function dineLabel(d) {
+  const when = d.at ? new Date(d.at) : null;
+  const time = when && !isNaN(when)
+    ? `${when.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}, ${when.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })}`
+    : shortDate(d.date || "");
+  const n = d.picks.length, k = (d.skips || []).length;
+  return [time, d.ask, `${n} ${n === 1 ? "pick" : "picks"}`, k ? `${k} to skip` : ""].filter(Boolean).join(" · ");
+}
+
+// The top-bar button (all day after a run) and the list at the top of the restaurant page.
+function renderDineRecall() {
+  const h = dineHistory();
+  $("btn-tonight").hidden = !isToday(h[0]);
+  if (!$("dine-recent")) return;
+  $("dine-recent").hidden = !h.length;
+  $("dine-recent-list").innerHTML = h.map((d, i) => `<li><button type="button" class="btn dine-recent-btn" data-dine-hist="${i}">
+      🍷 ${esc(dineLabel(d))}</button></li>`).join("");
+}
+
 function offerDinePicks() {
   const got = parseDineHash(location.hash);
   if (!got) return;
   history.replaceState(null, "", location.pathname + location.search);
   const asked = storeGet(STORE.dineAsk, null) || {};
   const d = { ...got, date: todayIso(), at: new Date().toISOString(), ask: asked.ask || "" };
-  storeSet(STORE.dine, d); // kept on this phone until the next restaurant visit
+  const before = dineHistory(); // read first: it falls back to STORE.dine, which is about to change
+  storeSet(STORE.dine, d);
+  storeSet(STORE.dineHistory, [d, ...before].slice(0, 5)); // the last 5 stay on this phone
+  renderDineRecall();
   showDinePicks(d);
 }
 
@@ -2850,7 +2880,8 @@ function wireEvents() {
     else if (t.dataset.notes) openNotes(t.dataset.notes);
     else if (t.dataset.dineGroup) dineChoose(t.dataset.dineGroup, t.dataset.value);
     else if (t.id === "dine-go") dineGo();
-    else if (t.id === "dine-reopen") showDinePicks(storeGet(STORE.dine, null));
+    else if (t.id === "btn-tonight") showDinePicks(dineHistory()[0]);
+    else if (t.dataset.dineHist != null) showDinePicks(dineHistory()[+t.dataset.dineHist]);
     else if (t.id === "dine-close") $("dine-dialog").close();
     else if (t.id === "notes-close") $("notes-dialog").close();
     else if (t.dataset.inboxRead) inboxAct(t.dataset.inboxRead, "read");
@@ -3085,6 +3116,7 @@ async function init() {
   if (/^#(save|share|dine)=/.test(location.hash)) announceNewerTab(); // older Wine Finder tabs step aside
   offerSavedRatings();
   offerDinePicks();
+  renderDineRecall();
   window.addEventListener("hashchange", offerSavedRatings);
   setTimeout(() => loadAllSources().then(() => { updatePickCounts(); renderSources(); }), 800);
 }
