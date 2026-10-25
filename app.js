@@ -52,14 +52,16 @@ For each wine, please:
 - Tell me about the region, the producer and the grapes — the history and the story behind it.
 - Look up current reviews on the web (critics and CellarTracker community notes). For every score, name the source and the vintage it applies to. If you can't find reviews for this wine, say so plainly rather than estimating.
 - Describe what the critics say in your own words. Give their scores with the source, but don't copy their tasting notes.
-- Give me a practical note: drink now or cellar, whether to decant, and a food pairing.
+- Give me a practical note: drink now or cellar, whether to decant, serving temperature, and two or three specific dishes to enjoy with it.
 - Start each wine's section with a heading that ends with its code in square brackets, exactly as in my list, for example: ## Château Example 2019 [bcl-123456]
 - End each wine's section with its own short "Sources:" list, so each wine's sources stay with it.
 
 Along the way:
 - Whenever you mention a particular place (a vineyard, estate, village, river valley or wine region), add a Google Maps satellite link so I can look at it from above. Build it from the place name like this: https://www.google.com/maps?q=Quinta+das+Carvalhas,+Pinhao,+Portugal&t=k (place, nearest town, country, with + for spaces; keep &t=k on the end, which opens the satellite view). Use names, not coordinates.
-- For each wine, end with a short "From the history books" section: two or three facts with dates about the people, places and events behind it (founders, dynasties, wars, treaties, trade routes, phylloxera and the like). Give each a Wikipedia link. Link an article directly only if you actually opened it; otherwise use a search link like https://en.wikipedia.org/wiki/Special:Search?search=Real+Companhia+Velha&go=Go so it never leads to a missing page.
-- I enjoy the occasional curious aside: the geology and soils, the climate or the science behind the winemaking. Hold these to the same standard as everything else, with sources.
+- Link generously as you write, so I can explore the wine from any point: give a Wikipedia link the first time you mention a person, a family or dynasty, a historical event, a grape variety, a soil or rock type, a winemaking term, a wind or river, or a dish. Link an article directly only if you actually opened it; otherwise use a search link like https://en.wikipedia.org/wiki/Special:Search?search=Real+Companhia+Velha&go=Go so it never leads to a missing page.
+- Whenever you give a critic's score or a fact you found on a page, link that page right there in the sentence (as well as in the wine's Sources list).
+- For each wine, end with a "From the history books" section: three to five facts with dates about the people, places and events behind it (founders, dynasties, popes and kings, wars, treaties, trade routes, phylloxera and the like), with links in each.
+- Then add a few "Curious details": the geology and soils, the climate, the science behind the winemaking, or an odd story about the estate or its name. Hold these to the same standard as everything else, with sources.
 
 Finally, after all the wines, finish with a short ranking of them by what reviewers say, as a numbered list: one line per wine with its price and where it's sold (as in my list), then its best-supported score, naming the source and the vintage it applies to. If the same wine appears twice, say how the two listings differ (store, size or price). Put any wine without reviews at the end and say so.
 
@@ -2446,7 +2448,7 @@ const researchButton = (w) => (notesFor(w).length
 // headings, bold, italics, lists, rules and http(s) links; everything else is plain text.
 function mdInline(s) {
   return esc(s)
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, t, u) => `<a href="${u}" target="_blank" rel="noopener">${t}</a>`)
+    .replace(/\[([^\]]+)\]\((https?:\/\/(?:[^\s()]|\([^\s()]*\))+)\)/g, (_, t, u) => `<a href="${u}" target="_blank" rel="noopener">${t}</a>`)
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
     .replace(/(^|[\s(])\*([^*\s][^*]*)\*/g, "$1<em>$2</em>")
     .replace(/(^|[\s(])_([^_\s][^_]*)_/g, "$1<em>$2</em>");
