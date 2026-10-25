@@ -585,6 +585,60 @@
     "note": "Advocate 98 plus tannic cellar it",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-15": {
+   "name": "Domaine des Bosquets Gigondas Le Lieu Dit... 2022",
+   "claude": {
+    "points": 95,
+    "vintage": 2022,
+    "note": "Advocate 95 to 97 young keep",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-14": {
+   "name": "Domaine des Bosquets Gigondas La Colline... 2019",
+   "claude": {
+    "points": 95,
+    "vintage": 2019,
+    "note": "Vinous 95 high chalky site",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-5": {
+   "name": "Domaine la Barroche Châteauneuf-du-Pape Pure Rouge 2016",
+   "claude": {
+    "points": 97,
+    "vintage": 2016,
+    "note": "Leve 100 tiny old vine Grenache",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-4": {
+   "name": "Domaine la Barroche Châteauneuf-du-Pape Cuvée Fiancée 2016",
+   "claude": {
+    "points": 94,
+    "vintage": 2016,
+    "note": "Leve 96 half Syrah drink soon",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-17": {
+   "name": "Le Clos du Caillou Châteauneuf-du-Pape La Réserve 2019",
+   "claude": {
+    "points": 98,
+    "vintage": 2019,
+    "note": "Dunnuck 100 Leve 99 cellar it",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-85": {
+   "name": "Les Halos de Jupiter Châteauneuf-du-Pape Adrastee 2015",
+   "claude": {
+    "points": 94,
+    "vintage": 2015,
+    "note": "Leve 95 drink soon window closing",
+    "date": "2026-10-25"
+   }
   }
  }
 }
