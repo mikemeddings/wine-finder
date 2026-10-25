@@ -2582,6 +2582,7 @@ async function publishResearch(items) {
 
 // The reader: one or more write-ups in a large dialog.
 async function openNotes(id) {
+  openNotesId = id;
   const w = findWine(id) || { id, name: ratingOf(id).name || frOf(id).name || noteIndex[id]?.name || id };
   const list = notesFor(w);
   $("notes-title").textContent = `Claude Research Results: ${w.name}`;
@@ -2775,6 +2776,41 @@ function openHelp(topic) {
 
 function goBack() { if (navDepth > 0) history.back(); else showView("find"); }
 
+// Leaving the site (a link in a write-up, a store's page…) and coming back with Back reloads
+// the page, which would start over. So the page notes where you were when you leave (this tab
+// only) and picks it up again on the way back: page, filters, sort, scroll and an open write-up.
+const SET_KEYS = ["sources", "countries", "types", "sweet"];
+let openNotesId = null;
+function savePlace() {
+  try {
+    const st = { ...state };
+    for (const k of SET_KEYS) st[k] = [...state[k]];
+    sessionStorage.setItem("wf.place", JSON.stringify({ view: currentView(), y: window.scrollY, state: st, notes: openNotesId }));
+  } catch { /* private window etc.: nothing to restore later */ }
+}
+window.addEventListener("pagehide", savePlace);
+$("notes-dialog")?.addEventListener("close", () => { if (document.visibilityState === "visible") openNotesId = null; });
+document.addEventListener("visibilitychange", () => { if (document.hidden) savePlace(); });
+
+async function restorePlace() {
+  const nav = performance.getEntriesByType?.("navigation")?.[0]?.type;
+  if (nav !== "back_forward" && nav !== "reload") return; // a fresh visit starts clean
+  if (/^#(save|share|dine)=/.test(location.hash)) return;  // a link from Claude has its own job
+  let saved;
+  try { saved = JSON.parse(sessionStorage.getItem("wf.place") || "null"); } catch { saved = null; }
+  if (!saved || !saved.state) return;
+  const st = { ...defaultState(), ...saved.state };
+  for (const k of SET_KEYS) st[k] = new Set(Array.isArray(saved.state[k]) ? saved.state[k] : []);
+  if (!st.sources.size) st.sources = new Set(["BC Liquor"]);
+  state = st;
+  const stores = [...state.sources].filter((x) => ALL_SOURCES.includes(x) && !LOADED.has(x));
+  if (stores.length) { await Promise.all(stores.map(loadSource)); renderFooter(); }
+  renderAll();
+  showView(VIEWS.includes(saved.view) ? saved.view : "find", true);
+  window.scrollTo(0, saved.y || 0);
+  if (saved.notes) openNotes(saved.notes);
+}
+
 window.addEventListener("popstate", (e) => {
   const st = e.state;
   if (!st || !st.wfView) return;
@@ -2954,7 +2990,7 @@ function wireEvents() {
     else if (t.id === "help-back") goBack();
     else if (t.dataset.dineHist != null) showDinePicks(dineHistory()[+t.dataset.dineHist]);
     else if (t.id === "dine-close") $("dine-dialog").close();
-    else if (t.id === "notes-close") $("notes-dialog").close();
+    else if (t.id === "notes-close") { $("notes-dialog").close(); openNotesId = null; }
     else if (t.dataset.inboxRead) inboxAct(t.dataset.inboxRead, "read");
     else if (t.dataset.inboxPublish) inboxAct(t.dataset.inboxPublish, "publish");
     else if (t.dataset.inboxIgnore) inboxAct(t.dataset.inboxIgnore, "ignore");
@@ -3191,6 +3227,7 @@ async function init() {
   offerDinePicks();
   renderDineRecall();
   addHelpButtons();
+  await restorePlace();
   window.addEventListener("hashchange", offerSavedRatings);
   setTimeout(() => loadAllSources().then(() => { updatePickCounts(); renderSources(); }), 800);
 }
