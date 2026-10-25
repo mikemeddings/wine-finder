@@ -54,6 +54,7 @@ For each wine, please:
 - Describe what the critics say in your own words. Give their scores with the source, but don't copy their tasting notes.
 - Give me a practical note: drink now or cellar, whether to decant, and a food pairing.
 - Start each wine's section with a heading that ends with its code in square brackets, exactly as in my list, for example: ## Château Example 2019 [bcl-123456]
+- End each wine's section with its own short "Sources:" list, so each wine's sources stay with it.
 
 Along the way:
 - Whenever you mention a particular place (a vineyard, estate, village, river valley or wine region), add a Google Maps satellite link so I can look at it from above. Build it from the place name like this: https://www.google.com/maps?q=Quinta+das+Carvalhas,+Pinhao,+Portugal&t=k (place, nearest town, country, with + for spaces; keep &t=k on the end, which opens the satellite view). Use names, not coordinates.
@@ -2115,34 +2116,62 @@ function splitWriteup(text, ids) {
   const lines = String(text || "").replace(/\r/g, "").split("\n")
     .filter((l) => !/save link is at the bottom|your save link|save these ratings to my wine finder|click this to keep these ratings|first press the copy button|create a doc|to save this research|^\W*step [12]:/i.test(l));
   const isHead = (l) => /^#{1,6}\s/.test(l.trim());
+  const isSources = (l) => /^(#{1,6}\s*)?\**sources:?\**\s*$/i.test(l.trim());
+  const isRule = (l) => /^(-{3,}|\*{3,}|_{3,})$/.test(l.trim());
   const DROP = /where to buy|ranking by what reviewers say|^#{1,6}\s*my rating/i;
-  const srcAt = lines.findIndex((l) => /^(#{1,6}\s*)?\**sources:?\**\s*$/i.test(l.trim()));
-  const srcEnd = srcAt >= 0 ? lines.findIndex((l, i) => i > srcAt && /^(-{3,}|\*{3,}|_{3,})$/.test(l.trim())) : -1;
-  const sources = srcAt >= 0 ? lines.slice(srcAt, srcEnd > 0 ? srcEnd : undefined).join("\n").trim() : "";
-  const body = srcAt >= 0 ? lines.slice(0, srcAt) : lines;
   const starts = [];
-  body.forEach((l, i) => { if (isHead(l)) for (const id of ids) if (l.includes(id)) starts.push({ i, id }); });
+  lines.forEach((l, i) => { if (isHead(l)) for (const id of ids) if (l.includes(id)) starts.push({ i, id }); });
+  starts.sort((a, b) => a.i - b.i);
+  // A Sources list after the last wine is shared; one inside a wine's section is its own.
+  const lastStart = starts.length ? starts[starts.length - 1].i : 0;
+  let srcAt = lines.findIndex((l, i) => i > lastStart && isSources(l));
+  // ...unless it belongs to the last wine (it then sits before the ranking): a shared list comes after it
+  const rankAt = lines.findIndex((l, i) => i > lastStart && /ranking by what reviewers say/i.test(l));
+  if (starts.length > 1 && srcAt >= 0 && rankAt > srcAt) srcAt = -1;
+  const srcEnd = srcAt >= 0 ? lines.findIndex((l, i) => i > srcAt && isRule(l)) : -1;
+  const shared = srcAt >= 0 ? lines.slice(srcAt + 1, srcEnd > 0 ? srcEnd : undefined).filter((l) => l.trim()) : [];
+  const body = srcAt >= 0 ? lines.slice(0, srcAt) : lines;
+  // "My rating at the bottom is for the 2022": that section isn't kept, so neither is the pointer to it.
+  const noPointer = (l) => l.replace(/[^.!?]*\bmy (?:own )?(?:rating|score)\b[^.!?]*\b(?:bottom|below|at the end|further down)\b[^.!?]*[.!?]\s*/gi, "");
   const clean = (part) => {
     const keep = [];
     let dropping = false;
     for (const l of part) {
       if (isHead(l)) dropping = DROP.test(l);
-      else if (/^\**my rating/i.test(l.trim())) continue;
-      if (!dropping) keep.push(l.replace(/\s*\[(?:bcl|bsw|zyn|cellar|manual|typed)-[\w.-]+\]/g, ""));
+      else if (/^\**(my rating|where to buy)/i.test(l.trim())) continue; // kept apart, or goes stale
+      if (!dropping) keep.push(noPointer(l).replace(/\s*\[(?:bcl|bsw|zyn|cellar|manual|typed)-[\w.-]+\]/g, ""));
     }
     return keep.join("\n").replace(/\n{3,}/g, "\n\n").trim();
   };
+  // A shared source goes to the wine its title or link names (or whose section links to it);
+  // one that names no wine, such as a general article on the region, goes to every wine.
+  const sourcesFor = (id, section) => {
+    if (!shared.length) return "";
+    const own = (l, sec, heading) => {
+      const url = (l.match(/\((https?:\/\/[^\s)]+)\)/) || [])[1];
+      if (url && sec.includes(url)) return true;
+      const words = new Set(nameTokens(l));
+      return storeTokens(heading).some((t) => words.has(t) && !GRAPE_WORDS.has(t));
+    };
+    const heads = starts.map((s) => ({ id: s.id, heading: lines[s.i].replace(/\[[^\]]*\]/g, ""), sec: s.sec }));
+    const mine = heads.find((h) => h.id === id);
+    const picked = shared.filter((l) => {
+      const owners = heads.filter((h) => own(l, h.sec, h.heading));
+      return owners.length ? owners.some((h) => h.id === id) : true;
+    });
+    return mine && picked.length ? `Sources:\n${picked.join("\n")}` : "";
+  };
   const out = {};
   if (starts.length) {
-    starts.sort((a, b) => a.i - b.i);
-    starts.forEach((s, k) => {
-      const end = k + 1 < starts.length ? starts[k + 1].i : body.length;
-      const t = clean(body.slice(s.i, end));
-      if (t) out[s.id] = (t + (sources ? `\n\n${sources}` : "")).slice(0, 40000);
-    });
+    starts.forEach((st, k) => { st.sec = body.slice(st.i, k + 1 < starts.length ? starts[k + 1].i : body.length).join("\n"); });
+    for (const st of starts) {
+      const t = clean(st.sec.split("\n"));
+      const src = sourcesFor(st.id, st.sec);
+      if (t) out[st.id] = (t + (src ? `\n\n${src}` : "")).slice(0, 40000);
+    }
   } else if (ids.length === 1) { // one wine and no code in the heading: the whole answer is about it
     const t = clean(body);
-    if (t) out[ids[0]] = (t + (sources ? `\n\n${sources}` : "")).slice(0, 40000);
+    if (t) out[ids[0]] = (t + (shared.length ? `\n\nSources:\n${shared.join("\n")}` : "")).slice(0, 40000);
   }
   return out;
 }
@@ -2261,9 +2290,9 @@ async function openNotes(id) {
   $("notes-dialog").showModal?.();
   const parts = [];
   for (const n of list) {
-    let text = n.text;
+    let text = noteIndex[sharedIdOf(n.id) || n.id] ? "" : n.text; // published: read the website's copy
     if (!text) {
-      try { text = (await fetch(`${NOTES_DIR}/${encodeURIComponent(n.id)}.json`, FRESH).then((r) => r.json())).text; } catch { text = ""; }
+      try { text = (await fetch(`${NOTES_DIR}/${encodeURIComponent(sharedIdOf(n.id) || n.id)}.json`, FRESH).then((r) => r.json())).text; } catch { text = n.text || ""; }
     }
     parts.push(`<section class="note"><p class="note-meta">Researched by ${esc(n.from || "the family")}${n.date ? ` · ${esc(shortDate(n.date))}` : ""}` +
       `${n.name && n.name !== w.name ? ` · as “${esc(n.name)}”` : ""}${n.local && !noteIndex[sharedIdOf(n.id) || n.id] ? " · on this computer only" : ""}</p>` +
