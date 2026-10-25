@@ -427,3 +427,8 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .stale-tab { position: fixed; inset: 0; background: rgba(40, 10, 20, 0.75); display: grid; place-items: center; z-index: 1000; padding: 1rem; }
 .stale-tab[hidden] { display: none; }
 .stale-card { background: #fff; border-radius: 0.75rem; padding: 1.25rem 1.5rem; max-width: 30rem; }
+
+/* The two save steps, as a picture */
+.save-steps-img { display: block; width: 100%; max-width: 46rem; height: auto; margin: 0.75rem 0; border-radius: 0.6rem; }
+.research-head .save-steps-img { max-width: 34rem; background: #fff; }
+.save-howto { background: #fff3c4; border: 2px solid #8a5a14; border-radius: 0.6rem; padding: 0.6rem 0.8rem; margin: 0.5rem 0; }

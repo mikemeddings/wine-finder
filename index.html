@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-25.5">
+<link rel="stylesheet" href="app.css?v=2026-10-25.6">
 </head>
 <body>
 <header class="top">
@@ -273,6 +273,7 @@
       <li><strong>Ask Claude.</strong> Claude opens with the question already written.</li>
       <li><strong>Save the research.</strong> When Claude finishes, press Claude's copy button under its answer (two small squares), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom. The ratings and Claude's write-up are kept, and shared with the family.</li>
     </ol>
+    <img class="save-steps-img" src="images/save-steps.png?v=2" alt="To save Claude's research, 2 clicks: first click the copy icon (two small squares) under Claude's answer, then click the 💾 Save these ratings to my Wine Finder link.">
   </header>
 
   <section class="typed-box" aria-labelledby="sl-add-h">
@@ -333,10 +334,15 @@
     <label for="save-name">Your first name <span class="hint">(asked once, so the family knows who did the research)</span></label>
     <input type="text" id="save-name" autocomplete="given-name">
   </div>
+  <div id="save-howto" class="save-howto" hidden>
+    <p><strong>Claude's write-up wasn't found.</strong> Go back to Claude, click the <strong>copy icon</strong> (two small squares) under its answer, then come back here and press <strong>Save again</strong>.</p>
+    <img class="save-steps-img" src="images/save-steps.png?v=2" alt="To save Claude's research, 2 clicks: first click the copy icon (two small squares) under Claude's answer, then click the 💾 Save these ratings to my Wine Finder link.">
+  </div>
   <p id="save-help" class="hint" hidden>In Claude, you can ask: “Please make the save link again.”</p>
   <p id="save-result" class="status" role="status"></p>
   <div class="dialog-actions">
     <button type="button" class="btn btn-primary btn-big" id="save-yes" autofocus>Save</button>
+    <button type="button" class="linklike" id="save-anyway" hidden>Save without the write-up</button>
     <button type="button" class="linklike" id="save-no">Cancel</button>
   </div>
 </dialog>
@@ -369,6 +375,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-25.5"></script>
+<script src="app.js?v=2026-10-25.6"></script>
 </body>
 </html>

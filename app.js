@@ -797,6 +797,7 @@ function askClaude(mode = "about") {
     ${done.length ? `<p class="warning">📖 ${done.length === 1 ? `“${esc(done[0].name)}” already has` : `${done.length} of these wines already have`} Claude Research Results from the family. Read them first with the 📖 button on each wine: you may not need to ask again.</p>` : ""}
     <p>Here's what happens when you press the button below:</p>
     <ol class="steps">${what}</ol>
+    <img class="save-steps-img" src="images/save-steps.png?v=2" alt="To save Claude&#39;s research, 2 clicks: first click the copy icon (two small squares) under Claude&#39;s answer, then click the 💾 Save these ratings to my Wine Finder link.">
     ${ZOOM_TIP}
     <p class="dialog-actions">
       <button type="button" class="btn btn-big btn-claude" id="go-claude">Open Claude with my question</button>
@@ -1407,6 +1408,7 @@ function parseShareHash(hash) {
 }
 
 let pendingSave = null;
+let saveAnyway = false; // "Save without the write-up" was pressed
 
 function offerSavedRatings() {
   const items = parseSaveHash(location.hash);
@@ -1432,6 +1434,8 @@ function offerSavedRatings() {
   $("save-writeup-text").value = "";
   $("save-writeup-state").textContent = "It's picked up from Claude's copy button when you press Save.";
   $("save-name-row").hidden = !!myName();
+  $("save-howto").hidden = $("save-anyway").hidden = true;
+  saveAnyway = false;
   $("save-dialog").showModal?.();
 }
 
@@ -1449,6 +1453,14 @@ async function confirmSavedRatings() {
   let text = $("save-writeup-text").value.trim();
   if (!text && !$("save-writeup").hidden) {
     try { const clip = await navigator.clipboard.readText(); if (looksLikeClaudeAnswer(clip, ids)) text = clip; } catch { /* not allowed */ }
+  }
+  if (!text && !$("save-writeup").hidden && !saveAnyway) {
+    $("save-howto").hidden = false;
+    $("save-anyway").hidden = false;
+    $("save-yes").textContent = "Save again";
+    $("save-result").textContent = "";
+    $("save-howto").scrollIntoView({ block: "nearest" });
+    return;
   }
   const parts = text ? splitWriteup(text, ids) : {};
   const today = todayIso(), from = myName(), notes = localNotes();
@@ -1491,7 +1503,7 @@ async function confirmSavedRatings() {
   }
   $("save-yes").textContent = "Close";
   $("save-yes").dataset.done = "1";
-  $("save-no").hidden = true;
+  $("save-no").hidden = $("save-anyway").hidden = $("save-howto").hidden = true;
   refreshRatedViews();
 }
 
@@ -2499,6 +2511,7 @@ function wireEvents() {
     else if (t.dataset.rateSave) saveMyRating(t.dataset.rateSave, t);
     else if (t.dataset.rateClear) clearMyRating(t.dataset.rateClear);
     else if (t.id === "save-yes") confirmSavedRatings();
+    else if (t.id === "save-anyway") { saveAnyway = true; $("save-howto").hidden = true; confirmSavedRatings(); }
     else if (t.id === "save-email-fallback") { $("save-dialog").close(); showView("mywines"); scrollToFamilyBox(); emailRatings(); }
     else if (t.dataset.notes) openNotes(t.dataset.notes);
     else if (t.id === "notes-close") $("notes-dialog").close();
