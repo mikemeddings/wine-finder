@@ -665,7 +665,7 @@ const SAVE_LINK_TEMPLATE = `Last of all, please give me a link I can click to sa
 - Make the very first line of your answer, once only: "Your save link is at the bottom of this answer."
 - Put the link at the very end, after everything else including your sources, below a horizontal line (---). Above it, write these three lines exactly, each in bold:
 "⬇️ To save this research: 2 clicks ⬇️"
-"Step 1: click the copy icon (two small squares) in the grey row below the “Create a doc” button."
+"Step 1: click the copy icon (two folders on top of each other) on the far left in the grey row below the “Create a doc” button."
 "Step 2: then click this link:"
 Then write the link as the largest heading (one #), itself the link, exactly in this form, one entry per wine joined by semicolons:
 # [💾 Save these ratings to my Wine Finder]({BASE}#save=CODE~POINTS~VINTAGE~NOTE;CODE~POINTS~VINTAGE~NOTE)
