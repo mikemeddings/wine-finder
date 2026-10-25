@@ -787,10 +787,10 @@ function askClaude(mode = "about") {
     ? `<li>Claude opens in a new tab with your question <strong>already typed in</strong>.</li>
        <li>Above the question, Claude shows a note saying “Use caution before running this prompt”. It shows that for every question that arrives by link. This one comes from your Short List, so it's fine to send.</li>
        <li>Check the question, then ${SEND}.</li>
-       <li>When Claude finishes, press Claude's <strong>copy button</strong> under its answer (two small squares), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom.</li>`
+       <li>When Claude finishes, press Claude's <strong>copy button</strong> under its answer (two folders on top of each other, on the far left), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom.</li>`
     : `<li>Claude opens in a new tab, and your question is copied.</li>
        <li>Your list is too long to type in automatically, so ${PASTE}.</li>
-       <li>When Claude finishes, press Claude's <strong>copy button</strong> under its answer (two small squares), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom.</li>`;
+       <li>When Claude finishes, press Claude's <strong>copy button</strong> under its answer (two folders on top of each other, on the far left), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom.</li>`;
   const notice = $("ask-notice");
   notice.hidden = false;
   $("ask-claude").hidden = $("ask-claude-rank").hidden = true;
@@ -800,7 +800,7 @@ function askClaude(mode = "about") {
     ${done.length ? `<p class="warning">📖 ${done.length === 1 ? `“${esc(done[0].name)}” already has` : `${done.length} of these wines already have`} Claude Research Results from the family. Read them first with the 📖 button on each wine: you may not need to ask again.</p>` : ""}
     <p>Here's what happens when you press the button below:</p>
     <ol class="steps">${what}</ol>
-    <img class="save-steps-img" src="images/save-steps.png?v=2" alt="To save Claude&#39;s research, 2 clicks: first click the copy icon (two small squares) under Claude&#39;s answer, then click the 💾 Save these ratings to my Wine Finder link.">
+    <img class="save-steps-img" src="images/save-steps.png?v=3" alt="To save Claude&#39;s research, 2 clicks: first click the copy icon (two folders on top of each other, on the far left) under Claude&#39;s answer, then click the 💾 Save these ratings to my Wine Finder link.">
     ${ZOOM_TIP}
     <p class="dialog-actions">
       <button type="button" class="btn btn-big btn-claude" id="go-claude">Open Claude with my question</button>
