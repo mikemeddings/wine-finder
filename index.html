@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-24.14">
+<link rel="stylesheet" href="app.css?v=2026-10-25.1">
 </head>
 <body>
 <header class="top">
@@ -16,6 +16,7 @@
     <button type="button" class="view-btn" data-view="find" aria-pressed="true">Find wines</button>
     <button type="button" class="view-btn" data-view="mywines" aria-pressed="false">My wines</button>
     <button type="button" class="view-btn" data-view="shortlist" aria-pressed="false">Short List for Claude: <span class="sl-count">0</span></button>
+    <button type="button" class="btn-research" data-view="shortlist" data-focus="sl-add-q">🔎 Research a wine</button>
   </nav>
   <button type="button" class="btn btn-reset" id="start-over">Start over</button>
 </header>
@@ -248,12 +249,33 @@
 </main>
 
 <main id="view-shortlist" hidden>
-  <h2>Your Short List for Claude</h2>
+  <header class="research-head">
+    <h2>Research wines with Claude</h2>
+    <p>Claude looks up each wine's reviews, background and history, suggests food to go with it, and gives its own score out of 100.</p>
+    <ol class="research-steps">
+      <li><strong>Add wines.</strong> Type a name in the box below, or press “＋ Add to Short List for Claude Research” on any wine in Find wines or My wines.</li>
+      <li><strong>Ask Claude.</strong> Claude opens with the question already written.</li>
+      <li><strong>Save the ratings.</strong> When Claude finishes, scroll to the very bottom of its answer and click <strong>💾 Save these ratings to my Wine Finder</strong>.</li>
+    </ol>
+  </header>
+
+  <section class="typed-box" aria-labelledby="sl-add-h">
+    <h3 id="sl-add-h">① Add a wine by name</h3>
+    <p class="hint">Any wine: one a friend recommended, one in a family cellar, or one from a store we don't list.</p>
+    <label for="sl-add-q" class="mw-label">Wine name</label>
+    <div class="typed-row">
+      <input type="text" id="sl-add-q" autocomplete="off" spellcheck="false" placeholder="for example Zenato Alanera Rosso Veneto">
+      <button type="button" class="btn btn-typed" id="sl-add-btn">＋ Add to Short List for Claude Research</button>
+    </div>
+    <div id="sl-add-hits" aria-live="polite"></div>
+  </section>
+
+  <h3 class="sl-list-h">Your Short List for Claude</h3>
   <p class="sl-keep" id="sl-keep" hidden></p>
   <div id="ask-notice" class="notice" role="status" hidden></div>
   <div id="sl-warning" class="warning" hidden></div>
   <div class="sl-actions" id="sl-actions">
-    <button type="button" class="btn btn-primary btn-big" id="ask-claude">Ask Claude about these</button>
+    <button type="button" class="btn btn-primary btn-big" id="ask-claude">② Ask Claude about these</button>
     <button type="button" class="btn btn-big btn-rank" id="ask-claude-rank">Ask Claude to rank these by reviews</button>
     <button type="button" class="btn" id="sl-copy">Copy as text</button>
     <button type="button" class="btn" id="sl-email">Email</button>
@@ -262,18 +284,8 @@
   </div>
   <p id="sl-status" class="status" role="status"></p>
   <ol id="sl-list" class="sl-list"></ol>
-  <p id="sl-empty" class="empty" hidden>Your Short List for Claude is empty. Go to <button type="button" class="linklike" data-view="find">Find wines</button> and press “Add to Short List” on any wine, or add one by name below.</p>
+  <p id="sl-empty" class="empty" hidden>Your Short List for Claude is empty. Type a wine's name in the box above, or go to <button type="button" class="linklike" data-view="find">Find wines</button> and press “＋ Add to Short List for Claude Research” on any wine.</p>
 
-  <section class="typed-box" aria-labelledby="sl-add-h">
-    <h3 id="sl-add-h">Add a wine by name</h3>
-    <p class="hint">For a wine that isn't in our store lists, such as one from the LCBO or a friend's recommendation.</p>
-    <label for="sl-add-q" class="mw-label">Wine name</label>
-    <div class="typed-row">
-      <input type="text" id="sl-add-q" autocomplete="off" spellcheck="false" placeholder="for example Zenato Alanera Rosso Veneto">
-      <button type="button" class="btn btn-typed" id="sl-add-btn">＋ Add to the Short List</button>
-    </div>
-    <div id="sl-add-hits" aria-live="polite"></div>
-  </section>
 </main>
 
 <footer class="foot">
@@ -315,6 +327,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-24.14"></script>
+<script src="app.js?v=2026-10-25.1"></script>
 </body>
 </html>

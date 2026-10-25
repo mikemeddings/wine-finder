@@ -51,6 +51,7 @@ Here are the wines I'm considering, with where they're sold and the current pric
 For each wine, please:
 - Tell me about the region, the producer and the grapes — the history and the story behind it.
 - Look up current reviews on the web (critics and CellarTracker community notes). For every score, name the source and the vintage it applies to. If you can't find reviews for this wine, say so plainly rather than estimating.
+- Describe what the critics say in your own words. Give their scores with the source, but don't copy their tasting notes.
 - Give me a practical note: drink now or cellar, whether to decant, and a food pairing.
 
 Along the way:
@@ -76,6 +77,7 @@ Please:
 - Look up current reviews on the web for each wine: professional critics and CellarTracker community notes.
 - Rank them from best reviewed to least, as a numbered list. Start each line with the wine, its price and where it's sold (as in my list). For every score, name the source and the vintage it applies to, and say so if that vintage differs from the one listed. If the same wine appears twice, say how the two listings differ (store, size or price).
 - If you can't find reviews for a wine, say so plainly and put it at the end rather than estimating.
+- Describe what the critics say in your own words. Give their scores with the source, but don't copy their tasting notes.
 - Finish with a short note on value for money at the prices above.
 
 {SAVE_LINK}
@@ -217,7 +219,7 @@ function hitRow(w) {
     <div><div class="sl-name">${esc(w.name)}</div>
       <div>${typePill(w.type)} ${esc([w.country, w.vintage, sizeText(w)].filter(Boolean).join(" · "))}</div>
       <div><strong>${money(w.price)}</strong> at ${sourceBadge(w.source)}</div></div>
-    <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "Add to Short List"}</button>
+    <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
   </li>`;
 }
 
@@ -257,7 +259,7 @@ function typedButton(name, lead) {
   return `<div class="typed-add"><p class="hint">${esc(lead)}</p>
     <button type="button" class="btn btn-typed" data-typed="${esc(name)}" aria-pressed="${on}">${on
       ? `✓ “${esc(name)}” is on the Short List`
-      : `＋ Add “${esc(name)}” to the Short List for Claude`}</button></div>`;
+      : `＋ Add “${esc(name)}” to Short List for Claude Research`}</button></div>`;
 }
 
 function addTypedWine(name) {
@@ -492,7 +494,7 @@ function cellarCard(w) {
     <p class="wine-detail"><span class="badge badge-cellar">${esc(w.source)}</span>${w.size_ml && w.size_ml !== 750 ? ` ${esc(sizeText(w))}` : ""}</p>
     ${scores ? `<p class="wine-detail mw-scores">${scores}</p>` : ""}${soldAtHtml(w)}${ratingsHtml(w)}
     <div class="wine-actions">
-      <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "Add to Short List"}</button>
+      <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
       <button type="button" class="btn btn-ew" data-action="mw-where" data-id="${esc(w.id)}">Where can I buy it?</button>
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
       <a class="btn ext btn-we" href="${wineEnthusiastUrl(w)}" target="_blank" rel="noopener">Wine Enthusiast</a>
@@ -517,7 +519,7 @@ function wineCard(w) {
     <p class="wine-facts">${typePill(w.type)} ${facts}</p>
     <p class="wine-detail">${detail} ${badges}</p>${scores}${calgary}${ratingsHtml(w)}${cellarBadges(w)}
     <div class="wine-actions">
-      <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "Add to Short List"}</button>
+      <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
       <a class="btn ext btn-we" href="${wineEnthusiastUrl(w)}" target="_blank" rel="noopener">Wine Enthusiast</a>
       <a class="btn ext btn-vivino" href="${vivinoUrl(w)}" target="_blank" rel="noopener">Vivino</a>
@@ -636,11 +638,10 @@ function wineLine(w, i, forClaude = false) {
   if (w.ct_score != null) line += `; CellarTracker community score ${w.ct_score}`;
   if (forClaude) {
     const r = ratingOf(w.id);
+    // Claude's own earlier scores are left out so it judges afresh; people's own points are useful context.
     if (r.mine) line += `; my own rating: ${r.mine.points}/100`;
-    if (r.claude?.points) line += `; your earlier rating: ${r.claude.points}/100${r.claude.vintage ? ` for ${r.claude.vintage}` : ""}`;
     const f = frOf(w.id);
     if (f.family && !r.mine) line += `; our family's rating: ${f.family.points}/100`;
-    if (f.claude?.points && !r.claude) line += `; your earlier rating (shared by family): ${f.claude.points}/100${f.claude.vintage ? ` for ${f.claude.vintage}` : ""}`;
     line += ` [${w.id}]`;
   }
   return line;
@@ -656,9 +657,12 @@ let claudeMode = "about"; // "about" (tell me about these) or "rank" (rank by re
 
 // Asks Claude to end with a link back to this page carrying its own ratings
 // (see offerSavedRatings). {BASE} becomes this page's address.
-const SAVE_LINK_TEMPLATE = `Last of all, please give me a link I can click to save your ratings. For each wine, give your own overall rating out of 100, based on what the reviewers say (your judgement, not a copy of any one critic's score). Build the link exactly like this, one entry per wine joined by semicolons:
-{BASE}#save=CODE~POINTS~VINTAGE~NOTE;CODE~POINTS~VINTAGE~NOTE
-CODE is the wine's code in square brackets in my list; POINTS is your rating (leave it empty if you found no reviews); VINTAGE is the vintage your rating is for, or NV; NOTE is up to eight words, with + instead of spaces and no semicolons or tildes. Show it as a link titled "Save these ratings to my Wine Finder".`;
+const SAVE_LINK_TEMPLATE = `Last of all, please give me a link I can click to save your ratings. For each wine, give your own overall rating out of 100, based on what the reviewers say (your judgement, not a copy of any one critic's score). The link is easy to miss, so:
+- At the very start of your answer, add one short line: "Your save link is at the bottom of this answer."
+- Put the link at the very end, after everything else including your sources, below a horizontal line (---). Write it as a large heading that is itself the link, exactly in this form, one entry per wine joined by semicolons:
+## [💾 Save these ratings to my Wine Finder]({BASE}#save=CODE~POINTS~VINTAGE~NOTE;CODE~POINTS~VINTAGE~NOTE)
+- Under it, add one plain sentence: "Click this to keep these ratings in your Wine Finder."
+CODE is the wine's code in square brackets in my list; POINTS is your rating (leave it empty if you found no reviews); VINTAGE is the vintage your rating is for, or NV; NOTE is up to eight words, with + instead of spaces and no semicolons or tildes.`;
 
 function claudePrompt(mode = claudeMode) {
   const about = String(storeGet(STORE.aboutMe, "") || "").trim();
@@ -773,9 +777,11 @@ function askClaude(mode = "about") {
   const what = prefilled
     ? `<li>Claude opens in a new tab with your question <strong>already typed in</strong>.</li>
        <li>Above the question, Claude shows a note saying “Use caution before running this prompt”. It shows that for every question that arrives by link. This one comes from your Short List, so it's fine to send.</li>
-       <li>Check the question, then ${SEND}.</li>`
+       <li>Check the question, then ${SEND}.</li>
+       <li>When Claude finishes, scroll to the very bottom of its answer and click <strong>💾 Save these ratings to my Wine Finder</strong>.</li>`
     : `<li>Claude opens in a new tab, and your question is copied.</li>
-       <li>Your list is too long to type in automatically, so ${PASTE}.</li>`;
+       <li>Your list is too long to type in automatically, so ${PASTE}.</li>
+       <li>When Claude finishes, scroll to the very bottom of its answer and click <strong>💾 Save these ratings to my Wine Finder</strong>.</li>`;
   const notice = $("ask-notice");
   notice.hidden = false;
   $("ask-claude").hidden = $("ask-claude-rank").hidden = true;
@@ -1143,7 +1149,7 @@ function mwRow(w) {
     ${scores || drink ? `<div class="mw-scores">${[scores, esc(drink)].filter(Boolean).join(" · ")}</div>` : ""}
     ${w.notes ? `<div class="hint">${esc(w.notes)}</div>` : ""}
     <div class="wine-actions">
-      <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "Add to Short List"}</button>
+      <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
       <button type="button" class="btn btn-ew" data-action="mw-where" data-id="${esc(w.id)}">Where can I buy it?</button>
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
       ${manualButtons}
@@ -1988,7 +1994,7 @@ function emptyShortlist() {
   shortlist = [];
   closeClaudeSteps();
   saveShortlist();
-  renderResults(); // card buttons back to "Add to Short List"
+  renderResults(); // card buttons back to "Add to Short List for Claude Research"
 }
 
 const ALL_PICKS = [...QUICK_PICKS, ...ICON_PICKS];
@@ -2074,7 +2080,7 @@ function wireEvents() {
     const t = e.target.closest("button, a");
     if (!t) return;
     if (t.dataset.pick != null) applyQuickPick(ALL_PICKS[+t.dataset.pick]);
-    else if (t.dataset.view) showView(t.dataset.view);
+    else if (t.dataset.view) { showView(t.dataset.view); if (t.dataset.focus) $(t.dataset.focus)?.focus(); }
     else if (t.dataset.add) {
       const id = t.dataset.add;
       toggleShortlist(id);
@@ -2082,7 +2088,7 @@ function wireEvents() {
       for (const b of document.querySelectorAll(".btn-add")) { // the same wine can show in two places
         if (b.dataset.add !== id) continue;
         b.setAttribute("aria-pressed", String(on));
-        b.textContent = on ? "✓ On Short List (tap to remove)" : "Add to Short List";
+        b.textContent = on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research";
         b.closest(".wine")?.classList.toggle("on-list", on);
       }
       if (!$("view-shortlist").hidden) renderShortlist(); // added from the Short List page's own box

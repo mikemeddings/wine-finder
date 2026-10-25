@@ -389,3 +389,14 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .check-cellar { font-size: 1.15em; font-weight: 700; color: #5a3a08; }
 .sold-at a { color: var(--blue); font-weight: 600; }
 .not-sold { color: #6b6b6b; }
+
+/* Research a wine: a plainer way in, and a header that says what the page is for */
+.btn-research { font: inherit; font-weight: 700; padding: 0.4rem 0.9rem; border-radius: 0.5rem; cursor: pointer;
+  background: #f6ead0; color: #5a3a08; border: 2px solid #f6ead0; }
+.btn-research:hover { background: #fff; }
+.research-head { background: var(--wine); color: #fff; border-radius: 0.6rem; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.research-head h2 { color: #fff; margin: 0 0 0.4rem; font-size: 1.7rem; }
+.research-head p { margin: 0 0 0.6rem; font-size: 1.1rem; }
+.research-steps { margin: 0; padding-left: 1.6rem; font-size: 1.1rem; line-height: 1.5; }
+.research-steps li { margin-bottom: 0.3rem; }
+.sl-list-h { margin: 1.25rem 0 0.5rem; }
