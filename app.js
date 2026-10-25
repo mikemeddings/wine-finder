@@ -2147,16 +2147,18 @@ function splitWriteup(text, ids) {
   return out;
 }
 
-// The copied text must be this answer: it contains the save link that opened the box
-// (or, if the link's characters were changed on the way, every wine's code and a save link).
+// The copied text must be this answer: it contains the very save link that opened the box.
+// (An earlier answer about the same wines has a different link, so it isn't accepted.)
+// Links are compared decoded, since characters can be written differently on the way.
+const normLink = (h) => {
+  let s = String(h || "").replace(/^#?save=/, "").replace(/\+/g, " ");
+  try { s = decodeURIComponent(s); } catch { /* keep as is */ }
+  return s.replace(/\s+/g, " ").trim();
+};
 function isThisAnswer(t, ids) {
-  if (typeof t !== "string" || t.length < 300) return false;
-  const hash = pendingHash.replace(/^#/, "");
-  let decoded = hash;
-  try { decoded = decodeURIComponent(hash.replace(/\+/g, " ")); } catch { /* keep as is */ }
-  const flat = (s) => s.replace(/\+|%20/g, " ");
-  return (hash && (t.includes(hash) || flat(t).includes(flat(decoded)))) ||
-    (/#save=/.test(t) && ids.every((id) => t.includes(id)));
+  if (typeof t !== "string" || t.length < 300 || !pendingHash) return false;
+  const want = normLink(pendingHash);
+  return (t.match(/#save=[^\s)\]>"']+/g) || []).some((h) => normLink(h) === want);
 }
 
 // Save shows only once Claude's write-up for this answer has been found.
