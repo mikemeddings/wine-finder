@@ -658,10 +658,12 @@ let claudeMode = "about"; // "about" (tell me about these) or "rank" (rank by re
 // Asks Claude to end with a link back to this page carrying its own ratings
 // (see offerSavedRatings). {BASE} becomes this page's address.
 const SAVE_LINK_TEMPLATE = `Last of all, please give me a link I can click to save your ratings. For each wine, give your own overall rating out of 100, based on what the reviewers say (your judgement, not a copy of any one critic's score). The link is easy to miss, so:
-- At the very start of your answer, add one short line: "Your save link is at the bottom of this answer."
-- Put the link at the very end, after everything else including your sources, below a horizontal line (---). Write it as a large heading that is itself the link, exactly in this form, one entry per wine joined by semicolons:
-## [💾 Save these ratings to my Wine Finder]({BASE}#save=CODE~POINTS~VINTAGE~NOTE;CODE~POINTS~VINTAGE~NOTE)
-- Under it, add one plain sentence: "Click this to keep these ratings in your Wine Finder."
+- Make the very first line of your answer, once only: "Your save link is at the bottom of this answer."
+- Put the link at the very end, after everything else including your sources, below a horizontal line (---). Above it, put the line "⬇️ Your save link ⬇️" in bold. Then write the link as the largest heading (one #), itself the link, exactly in this form, one entry per wine joined by semicolons:
+# [💾 Save these ratings to my Wine Finder]({BASE}#save=CODE~POINTS~VINTAGE~NOTE;CODE~POINTS~VINTAGE~NOTE)
+- Under it, in bold: "Click this to keep these ratings in your Wine Finder."
+- Then, in italics: "(The “Create a doc” button below is Claude's own. It makes a document of this answer to keep or send. It doesn't save your ratings.)"
+- End with one more horizontal line (---), so the save link stands apart from the buttons under the answer.
 CODE is the wine's code in square brackets in my list; POINTS is your rating (leave it empty if you found no reviews); VINTAGE is the vintage your rating is for, or NV; NOTE is up to eight words, with + instead of spaces and no semicolons or tildes.`;
 
 function claudePrompt(mode = claudeMode) {
