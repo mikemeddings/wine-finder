@@ -220,8 +220,9 @@ function hitRow(w) {
   return `<li class="ew-hit">
     <div><div class="sl-name">${esc(w.name)}</div>
       <div>${typePill(w.type)} ${esc([w.country, w.vintage, sizeText(w)].filter(Boolean).join(" · "))}</div>
-      <div><strong>${money(w.price)}</strong> at ${sourceBadge(w.source)}</div></div>
-    <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
+      <div><strong>${money(w.price)}</strong> at ${sourceBadge(w.source)}</div>${ratingsHtml(w)}${familyLinksHtml(w)}</div>
+    <div class="hit-buttons">${researchButton(w)}
+    <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button></div>
   </li>`;
 }
 
@@ -1844,7 +1845,8 @@ const STYLE_WORDS = { amarone: "amarone", ripasso: "ripasso", recioto: "recioto"
   reserve: "reserve", gran: "gran", blanc: "blanc", bianco: "blanc", blanco: "blanc", rose: "rose", rosato: "rose",
   rosado: "rose", brut: "brut", spatlese: "spatlese", auslese: "auslese", kabinett: "kabinett", icewine: "icewine" };
 const styleOf = (s) => [...new Set(fold(s).split(/[^a-z0-9]+/).map((t) => STYLE_WORDS[t]).filter(Boolean))].sort().join(" ");
-const nameTokens = (s) => fold(s).split(/[^a-z0-9]+/).filter((t) => t.length >= 3 && !/^\d+$/.test(t) && !MATCH_STOP.has(t));
+const nameTokens = (s) => fold(s).split(/[^a-z0-9]+/)
+  .filter((t) => t.length >= 3 && !/^\d+$/.test(t) && !/^\d+(?:ml|cl|l)$/.test(t) && !MATCH_STOP.has(t)); // sizes aren't names
 
 function storeTokens(name) {
   let n = String(name || "");
@@ -2023,11 +2025,12 @@ function familyHitsHtml(q) {
   const rows = [
     ...cellar.slice(0, 6).map((w) => `<li class="ew-hit"><div><div class="sl-name">${esc(w.name)}</div>
         <div><span class="badge badge-cellar">In ${esc(w.source)}</span></div>${ratingsHtml(w)}${soldAtHtml(w)}</div>
-        ${addBtn(`data-add="${esc(w.id)}"`, isOnList(w.id))}</li>`),
+        <div class="hit-buttons">${researchButton(w)}${addBtn(`data-add="${esc(w.id)}"`, isOnList(w.id))}</div></li>`),
     ...typed.map((t) => `<li class="ew-hit"><div><div class="sl-name">${esc(t.name)}</div>
         <div class="hint">Already researched by the family</div>${ratingsHtml({ id: t.id })}</div>
+        <div class="hit-buttons">${researchButton({ id: t.id, name: t.name, kind: "typed" })}
         <button type="button" class="btn btn-typed" data-typed="${esc(t.name)}" aria-pressed="${isOnList(t.id)}">${isOnList(t.id)
-          ? "✓ On the Short List" : "＋ Add to Short List for Claude Research"}</button></li>`),
+          ? "✓ On the Short List" : "＋ Add to Short List for Claude Research"}</button></div></li>`),
   ];
   return `<h3 class="ew-sub">In the family's wines</h3>
     <p class="hint">Found in a family cellar or already researched. Adding one of these keeps its ratings together.</p>
@@ -2578,7 +2581,7 @@ async function publishResearch(items) {
 
 // The reader: one or more write-ups in a large dialog.
 async function openNotes(id) {
-  const w = findWine(id) || { id, name: ratingOf(id).name || id };
+  const w = findWine(id) || { id, name: ratingOf(id).name || frOf(id).name || noteIndex[id]?.name || id };
   const list = notesFor(w);
   $("notes-title").textContent = `Claude Research Results: ${w.name}`;
   $("notes-body").innerHTML = `<p class="hint">Loading…</p>`;
