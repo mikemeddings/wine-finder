@@ -336,7 +336,7 @@ function defaultState() {
     names: null,    // famous-wine phrases (an Icons pick)
     minAge: null,   // vintage at least this many years old
     pickLabel: "",  // the quick pick that set these filters, for the "Showing:" line
-    sort: "price-asc",
+    sorts: ["price-asc", "", ""], // Sort by, then by, then by ("" = nothing)
     shown: PAGE_SIZE,
   };
 }
@@ -374,21 +374,45 @@ function matches(w, skip, st = state) {
   return true;
 }
 
-const SORTS = {
-  "price-asc": (a, b) => (a.price ?? 1e9) - (b.price ?? 1e9),
-  "price-desc": (a, b) => (b.price ?? -1) - (a.price ?? -1),
-  "cellar-score": (a, b) => (b.my_score ?? b.ct_score ?? -1) - (a.my_score ?? a.ct_score ?? -1) || a.name.localeCompare(b.name),
-  name: (a, b) => a.name.localeCompare(b.name),
-  country: (a, b) => a.country.localeCompare(b.country) || a.price - b.price,
-  vintage: (a, b) => (b.vintage ?? -1) - (a.vintage ?? -1) || a.price - b.price,
-  abv: (a, b) => (a.abv ?? 99) - (b.abv ?? 99) || a.price - b.price,
-  sweet: (a, b) => (b.sweetness ?? -1) - (a.sweetness ?? -1) || a.price - b.price, // not rated last
-  // Claude's score from any family research: this computer's latest, else the published one,
-  // so the order is the same on every computer. Wines without a price (cellar wines) go last on ties.
-  claude: (a, b) => (claudeScore(b) ?? -1) - (claudeScore(a) ?? -1) || (a.price ?? 1e9) - (b.price ?? 1e9),
-  mine: (a, b) => (ratingOf(b.id).mine?.points ?? -1) - (ratingOf(a.id).mine?.points ?? -1) || a.price - b.price,
-  family: (a, b) => (frScore(b.id) ?? -1) - (frScore(a.id) ?? -1) || a.price - b.price,
+// Sorting: up to three levels. Each choice is a key and a direction; the second level only
+// orders wines that tie on the first, and so on. A wine without the value (no vintage, no
+// score…) goes to the bottom of its group either way, and the next level orders those too.
+const SORT_KEYS = {
+  price: { get: (w) => w.price, up: "Price: low to high", down: "Price: high to low" },
+  name: { get: (w) => w.name, text: true, up: "Name: A to Z", down: "Name: Z to A" },
+  country: { get: (w) => (w.country === "Country not stated" ? null : w.country), text: true, up: "Country: A to Z", down: "Country: Z to A" },
+  vintage: { get: (w) => w.vintage, up: "Vintage: oldest first", down: "Vintage: newest first", first: "down" },
+  abv: { get: (w) => w.abv, up: "Alcohol %: lowest first", down: "Alcohol %: highest first" },
+  sweet: { get: (w) => w.sweetness, up: "Sweetness: driest first", down: "Sweetness: sweetest first", first: "down" },
+  claude: { get: (w) => claudeScore(w), up: "Claude's rating (all family research): lowest first", down: "Claude's rating (all family research): highest first", first: "down" },
+  mine: { get: (w) => ratingOf(w.id).mine?.points, up: "Your rating: lowest first", down: "Your rating: highest first", first: "down" },
+  family: { get: (w) => frScore(w.id), up: "Family rating (FR): lowest first", down: "Family rating (FR): highest first", first: "down" },
+  // the cellar owner's own CellarTracker score, else the CellarTracker community score
+  ct: { get: (w) => w.my_score ?? w.ct_score, up: "CellarTracker score: lowest first", down: "CellarTracker score: highest first", first: "down" },
 };
+// Older saved places used one sort name.
+const OLD_SORTS = { name: "name-asc", country: "country-asc", vintage: "vintage-desc", abv: "abv-asc", sweet: "sweet-desc",
+  claude: "claude-desc", mine: "mine-desc", family: "family-desc", "cellar-score": "ct-desc" };
+
+const sortGroup = (v) => v.replace(/-(asc|desc)$/, ""); // "price-asc" and "price-desc" are one choice
+
+function sortLevel(v) {
+  if (v.startsWith("cellar:")) {
+    const src = v.slice(7);
+    const has = (w) => (cellarMatches(w).some((m) => m.source === src) ? 0 : 1);
+    return (a, b) => has(a) - has(b);
+  }
+  const key = SORT_KEYS[sortGroup(v)];
+  if (!key) return () => 0;
+  const dir = v.endsWith("-desc") ? -1 : 1;
+  return (a, b) => {
+    const x = key.get(a), y = key.get(b);
+    const xm = x == null || x === "", ym = y == null || y === "";
+    if (xm || ym) return xm && ym ? 0 : xm ? 1 : -1;
+    return dir * (key.text ? String(x).localeCompare(String(y)) : x - y);
+  };
+}
+
 
 function countBy(skip, key) {
   const counts = new Map();
@@ -481,7 +505,7 @@ function syncInputs() {
   $("price-to").value = state.priceTo ?? "";
   $("not-rated").checked = state.notRated;
   $("bottle-only").checked = state.bottleOnly;
-  $("sort").value = state.sort;
+  renderSorts();
 }
 
 function filtersOnCount() {
@@ -2051,26 +2075,62 @@ function cellarSources() {
   return [...new Set(allMyWines().filter((w) => w.kind === "cellar").map((w) => w.source))].sort();
 }
 
+// Every sort choice as [value, label], in menu order.
+function sortChoices() {
+  const out = [];
+  for (const [k, key] of Object.entries(SORT_KEYS)) {
+    const pair = [[`${k}-asc`, key.up], [`${k}-desc`, key.down]];
+    out.push(...(key.first === "down" ? pair.reverse() : pair));
+  }
+  for (const src of cellarSources()) out.push([`cellar:${src}`, `In ${src} first`]);
+  return out;
+}
+
+// Tidy the three choices: no unknown ones, no choice used twice, gaps closed up.
+function normaliseSorts() {
+  const known = new Set(sortChoices().map(([v]) => v));
+  const list = (Array.isArray(state.sorts) ? state.sorts : [state.sort]).map((v) => OLD_SORTS[v] || v || "");
+  const out = [], used = new Set();
+  for (const v of list) {
+    if (!known.has(v) || used.has(sortGroup(v))) continue;
+    out.push(v);
+    used.add(sortGroup(v));
+  }
+  if (!out.length) out.push("price-asc");
+  state.sorts = [...out, "", ""].slice(0, 3);
+  delete state.sort;
+}
+
+function renderSorts() {
+  if (!$("sort")) return;
+  normaliseSorts();
+  const choices = sortChoices();
+  ["sort", "sort2", "sort3"].forEach((id, i) => {
+    const used = new Set(state.sorts.slice(0, i).filter(Boolean).map(sortGroup));
+    const opts = choices.filter(([v]) => !used.has(sortGroup(v)));
+    $(id).innerHTML = (i ? `<option value="">(nothing)</option>` : "") +
+      opts.map(([v, label]) => `<option value="${esc(v)}">${esc(label)}</option>`).join("");
+    $(id).value = state.sorts[i];
+  });
+}
+
 function updateCellarSorts() {
-  const sel = $("sort");
-  if (!sel) return;
-  for (const o of [...sel.options]) if (o.value.startsWith("cellar:")) o.remove();
-  for (const src of cellarSources()) sel.add(new Option(`In ${src} first`, `cellar:${src}`));
-  if (state.sort.startsWith("cellar:") && ![...sel.options].some((o) => o.value === state.sort)) state.sort = "price-asc";
-  sel.value = state.sort;
+  if (!$("sort")) return;
+  renderSorts();
   const srcs = new Set(cellarSources());
   for (const s of [...state.sources]) if (!srcs.has(s) && !ALL_SOURCES.includes(s)) state.sources.delete(s); // renamed or removed
   for (const s of srcs) LOADED.add(s);
   if (WINES.length) renderSources();
 }
 
+// The three levels, then price (low first) and the name to settle any tie that's left.
 function currentSort() {
-  if (state.sort.startsWith("cellar:")) {
-    const src = state.sort.slice(7);
-    const has = (w) => (cellarMatches(w).some((m) => m.source === src) ? 0 : 1);
-    return (a, b) => has(a) - has(b) || SORTS["price-asc"](a, b);
-  }
-  return SORTS[state.sort] || SORTS["price-asc"];
+  normaliseSorts();
+  const levels = [...state.sorts.filter(Boolean), "price-asc", "name-asc"].map(sortLevel);
+  return (a, b) => {
+    for (const f of levels) { const r = f(a, b); if (r) return r; }
+    return 0;
+  };
 }
 
 // ---- At a restaurant: a photo of the wine list, Claude's picks, back in the Wine Finder ----
@@ -2808,6 +2868,7 @@ async function restorePlace() {
   try { saved = JSON.parse(sessionStorage.getItem("wf.place") || "null"); } catch { saved = null; }
   if (!saved || !saved.state) return;
   const st = { ...defaultState(), ...saved.state };
+  if (!Array.isArray(saved.state.sorts) && saved.state.sort) st.sorts = [saved.state.sort, "", ""];
   for (const k of SET_KEYS) st[k] = new Set(Array.isArray(saved.state[k]) ? saved.state[k] : []);
   if (!st.sources.size) st.sources = new Set(["BC Liquor"]);
   state = st;
@@ -3086,11 +3147,11 @@ function wireEvents() {
       if (t.checked) {
         state.sources = new Set([t.value]);
         state.bottleOnly = false;
-        if (state.sort.startsWith("price")) state.sort = "cellar-score";
+        if (state.sorts[0].startsWith("price")) state.sorts = ["ct-desc", "vintage-desc", ""];
       } else {
         state.sources = new Set(["BC Liquor"]);
         state.bottleOnly = true;
-        if (state.sort === "cellar-score") state.sort = "price-asc";
+        if (state.sorts[0] === "ct-desc") state.sorts = ["price-asc", "", ""];
       }
       state.shown = PAGE_SIZE;
       renderAll();
@@ -3144,7 +3205,12 @@ function wireEvents() {
       refresh();
     }, 300));
   }
-  $("sort").addEventListener("change", () => { state.sort = $("sort").value; state.shown = PAGE_SIZE; renderResults(); });
+  ["sort", "sort2", "sort3"].forEach((id, i) => $(id).addEventListener("change", () => {
+    state.sorts[i] = $(id).value;
+    state.shown = PAGE_SIZE;
+    renderSorts(); // the boxes below leave out what's now used above
+    renderResults();
+  }));
 }
 
 function renderFooter() {

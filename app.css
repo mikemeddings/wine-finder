@@ -161,6 +161,10 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .results-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; }
 .results-head h2 { margin: 0; }
 .sort { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; flex-wrap: wrap; }
+.sorts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.4rem 0.6rem; align-items: center; flex: 1 1 26rem; max-width: 40rem; }
+.sorts .sort { display: contents; }
+.sorts .sort span { text-align: right; white-space: nowrap; }
+.sorts select { width: 100%; min-width: 0; }
 .active-filters { margin: 0.5rem 0 1rem; color: var(--muted); padding: 0.4rem 0.75rem; background: var(--panel); border-radius: 0.5rem; }
 .active-filters strong { color: var(--wine); }
 .result-list { display: grid; gap: 0.9rem; }

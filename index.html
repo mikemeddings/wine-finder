@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-25.35">
+<link rel="stylesheet" href="app.css?v=2026-10-25.36">
 </head>
 <body>
 <header class="top">
@@ -121,21 +121,11 @@
     <section class="results" aria-labelledby="results-h">
       <div class="results-head">
         <h2 id="results-h"><span id="result-count">Loading wines…</span></h2>
-        <label class="sort">Sort by
-          <select id="sort">
-            <option value="price-asc">Price: low to high</option>
-            <option value="price-desc">Price: high to low</option>
-            <option value="name">Name A to Z</option>
-            <option value="country">Country</option>
-            <option value="vintage">Vintage: newest first</option>
-            <option value="abv">Alcohol %: lowest first</option>
-            <option value="sweet">Sweetness: sweetest first</option>
-            <option value="claude">Claude's rating (all family research): highest first</option>
-            <option value="mine">Your rating: highest first</option>
-            <option value="family">Family rating (FR): highest first</option>
-            <option value="cellar-score">Cellar score: highest first</option>
-          </select>
-        </label>
+        <div class="sorts" role="group" aria-label="Sort the wines">
+          <label class="sort"><span>Sort by</span><select id="sort"></select></label>
+          <label class="sort"><span>then by</span><select id="sort2"></select></label>
+          <label class="sort"><span>then by</span><select id="sort3"></select></label>
+        </div>
       </div>
       <div id="active-filters" class="active-filters"></div>
       <div id="result-list" class="result-list" aria-live="polite"></div>
@@ -298,7 +288,7 @@
       <li><strong>Sold by</strong>: BC Liquor – LDB, and the Calgary stores BSW Liquor and ZYN (check shipping to BC).</li>
       <li><strong>Country</strong>, <strong>Type of wine</strong>, <strong>Price</strong> (the − and + buttons jump between common prices) and <strong>Sweetness</strong>.</li>
     </ul>
-    <p>The <strong>Showing:</strong> line sums up what you've chosen. <strong>Sort by</strong> puts the list in order: price, name, country, vintage, sweetness, Claude's rating, your rating, family rating, “In Jon's cellar first” and more.</p>
+    <p>The <strong>Showing:</strong> line sums up what you've chosen. <strong>Sort by</strong> puts the list in order: price, name, country, vintage, alcohol, sweetness, Claude's rating, your rating, family rating, CellarTracker score, “In Jon's cellar first”, each either way round. The two <strong>then by</strong> boxes break ties: for example Country, then Vintage newest first, then Price low to high. <strong>CellarTracker score</strong> is the cellar owner's own score on CellarTracker, or the CellarTracker community score when they haven't given one.</p>
     <p>Each <strong>wine card</strong> shows the price, the store, the alcohol and sweetness, and any family ratings. Its buttons:</p>
     <ul>
       <li><strong>＋ Add to Short List for Claude Research</strong>: puts the wine on your list for Claude (see topic 3).</li>
@@ -583,6 +573,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-25.35"></script>
+<script src="app.js?v=2026-10-25.36"></script>
 </body>
 </html>
