@@ -2761,11 +2761,30 @@ function addHelpButtons() {
     el.insertAdjacentHTML("beforeend", ` <button type="button" class="help-i" data-help="${topic}" aria-label="Help with this section">ⓘ</button>`);
   }
 }
+// Help remembers where it was opened from, so the browser's Back button (or the phone's
+// back gesture) and the "Back to where you were" button return to that spot.
+const VIEWS = ["find", "shortlist", "mywines", "dine", "help"];
+const currentView = () => VIEWS.find((v) => !$(`view-${v}`).hidden) || "find";
+let helpReturn = null;
+
 function openHelp(topic) {
+  const from = currentView();
+  if (from !== "help") {
+    helpReturn = { view: from, y: window.scrollY };
+    history.pushState({ wfHelp: true }, "", location.pathname + location.search);
+  }
   showView("help");
   const el = topic && $(topic);
   if (el) el.scrollIntoView({ block: "start" }); else $("help-top").focus();
 }
+
+function leaveHelp() {
+  const r = helpReturn || { view: "find", y: 0 };
+  helpReturn = null;
+  showView(r.view);
+  window.scrollTo(0, r.y);
+}
+window.addEventListener("popstate", () => { if (!$("view-help").hidden) leaveHelp(); });
 
 function showView(name) {
   $("view-find").hidden = name !== "find";
@@ -2929,6 +2948,7 @@ function wireEvents() {
     else if (t.id === "dine-go") dineGo();
     else if (t.id === "btn-tonight") showDinePicks(dineHistory()[0]);
     else if (t.dataset.help) { e.preventDefault(); openHelp(t.dataset.help); }
+    else if (t.id === "help-back") { if (history.state?.wfHelp) history.back(); else leaveHelp(); }
     else if (t.dataset.dineHist != null) showDinePicks(dineHistory()[+t.dataset.dineHist]);
     else if (t.id === "dine-close") $("dine-dialog").close();
     else if (t.id === "notes-close") $("notes-dialog").close();

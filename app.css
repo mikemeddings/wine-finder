@@ -493,3 +493,4 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .help-back { text-align: right; margin: 0.3rem 0 0; }
 .help-faq dt { font-weight: 700; margin-top: 0.6rem; }
 .help-faq dd { margin-left: 1rem; }
+.help-backbar { margin: 0 0 0.8rem; }

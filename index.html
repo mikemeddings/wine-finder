@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-25.29">
+<link rel="stylesheet" href="app.css?v=2026-10-25.30">
 </head>
 <body>
 <header class="top">
@@ -19,7 +19,7 @@
     <button type="button" class="btn-research" data-view="shortlist" data-focus="sl-add-q">🔎 Research a wine</button>
     <button type="button" class="btn-research btn-dine" data-view="dine">🍽️ At a restaurant</button>
     <button type="button" class="btn-research btn-tonight" id="btn-tonight" hidden>🍷 Tonight's picks</button>
-    <button type="button" class="btn-research btn-help" data-view="help">❓ Help</button>
+    <button type="button" class="btn-research btn-help" data-help="help-top">❓ Help</button>
   </nav>
   <button type="button" class="btn btn-reset" id="start-over">Start over</button>
 </header>
@@ -269,6 +269,7 @@
 </main>
 
 <main id="view-help" class="help" hidden>
+  <p class="help-backbar"><button type="button" class="btn btn-primary btn-big" id="help-back">← Back to where you were</button></p>
   <header class="research-head help-head">
     <h2 id="help-top" tabindex="-1">❓ Help: how Basil's Wine Finder works</h2>
     <p>Tap a topic to jump to it. Every section of the site also has a small <span class="help-i-sample">ⓘ</span> button that brings you straight to its help.</p>
@@ -582,6 +583,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-25.29"></script>
+<script src="app.js?v=2026-10-25.30"></script>
 </body>
 </html>
