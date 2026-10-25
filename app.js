@@ -2098,7 +2098,7 @@ Please:
 
 At the very end, below a horizontal line (---), write this link as the largest heading (one #), exactly in this form: first the count, then one entry per pick in the same order, all joined by semicolons:
 # [🍷 Back to my Wine Finder with tonight's picks]({BASE}#dine=READ~UNREAD;NAME~PRICE~SCORE~CRITICS~STORE~WHAT~WHY~VALUE;NAME~PRICE~SCORE~CRITICS~STORE~WHAT~WHY~VALUE)
-READ is how many wines you could read, and UNREAD how many you couldn't (0 if none). For each pick: NAME is the wine as written on the list (with its vintage if shown); PRICE is the price as on the list, for example 63, or glass 5 oz 12 8 oz 19 bottle 54 (up to ten words); SCORE is the best critic score you know as a number out of 100, or empty; CRITICS is who gave it and for which vintage, up to eight words, or empty; STORE is the usual store price, up to six words, or empty; WHAT is what the wine is, up to thirty words; WHY is why it suits my meal and budget, up to twenty words; VALUE is your verdict on the price, up to twelve words. Use + instead of spaces, and no semicolons or tildes anywhere inside the entries. Under the link, in bold: "Tap this to see tonight's picks in your Wine Finder."`;
+READ is how many wines you could read, and UNREAD how many you couldn't (0 if none). For each pick: NAME is the wine as written on the list (with its vintage if shown); PRICE is the price as on the list, for example 63, or glass 5 oz 12 8 oz 19 bottle 54 (up to ten words); SCORE is the best critic score you know as a number out of 100, or empty; CRITICS is what critics say, with who gave the score and for which vintage, up to twenty-five words, or empty; STORE is the usual store price, up to ten words, or empty; WHAT is what the wine is, up to sixty words; WHY is why it suits my meal and budget, up to thirty-five words; VALUE is your verdict on the price, with the sums, up to twenty-five words. For WHAT, CRITICS, WHY and VALUE, reuse the sentences you wrote above for that pick, shortened only if needed. Use + instead of spaces, and no semicolons or tildes anywhere inside the entries. Under the link, in bold: "Tap this to see tonight's picks in your Wine Finder."`;
 
 function dinePrompt() {
   const bits = [];
@@ -2214,16 +2214,25 @@ function parseDineHash(hash) {
     unread = head[1] ? +head[1] : null;
     parts.shift();
   }
+  // A stray semicolon inside a sentence would split a pick: each pick has a known number
+  // of fields (8, or 4 in older links), so pieces are joined back until they're complete.
+  const tildes = (t) => (t.match(/~/g) || []).length;
+  const need = read != null || parts.some((t) => tildes(t) > 3) ? 7 : 3; // newer links start with the count
+  const entries = [];
+  for (const part of parts) {
+    if (entries.length && tildes(entries[entries.length - 1]) < need) entries[entries.length - 1] += `;${part}`;
+    else entries.push(part);
+  }
   const picks = [];
-  for (const part of parts.slice(0, 5)) {
+  for (const part of entries.slice(0, 5)) {
     const f = part.split("~");
     const name = clip(f[0], 120);
     if (!name) continue;
     const sc = parseInt(f[2], 10);
     const pick = { name, price: clip(f[1], 40), score: sc >= 50 && sc <= 100 ? sc : null };
     if (f.length <= 4) pick.why = clip(f.slice(3).join(" "), 160); // an older, shorter link
-    else Object.assign(pick, { critics: clip(f[3], 100), store: clip(f[4], 60), what: clip(f[5], 300),
-      why: clip(f[6], 200), value: clip(f[7], 120) });
+    else Object.assign(pick, { critics: clip(f[3], 250), store: clip(f[4], 100), what: clip(f[5], 600),
+      why: clip(f[6], 350), value: clip(f[7], 250) });
     picks.push(pick);
   }
   return { read, unread, picks };
@@ -2258,7 +2267,7 @@ function showDinePicks(d) {
       ${p.what ? `<p>${esc(p.what)}</p>` : ""}
       ${row("Critics", [p.score != null ? `about ${p.score}` : "", p.critics].filter(Boolean).join(", "))}
       ${row("With your meal", p.why)}
-      ${row("Value", [p.value, p.store ? `(in stores: ${p.store})` : ""].filter(Boolean).join(" "))}
+      ${row("Value", [p.value, p.store && !/store/i.test(p.value || "") ? `(in stores: ${p.store})` : ""].filter(Boolean).join(" "))}
       ${fam(p)}</section>`).join("");
   $("dine-details-h").hidden = !n;
   $("dine-dialog").showModal?.();
