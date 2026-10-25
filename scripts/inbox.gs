@@ -113,3 +113,10 @@ function makeAdminKey() {
   PropertiesService.getScriptProperties().setProperty('ADMIN_KEY', key);
   Logger.log('Your inbox key. Paste it into the Wine Finder on your own computer only: ' + key);
 }
+
+// Run once from the editor after updating the script: Google asks to allow sending
+// email, then a test email arrives. (Deploying alone doesn't ask.)
+function testEmail() {
+  notify_('Test', [{ id: 'typed-test-wine', name: 'Test wine (from testEmail)', claude: { points: 90, vintage: 2020 } }]);
+  Logger.log('Test email sent to ' + Session.getEffectiveUser().getEmail());
+}
