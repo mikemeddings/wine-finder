@@ -407,7 +407,9 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .family-hit-list .ew-hit { border-left: 0.4rem solid #8a5a14; }
 
 /* Claude Research Results */
-.btn-results { background: #fff3c4; border-color: #8a5a14; color: #5a3a08; font-weight: 700; }
+/* Deep violet (bluer than ZYN's plum) so it stands out as the best thing on a card; white on #4a2c8f is about 10:1. */
+.btn-results { background: #4a2c8f; border: 3px solid #4a2c8f; color: #fff; font-weight: 700; }
+.btn-results:hover, .btn-results:focus-visible { background: #ece6f8; color: #4a2c8f; filter: none; }
 .dialog-wide { max-width: min(56rem, 94vw); width: 94vw; }
 .notes-title { margin-top: 0; }
 .notes-body { max-height: 70vh; overflow-y: auto; font-size: 1.15rem; line-height: 1.55; }
