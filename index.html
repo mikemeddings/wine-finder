@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-25.3">
+<link rel="stylesheet" href="app.css?v=2026-10-25.5">
 </head>
 <body>
 <header class="top">
@@ -151,6 +151,46 @@
   <p class="sl-keep">Wines from family cellars, and wines you add yourself. They are kept on this computer only,
     so press “Save a backup file” now and then.</p>
 
+  <section class="mw-box inbox-box" id="inbox-box" aria-labelledby="inbox-h" hidden>
+    <h3 id="inbox-h">Family inbox</h3>
+    <p id="inbox-state" class="fr-count"></p>
+    <ul id="inbox-list" class="inbox-list"></ul>
+    <button type="button" class="btn" id="inbox-refresh">Check for new research</button>
+    <details class="mw-how"><summary>Inbox key (website keeper only)</summary>
+      <p id="inbox-key-state"></p>
+      <div class="typed-row">
+        <input type="password" id="inbox-key" autocomplete="off" spellcheck="false" placeholder="the long code from makeAdminKey">
+        <button type="button" class="btn" id="inbox-key-save">Save key on this computer</button>
+      </div>
+      <p class="hint">Kept in this browser only, like the publishing key.</p>
+    </details>
+  </section>
+
+  <section class="mw-box fr-box" aria-labelledby="fr-h">
+    <h3 id="fr-h">Family ratings (FR)</h3>
+    <p>When you save Claude's ratings, they and Claude's write-up go to the person who looks after the website
+      automatically, and everyone then sees them as <strong>FR</strong>. Your own ratings (☆ Your rating) can be sent
+      here, by email.</p>
+    <p id="fr-count" class="fr-count"></p>
+    <div class="sl-actions">
+      <button type="button" class="btn btn-primary" id="fr-email">Email my ratings to family</button>
+      <button type="button" class="btn btn-primary" id="fr-publish" hidden>Publish as Family ratings</button>
+    </div>
+    <p id="fr-status" class="status" role="status"></p>
+    <details class="mw-how"><summary>Publishing key (website keeper only)</summary>
+      <p id="fr-key-state"></p>
+      <label class="mw-label" for="fr-key">Paste a GitHub key for the wine-finder repository</label>
+      <div class="typed-row">
+        <input type="password" id="fr-key" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+        <button type="button" class="btn" id="fr-key-save">Save key on this computer</button>
+        <button type="button" class="btn btn-danger" id="fr-key-forget" hidden>Remove key</button>
+      </div>
+      <p class="hint">The key stays in this browser only. It is never part of the website. Without a key, use
+        “Download ratings.json” and upload the file to the repository's data folder on GitHub.</p>
+      <button type="button" class="btn" id="fr-download">Download ratings.json</button>
+    </details>
+  </section>
+
   <section class="mw-box" aria-labelledby="mw-import-h">
     <h3 id="mw-import-h">Import a cellar from CellarTracker</h3>
     <p class="notice"><strong>Sharing your cellar with the family?</strong> Just get the file from CellarTracker
@@ -212,30 +252,6 @@
     <button type="button" class="btn more" id="mw-more" hidden>Show more</button>
   </section>
 
-  <section class="mw-box fr-box" aria-labelledby="fr-h">
-    <h3 id="fr-h">Family ratings (FR)</h3>
-    <p>Share the ratings on this computer, both Claude's and your own, so everyone who opens Basil's Wine Finder
-      sees them as <strong>FR</strong>. Press <strong>Email my ratings to family</strong> and send the email to
-      the person who looks after the website; they click the link in it to publish your ratings.</p>
-    <p id="fr-count" class="fr-count"></p>
-    <div class="sl-actions">
-      <button type="button" class="btn btn-primary" id="fr-email">Email my ratings to family</button>
-      <button type="button" class="btn btn-primary" id="fr-publish" hidden>Publish as Family ratings</button>
-    </div>
-    <p id="fr-status" class="status" role="status"></p>
-    <details class="mw-how"><summary>Publishing key (website keeper only)</summary>
-      <p id="fr-key-state"></p>
-      <label class="mw-label" for="fr-key">Paste a GitHub key for the wine-finder repository</label>
-      <div class="typed-row">
-        <input type="password" id="fr-key" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
-        <button type="button" class="btn" id="fr-key-save">Save key on this computer</button>
-        <button type="button" class="btn btn-danger" id="fr-key-forget" hidden>Remove key</button>
-      </div>
-      <p class="hint">The key stays in this browser only. It is never part of the website. Without a key, use
-        “Download ratings.json” and upload the file to the repository's data folder on GitHub.</p>
-      <button type="button" class="btn" id="fr-download">Download ratings.json</button>
-    </details>
-  </section>
 
   <section class="mw-box" aria-labelledby="mw-backup-h">
     <h3 id="mw-backup-h">Backup</h3>
@@ -255,7 +271,7 @@
     <ol class="research-steps">
       <li><strong>Add wines.</strong> Type a name in the box below, or press “＋ Add to Short List for Claude Research” on any wine in Find wines or My wines.</li>
       <li><strong>Ask Claude.</strong> Claude opens with the question already written.</li>
-      <li><strong>Save the ratings.</strong> When Claude finishes, scroll to the very bottom of its answer and click <strong>💾 Save these ratings to my Wine Finder</strong>.</li>
+      <li><strong>Save the research.</strong> When Claude finishes, press Claude's copy button under its answer (two small squares), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom. The ratings and Claude's write-up are kept, and shared with the family.</li>
     </ol>
   </header>
 
@@ -307,13 +323,39 @@
 <dialog id="save-dialog" class="dialog" aria-labelledby="save-q">
   <p id="save-q" class="dialog-q"></p>
   <ul id="save-list" class="save-list"></ul>
+  <div id="save-writeup" class="save-writeup">
+    <p><strong>Claude's write-up</strong> <span id="save-writeup-state" class="hint"></span></p>
+    <details><summary>Not picked up? Paste it here</summary>
+      <textarea id="save-writeup-text" placeholder="Go back to Claude, press the copy button under its answer (two small squares), then click here and press Ctrl+V."></textarea>
+    </details>
+  </div>
+  <div id="save-name-row" class="save-name-row" hidden>
+    <label for="save-name">Your first name <span class="hint">(asked once, so the family knows who did the research)</span></label>
+    <input type="text" id="save-name" autocomplete="given-name">
+  </div>
   <p id="save-help" class="hint" hidden>In Claude, you can ask: “Please make the save link again.”</p>
+  <p id="save-result" class="status" role="status"></p>
   <div class="dialog-actions">
-    <button type="button" class="btn btn-primary" id="save-yes">Save these ratings</button>
-    <button type="button" class="btn btn-primary" id="save-email">Save and email to family</button>
-    <button type="button" class="btn" id="save-no" autofocus>Don't save</button>
+    <button type="button" class="btn btn-primary btn-big" id="save-yes" autofocus>Save</button>
+    <button type="button" class="linklike" id="save-no">Cancel</button>
   </div>
 </dialog>
+
+<dialog id="notes-dialog" class="dialog dialog-wide" aria-labelledby="notes-title">
+  <h2 id="notes-title" class="notes-title"></h2>
+  <div id="notes-body" class="notes-body"></div>
+  <div class="dialog-actions">
+    <button type="button" class="btn btn-primary" id="notes-close">Close</button>
+  </div>
+</dialog>
+
+<div id="stale-tab" class="stale-tab" hidden>
+  <div class="stale-card">
+    <p class="big">Basil's Wine Finder is open in a newer tab.</p>
+    <p>You can close this one with the ✕ on its tab. Everything you saved is kept.</p>
+    <button type="button" class="btn" id="stale-reload">Use this tab instead</button>
+  </div>
+</div>
 
 <dialog id="mail-dialog" class="dialog" aria-labelledby="mail-q">
   <p id="mail-q" class="dialog-q">Which email do you use?</p>
@@ -327,6 +369,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-25.3"></script>
+<script src="app.js?v=2026-10-25.5"></script>
 </body>
 </html>

@@ -405,3 +405,25 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .family-links { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; }
 .rating-related { opacity: 0.9; }
 .family-hit-list .ew-hit { border-left: 0.4rem solid #8a5a14; }
+
+/* Claude Research Results */
+.btn-results { background: #fff3c4; border-color: #8a5a14; color: #5a3a08; font-weight: 700; }
+.dialog-wide { max-width: min(56rem, 94vw); width: 94vw; }
+.notes-title { margin-top: 0; }
+.notes-body { max-height: 70vh; overflow-y: auto; font-size: 1.15rem; line-height: 1.55; }
+.notes-body h3, .notes-body h4, .notes-body h5 { margin: 1rem 0 0.3rem; }
+.note-meta { color: #6b4b12; font-weight: 600; }
+.save-writeup { background: #faf5ea; border-radius: 0.5rem; padding: 0.5rem 0.75rem; margin: 0.5rem 0; }
+.save-writeup textarea { width: 100%; min-height: 6rem; font: inherit; }
+.save-name-row { display: grid; gap: 0.25rem; margin: 0.5rem 0; }
+.save-name-row input { font: inherit; min-height: 2.6rem; padding: 0.2rem 0.5rem; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+/* The keeper's inbox */
+.inbox-box { border-color: #8a5a14; }
+.inbox-list { list-style: none; padding: 0; display: grid; gap: 0.5rem; }
+.inbox-item { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; background: #fff; border-radius: 0.5rem; padding: 0.5rem 0.75rem; }
+.inbox-buttons { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
+/* An older tab, once a newer one opens */
+.stale-tab { position: fixed; inset: 0; background: rgba(40, 10, 20, 0.75); display: grid; place-items: center; z-index: 1000; padding: 1rem; }
+.stale-tab[hidden] { display: none; }
+.stale-card { background: #fff; border-radius: 0.75rem; padding: 1.25rem 1.5rem; max-width: 30rem; }

@@ -53,6 +53,7 @@ For each wine, please:
 - Look up current reviews on the web (critics and CellarTracker community notes). For every score, name the source and the vintage it applies to. If you can't find reviews for this wine, say so plainly rather than estimating.
 - Describe what the critics say in your own words. Give their scores with the source, but don't copy their tasting notes.
 - Give me a practical note: drink now or cellar, whether to decant, and a food pairing.
+- Start each wine's section with a heading that ends with its code in square brackets, exactly as in my list, for example: ## Château Example 2019 [bcl-123456]
 
 Along the way:
 - Whenever you mention a particular place (a vineyard, estate, village, river valley or wine region), add a Google Maps satellite link so I can look at it from above. Build it from the place name like this: https://www.google.com/maps?q=Quinta+das+Carvalhas,+Pinhao,+Portugal&t=k (place, nearest town, country, with + for spaces; keep &t=k on the end, which opens the satellite view). Use names, not coordinates.
@@ -102,7 +103,7 @@ const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB" };
 const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn" };
 const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 50;
-const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames" };
+const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey" };
 
 // ---- Helpers -----------------------------------------------------------------
 
@@ -500,7 +501,7 @@ function cellarCard(w) {
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
       <a class="btn ext btn-we" href="${wineEnthusiastUrl(w)}" target="_blank" rel="noopener">Wine Enthusiast</a>
       <a class="btn ext btn-vivino" href="${vivinoUrl(w)}" target="_blank" rel="noopener">Vivino</a>
-      ${rateButton(w)}
+      ${rateButton(w)}${researchButton(w)}
     </div>
   </article>`;
 }
@@ -664,7 +665,7 @@ const SAVE_LINK_TEMPLATE = `Last of all, please give me a link I can click to sa
 - Make the very first line of your answer, once only: "Your save link is at the bottom of this answer."
 - Put the link at the very end, after everything else including your sources, below a horizontal line (---). Above it, put the line "⬇️ Your save link ⬇️" in bold. Then write the link as the largest heading (one #), itself the link, exactly in this form, one entry per wine joined by semicolons:
 # [💾 Save these ratings to my Wine Finder]({BASE}#save=CODE~POINTS~VINTAGE~NOTE;CODE~POINTS~VINTAGE~NOTE)
-- Under it, in bold: "Click this to keep these ratings in your Wine Finder."
+- Under it, in bold: "First press the copy button under this answer (two small squares), then click the link above to keep these ratings and this write-up in your Wine Finder."
 - Then, in italics: "(The “Create a doc” button below is Claude's own. It makes a document of this answer to keep or send. It doesn't save your ratings.)"
 - End with one more horizontal line (---), so the save link stands apart from the buttons under the answer.
 CODE is the wine's code in square brackets in my list; POINTS is your rating (leave it empty if you found no reviews); VINTAGE is the vintage your rating is for, or NV; NOTE is up to eight words, with + instead of spaces and no semicolons or tildes.`;
@@ -719,7 +720,7 @@ function renderShortlist() {
       <div>${w.kind === "cellar" || w.price == null ? esc(priceText(w)) : `<strong>${money(w.price)}</strong> at ${esc(sourceLabel(w.source))}`}</div>
       ${ratingsHtml(w)}${w.kind === "cellar" ? "" : familyLinksHtml(w)}</div>
       <div class="sl-buttons">
-        ${rateButton(w)}
+        ${researchButton(w)}${rateButton(w)}
         <button type="button" class="btn btn-ew" data-ew="${esc(w.id)}" aria-expanded="false">Find it elsewhere</button>
         <button type="button" class="btn" data-remove="${esc(w.id)}">Remove</button>
       </div>
@@ -783,15 +784,17 @@ function askClaude(mode = "about") {
     ? `<li>Claude opens in a new tab with your question <strong>already typed in</strong>.</li>
        <li>Above the question, Claude shows a note saying “Use caution before running this prompt”. It shows that for every question that arrives by link. This one comes from your Short List, so it's fine to send.</li>
        <li>Check the question, then ${SEND}.</li>
-       <li>When Claude finishes, scroll to the very bottom of its answer and click <strong>💾 Save these ratings to my Wine Finder</strong>.</li>`
+       <li>When Claude finishes, press Claude's <strong>copy button</strong> under its answer (two small squares), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom.</li>`
     : `<li>Claude opens in a new tab, and your question is copied.</li>
        <li>Your list is too long to type in automatically, so ${PASTE}.</li>
-       <li>When Claude finishes, scroll to the very bottom of its answer and click <strong>💾 Save these ratings to my Wine Finder</strong>.</li>`;
+       <li>When Claude finishes, press Claude's <strong>copy button</strong> under its answer (two small squares), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom.</li>`;
   const notice = $("ask-notice");
   notice.hidden = false;
   $("ask-claude").hidden = $("ask-claude-rank").hidden = true;
   const n = `${shortlist.length} ${shortlist.length === 1 ? "wine" : "wines"}`;
+  const done = shortlist.filter((w) => notesFor(w).length);
   notice.innerHTML = `<p class="big">${mode === "rank" ? `Asking Claude to rank your ${n} by reviews` : `Asking Claude about your ${n}`}</p>
+    ${done.length ? `<p class="warning">📖 ${done.length === 1 ? `“${esc(done[0].name)}” already has` : `${done.length} of these wines already have`} Claude Research Results from the family. Read them first with the 📖 button on each wine: you may not need to ask again.</p>` : ""}
     <p>Here's what happens when you press the button below:</p>
     <ol class="steps">${what}</ol>
     ${ZOOM_TIP}
@@ -871,7 +874,7 @@ const MW_PAGE = 50;
 
 let myWines = { cellars: {}, manual: [] };
 let mwPending = null; // parsed import awaiting "Save"
-const mwView = { q: "", owner: "all", sort: "name", shown: MW_PAGE };
+const mwView = { q: "", owner: "all", sort: "name", shown: MW_PAGE, open: false }; // open: the wine list is showing
 
 function loadMyWines() {
   const saved = storeGet(STORE.myWines, null);
@@ -1062,7 +1065,8 @@ function confirmImport() {
 }
 
 function removeCellar(owner) {
-  if (!window.confirm(`Remove ${owner}'s cellar (${myWines.cellars[owner].wines.length} wines) from this computer?`)) return;
+  if (!window.confirm(`Remove your private copy of ${owner}'s cellar (${myWines.cellars[owner].wines.length} wines) from this computer?\n\n` +
+    `The family keeps the shared copy on the website; only the bottle counts and bin locations go from your screen.`)) return;
   delete myWines.cellars[owner];
   cellarsChanged();
   mwView.owner = "all";
@@ -1175,11 +1179,12 @@ function renderMyWines() {
     shared.map(([slot, c]) => chip(cellarLabel(slot), `${cellarTitle(slot)} (shared)`, (c.wines || []).length)).join("") +
     (myWines.manual.length ? chip("manual", "Added by hand", myWines.manual.length) : "") +
     `<span class="mw-owner-tools">` +
+    (mwView.open ? mini("mw-hide", "", "Hide the wines") : "") +
     shared.map(([slot]) => mini("mw-name-cellar", `data-slot="${esc(slot)}"`, cellarNames()[slot] ? `Rename ${cellarTitle(slot)}` : `Name ${cellarTitle(slot)}`)).join("") +
     (keeper ? owners.map(([o]) => mini("mw-share", `data-owner="${esc(o)}"`,
       slotFor(o) ? `Update the shared copy of ${o}'s cellar` : `Share ${o}'s cellar with the family`, "btn-share")).join("") : "") +
-    (keeper ? Object.keys(sharedCellars).map((slot) => mini("mw-unshare", `data-slot="${esc(slot)}"`, `Stop sharing ${cellarTitle(slot)}`, "btn-danger")).join("") : "") +
-    owners.map(([o]) => mini("mw-remove", `data-owner="${esc(o)}"`, `Remove ${o}'s cellar`, "btn-danger")).join("") +
+    (keeper ? Object.keys(sharedCellars).map((slot) => mini("mw-unshare", `data-slot="${esc(slot)}"`, `Take ${cellarTitle(slot)} off the website`, "btn-danger")).join("") : "") +
+    owners.map(([o]) => mini("mw-remove", `data-owner="${esc(o)}"`, `Remove my private copy of ${o}'s cellar`, "btn-danger")).join("") +
     `</span>`
     : "";
   const words = fold(mwView.q).split(/\s+/).filter(Boolean);
@@ -1190,6 +1195,11 @@ function renderMyWines() {
     return words.every((t) => s.includes(t));
   }).sort(MW_SORTS[mwView.sort]);
   $("mw-list-h").textContent = all.length ? `${list.length.toLocaleString()} ${list.length === 1 ? "wine" : "wines"}` : "No wines yet";
+  if (all.length && !mwView.open && !mwView.q) { // a cellar can be hundreds of wines: list them only when asked
+    $("mw-list").innerHTML = `<li class="empty">Press a cellar's button above, or search, to see its wines.</li>`;
+    $("mw-more").hidden = true;
+    return;
+  }
   $("mw-list").innerHTML = list.slice(0, mwView.shown).map(mwRow).join("") ||
     (all.length ? `<li class="empty">No wines match.</li>` : `<li class="empty">Import a cellar or add a wine above.</li>`);
   $("mw-more").hidden = list.length <= mwView.shown;
@@ -1412,35 +1422,77 @@ function offerSavedRatings() {
     (it.claude === false ? "" : `<br>Claude's rating: <strong>${it.points ?? "no reviews found"}</strong>${it.vintage ? ` (${esc(String(it.vintage))})` : ""}${it.note ? ` · ${esc(it.note)}` : ""}`) +
     (it.mine ? `<br>Family member's own rating: <strong>${it.mine.points}</strong>${it.mine.note ? ` · ${esc(it.mine.note)}` : ""}` : "") +
     `</li>`).join("");
-  const hasKey = !!storeGet(STORE.ghKey, "");
   $("save-help").hidden = items.length > 0;
   $("save-yes").hidden = items.length === 0;
-  $("save-yes").textContent = shared && hasKey ? "Save and publish for everyone" : "Save these ratings";
-  $("save-email").hidden = items.length === 0 || shared;
+  $("save-yes").textContent = "Save";
+  $("save-yes").dataset.done = "";
+  $("save-no").hidden = false;
+  $("save-result").innerHTML = "";
+  $("save-writeup").hidden = items.length === 0 || shared;
+  $("save-writeup-text").value = "";
+  $("save-writeup-state").textContent = "It's picked up from Claude's copy button when you press Save.";
+  $("save-name-row").hidden = !!myName();
   $("save-dialog").showModal?.();
 }
 
-function confirmSavedRatings(then) {
+async function confirmSavedRatings() {
+  if ($("save-yes").dataset.done) { $("save-dialog").close(); return; } // the button now says Close
   const items = pendingSave || [];
+  if (!items.length) return;
+  if (!myName()) {
+    const n = $("save-name").value.trim();
+    if (!n) { $("save-result").textContent = "Please type your first name first."; $("save-name").focus(); return; }
+    storeSet(STORE.myName, n.slice(0, 30));
+  }
+  // Claude's write-up: pasted into the box, or read from what Claude's copy button copied.
+  const ids = items.map((it) => it.id);
+  let text = $("save-writeup-text").value.trim();
+  if (!text && !$("save-writeup").hidden) {
+    try { const clip = await navigator.clipboard.readText(); if (looksLikeClaudeAnswer(clip, ids)) text = clip; } catch { /* not allowed */ }
+  }
+  const parts = text ? splitWriteup(text, ids) : {};
+  const today = todayIso(), from = myName(), notes = localNotes();
+  const send = [];
   for (const it of items) {
     if (!findWine(it.id) && sharedIdOf(it.id) && sharedIdOf(it.id) !== it.id) it.id = sharedIdOf(it.id);
-    const name = findWine(it.id)?.name || ratingOf(it.id).name || it.name || it.id;
+    const real = (n) => (n && n !== it.id ? n : null); // an earlier save may have stored the code as the name
+    const name = findWine(it.id)?.name || real(ratingOf(it.id).name) || it.name || real(frOf(it.id).name) ||
+      (it.id.startsWith("typed-") ? it.id.slice(6).replace(/-/g, " ") : it.id); // a typed wine's code is its name
     const r = { ...ratingOf(it.id), name };
-    if (it.claude !== false) r.claude = { points: it.points, vintage: it.vintage, note: it.note, date: todayIso() };
-    if (it.mine) r.mine = { ...it.mine, date: todayIso() };
+    const claude = it.claude !== false ? { points: it.points, vintage: it.vintage, note: it.note, date: today } : null;
+    const mine = it.mine ? { ...it.mine, date: today } : null;
+    if (claude) r.claude = claude;
+    if (mine) r.mine = mine;
     ratings[it.id] = r;
+    const writeup = parts[it.id] || parts[ids[items.indexOf(it)]] || "";
+    if (writeup) notes[it.id] = { name, from, date: today, text: writeup };
+    send.push({ id: sharedIdOf(it.id) || it.id, name, claude, mine, writeup, from, date: today });
   }
   saveRatings();
+  storeSet(STORE.notes, notes);
   pendingSave = null;
-  $("save-dialog").close();
-  if (then === "email") { showView("mywines"); scrollToFamilyBox(); emailRatings(); }
-  else if (items.some((it) => it.shared)) {
-    // Ratings from family: take the website keeper straight to publishing them.
-    showView("mywines");
-    scrollToFamilyBox();
-    if (storeGet(STORE.ghKey, "")) publishFamilyRatings();
-    else frStatus("Saved. To share them with everyone, publish them here (a publishing key is needed), or use Download ratings.json.");
-  } else refreshRatedViews();
+  const nNotes = Object.keys(parts).length;
+  const gotText = nNotes ? `Claude's write-up kept for ${nNotes} ${nNotes === 1 ? "wine" : "wines"}.` : "No write-up was found, so only the ratings were saved.";
+  $("save-yes").disabled = true;
+  $("save-result").textContent = "Saving…";
+  try {
+    if (isKeeper()) {
+      await publishResearch(send);
+      $("save-result").innerHTML = `<strong>Saved and published ✓</strong> ${esc(gotText)} Everyone sees it after reloading.`;
+    } else {
+      await sendToInbox(send, from);
+      $("save-result").innerHTML = `<strong>Saved ✓</strong> — also sent to the website keeper for the family site. ${esc(gotText)}`;
+    }
+  } catch (e) {
+    $("save-result").innerHTML = `<strong>Saved on this computer ✓</strong> ${esc(gotText)} But it couldn't be ${isKeeper() ? "published" : "sent on"} (${esc(e.message)}).
+      <button type="button" class="btn" id="save-email-fallback">Email it instead</button>`;
+  } finally {
+    $("save-yes").disabled = false;
+  }
+  $("save-yes").textContent = "Close";
+  $("save-yes").dataset.done = "1";
+  $("save-no").hidden = true;
+  refreshRatedViews();
 }
 
 function scrollToFamilyBox() { document.querySelector(".fr-box")?.scrollIntoView({ block: "start" }); }
@@ -1740,7 +1792,7 @@ async function shareCellar(owner) {
 }
 
 async function unshareCellar(slot) {
-  if (!window.confirm(`Stop sharing ${cellarTitle(slot)} with the family? It's removed from the website (not from anyone's own computer).`)) return;
+  if (!window.confirm(`Take ${cellarTitle(slot)} off the website? Nobody in the family will see it any more (copies on people's own computers stay).`)) return;
   try {
     const data = await ghUpdate(CELLARS_PATH, (d) => { if (d.cellars) delete d.cellars[slot]; d.updated = todayIso(); },
       "Stop sharing a family cellar");
@@ -1984,6 +2036,264 @@ function currentSort() {
   return SORTS[state.sort] || SORTS["price-asc"];
 }
 
+// ---- Claude Research Results: Claude's full write-ups, kept and shared ----------------
+// When someone saves Claude's ratings, the page also keeps Claude's write-up (copied with
+// Claude's copy button), split into one report per wine. It stays on that computer and goes
+// to the website keeper's inbox (a Google Sheet, see scripts/inbox.gs); the keeper publishes
+// it to data/notes/<code>.json, and every card for that wine gets a "Claude Research
+// Results" button. The keeper's own saves publish straight away.
+const INBOX_URL = "https://script.google.com/macros/s/AKfycbxQ340N661mKKfIJ3FEpHnlqEcIANI2kyYx2LO-4FAeoPlkDSAwxxoYE9caOU3vI_bo/exec";
+const NOTES_DIR = "data/notes";
+let noteIndex = {}; // published write-ups: {code: {name, from, date}}
+const localNotes = () => { const n = storeGet(STORE.notes, {}); return n && typeof n === "object" ? n : {}; };
+const isKeeper = () => !!storeGet(STORE.ghKey, "");
+const myName = () => String(storeGet(STORE.myName, "") || "").trim();
+
+// Every write-up the family has for this wine, under any of its records.
+function notesFor(w) {
+  if (!w) return [];
+  const ids = new Set([w.id, sharedIdOf(w.id), ...(cellarMatches(w).ids || [])].filter(Boolean));
+  const local = localNotes(), out = new Map();
+  for (const [id, n] of Object.entries(local)) {
+    if (ids.has(id) || ids.has(sharedIdOf(id)) || (id.startsWith("typed-") && n.name && sameWineName(w.name, n.name))) out.set(sharedIdOf(id) || id, { id, ...n, local: true });
+  }
+  for (const [id, n] of Object.entries(noteIndex)) {
+    if (out.has(id)) continue;
+    if (ids.has(id) || (id.startsWith("typed-") && n.name && sameWineName(w.name, n.name))) out.set(id, { id, ...n });
+  }
+  return [...out.values()].sort((a, b) => String(b.date).localeCompare(String(a.date)));
+}
+
+const researchButton = (w) => (notesFor(w).length
+  ? `<button type="button" class="btn btn-results" data-notes="${esc(w.id)}">📖 Claude Research Results</button>` : "");
+
+// Claude's answer arrives as Markdown (from its copy button). A small, safe renderer:
+// headings, bold, italics, lists, rules and http(s) links; everything else is plain text.
+function mdInline(s) {
+  return esc(s)
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, t, u) => `<a href="${u}" target="_blank" rel="noopener">${t}</a>`)
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[\s(])\*([^*\s][^*]*)\*/g, "$1<em>$2</em>")
+    .replace(/(^|[\s(])_([^_\s][^_]*)_/g, "$1<em>$2</em>");
+}
+function mdToHtml(md) {
+  const out = [];
+  let list = null, para = [];
+  const flush = () => {
+    if (para.length) { out.push(`<p>${mdInline(para.join(" "))}</p>`); para = []; }
+    if (list) { out.push(`</${list}>`); list = null; }
+  };
+  for (const raw of String(md || "").replace(/\r/g, "").split("\n")) {
+    const line = raw.trim();
+    let m;
+    if (!line) { flush(); continue; }
+    if (/^(-{3,}|\*{3,}|_{3,})$/.test(line)) { flush(); out.push("<hr>"); continue; }
+    if ((m = /^(#{1,6})\s+(.*)$/.exec(line))) { flush(); const h = Math.min(6, m[1].length + 2); out.push(`<h${h}>${mdInline(m[2])}</h${h}>`); continue; }
+    if ((m = /^([-*•]|\d+[.)])\s+(.*)$/.exec(line))) {
+      if (para.length) { out.push(`<p>${mdInline(para.join(" "))}</p>`); para = []; }
+      const want = /^\d/.test(m[1]) ? "ol" : "ul";
+      if (list !== want) { if (list) out.push(`</${list}>`); out.push(`<${want}>`); list = want; }
+      out.push(`<li>${mdInline(m[2])}</li>`);
+      continue;
+    }
+    if (list) { out.push(`</${list}>`); list = null; }
+    para.push(line);
+  }
+  flush();
+  return out.join("");
+}
+
+// Claude's whole answer -> {code: that wine's report}. Each wine's section starts with a
+// heading ending in its code; the shared Sources go with every wine. Dropped: the save
+// link and its notes, "Where to buy", the ranking and "My rating" (the rating is kept apart).
+function splitWriteup(text, ids) {
+  const lines = String(text || "").replace(/\r/g, "").split("\n")
+    .filter((l) => !/save link is at the bottom|your save link|save these ratings to my wine finder|click this to keep these ratings|first press the copy button|create a doc/i.test(l));
+  const isHead = (l) => /^#{1,6}\s/.test(l.trim());
+  const DROP = /where to buy|ranking by what reviewers say|^#{1,6}\s*my rating/i;
+  const srcAt = lines.findIndex((l) => /^(#{1,6}\s*)?\**sources:?\**\s*$/i.test(l.trim()));
+  const srcEnd = srcAt >= 0 ? lines.findIndex((l, i) => i > srcAt && /^(-{3,}|\*{3,}|_{3,})$/.test(l.trim())) : -1;
+  const sources = srcAt >= 0 ? lines.slice(srcAt, srcEnd > 0 ? srcEnd : undefined).join("\n").trim() : "";
+  const body = srcAt >= 0 ? lines.slice(0, srcAt) : lines;
+  const starts = [];
+  body.forEach((l, i) => { if (isHead(l)) for (const id of ids) if (l.includes(id)) starts.push({ i, id }); });
+  const clean = (part) => {
+    const keep = [];
+    let dropping = false;
+    for (const l of part) {
+      if (isHead(l)) dropping = DROP.test(l);
+      else if (/^\**my rating/i.test(l.trim())) continue;
+      if (!dropping) keep.push(l.replace(/\s*\[(?:bcl|bsw|zyn|cellar|manual|typed)-[\w.-]+\]/g, ""));
+    }
+    return keep.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+  };
+  const out = {};
+  if (starts.length) {
+    starts.sort((a, b) => a.i - b.i);
+    starts.forEach((s, k) => {
+      const end = k + 1 < starts.length ? starts[k + 1].i : body.length;
+      const t = clean(body.slice(s.i, end));
+      if (t) out[s.id] = (t + (sources ? `\n\n${sources}` : "")).slice(0, 40000);
+    });
+  } else if (ids.length === 1) { // one wine and no code in the heading: the whole answer is about it
+    const t = clean(body);
+    if (t) out[ids[0]] = (t + (sources ? `\n\n${sources}` : "")).slice(0, 40000);
+  }
+  return out;
+}
+
+const looksLikeClaudeAnswer = (t, ids) => typeof t === "string" && t.length > 300 &&
+  (ids.some((id) => t.includes(id)) || /save these ratings|from the history books|practical note/i.test(t));
+
+async function sendToInbox(items, from) {
+  const r = await fetch(INBOX_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ action: "submit", from, items }) });
+  const d = await r.json();
+  if (!d.ok) throw new Error(d.error || "inbox");
+  return d.received;
+}
+
+async function inboxCall(body) {
+  const key = storeGet(STORE.inboxKey, "");
+  const r = await fetch(INBOX_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ ...body, key }) });
+  const d = await r.json();
+  if (!d.ok) throw new Error(d.error === "not allowed" ? "The inbox key isn't right." : d.error || "inbox");
+  return d;
+}
+
+// Create or replace one file in the repository.
+async function ghPutFile(path, text, message) {
+  let sha;
+  try { sha = (await ghFetch("GET", null, path)).sha; } catch { sha = undefined; } // a new file
+  await ghFetch("PUT", { message, content: toBase64(text), branch: PUBLISH.branch, ...(sha ? { sha } : {}) }, path);
+}
+
+// The keeper publishes ratings and write-ups: [{id, name, claude, mine, writeup, from, date}]
+async function publishResearch(items) {
+  const pub = items.map((it) => ({ ...it, id: sharedIdOf(it.id) })).filter((it) => it.id);
+  if (!pub.length) return 0;
+  const data = await ghUpdate(PUBLISH.path, (d) => {
+    d.updated = todayIso();
+    d.ratings = d.ratings && typeof d.ratings === "object" ? d.ratings : {};
+    for (const it of pub) {
+      const e = d.ratings[it.id] || {};
+      if (it.name) e.name = it.name;
+      if (it.claude) e.claude = it.claude;
+      if (it.mine) e.family = it.mine;
+      if (e.claude || e.family) d.ratings[it.id] = e;
+    }
+  }, `Family ratings (${pub.length} from ${pub[0].from || "the family"})`);
+  familyRatings = data.ratings;
+  const withNotes = pub.filter((it) => it.writeup);
+  for (const it of withNotes) {
+    await ghPutFile(`${NOTES_DIR}/${it.id}.json`,
+      JSON.stringify({ id: it.id, name: it.name, from: it.from, date: it.date, text: it.writeup }, null, 1) + "\n",
+      `Claude research: ${it.name}`);
+  }
+  if (withNotes.length) {
+    const idx = await ghUpdate(`${NOTES_DIR}/index.json`, (d) => {
+      d.updated = todayIso();
+      d.notes = d.notes && typeof d.notes === "object" ? d.notes : {};
+      for (const it of withNotes) d.notes[it.id] = { name: it.name, from: it.from, date: it.date };
+    }, `Claude research index (${withNotes.length})`);
+    noteIndex = idx.notes;
+  }
+  return pub.length;
+}
+
+// The reader: one or more write-ups in a large dialog.
+async function openNotes(id) {
+  const w = findWine(id) || { id, name: ratingOf(id).name || id };
+  const list = notesFor(w);
+  $("notes-title").textContent = `Claude Research Results: ${w.name}`;
+  $("notes-body").innerHTML = `<p class="hint">Loading…</p>`;
+  $("notes-dialog").showModal?.();
+  const parts = [];
+  for (const n of list) {
+    let text = n.text;
+    if (!text) {
+      try { text = (await fetch(`${NOTES_DIR}/${encodeURIComponent(n.id)}.json`, FRESH).then((r) => r.json())).text; } catch { text = ""; }
+    }
+    parts.push(`<section class="note"><p class="note-meta">Researched by ${esc(n.from || "the family")}${n.date ? ` · ${esc(shortDate(n.date))}` : ""}` +
+      `${n.name && n.name !== w.name ? ` · as “${esc(n.name)}”` : ""}${n.local && !noteIndex[sharedIdOf(n.id) || n.id] ? " · on this computer only" : ""}</p>` +
+      (text ? mdToHtml(text) : `<p>This write-up couldn't be loaded. Please try again later.</p>`) + `</section>`);
+  }
+  $("notes-body").innerHTML = parts.join("<hr class='note-sep'>") || "<p>No write-up found.</p>";
+}
+
+function showWriteup(title, meta, text) {
+  $("notes-title").textContent = title;
+  $("notes-body").innerHTML = `<section class="note"><p class="note-meta">${esc(meta)}</p>${mdToHtml(text)}</section>`;
+  $("notes-dialog").showModal?.();
+}
+
+// ---- The keeper's inbox (My wines) -------------------------------------------------
+let inboxItems = [];
+
+async function loadInbox() {
+  if (!isKeeper()) { $("inbox-box").hidden = true; return; }
+  $("inbox-box").hidden = false;
+  const hasKey = !!storeGet(STORE.inboxKey, "");
+  $("inbox-key-state").textContent = hasKey ? "An inbox key is saved on this computer." : "No inbox key on this computer yet.";
+  if (!hasKey) { $("inbox-state").textContent = "Paste your inbox key below (the long code from makeAdminKey) to see what the family has sent."; $("inbox-list").innerHTML = ""; return; }
+  $("inbox-state").textContent = "Checking for new research…";
+  try {
+    inboxItems = (await inboxCall({ action: "list" })).items || [];
+    $("inbox-state").textContent = inboxItems.length
+      ? `${inboxItems.length} new from the family, waiting for you to publish.` : "Nothing new from the family.";
+    $("inbox-list").innerHTML = inboxItems.map((it) => {
+      const c = it.details?.claude, m = it.details?.mine;
+      return `<li class="inbox-item"><div><strong>${esc(it.name || it.id)}</strong><br>
+        <span class="hint">From ${esc(it.from || "?")} · ${esc(shortDate(String(it.received).slice(0, 10)))}</span><br>
+        ${c ? `Claude ${c.points ?? "no reviews"}${c.vintage ? ` (${esc(String(c.vintage))})` : ""}` : ""}${m ? ` · own rating ${m.points}` : ""}${it.writeup ? " · write-up ✓" : ""}</div>
+        <div class="inbox-buttons">${it.writeup ? `<button type="button" class="btn" data-inbox-read="${it.row}">Read</button>` : ""}
+        <button type="button" class="btn btn-primary" data-inbox-publish="${it.row}">Publish</button>
+        <button type="button" class="btn" data-inbox-ignore="${it.row}">Ignore</button></div></li>`;
+    }).join("");
+  } catch (e) {
+    $("inbox-state").textContent = `Couldn't open the inbox. ${e.message}`;
+  }
+}
+
+async function inboxAct(row, what) {
+  const it = inboxItems.find((x) => String(x.row) === String(row));
+  if (!it) return;
+  if (what === "read") { showWriteup(`Claude Research Results: ${it.name}`, `From ${it.from || "the family"}`, it.writeup); return; }
+  $("inbox-state").textContent = what === "publish" ? `Publishing ${it.name}…` : "Ignoring…";
+  try {
+    if (what === "publish") {
+      await publishResearch([{ id: it.id, name: it.name, claude: it.details?.claude || null, mine: it.details?.mine || null,
+        writeup: it.writeup || "", from: it.from, date: String(it.received).slice(0, 10) }]);
+    }
+    await inboxCall({ action: "mark", row: it.row, status: what === "publish" ? "published" : "ignored" });
+    await loadInbox();
+    if (what === "publish") $("inbox-state").textContent += ` Published ${it.name}; everyone sees it after reloading.`;
+    renderFamilyBox();
+  } catch (e) {
+    $("inbox-state").textContent = `Not done. ${e.message === "conflict" ? "Please try again in a minute." : e.message}`;
+  }
+}
+
+function saveInboxKey() {
+  const key = $("inbox-key").value.trim();
+  if (!/^[a-f0-9]{40,80}$/i.test(key)) { $("inbox-state").textContent = "That doesn't look like the inbox key (a long code of letters and numbers)."; return; }
+  storeSet(STORE.inboxKey, key);
+  $("inbox-key").value = "";
+  loadInbox();
+}
+
+// ---- One Wine Finder tab -------------------------------------------------------------
+// Claude opens its save link in a new tab. That newest tab is the one in use, so older
+// Wine Finder tabs step aside: they close if the browser allows it, or say they can be closed.
+const tabChannel = "BroadcastChannel" in window ? new BroadcastChannel("wine-finder") : null;
+if (tabChannel) tabChannel.onmessage = (e) => { if (e.data?.type === "newer-tab") stepAside(); };
+function announceNewerTab() { tabChannel?.postMessage({ type: "newer-tab" }); }
+function stepAside() {
+  try { window.close(); } catch { /* not allowed */ }
+  setTimeout(() => { $("stale-tab").hidden = false; }, 300);
+}
+
 // ---- Email: each person picks the email they actually use -----------------------
 // A plain mailto: link opens whatever Windows thinks the email program is, which is
 // often an Outlook nobody set up. So every Email button asks, remembers the answer on
@@ -2044,7 +2354,7 @@ function showView(name) {
   $("view-mywines").hidden = name !== "mywines";
   for (const b of document.querySelectorAll(".view-btn")) b.setAttribute("aria-pressed", String(b.dataset.view === name));
   if (name === "shortlist") renderShortlist();
-  else if (name === "mywines") { renderMyWines(); renderFamilyBox(); }
+  else if (name === "mywines") { renderMyWines(); renderFamilyBox(); loadInbox(); }
   else renderResults();
   window.scrollTo(0, 0);
 }
@@ -2189,7 +2499,16 @@ function wireEvents() {
     else if (t.dataset.rateSave) saveMyRating(t.dataset.rateSave, t);
     else if (t.dataset.rateClear) clearMyRating(t.dataset.rateClear);
     else if (t.id === "save-yes") confirmSavedRatings();
-    else if (t.id === "save-email") confirmSavedRatings("email");
+    else if (t.id === "save-email-fallback") { $("save-dialog").close(); showView("mywines"); scrollToFamilyBox(); emailRatings(); }
+    else if (t.dataset.notes) openNotes(t.dataset.notes);
+    else if (t.id === "notes-close") $("notes-dialog").close();
+    else if (t.dataset.inboxRead) inboxAct(t.dataset.inboxRead, "read");
+    else if (t.dataset.inboxPublish) inboxAct(t.dataset.inboxPublish, "publish");
+    else if (t.dataset.inboxIgnore) inboxAct(t.dataset.inboxIgnore, "ignore");
+    else if (t.id === "inbox-refresh") loadInbox();
+    else if (t.id === "inbox-key-save") saveInboxKey();
+    else if (t.id === "stale-reload") location.reload();
+    else if (t.dataset.action === "mw-hide") { mwView.open = false; renderMyWines(); }
     else if (t.id === "fr-email") emailRatings();
     else if (t.id === "sl-email") sendEmail("Wine short list", shortlistText(), setStatus);
     else if (t.dataset.mail) chooseMail(t.dataset.mail);
@@ -2201,7 +2520,7 @@ function wireEvents() {
     else if (t.id === "fr-key-forget") forgetGhKey();
     else if (t.dataset.action === "mw-confirm") confirmImport();
     else if (t.dataset.action === "mw-cancel-import") { mwPending = null; $("mw-preview").hidden = true; $("mw-file").value = ""; }
-    else if (t.dataset.action === "mw-owner") { mwView.owner = t.dataset.owner; mwView.shown = MW_PAGE; renderMyWines(); }
+    else if (t.dataset.action === "mw-owner") { mwView.owner = t.dataset.owner; mwView.shown = MW_PAGE; mwView.open = true; renderMyWines(); }
     else if (t.dataset.action === "mw-remove") removeCellar(t.dataset.owner);
     else if (t.dataset.action === "mw-share") shareCellar(t.dataset.owner);
     else if (t.dataset.action === "mw-unshare") unshareCellar(t.dataset.slot);
@@ -2388,12 +2707,14 @@ async function init() {
   wireEvents();
   saveShortlist();
   try {
-    const [wines, meta, fr, cel] = await Promise.all([
+    const [wines, meta, fr, cel, notesIdx] = await Promise.all([
       fetch("data/wines.json", FRESH).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }),
       fetch("data/meta.json", FRESH).then((r) => (r.ok ? r.json() : { sources: {} })).catch(() => ({ sources: {} })),
       fetch("data/ratings.json", FRESH).then((r) => (r.ok ? r.json() : {})).catch(() => ({})),
       fetch(CELLARS_PATH, FRESH).then((r) => (r.ok ? r.json() : {})).catch(() => ({})),
+      fetch(`${NOTES_DIR}/index.json`, FRESH).then((r) => (r.ok ? r.json() : {})).catch(() => ({})),
     ]);
+    noteIndex = notesIdx && typeof notesIdx.notes === "object" && notesIdx.notes ? notesIdx.notes : {};
     sharedCellars = cel && typeof cel.cellars === "object" && cel.cellars ? cel.cellars : {};
     cellarsChanged();
     META = meta;
@@ -2410,6 +2731,7 @@ async function init() {
   renderFooter();
   renderAll();
   updatePickCounts();
+  if (/^#(save|share)=/.test(location.hash)) announceNewerTab(); // older Wine Finder tabs step aside
   offerSavedRatings();
   window.addEventListener("hashchange", offerSavedRatings);
   setTimeout(() => loadAllSources().then(() => { updatePickCounts(); renderSources(); }), 800);
