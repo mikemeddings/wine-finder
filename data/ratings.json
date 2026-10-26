@@ -981,6 +981,60 @@
     "note": "Quintessential old-vine Barossa, restrained power",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-93": {
+   "name": "Domaine Huet Vouvray Moelleux Le Mont 2015",
+   "claude": {
+    "points": 96,
+    "vintage": 2015,
+    "note": "Flinty, saline sweet Chenin; decades ahead",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-89": {
+   "name": "Domaine Huet Vouvray Demi-Sec Le Mont 2017",
+   "claude": {
+    "points": 93,
+    "vintage": 2017,
+    "note": "Chiselled demi-sec; hold until 2030",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-87": {
+   "name": "Domaine Huet Vouvray Demi-Sec Clos du Bourg 2017",
+   "claude": {
+    "points": 94,
+    "vintage": 2017,
+    "note": "Archetypal Vouvray from Huet's finest clos",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-48": {
+   "name": "Dönnhoff Niederhäuser Hermannshöhle Riesling Spätlese 2015",
+   "claude": {
+    "points": 95,
+    "vintage": 2015,
+    "note": "Aristocratic, salty Spätlese; one of 2015's finest",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-49": {
+   "name": "Dönnhoff Oberhäuser Brücke Riesling Spätlese 2015",
+   "claude": {
+    "points": 95,
+    "vintage": 2015,
+    "note": "Electric, floral Spätlese for the long haul",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-137": {
+   "name": "Joh. Jos. Prüm Wehlener Sonnenuhr Riesling Spätlese 2015",
+   "claude": {
+    "points": 94,
+    "vintage": 2015,
+    "note": "Classic Prüm finesse, decades of life",
+    "date": "2026-10-25"
+   }
   }
  }
 }
