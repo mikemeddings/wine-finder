@@ -1242,6 +1242,60 @@
     "note": "Peppery grand cru Monterey Syrah at ten",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-62": {
+   "name": "Glaetzer Anaperenna 2017",
+   "claude": {
+    "points": 95,
+    "vintage": 2017,
+    "note": "Velvety, fragrant blend in its prime",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-61": {
+   "name": "Glaetzer Anaperenna 2018",
+   "claude": {
+    "points": 95,
+    "vintage": 2018,
+    "note": "Intense, complete Shiraz-Cabernet; decade ahead",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-60": {
+   "name": "Glaetzer Anaperenna 2019",
+   "claude": {
+    "points": 94,
+    "vintage": 2019,
+    "note": "Lavish yet fresh; just opening",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-66": {
+   "name": "Glaetzer Shiraz Amon-Ra Barossa Valley 2019",
+   "claude": {
+    "points": 95,
+    "vintage": 2019,
+    "note": "Iron fist in velvet glove; cellar more",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-64": {
+   "name": "Glaetzer Shiraz Amon-Ra Barossa Valley 2021",
+   "claude": {
+    "points": 96,
+    "vintage": 2021,
+    "note": "Complete, cool-year Amon-Ra; patience",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-63": {
+   "name": "Glaetzer Shiraz Amon-Ra Barossa Valley 2022",
+   "claude": {
+    "points": 95,
+    "vintage": 2022,
+    "note": "Bright, magnificent 2022; still a baby",
+    "date": "2026-10-25"
+   }
   }
  }
 }
