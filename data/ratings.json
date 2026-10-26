@@ -1116,6 +1116,69 @@
     "note": "Harmonious classic-vintage Tignanello, now open",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-156": {
+   "name": "Domaine du Vieux Télégraphe Châteauneuf-du-Pape La Crau 2019",
+   "claude": {
+    "points": 97,
+    "vintage": 2019,
+    "note": "Elegant La Crau masterpiece; magnum for decades",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-35": {
+   "name": "Domaine Auguste Clape Cornas 2013",
+   "claude": {
+    "points": 95,
+    "vintage": 2013,
+    "note": "Iron, blood and pepper; Cornas benchmark",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-160": {
+   "name": "Alain Voge Cornas Les Vieilles Vignes 2012",
+   "claude": {
+    "points": 93,
+    "vintage": 2012,
+    "note": "Pure, polished Cornas in its prime",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-34": {
+   "name": "M. Chapoutier Crozes-Ermitage Les Varonniers 2015",
+   "claude": {
+    "points": 93,
+    "vintage": 2015,
+    "note": "Rich old-vine Crozes, granite and cassis",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-132": {
+   "name": "Famille Perrin / Perrin & Fils Gigondas Domaine du Clos des Tourelles 2018",
+   "claude": {
+    "points": 94,
+    "vintage": 2018,
+    "note": "Silky, energetic Gigondas, just opening",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-3": {
+   "name": "Domaine Paul Autard Châteauneuf-du-Pape Cuvée La Cote Ronde 2015",
+   "claude": {
+    "points": 92,
+    "vintage": 2015,
+    "note": "Modern, oaky Grenache-Syrah, now harmonious",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-50": {
+   "name": "Domaine Durieu Châteauneuf-du-Pape Cuvée Lucile Avril 2016",
+   "claude": {
+    "points": 92,
+    "vintage": 2016,
+    "note": "Velvety old-vine Grenache from a great year",
+    "date": "2026-10-25"
+   }
   }
  }
 }
