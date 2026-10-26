@@ -35,6 +35,7 @@ function doGet() {
 function doPost(e) {
   const req = json_(e && e.postData && e.postData.contents);
   if (!req) return out_({ ok: false, error: 'bad request' });
+  if (req.action === 'lcbo') return lcbo_(req); // read-only, needs no lock
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
@@ -105,6 +106,54 @@ function mark_(req) {
   }
   sh.getRange(row, STATUS_COL).setValue(req.status);
   return out_({ ok: true });
+}
+
+// ---- The private LCBO list ----------------------------------------------------------
+// A family-only snapshot of the LCBO wine list, kept in the keeper's Google Drive and
+// handed to a browser that sends the right unlock code. Neither the code nor the list
+// is ever in the website's code or on GitHub. Script properties (Project Settings >
+// Script properties): LCBO_CODE (the unlock code), LCBO_FILE_ID (the Drive file's id),
+// LCBO_AS_OF (optional, e.g. "July 2026").
+
+// Capitals, accents, spaces and punctuation don't matter: "chateauneuf du pape" = "Châteauneuf-du-Pape".
+const codeNorm_ = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+// {action:"lcbo", code:"…", who:"Dad"} -> {ok:true, asOf, csv} or {ok:false, error}
+function lcbo_(req) {
+  const p = PropertiesService.getScriptProperties();
+  const code = codeNorm_(p.getProperty('LCBO_CODE')), fileId = p.getProperty('LCBO_FILE_ID');
+  if (!code || !fileId) return out_({ ok: false, error: 'not set up' });
+  if (codeNorm_(req.code) !== code) {
+    Utilities.sleep(2000); // makes guessing pointlessly slow; family won't notice
+    return out_({ ok: false, error: 'wrong code' });
+  }
+  const csv = DriveApp.getFileById(fileId).getBlob().getDataAsString('UTF-8').replace(/^﻿/, '');
+  notifyLcbo_(req.who);
+  return out_({ ok: true, asOf: p.getProperty('LCBO_AS_OF') || 'July 2026', csv });
+}
+
+// One email to the keeper per browser that unlocks the list.
+function notifyLcbo_(who) {
+  try {
+    const name = String(who || 'Someone').slice(0, 30);
+    MailApp.sendEmail(Session.getEffectiveUser().getEmail(), 'Wine Finder: ' + name + ' unlocked the LCBO list',
+      name + " unlocked the LCBO list in Basil's Wine Finder on " + new Date().toString() + '.\n\n' +
+      'Each browser downloads it once, so this is one new browser.');
+  } catch (e) {
+    // the list was sent either way
+  }
+}
+
+// Run once from the editor after adding the script properties: Google asks to allow
+// reading Drive, then the log says whether the code and the file are set (never the code itself).
+function checkLcboSetup() {
+  const p = PropertiesService.getScriptProperties();
+  Logger.log('Unlock code: ' + (p.getProperty('LCBO_CODE') ? 'set' : 'MISSING (add LCBO_CODE)'));
+  const id = p.getProperty('LCBO_FILE_ID');
+  if (!id) { Logger.log('Drive file: MISSING (add LCBO_FILE_ID)'); return; }
+  const f = DriveApp.getFileById(id), text = f.getBlob().getDataAsString('UTF-8');
+  Logger.log('Drive file: "' + f.getName() + '", ' + (f.getSize() / 1e6).toFixed(1) + ' MB, about ' +
+    (text.split('\n').length - 1) + ' lines. List date shown on the page: ' + (p.getProperty('LCBO_AS_OF') || 'July 2026'));
 }
 
 // Run once from the editor: makes the keeper's key and shows it in the execution log.

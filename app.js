@@ -100,13 +100,13 @@ const SWEET_BANDS = [
   { label: "Medium-sweet", lo: 5, hi: 7 },
   { label: "Sweet", lo: 8, hi: 10 },
 ];
-const ALL_SOURCES = ["BC Liquor", "BSW Liquor", "ZYN"];
+const ALL_SOURCES = ["BC Liquor", "BSW Liquor", "ZYN", "LCBO"];
 // How each source is named on screen, in the shortlist and in the Claude question.
 const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB" };
-const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn" };
+const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn", LCBO: "lcbo" };
 const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 100;
-const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk", dineHistory: "wf.dineHistory" };
+const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk", dineHistory: "wf.dineHistory", lcbo: "wf.lcbo" };
 
 // ---- Helpers -----------------------------------------------------------------
 
@@ -445,10 +445,22 @@ function renderSources() {
   const cel = [...state.sources].filter((s) => !ALL_SOURCES.includes(s));
   $("source-legend").textContent = cel.length ? `Sold by (of ${cel.join(", ")}'s wines)`.replace("'s cellar's", "'s") : "Sold by";
   $("source-list").innerHTML = have.map((s) => checkbox("source", s, state.sources.has(s), sourceBadge(s), null)).join("") +
-    (have.includes("ZYN") ? `<label class="check check-strong"><input type="checkbox" id="top-only"${state.topOnly ? " checked" : ""}>
-       Only ZYN's “90+ point wines under $35”</label>
-       <p class="hint">ZYN's own list of wines rated 90 or more, priced under $35.</p>` : "");
+    lcboBoxHtml();
   renderCellarFilter();
+}
+
+// LCBO under "Sold by": an ordinary box once this browser has the private list;
+// until then, ticking it asks for the unlock code.
+function lcboBoxHtml() {
+  const info = lcboInfo();
+  if (info) return `<p class="hint lcbo-hint">${lcboPanel.done ? "✓ LCBO unlocked on this browser. " : ""}LCBO: private ${esc(info.asOf)} list, ${Number(info.count).toLocaleString()} wines.</p>`;
+  return `<label class="check"><input type="checkbox" id="lcbo-lock"${lcboPanel.open ? " checked" : ""}> ${sourceBadge("LCBO")}</label>` +
+    (lcboPanel.open ? `<div class="lcbo-unlock">
+      <label for="lcbo-code">Enter unlock code for LCBO</label>
+      <input type="text" id="lcbo-code" autocomplete="off" spellcheck="false">
+      <button type="button" class="btn btn-primary" data-action="lcbo-unlock">Unlock</button>
+      <p class="hint" id="lcbo-msg" aria-live="polite">${esc(lcboPanel.msg)}</p>
+    </div>` : "");
 }
 
 // Family cellars, at the top of the filters: tick one to see that whole cellar.
@@ -548,13 +560,14 @@ function wineCard(w) {
   const detail = [sizeText(w), w.abv != null ? `${w.abv}% alcohol` : null, sweetText(w)].filter(Boolean).map(esc).join(" · ");
   const badges = sourceBadge(w.source) + (w.new_since_last ? `<span class="badge badge-new">New</span>` : "");
   const calgary = CALGARY.has(w.source) ? `<p class="wine-detail">Calgary retailer — check shipping to BC.</p>` : "";
+  const lcbo = w.source === "LCBO" ? lcboDetailHtml(w) : "";
   const scores = w.retailer_scores ? `<p class="wine-detail"><span class="badge badge-score">★ ${esc(w.retailer_scores)}</span></p>` : "";
   const retailer = w.url ? `<a class="btn ext" href="${esc(w.url)}" target="_blank" rel="noopener">${esc(sourceLabel(w.source))} page</a>` : "";
   return `<article class="wine wine-${esc(w.type)}${on ? " on-list" : ""}">
     <h3 class="wine-name">${esc(w.name)}</h3>
     <div class="wine-price">${money(w.price)}</div>
     <p class="wine-facts">${typePill(w.type)} ${facts}</p>
-    <p class="wine-detail">${detail} ${badges}</p>${scores}${calgary}${ratingsHtml(w)}${familyLinksHtml(w)}
+    <p class="wine-detail">${detail} ${badges}</p>${scores}${calgary}${lcbo}${ratingsHtml(w)}${familyLinksHtml(w)}
     <div class="wine-actions">
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
@@ -3042,6 +3055,7 @@ function wireEvents() {
     }
     else if (t.dataset.action === "hide-notice") closeClaudeSteps();
     else if (t.dataset.action === "hits-in-list") showHitsInList();
+    else if (t.dataset.action === "lcbo-unlock") unlockLcbo($("lcbo-code").value);
     else if (t.dataset.typed != null) {
       if (!addTypedWine(t.dataset.typed)) toggleShortlist(typedId(t.dataset.typed)); // pressed again: take it off
       const box = t.closest(".elsewhere");
@@ -3178,15 +3192,11 @@ function wireEvents() {
         loadSource(t.value).then(() => { renderFooter(); refresh(); });
         return;
       }
-    } else if (t.id === "top-only") {
-      state.topOnly = t.checked;
-      if (t.checked && !state.sources.has("ZYN")) { // the list is ZYN's, so show ZYN's wines
-        state.sources.add("ZYN");
-        renderSources();
-        $("result-count").textContent = "Loading ZYN…";
-        loadSource("ZYN").then(() => { renderFooter(); state.shown = PAGE_SIZE; refresh(); });
-        return;
-      }
+    } else if (t.id === "lcbo-lock") { // LCBO isn't unlocked on this browser yet: ask for the code
+      lcboPanel.open = t.checked;
+      renderSources();
+      if (t.checked) $("lcbo-code").focus();
+      return;
     } else if (t.id === "not-rated") state.notRated = t.checked;
     else if (t.id === "bottle-only") state.bottleOnly = t.checked;
     else return;
@@ -3197,6 +3207,9 @@ function wireEvents() {
   $("ew-top").innerHTML = elsewhereHtml("", "Wine name", true);
   $("sl-add-q").addEventListener("input", renderSlAddHits);
   $("sl-add-q").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); addFromShortlistBox(); } });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && e.target.id === "lcbo-code") { e.preventDefault(); unlockLcbo(e.target.value); }
+  });
   document.addEventListener("input", (e) => {
     if (e.target.classList.contains("ew-q")) updateElsewhere(e.target.closest(".elsewhere"));
   });
@@ -3225,6 +3238,8 @@ function renderFooter() {
     if (m.status !== "ok") return `${label}: could not be updated last time (showing earlier data)`;
     return `${label}: ${m.edition ? m.edition + " edition · " : ""}updated ${m.refreshed}`;
   });
+  const lcbo = lcboInfo();
+  if (lcbo) parts.push(`LCBO: private ${lcbo.asOf} list, on this browser only`);
   $("foot-editions").textContent = parts.join(" — ") || "Data date unknown.";
   $("foot-calgary").hidden = !knownSources().some((s) => CALGARY.has(s));
 }
@@ -3251,12 +3266,13 @@ function addWines(list) {
 }
 
 const sourceFile = (name) => META.sources?.[name]?.data_file;
-const knownSources = () => ALL_SOURCES.filter((s) => s === "BC Liquor" || sourceFile(s));
+const knownSources = () => ALL_SOURCES.filter((s) => s === "BC Liquor" || sourceFile(s) || (s === "LCBO" && lcboInfo()));
 const allLoaded = () => knownSources().every((s) => LOADED.has(s));
 const loadedSourceLabels = () => knownSources().filter((s) => LOADED.has(s)).map(sourceLabel).join(", ");
 
 function loadSource(name) {
   if (LOADED.has(name)) return Promise.resolve();
+  if (name === "LCBO") return (loading[name] ||= loadLcbo());
   const file = sourceFile(name);
   if (!file) return Promise.resolve();
   loading[name] ||= fetch("data/" + file, FRESH)
@@ -3269,6 +3285,147 @@ function loadSource(name) {
 function loadAllSources() {
   loadingAll ||= Promise.all(knownSources().map(loadSource)).then(() => { loadingAll = null; renderFooter(); });
   return loadingAll;
+}
+
+// ---- The private LCBO list ----------------------------------------------------------
+// A family-only snapshot of the LCBO's wine list. LCBO's terms don't allow publishing
+// it, so it isn't part of the site: the keeper's Google script (INBOX_URL) hands it to
+// a browser that sends the unlock code, once. The browser keeps it in its own storage
+// (IndexedDB, too big for localStorage) and never asks again. The unlock code lives
+// only in the Google script's settings, never here.
+const lcboInfo = () => storeGet(STORE.lcbo, null); // {asOf, count, on}
+let lcboPanel = { open: false, msg: "", done: false };
+
+function idb(mode, op) {
+  return new Promise((resolve, reject) => {
+    const open = indexedDB.open("wine-finder", 1);
+    open.onupgradeneeded = () => open.result.createObjectStore("lists");
+    open.onerror = () => reject(open.error);
+    open.onsuccess = () => {
+      const db = open.result, tx = db.transaction("lists", mode), req = op(tx.objectStore("lists"));
+      tx.oncomplete = () => { db.close(); resolve(req.result); };
+      tx.onerror = tx.onabort = () => { db.close(); reject(tx.error); };
+    };
+  });
+}
+
+// Plain CSV with quoted fields (tasting notes hold commas, quotes and line breaks).
+function parseCsv(text) {
+  const rows = [];
+  let row = [], cell = "", quoted = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (quoted) {
+      if (c !== '"') cell += c;
+      else if (text[i + 1] === '"') { cell += '"'; i++; }
+      else quoted = false;
+    } else if (c === '"') quoted = true;
+    else if (c === ",") { row.push(cell); cell = ""; }
+    else if (c === "\n" || c === "\r") {
+      if (c === "\r" && text[i + 1] === "\n") i++;
+      row.push(cell); rows.push(row); row = []; cell = "";
+    } else cell += c;
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); }
+  const head = rows.shift() || [];
+  return rows.filter((r) => r.length > 1).map((r) => Object.fromEntries(head.map((h, i) => [h, r[i] ?? ""])));
+}
+
+const numOrNull = (s) => { const n = parseFloat(s); return Number.isFinite(n) ? n : null; };
+
+// The trimmed LCBO file (ON-LB-26-trimmed-notes.csv) -> the site's wine records.
+function lcboWines(csv) {
+  return parseCsv(csv.replace(/^﻿/, "")).filter((r) => r.sku && numOrNull(r.price) != null).map((r) => {
+    const region = r.subregion || (r.region !== "Other" ? r.region : "");
+    return {
+      id: "lcbo-" + r.sku, source: "LCBO", sku: r.sku, name: r.name, name_raw: r.name,
+      // LCBO's "brand" is patchy: sometimes ALL CAPS, sometimes a release name rather than a producer.
+      producer: r.producer && r.producer !== r.producer.toUpperCase() && !/release|vintages/i.test(r.producer) ? r.producer : null,
+      region_or_grape: [region, r.grape].filter(Boolean).join(" ") || null,
+      region: region || null, grape: r.grape || null,
+      vintage: numOrNull(r.vintage), country: r.country || null, type: r.type || "Other",
+      size_ml: numOrNull(r.volume_ml), pack: 1, abv: numOrNull(r.alcohol_percent), price: numOrNull(r.price),
+      sweetness: null, sugar: numOrNull(r.sugar_g_per_l), upc: r.upc || null, url: r.url || null,
+      note: r.tasting_note || null, available: true, retailer_scores: null, new_since_last: false,
+    };
+  });
+}
+
+function addLcbo(wines) {
+  if (LOADED.has("LCBO")) return;
+  addWines(wines);
+  LOADED.add("LCBO");
+}
+
+function loadLcbo() {
+  return idb("readonly", (s) => s.get("LCBO")).then((wines) => {
+    if (Array.isArray(wines) && wines.length) return addLcbo(wines);
+    storeSet(STORE.lcbo, null); // the browser's storage was cleared: ask for the code again
+    renderSources();
+  }).catch(() => { delete loading.LCBO; });
+}
+
+function lcboDetailHtml(w) {
+  const facts = [w.region, w.grape, w.sugar != null ? `sugar ${w.sugar} g/L` : null].filter(Boolean).map(esc).join(" · ");
+  return (facts ? `<p class="wine-detail">${facts}</p>` : "") +
+    `<p class="wine-detail">Ontario price from the ${esc(lcboInfo()?.asOf || "LCBO")} list: check the LCBO page for today's price.</p>` +
+    (w.note ? `<details class="lcbo-note"><summary>LCBO tasting note</summary><p>${esc(w.note)}</p></details>` : "");
+}
+
+function lcboMsg(msg, busy = false) {
+  lcboPanel.msg = msg;
+  if ($("lcbo-msg")) $("lcbo-msg").textContent = msg;
+  const b = document.querySelector('[data-action="lcbo-unlock"]');
+  if (b) { b.disabled = busy; b.textContent = busy ? "Unlocking…" : "Unlock"; }
+}
+
+async function unlockLcbo(code, who) {
+  code = String(code || "").trim();
+  if (!code) return lcboMsg("Please type the unlock code.");
+  lcboMsg("Checking the code and fetching the LCBO list (about 2 MB)…", true);
+  try {
+    let d;
+    try {
+      const r = await fetch(INBOX_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "lcbo", code, who: who || storeGet(STORE.myName, "") || "Someone" }) });
+      d = await r.json();
+    } catch {
+      throw new Error("Couldn't reach the server. Please check the internet connection and try again.");
+    }
+    if (!d.ok) throw new Error(d.error === "wrong code" ? "That code isn't right. Please check it and try again."
+      : "The LCBO list isn't available right now. Please try again later.");
+    const wines = lcboWines(d.csv || "");
+    if (!wines.length) throw new Error("The LCBO list came back empty. Please try again later.");
+    await idb("readwrite", (s) => s.put(wines, "LCBO"));
+    storeSet(STORE.lcbo, { asOf: d.asOf, count: wines.length, on: new Date().toISOString().slice(0, 10) });
+    addLcbo(wines);
+    lcboPanel = { open: false, msg: "", done: true };
+    state.sources.add("LCBO");
+    renderSources();
+    renderFooter();
+    state.shown = PAGE_SIZE;
+    refresh();
+  } catch (e) {
+    lcboMsg(e.message || "Something went wrong. Please try again.");
+  }
+}
+
+// An emailed link "…/#lcbo=CODE~Name" unlocks with one click.
+function unlockFromLink() {
+  const m = location.hash.match(/^#lcbo=([^~]*)(?:~(.*))?$/);
+  if (!m) return;
+  history.replaceState(history.state, "", location.pathname + location.search); // don't leave the code on screen
+  const code = decodeURIComponent(m[1]), who = decodeURIComponent(m[2] || "");
+  if (lcboInfo()) {
+    state.sources.add("LCBO");
+    loadSource("LCBO").then(() => { renderSources(); refresh(); });
+  } else {
+    lcboPanel.open = true;
+    renderSources();
+    $("lcbo-code").value = code;
+    unlockLcbo(code, who);
+  }
+  $("source-list").scrollIntoView({ block: "center" });
 }
 
 async function init() {
@@ -3304,11 +3461,13 @@ async function init() {
   if (!history.state?.wfView) history.replaceState({ wfView: currentView(), y: 0 }, "");
   if (/^#(save|share|dine)=/.test(location.hash)) announceNewerTab(); // older Wine Finder tabs step aside
   offerSavedRatings();
+  unlockFromLink();
   offerDinePicks();
   renderDineRecall();
   addHelpButtons();
   await restorePlace();
   window.addEventListener("hashchange", offerSavedRatings);
+  window.addEventListener("hashchange", unlockFromLink);
   setTimeout(() => loadAllSources().then(() => { updatePickCounts(); renderSources(); }), 800);
 }
 

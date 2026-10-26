@@ -39,7 +39,7 @@ h2 { font-size: 1.5rem; margin: 0 0 0.6rem; color: var(--wine); }
 :focus-visible { outline: 4px solid var(--focus); outline-offset: 2px; }
 
 /* Buttons and inputs: 48px+ targets */
-.btn, select, input[type="search"], input[type="number"] {
+.btn, select, input[type="search"], input[type="number"], #lcbo-code {
   font: inherit;
   min-height: 3rem;
   border: 2px solid var(--line);
@@ -62,7 +62,7 @@ h2 { font-size: 1.5rem; margin: 0 0 0.6rem; color: var(--wine); }
 .btn-big { font-size: 1.4rem; min-height: 3.75rem; padding: 0.5rem 1.5rem; }
 .btn-mini { font-size: 1.05rem; padding: 0.2rem 0.9rem; background: var(--wine-tint); border-color: var(--wine); color: var(--wine-dark); }
 .mini-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
-input[type="search"], input[type="number"] { width: 100%; padding: 0.3rem 0.6rem; }
+input[type="search"], input[type="number"], #lcbo-code { width: 100%; padding: 0.3rem 0.6rem; }
 select { padding: 0.3rem 0.5rem; }
 .linklike { font: inherit; color: var(--wine); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; }
 
@@ -196,6 +196,12 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .badge-bcl { background: var(--bc-navy); color: #fff; border-color: var(--bc-navy); border-bottom: 4px solid var(--bc-gold); }
 .badge-bsw { background: var(--teal); color: #fff; border-color: var(--teal); }
 .badge-zyn { background: var(--plum); color: #fff; border-color: var(--plum); }
+.badge-lcbo { background: #b3261e; color: #fff; border-color: #b3261e; }
+.lcbo-unlock { margin: 0.4rem 0 0.8rem 2.6rem; display: grid; gap: 0.5rem; }
+.lcbo-unlock label { font-weight: 700; }
+.lcbo-hint { margin-top: 0.2rem; }
+.lcbo-note summary { cursor: pointer; color: var(--wine); font-weight: 700; min-height: 48px; display: flex; align-items: center; }
+.lcbo-note p { margin: 0.2rem 0 0.6rem; }
 .wine-detail .badge-src { margin-left: 0.3rem; }
 .badge-new { background: #fff3a8; }
 .btn-add { background: var(--green-tint); border-color: var(--green); color: var(--green); }
