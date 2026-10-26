@@ -100,10 +100,10 @@ const SWEET_BANDS = [
   { label: "Medium-sweet", lo: 5, hi: 7 },
   { label: "Sweet", lo: 8, hi: 10 },
 ];
-const ALL_SOURCES = ["BC Liquor", "BSW Liquor", "ZYN", "LCBO"];
+const ALL_SOURCES = ["BC Liquor", "BSW Liquor", "ZYN", "Lucullus", "LCBO"];
 // How each source is named on screen, in the shortlist and in the Claude question.
-const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB" };
-const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn", LCBO: "lcbo" };
+const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB", Lucullus: "Lucullus (Switzerland)" };
+const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn", Lucullus: "luc", LCBO: "lcbo" };
 const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 100;
 const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk", dineHistory: "wf.dineHistory", lcbo: "wf.lcbo" };
@@ -115,6 +115,13 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
   ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const fold = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 const money = (n) => "$" + Number(n).toFixed(2);
+// Swiss prices: the shop's own price in francs, then roughly what that is in Canadian dollars
+// (w.price, which the price filter and sorting use). Excl. VAT, as Lucullus publishes it.
+const vatNote = (w) => (w.vat === "excl" ? " excl. VAT" : "");
+const priceStr = (w) => (w.currency ? `${w.currency} ${Number(w.price_local).toFixed(2)}${vatNote(w)} (≈ ${money(w.price)})` : money(w.price));
+const priceHtml = (w) => (w.currency
+  ? `${esc(w.currency)} ${Number(w.price_local).toFixed(2)} <span class="price-cad">≈ ${money(w.price)}</span>`
+  : money(w.price));
 const sourceLabel = (s) => SOURCE_LABELS[s] || s;
 const sourceBadge = (s) => `<span class="badge badge-src badge-${SOURCE_CLASS[s] || "other"}">${esc(sourceLabel(s))}</span>`;
 const typePill = (t) => `<span class="type-pill type-${esc(t)}">${esc(t)}</span>`;
@@ -177,6 +184,7 @@ const STORE_GROUPS = [
   // Mövenpick's terms allow links to its home page only (no deep links without permission),
   // so its button opens the home page and Basil searches there.
   { place: "Switzerland", note: "Prices in Swiss francs. Mövenpick opens on its home page (in French): search there.", stores: [
+    { name: "Lucullus (Stans)", url: "https://www.lucullus.ch/en/search?search={q}" },
     { name: "Mövenpick Wein (Geneva shops)", url: "https://www.moevenpick-wein.com/fr/" },
     { name: "Flaschenpost", url: "https://www.flaschenpost.ch/en/wine?searchParam={q}" },
   ] },
@@ -226,7 +234,7 @@ function hitRow(w) {
   return `<li class="ew-hit">
     <div><div class="sl-name">${esc(w.name)}</div>
       <div>${typePill(w.type)} ${esc([w.country, w.vintage, sizeText(w)].filter(Boolean).join(" · "))}</div>
-      <div><strong>${money(w.price)}</strong> at ${sourceBadge(w.source)}</div>${ratingsHtml(w)}${familyLinksHtml(w)}</div>
+      <div><strong>${priceHtml(w)}</strong> at ${sourceBadge(w.source)}</div>${ratingsHtml(w)}${familyLinksHtml(w)}</div>
     <div class="hit-buttons">${researchButton(w)}
     <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button></div>
   </li>`;
@@ -560,12 +568,12 @@ function wineCard(w) {
   const detail = [sizeText(w), w.abv != null ? `${w.abv}% alcohol` : null, sweetText(w)].filter(Boolean).map(esc).join(" · ");
   const badges = sourceBadge(w.source) + (w.new_since_last ? `<span class="badge badge-new">New</span>` : "");
   const calgary = CALGARY.has(w.source) ? `<p class="wine-detail">Calgary retailer — check shipping to BC.</p>` : "";
-  const lcbo = w.source === "LCBO" ? lcboDetailHtml(w) : "";
+  const lcbo = w.source === "LCBO" ? lcboDetailHtml(w) : w.source === "Lucullus" ? lucullusDetailHtml(w) : "";
   const scores = w.retailer_scores ? `<p class="wine-detail"><span class="badge badge-score">★ ${esc(w.retailer_scores)}</span></p>` : "";
   const retailer = w.url ? `<a class="btn ext" href="${esc(w.url)}" target="_blank" rel="noopener">${esc(sourceLabel(w.source))} page</a>` : "";
   return `<article class="wine wine-${esc(w.type)}${on ? " on-list" : ""}">
     <h3 class="wine-name">${esc(w.name)}</h3>
-    <div class="wine-price">${money(w.price)}</div>
+    <div class="wine-price">${priceHtml(w)}</div>
     <p class="wine-facts">${typePill(w.type)} ${facts}</p>
     <p class="wine-detail">${detail} ${badges}</p>${scores}${calgary}${lcbo}${ratingsHtml(w)}${familyLinksHtml(w)}
     <div class="wine-actions">
@@ -675,7 +683,7 @@ function toggleShortlist(id) {
 function priceText(w) {
   if (w.kind === "typed") return "added by name, not on my store lists";
   if (w.kind === "cellar" || w.price == null) return `from ${sourceLabel(w.source)}`;
-  return `${money(w.price)} at ${sourceLabel(w.source)}`;
+  return `${priceStr(w)} at ${sourceLabel(w.source)}`;
 }
 
 function wineLine(w, i, forClaude = false) {
@@ -768,7 +776,7 @@ function renderShortlist() {
   $("sl-list").innerHTML = shortlist.map((w) => `<li><div class="sl-row">
       <div><div class="sl-name">${esc(w.name)}</div>
       <div>${esc([w.country !== "Country not stated" ? w.country : null, w.type !== "Other" ? w.type : null, w.vintage, w.size_ml ? sizeText(w) : null].filter(Boolean).join(" · "))}</div>
-      <div>${w.kind === "cellar" || w.price == null ? esc(priceText(w)) : `<strong>${money(w.price)}</strong> at ${esc(sourceLabel(w.source))}`}</div>
+      <div>${w.kind === "cellar" || w.price == null ? esc(priceText(w)) : `<strong>${priceHtml(w)}</strong> at ${esc(sourceLabel(w.source))}`}</div>
       ${ratingsHtml(w)}${w.kind === "cellar" ? "" : familyLinksHtml(w)}</div>
       <div class="sl-buttons">
         ${researchButton(w)}${rateButton(w)}
@@ -1982,7 +1990,7 @@ function soldAtHtml(w) {
   const sold = [...best.values()].map((s) => {
     const url = linkOf(s);
     return (url ? `<a href="${esc(url)}" target="_blank" rel="noopener">` : "<span>") +
-      `${esc(sourceLabel(s.source))} ${money(s.price)}${s.vintage ? ` (${esc(String(s.vintage))})` : ""}` +
+      `${esc(sourceLabel(s.source))} ${esc(priceStr(s))}${s.vintage ? ` (${esc(String(s.vintage))})` : ""}` +
       (w.size_ml && s.size_ml && s.size_ml !== w.size_ml ? ` ${esc(sizeText(s))}` : "") +
       (url ? "</a>" : "</span>");
   });
@@ -3240,6 +3248,8 @@ function renderFooter() {
   });
   const lcbo = lcboInfo();
   if (lcbo) parts.push(`LCBO: private ${lcbo.asOf} list, on this browser only`);
+  const fx = META.sources?.Lucullus?.fx;
+  if (fx) parts.push(`Swiss prices in Canadian dollars are approximate (Bank of Canada rate ${fx.CAD_per_CHF} CAD per franc, ${fx.date})`);
   $("foot-editions").textContent = parts.join(" — ") || "Data date unknown.";
   $("foot-calgary").hidden = !knownSources().some((s) => CALGARY.has(s));
 }
@@ -3363,6 +3373,15 @@ function loadLcbo() {
     storeSet(STORE.lcbo, null); // the browser's storage was cleared: ask for the code again
     renderSources();
   }).catch(() => { delete loading.LCBO; });
+}
+
+// Lucullus sells by the case and quotes francs without Swiss VAT; say so on every card.
+function lucullusDetailHtml(w) {
+  const facts = [w.region_or_grape, w.producer, w.stock != null ? `${w.stock} in stock` : null].filter(Boolean).map(esc).join(" · ");
+  const fx = META.sources?.Lucullus?.fx;
+  return (facts ? `<p class="wine-detail">${facts}</p>` : "") +
+    `<p class="wine-detail">Lucullus, Stans: delivers in Switzerland, in cases of 6. Price excludes Swiss VAT` +
+    (fx ? `; ≈ Canadian dollars at the Bank of Canada rate of ${esc(fx.date)}` : "") + `.</p>`;
 }
 
 function lcboDetailHtml(w) {

@@ -25,6 +25,20 @@
       "note": "in-stock wines from the store's online catalogue",
       "data_file": "wines-bsw.json",
       "refreshed": "2026-10-23"
+    },
+    "Lucullus": {
+      "status": "ok",
+      "count": 3701,
+      "edition": "2026-10-14",
+      "currency": "CHF",
+      "fx": {
+        "CAD_per_CHF": 1.6969,
+        "date": "2026-10-23",
+        "source": "Bank of Canada"
+      },
+      "note": "Lucullus's full price list; prices in CHF excluding VAT, with approximate CAD",
+      "data_file": "wines-lucullus.json",
+      "refreshed": "2026-10-26"
     }
   }
 }

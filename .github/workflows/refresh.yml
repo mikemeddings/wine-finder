@@ -1,10 +1,11 @@
 name: Refresh wine lists
 
-# Every three months (BC publishes a new price list about quarterly), plus a
-# "Run workflow" button on the Actions tab for any time. For monthly, use "17 10 1 * *".
+# Monthly. Scheduled runs refresh only the stores due that month (refresh.py --scheduled):
+# Lucullus every month; BC, ZYN and BSW in Jan, Apr, Jul and Oct (BC publishes about
+# quarterly). The "Run workflow" button on the Actions tab refreshes every store.
 on:
   schedule:
-    - cron: "17 10 1 1,4,7,10 *"   # 10:17 UTC on 1 Jan, Apr, Jul, Oct
+    - cron: "17 10 1 * *"   # 10:17 UTC on the 1st of each month
   workflow_dispatch:
 
 permissions:
@@ -33,7 +34,8 @@ jobs:
       - name: Refresh
         id: refresh
         run: |
-          if python scripts/refresh.py; then echo "ok=true" >> "$GITHUB_OUTPUT"
+          args=""; if [ "${{ github.event_name }}" = "schedule" ]; then args="--scheduled"; fi
+          if python scripts/refresh.py $args; then echo "ok=true" >> "$GITHUB_OUTPUT"
           else echo "ok=false" >> "$GITHUB_OUTPUT"; echo "::warning::A store could not be refreshed; see the log above."; fi
 
       - name: Test

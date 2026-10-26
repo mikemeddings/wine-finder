@@ -4,7 +4,8 @@ Usage:
     python scripts/refresh.py                     # all stores (about 8 minutes: the retailers are read politely)
     python scripts/refresh.py --local FILE        # BC from a CSV already on disk
     python scripts/refresh.py --skip-retailers    # BC only
-    python scripts/refresh.py --only zyn          # one store: bcl, zyn or bsw
+    python scripts/refresh.py --only zyn          # one store: bcl, zyn, bsw or luc
+    python scripts/refresh.py --scheduled         # only the stores due this month (the monthly GitHub run)
 
 Each store has its own file (BC: wines.json, ZYN: wines-zyn.json, BSW: wines-bsw.json),
 named in meta.json as data_file so the page can load the Calgary lists only when needed.
@@ -20,6 +21,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import src_bcl  # noqa: E402
+import src_lucullus  # noqa: E402
 import src_shopify  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -80,7 +82,7 @@ def refresh_bcl(local=None):
     }
 
 
-MIN_RECORDS = {"BC Liquor": 1000, "ZYN": 1000, "BSW Liquor": 3000}  # fewer means a broken feed
+MIN_RECORDS = {"BC Liquor": 1000, "ZYN": 1000, "BSW Liquor": 3000, "Lucullus": 2000}  # fewer means a broken feed
 
 
 def refresh_shopify(name, fetch):
@@ -91,13 +93,27 @@ def refresh_shopify(name, fetch):
                      "note": "in-stock wines from the store's online catalogue"}
 
 
-# (key, source name, data file, refresh function)
+def refresh_lucullus():
+    records, extras = src_lucullus.fetch()
+    if len(records) < MIN_RECORDS["Lucullus"]:
+        raise ValueError(f"only {len(records)} wines parsed; refusing to replace data")
+    return records, {"status": "ok", "count": len(records), **extras}
+
+
+# (key, source name, data file, refresh function, months between scheduled refreshes)
+# Quarterly sources run in Jan, Apr, Jul and Oct (BC publishes about quarterly); monthly ones every month.
 SOURCES = [
-    ("bcl", src_bcl.SOURCE, "wines.json", lambda args: refresh_bcl(args.local)),
-    ("zyn", src_shopify.ZYN_SOURCE, "wines-zyn.json", lambda args: refresh_shopify("ZYN", src_shopify.fetch_zyn)),
+    ("bcl", src_bcl.SOURCE, "wines.json", lambda args: refresh_bcl(args.local), 3),
+    ("zyn", src_shopify.ZYN_SOURCE, "wines-zyn.json", lambda args: refresh_shopify("ZYN", src_shopify.fetch_zyn), 3),
     ("bsw", src_shopify.BSW_SOURCE, "wines-bsw.json",
-     lambda args: refresh_shopify("BSW Liquor", src_shopify.fetch_bsw)),
+     lambda args: refresh_shopify("BSW Liquor", src_shopify.fetch_bsw), 3),
+    ("luc", src_lucullus.SOURCE, "wines-lucullus.json", lambda args: refresh_lucullus(), 1),
 ]
+
+
+def due(every, month):
+    """A source refreshed every `every` months is due in Jan, and every `every` months after."""
+    return (month - 1) % every == 0
 
 
 def main(argv=None):
@@ -105,6 +121,7 @@ def main(argv=None):
     ap.add_argument("--local", help="path to a BC price-list CSV to use instead of downloading")
     ap.add_argument("--skip-retailers", action="store_true", help="refresh BC only")
     ap.add_argument("--only", choices=[k for k, *_ in SOURCES], help="refresh just this store")
+    ap.add_argument("--scheduled", action="store_true", help="refresh only the stores due this month")
     args = ap.parse_args(argv)
 
     DATA.mkdir(exist_ok=True)
@@ -113,8 +130,8 @@ def main(argv=None):
     today = dt.date.today().isoformat()
     ran_ok = True
 
-    for key, name, file, fn in SOURCES:
-        if (args.only and key != args.only) or (args.skip_retailers and key != "bcl"):
+    for key, name, file, fn, every in SOURCES:
+        if (args.only and key != args.only) or (args.skip_retailers and key != "bcl") or                 (args.scheduled and not due(every, dt.date.today().month)):
             continue  # untouched: previous file and meta entry stay as they are
         path = DATA / file
         old_records = _load(path, [])
