@@ -864,6 +864,69 @@
     "note": "Magical high-altitude Gigondas, long life",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-72": {
+   "name": "Glaetzer Shiraz Amon-Ra Barossa Valley 2010",
+   "claude": {
+    "points": 93,
+    "vintage": 2010,
+    "note": "Mature early-era blockbuster; drink soon",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-70": {
+   "name": "Glaetzer Shiraz Amon-Ra Barossa Valley 2015",
+   "claude": {
+    "points": 94,
+    "vintage": 2015,
+    "note": "Velvety powerhouse in its prime",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-69": {
+   "name": "Glaetzer Shiraz Amon-Ra Barossa Valley 2016",
+   "claude": {
+    "points": 95,
+    "vintage": 2016,
+    "note": "Refined, powerful, in its window",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-68": {
+   "name": "Glaetzer Shiraz Amon-Ra Barossa Valley 2017",
+   "claude": {
+    "points": 95,
+    "vintage": 2017,
+    "note": "Cool-year purity, one of the greatest",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-67": {
+   "name": "Glaetzer Shiraz Amon-Ra Barossa Valley 2018",
+   "claude": {
+    "points": 96,
+    "vintage": 2018,
+    "note": "Stupendous young Amon-Ra; patience rewarded",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-65": {
+   "name": "Glaetzer Shiraz Amon-Ra Barossa Valley 2020",
+   "claude": {
+    "points": 96,
+    "vintage": 2020,
+    "note": "Rare, saturated vintage; cellar to 2030",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-59": {
+   "name": "Glaetzer Anaperenna 2021",
+   "claude": {
+    "points": 94,
+    "vintage": 2021,
+    "note": "Polished Shiraz-Cabernet from a great year",
+    "date": "2026-10-25"
+   }
   }
  }
 }
