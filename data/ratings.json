@@ -1828,6 +1828,246 @@
     "date": "2026-10-26",
     "quick": true
    }
+  },
+  "lcbo-638213": {
+   "name": "Carvalhas Vinhas Velhas 2015",
+   "claude": {
+    "points": 94,
+    "vintage": 2015,
+    "note": "WA 94",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-683128": {
+   "name": "Casa Ferreirinha Quinta da Leda 2021",
+   "claude": {
+    "points": 93,
+    "vintage": 2021,
+    "note": "Falstaff 93, Grandes Escolhas 18/20",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-18383": {
+   "name": "Ex Aequo 2021",
+   "claude": {
+    "points": 93,
+    "vintage": 2017,
+    "note": "JS 94 for 2017, 2021 unreviewed",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-47348": {
+   "name": "Difinido Dao Carlos Raposo Vinhos 2021",
+   "claude": {
+    "points": 95,
+    "vintage": 2021,
+    "note": "JS 95, Wine Anorak 94 for 2022",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-371773": {
+   "name": "Quinta do Vallado Reserva Field Blend 2021",
+   "claude": {
+    "points": 94,
+    "vintage": 2021,
+    "note": "WA 94",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-26946": {
+   "name": "Quadrus Grande Reserva 2017",
+   "claude": {
+    "points": null,
+    "vintage": 2017,
+    "note": "Only unscored critic note found",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-47337": {
+   "name": "Touriga Nacional Letra A Douro Macanita 2022",
+   "claude": {
+    "points": 93,
+    "vintage": 2022,
+    "note": "WA 93",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-46578": {
+   "name": "Marques De Alvito Reserva Red Fiuza Bright 2017",
+   "claude": {
+    "points": 93,
+    "vintage": 2017,
+    "note": "WE 94, single review",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-46837": {
+   "name": "Savedra Grande Reserva 2020",
+   "claude": {
+    "points": 92,
+    "vintage": 2020,
+    "note": "DWWA 95 competition medal only",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-632166": {
+   "name": "Herdade da Farizoa Grande Reserva 2013",
+   "claude": {
+    "points": null,
+    "vintage": 2013,
+    "note": "WA note found, score not shown",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-25245": {
+   "name": "Quinta da Falorca Touriga Nacional 2015",
+   "claude": {
+    "points": 94,
+    "vintage": 2015,
+    "note": "WA 94",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-47336": {
+   "name": "Douro Os Caniveis Macanita Vinhos Lda 2022",
+   "claude": {
+    "points": 94,
+    "vintage": 2022,
+    "note": "WA 94",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-18756": {
+   "name": "Quinta do Vallado Sousão 2020",
+   "claude": {
+    "points": 93,
+    "vintage": 2020,
+    "note": "WA 93",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-31589": {
+   "name": "Julia Kemper Red Reserva 2011",
+   "claude": {
+    "points": 92,
+    "vintage": 2010,
+    "note": "Wine Anorak 95 for 2010",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-460790": {
+   "name": "Monte da Ravasqueira Vinha das Romãs 2021",
+   "claude": {
+    "points": 92,
+    "vintage": 2021,
+    "note": "WE 92 Editors Choice",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-538546": {
+   "name": "Herdade de São Miguel Reserva 2023",
+   "claude": {
+    "points": 91,
+    "vintage": 2023,
+    "note": "WE 92, single review",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-45794": {
+   "name": "Madre de Agua Vinha Velhas Tinto 2017",
+   "claude": {
+    "points": 92,
+    "vintage": 2017,
+    "note": "LCBO cites 93, critic unnamed",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-42453": {
+   "name": "Quinta da Foz Reserva 2021",
+   "claude": {
+    "points": null,
+    "vintage": 2021,
+    "note": "JS reviewed, score paywalled",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-294116": {
+   "name": "Quinta do Crasto Old Vines Reserva 2015",
+   "claude": {
+    "points": 94,
+    "vintage": 2015,
+    "note": "WA 94, WS 94",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-46076": {
+   "name": "Constantino Ramos Juca Tinto Vinho Verde 2023",
+   "claude": {
+    "points": null,
+    "vintage": 2023,
+    "note": "JancisRobinson reviewed, score paywalled",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-534271": {
+   "name": "Quadrus Reserva 2017",
+   "claude": {
+    "points": 91,
+    "vintage": 2017,
+    "note": "WineAlign critics 91-92",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-47181": {
+   "name": "Letra F Old Vines Field Blend Macanita Vinhos 2023",
+   "claude": {
+    "points": 93,
+    "vintage": 2023,
+    "note": "WA 93",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-67538": {
+   "name": "Prats & Symington Post Scriptum de Chryseia 2023",
+   "claude": {
+    "points": 92,
+    "vintage": 2023,
+    "note": "JS 93, WA 93, WE 92, WS 91",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-21430": {
+   "name": "Quinta da Pedra Escrita 2017",
+   "claude": {
+    "points": 91,
+    "vintage": 2017,
+    "note": "DWWA 97, MacLean 90",
+    "date": "2026-10-26",
+    "quick": true
+   }
   }
  }
 }
