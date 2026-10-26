@@ -1674,6 +1674,114 @@
     "note": "Halliday's Wine of the Year, pure Grenache",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-22": {
+   "name": "Cave Vinicole de Hunawihr Gewurztraminer Mühlforst 2017",
+   "claude": {
+    "points": 88,
+    "vintage": 2017,
+    "note": "Balanced, perfumed lieu-dit Gewurz; drink soon",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-23": {
+   "name": "Cave Vinicole de Hunawihr Gewurztraminer Reserve 2021",
+   "claude": {
+    "points": 88,
+    "vintage": 2021,
+    "note": "Bright, tangy off-dry Gewurz; prime",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-24": {
+   "name": "Cave Vinicole de Hunawihr Gewurztraminer Reserve 2020",
+   "claude": {
+    "points": 87,
+    "vintage": 2020,
+    "note": "Rich orange-blossom Gewurz; drink now",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-25": {
+   "name": "Cave Vinicole de Hunawihr Gewurztraminer Reserve 2019",
+   "claude": {
+    "points": 87,
+    "vintage": 2019,
+    "note": "Turkish-delight Gewurz, marmalade finish; drink",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-26": {
+   "name": "Cave Vinicole de Hunawihr Gewurztraminer Rosacker 2017",
+   "claude": {
+    "points": 90,
+    "vintage": 2017,
+    "note": "Classy grand cru Gewurz; open first",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-27": {
+   "name": "Cave Vinicole de Hunawihr Gewurztraminer Vieille Vigne 2021",
+   "claude": {
+    "points": 89,
+    "vintage": 2021,
+    "note": "Old-vine Gewurz, candied and lively",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-28": {
+   "name": "Cave Vinicole de Hunawihr Pinot Gris Mühlforst 2019",
+   "claude": {
+    "points": 89,
+    "vintage": 2019,
+    "note": "Elegant, complex lieu-dit Pinot Gris",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-29": {
+   "name": "Cave Vinicole de Hunawihr Pinot Gris Mühlforst 2018",
+   "claude": {
+    "points": 88,
+    "vintage": 2018,
+    "note": "Rich, spicy Pinot Gris; drink soon",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-30": {
+   "name": "Cave Vinicole de Hunawihr Pinot Gris Reserve 2019",
+   "claude": {
+    "points": 87,
+    "vintage": 2019,
+    "note": "Broad, racy Réserve Pinot Gris; drink",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-31": {
+   "name": "Cave Vinicole de Hunawihr Pinot Gris Rosacker 2020",
+   "claude": {
+    "points": 90,
+    "vintage": 2020,
+    "note": "Mineral grand cru Pinot Gris in prime",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-32": {
+   "name": "Cave Vinicole de Hunawihr Riesling Osterberg Grand Cru Osterberg 2018",
+   "claude": {
+    "points": 91,
+    "vintage": 2018,
+    "note": "Supple, mineral grand cru Riesling",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-33": {
+   "name": "Cave Vinicole de Hunawihr Riesling Vendanges Tardives 2015",
+   "claude": {
+    "points": 90,
+    "vintage": 2015,
+    "note": "Late-harvest Riesling from a sweet year",
+    "date": "2026-10-25"
+   }
   }
  }
 }
