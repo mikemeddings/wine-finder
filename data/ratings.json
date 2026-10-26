@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-25",
+ "updated": "2026-10-26",
  "ratings": {
   "bcl-220979": {
    "name": "Cabernet Sauvignon - Haras De Pirque Hussonet Reserva",
@@ -1817,6 +1817,16 @@
     "vintage": 2012,
     "note": "Voluptuous old-vine Rasteau blend, prime",
     "date": "2026-10-25"
+   }
+  },
+  "lcbo-694935": {
+   "name": "Quinta do Crasto Touriga Nacional 2020",
+   "claude": {
+    "points": 95,
+    "vintage": 2020,
+    "note": "Atkin 96, WE 94, WA 94",
+    "date": "2026-10-26",
+    "quick": true
    }
   }
  }
