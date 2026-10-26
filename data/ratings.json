@@ -1413,6 +1413,60 @@
     "note": "Rich, tannic Lirac in its prime",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-148": {
+   "name": "Domaine Pierre Usseglio & Fils Châteauneuf-du-Pape 2016",
+   "claude": {
+    "points": 93,
+    "vintage": 2016,
+    "note": "Rock-star classic cuvée from a great year",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-149": {
+   "name": "Domaine Pierre Usseglio & Fils Châteauneuf-du-Pape 2015",
+   "claude": {
+    "points": 91,
+    "vintage": 2015,
+    "note": "Soft, silky, forward; drink now",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-159": {
+   "name": "Alain Voge Cornas Les Vieilles Vignes 2013",
+   "claude": {
+    "points": 92,
+    "vintage": 2013,
+    "note": "Pure, old-school Cornas; drink soon",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-133": {
+   "name": "Famille Perrin / Perrin & Fils Gigondas Domaine du Clos des Tourelles 2015",
+   "claude": {
+    "points": 95,
+    "vintage": 2015,
+    "note": "Wow vintage of Tourelles, in its prime",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-51": {
+   "name": "Domaine Durieu Châteauneuf-du-Pape Cuvée Lucile Avril 2015",
+   "claude": {
+    "points": 91,
+    "vintage": 2015,
+    "note": "Old-vine Grenache from a ripe year",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-12": {
+   "name": "Domaine des Bosquets Gigondas La Colline... 2022",
+   "claude": {
+    "points": 94,
+    "vintage": 2022,
+    "note": "Powerful high-altitude Gigondas; give it time",
+    "date": "2026-10-25"
+   }
   }
  }
 }
