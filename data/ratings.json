@@ -1782,6 +1782,42 @@
     "note": "Late-harvest Riesling from a sweet year",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-103": {
+   "name": "Mitolo Shiraz Savitar 2018",
+   "claude": {
+    "points": 94,
+    "vintage": 2018,
+    "note": "Taut, red-fruited, age-worthy McLaren Shiraz",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-104": {
+   "name": "Mitolo Shiraz Savitar 2015",
+   "claude": {
+    "points": 92,
+    "vintage": 2015,
+    "note": "Elegant, earthy Shiraz now in prime",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-143": {
+   "name": "Stags' Leap Winery Cabernet Sauvignon Napa Valley 2016",
+   "claude": {
+    "points": 90,
+    "vintage": 2016,
+    "note": "Classic Napa Cabernet at its peak",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-74": {
+   "name": "Domaine Gourt de Mautens (Jérôme Bressy) Vaucluse Rouge 2012",
+   "claude": {
+    "points": 94,
+    "vintage": 2012,
+    "note": "Voluptuous old-vine Rasteau blend, prime",
+    "date": "2026-10-25"
+   }
   }
  }
 }
