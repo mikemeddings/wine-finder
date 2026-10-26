@@ -2068,6 +2068,256 @@
     "date": "2026-10-26",
     "quick": true
    }
+  },
+  "bcl-464388": {
+   "name": "Douro - Vila Regia",
+   "claude": {
+    "points": 87,
+    "vintage": 2021,
+    "note": "Falstaff 89 2021, Gismondi 86 older",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-89961": {
+   "name": "Esporão Alandra Red",
+   "claude": {
+    "points": 84,
+    "vintage": "NV",
+    "note": "Wine Spectator 85 NV",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-48146": {
+   "name": "Estreia Red 2024",
+   "claude": {
+    "points": null,
+    "vintage": 2024,
+    "note": "No reviews found",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-42826": {
+   "name": "Portal Muros De Vinha Red 2022",
+   "claude": {
+    "points": null,
+    "vintage": 2022,
+    "note": "No reviews found",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-43763": {
+   "name": "Rota N2 Red Blend",
+   "claude": {
+    "points": null,
+    "vintage": "NV",
+    "note": "No reviews found",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-32793": {
+   "name": "Red Blend Portugal",
+   "claude": {
+    "points": 88,
+    "vintage": 2023,
+    "note": "JS 88 2023, WE 90 2022 (likely match)",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-89912": {
+   "name": "Loios Red",
+   "claude": {
+    "points": 85,
+    "vintage": 2020,
+    "note": "WineAlign 85 2020, community says sweeter",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-43981": {
+   "name": "Agua Do Sol Vinho Regional Lisboa Red",
+   "claude": {
+    "points": null,
+    "vintage": "NV",
+    "note": "No reviews found",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-34812": {
+   "name": "Herdade Grande Monte Das Talhas Alentejo Tinto 2021",
+   "claude": {
+    "points": null,
+    "vintage": 2021,
+    "note": "No reviews found",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-534586": {
+   "name": "Lab Red Lisboa VR",
+   "claude": {
+    "points": 85,
+    "vintage": 2015,
+    "note": "Community 85 2015, Waitrose shoppers 4.5 of 5",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-532358": {
+   "name": "Julia Florista Red",
+   "claude": {
+    "points": 83,
+    "vintage": 2016,
+    "note": "Two community scores, 88 and 78, 2016",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-18998": {
+   "name": "Lisbon By Night Red Blend",
+   "claude": {
+    "points": 88,
+    "vintage": 2022,
+    "note": "MacLean 89 2022, community 87 2018",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-464388": {
+   "name": "Sogrape Vila Regia",
+   "claude": {
+    "points": 87,
+    "vintage": 2021,
+    "note": "Falstaff 89 2021, Gismondi 86 older",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-590364": {
+   "name": "Alianca Terra Boa Vinho Tinto Old Vines",
+   "claude": {
+    "points": 85,
+    "vintage": 2016,
+    "note": "WineAlign 85 2016 (Thurlow)",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-146449": {
+   "name": "Passion Of Portugal Red",
+   "claude": {
+    "points": 86,
+    "vintage": 2017,
+    "note": "WineAlign 87 2017, community 86-87",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-620658": {
+   "name": "Pedras Do Monte Cabernet Sauvignon Tinta Roriz, Lisboa VR",
+   "claude": {
+    "points": 85,
+    "vintage": 2016,
+    "note": "MacLean 86 2016, 84 2013",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-26804": {
+   "name": "Sanguinhal Cerejeiras Red 2022",
+   "claude": {
+    "points": null,
+    "vintage": 2022,
+    "note": "No reviews found",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-14977": {
+   "name": "Sogrape Grao Vasco Dao",
+   "claude": {
+    "points": 86,
+    "vintage": 2022,
+    "note": "Gismondi 86 2022, WineAlign 87 2017",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-25257": {
+   "name": "Guarda Rios Red 2022",
+   "claude": {
+    "points": 87,
+    "vintage": 2022,
+    "note": "WineAlign 87 2022, MacLean 88 2021",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-286195": {
+   "name": "JP Azeitão Red",
+   "claude": {
+    "points": 86,
+    "vintage": 2015,
+    "note": "WineAlign 87 2015, 86 2010",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-239046": {
+   "name": "Quatro Ventos Douro",
+   "claude": {
+    "points": 83,
+    "vintage": 2018,
+    "note": "Decanter WWA 83 2018 (Commended)",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-37997": {
+   "name": "Valdeus Premium Red 2021",
+   "claude": {
+    "points": null,
+    "vintage": 2021,
+    "note": "No reviews, only a 2023 silver medal",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-30868": {
+   "name": "Esporão Monte Velho Red",
+   "claude": {
+    "points": 86,
+    "vintage": 2019,
+    "note": "WE 86 2019, Falstaff 89 2014",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-158741": {
+   "name": "Alianca Bairrada Reserva",
+   "claude": {
+    "points": 86,
+    "vintage": 2018,
+    "note": "WineAlign 87 2018, 85 2008",
+    "date": "2026-10-26",
+    "quick": true
+   }
+  },
+  "lcbo-522292": {
+   "name": "Altivo Red 2019",
+   "claude": {
+    "points": 88,
+    "vintage": 2016,
+    "note": "Sommelier Steeves 91 2016, 92 2015",
+    "date": "2026-10-26",
+    "quick": true
+   }
   }
  }
 }
