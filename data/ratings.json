@@ -1350,6 +1350,69 @@
     "note": "Fabulous, absorbed oak; supple and long",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-113": {
+   "name": "Domaine de la Mordorée Châteauneuf-du-Pape Plume du Peintre 2019",
+   "claude": {
+    "points": 97,
+    "vintage": 2019,
+    "note": "Monumental, pure Grenache; cellar it",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-114": {
+   "name": "Domaine de la Mordorée Lirac Cuvée de la Reine des Bois 2020",
+   "claude": {
+    "points": 93,
+    "vintage": 2020,
+    "note": "Silky, captivating Lirac; ages well",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-115": {
+   "name": "Domaine de la Mordorée Lirac Cuvée de la Reine des Bois 2019",
+   "claude": {
+    "points": 93,
+    "vintage": 2019,
+    "note": "Fresh, structured Lirac, rivals Châteauneuf",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-116": {
+   "name": "Domaine de la Mordorée Lirac Cuvée de la Reine des Bois 2018",
+   "claude": {
+    "points": 92,
+    "vintage": 2018,
+    "note": "Velvety red-fruited Lirac, in its prime",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-117": {
+   "name": "Domaine de la Mordorée Lirac Cuvée de la Reine des Bois 2017",
+   "claude": {
+    "points": 92,
+    "vintage": 2017,
+    "note": "Sexy, opulent Lirac; drink now",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-118": {
+   "name": "Domaine de la Mordorée Lirac Cuvée de la Reine des Bois 2016",
+   "claude": {
+    "points": 94,
+    "vintage": 2016,
+    "note": "Pure, brilliant Lirac; drink soon",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-119": {
+   "name": "Domaine de la Mordorée Lirac Cuvée de la Reine des Bois 2015",
+   "claude": {
+    "points": 92,
+    "vintage": 2015,
+    "note": "Rich, tannic Lirac in its prime",
+    "date": "2026-10-25"
+   }
   }
  }
 }
