@@ -684,6 +684,24 @@
     "note": "Advocate and Vinous 100 now entering prime",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-162": {
+   "name": "Wynns Coonawarra Estate Cabernet Sauvignon John Riddoch 2012",
+   "claude": {
+    "points": 96,
+    "vintage": 2012,
+    "note": "Mattinson gold every year Real Review 2",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-128": {
+   "name": "La Pèira Terrasses du Larzac La Pèira 2016",
+   "claude": {
+    "points": 96,
+    "vintage": 2016,
+    "note": "Dunnuck 97 to 99 Robinson 17.5",
+    "date": "2026-10-25"
+   }
   }
  }
 }
