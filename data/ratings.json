@@ -1530,6 +1530,51 @@
     "note": "Mature volcanic Aglianico, tar and cherry",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-84": {
+   "name": "Les Halos de Jupiter Châteauneuf-du-Pape Adrastee 2016",
+   "claude": {
+    "points": 95,
+    "vintage": 2016,
+    "note": "Lush century-old La Crau Grenache, ready",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-142": {
+   "name": "Domaine des Sénéchaux Châteauneuf-du-Pape 2016",
+   "claude": {
+    "points": 93,
+    "vintage": 2016,
+    "note": "Rich, spicy Châteauneuf just opening",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-43": {
+   "name": "Clos des Papes Châteauneuf-du-Pape Blanc 2014",
+   "claude": {
+    "points": 93,
+    "vintage": 2014,
+    "note": "Racy, mineral white built to age",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-94": {
+   "name": "Paul Jaboulet Aîné Crozes-Hermitage Domaine de Thalabert 2015",
+   "claude": {
+    "points": 95,
+    "vintage": 2015,
+    "note": "Finest Thalabert yet, savoury and seamless",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-16": {
+   "name": "Domaine des Bosquets Gigondas Le Plateau... 2022",
+   "claude": {
+    "points": 93,
+    "vintage": 2022,
+    "note": "Old-vine Mourvèdre Gigondas; cellar it",
+    "date": "2026-10-25"
+   }
   }
  }
 }
