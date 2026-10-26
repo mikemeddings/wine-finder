@@ -810,6 +810,60 @@
     "note": "Powerful and fresh; cellar to 2029",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-81": {
+   "name": "Domaine Grand Veneur Châteauneuf-du-Pape Vieilles Vignes 2013",
+   "claude": {
+    "points": 94,
+    "vintage": 2013,
+    "note": "Mourvèdre-led star of a short vintage",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-82": {
+   "name": "Domaine Grand Veneur Châteauneuf-du-Pape Vieilles Vignes 2012",
+   "claude": {
+    "points": 93,
+    "vintage": 2012,
+    "note": "Powerful, polished; drink up now",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-77": {
+   "name": "Domaine Grand Veneur Châteauneuf-du-Pape Les Origines 2010",
+   "claude": {
+    "points": 93,
+    "vintage": 2010,
+    "note": "Modern, mature, fair-priced blockbuster",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-126": {
+   "name": "Domaine du Pégau Châteauneuf-du-Pape Cuvée Réservée 2017",
+   "claude": {
+    "points": 95,
+    "vintage": 2017,
+    "note": "Classic old-school Pégau, just opening",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-6": {
+   "name": "Domaine la Barroche Châteauneuf-du-Pape Pure Rouge 2015",
+   "claude": {
+    "points": 94,
+    "vintage": 2015,
+    "note": "Perfumed sand-grown Grenache, ripe year",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-13": {
+   "name": "Domaine des Bosquets Gigondas La Colline... 2020",
+   "claude": {
+    "points": 95,
+    "vintage": 2020,
+    "note": "Magical high-altitude Gigondas, long life",
+    "date": "2026-10-25"
+   }
   }
  }
 }
