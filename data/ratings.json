@@ -1467,6 +1467,69 @@
     "note": "Powerful high-altitude Gigondas; give it time",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-165": {
+   "name": "Zenato Amarone della Valpolicella Classico 2017",
+   "claude": {
+    "points": 92,
+    "vintage": 2017,
+    "note": "Warm, velvety classic Amarone in its prime",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-166": {
+   "name": "Zenato Amarone della Valpolicella Classico 2013",
+   "claude": {
+    "points": 90,
+    "vintage": 2013,
+    "note": "Mature Amarone; drink soon",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-167": {
+   "name": "Zenato Amarone della Valpolicella Classico 2007",
+   "claude": {
+    "points": 89,
+    "vintage": 2007,
+    "note": "Fully mature Amarone; drink now",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-168": {
+   "name": "Zenato Amarone della Valpolicella Classico Sergio Zenato Riserva 2012",
+   "claude": {
+    "points": 94,
+    "vintage": 2012,
+    "note": "Layered, harmonious Riserva with years ahead",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-141": {
+   "name": "Podere Sapaio Sapaio 2016",
+   "claude": {
+    "points": 94,
+    "vintage": 2016,
+    "note": "Polished, seamless coastal Tuscan blend",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-57": {
+   "name": "Fuligni Brunello di Montalcino 2018",
+   "claude": {
+    "points": 95,
+    "vintage": 2018,
+    "note": "Elegant, silky Brunello; hard to put down",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-125": {
+   "name": "Paternoster Aglianico del Vulture Don Anselmo 2010",
+   "claude": {
+    "points": 91,
+    "vintage": 2010,
+    "note": "Mature volcanic Aglianico, tar and cherry",
+    "date": "2026-10-25"
+   }
   }
  }
 }
