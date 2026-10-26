@@ -41,7 +41,7 @@ def test_sitemap_keeps_english_wine_pages_only():
 def test_a_wine_page():
     r = W.parse_page(ROSE, URL, "2026-07-27", 1.7)
     assert (r["id"], r["name"], r["producer"], r["type"], r["vintage"]) == (
-        "w365-100068", "Ancora Rosé VdP Suisse", "Cave de Jolimont", "Rosé", 2025)
+        "wsh-100068", "Ancora Rosé VdP Suisse", "Cave de Jolimont", "Rosé", 2025)
     assert (r["region"], r["grape"], r["country"], r["size_ml"]) == ("Waadt - La Côte", "Gamay", "Switzerland", 750)
     assert (r["price_local"], r["price_was"], r["price"], r["vat"], r["currency"]) == (13.2, 15.5, 22.44, "incl", "CHF")
 
@@ -77,7 +77,7 @@ def test_unchanged_pages_are_not_read_again_but_get_todays_rate():
 
     previous = [W.parse_page(ROSE, URL, "2026-07-27T08:00:00Z", 1.7)]
     records, extras = W.fetch(previous, get=get, delay=0, log=lambda *a: None)
-    assert [r["id"] for r in records] == ["w365-100068"]
+    assert [r["id"] for r in records] == ["wsh-100068"]
     assert records[0]["price"] == 26.4  # CHF 13.20 at the new rate
     assert URL not in calls  # unchanged page: not read again
     assert extras["fx"]["CAD_per_CHF"] == 2.0

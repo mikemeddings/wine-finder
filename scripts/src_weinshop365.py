@@ -138,7 +138,7 @@ def parse_page(page, url, lastmod, rate):
     region, grape = facts.get("Region") or None, facts.get("Grape varieties") or None
     sku = str(product.get("sku") or facts.get("Article number") or url.rsplit("-", 1)[-1])
     return {
-        "id": f"w365-{sku}",
+        "id": f"wsh-{sku}",
         "source": SOURCE,
         "name": html.unescape(product.get("name", "")).strip(),
         "name_raw": product.get("name", ""),

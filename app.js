@@ -733,6 +733,90 @@ Then write the link as the largest heading (one #), itself the link, exactly in 
 - End with one more horizontal line (---), so the save link stands apart from the buttons under the answer.
 CODE is the wine's code in square brackets in my list; POINTS is your rating (leave it empty if you found no reviews); VINTAGE is the vintage your rating is for, or NV; NOTE is up to eight words, with + instead of spaces and no semicolons or tildes.`;
 
+// "Sort top 25 using Claude": a quick review score for each wine, no write-up, so a
+// store's list can be sorted. Claude ends with a #scores= link (read by parseSaveHash).
+const SCORE_BATCH = 25;
+const SCORE_TEMPLATE = `I'd like a quick review score for each of these wines, so I can sort a shop's list by what reviewers say. {ABOUT_ME}
+
+Here are the wines, with the vintage, where each is sold and the price, and a code in square brackets:
+{WINES}
+
+For each wine, please:
+- Search the web for professional reviews and community notes (for example Wine Enthusiast, Decanter, James Suckling, Vinous, Jancis Robinson, CellarTracker).
+- Give your own overall score out of 100, based on what the reviewers say (your judgement, not a copy of any one critic's score), and the vintage it applies to. If you only find reviews of another vintage, you may use them, but give that vintage.
+- In up to eight words, say what your score rests on, for example: WE 92, Decanter 90 for 2021.
+- If you can't find any reviews, say so plainly rather than estimating.
+
+Keep the answer short: one line per wine, in my order, as: number. wine — score (vintage) — what it rests on.
+
+Last of all, after a horizontal line (---), give me a link to save the scores, as the largest heading (one #), itself the link, exactly in this form, one entry per wine joined by semicolons:
+# [💾 Save these scores to my Wine Finder]({BASE}#scores=CODE~POINTS~VINTAGE~NOTE;CODE~POINTS~VINTAGE~NOTE)
+CODE is the wine's code in square brackets in my list; POINTS is your score (leave it empty if you found no reviews); VINTAGE is the vintage your score is for, or NV; NOTE is what it rests on, up to eight words, with + instead of spaces and no semicolons or tildes.`;
+
+let scorePicks = [];
+
+// Already scored, in any vintage and at any store: Claude's research, an earlier quick
+// score, or "no reviews found" from an earlier search. These aren't looked up again.
+const hasClaudeRating = (w) => !!(ratingOf(w.id).claude || frOf(w.id).claude ||
+  relatedRatings(w).some((r) => r.f.claude));
+
+function scoreLine(w, i) {
+  return `${i + 1}. ${w.name}${w.vintage ? `, ${w.vintage}` : ""} — ${sourceLabel(w.source)}, ${priceStr(w)} [${w.id}]`;
+}
+
+function scorePrompt() {
+  const about = String(storeGet(STORE.aboutMe, "") || "").trim();
+  return SCORE_TEMPLATE.replace("{ABOUT_ME}", about)
+    .replace("{BASE}", location.href.split("#")[0].split("?")[0])
+    .replace("{WINES}", scorePicks.map(scoreLine).join("\n"))
+    .replace(/[ \t]+\n/g, "\n");
+}
+
+// Step 1: pick the first 25 unscored wines of the list as it's sorted now, and explain.
+function openScoreDialog() {
+  const list = lastResults.filter((w) => w.kind !== "typed");
+  let skipped = 0;
+  scorePicks = [];
+  for (const w of list) {
+    if (scorePicks.length >= SCORE_BATCH) break;
+    if (hasClaudeRating(w)) skipped++; else scorePicks.push(w);
+  }
+  $("score-result").hidden = true;
+  $("score-go").textContent = "Open Claude with my question";
+  if (!scorePicks.length) {
+    $("score-intro").textContent = list.length
+      ? "Every wine at the top of this list already has a Claude score. Change the filters or the order to score others."
+      : "There are no wines in the list. Choose some with the filters first.";
+    $("score-list").innerHTML = "";
+    $("score-steps").hidden = $("score-go").hidden = true;
+  } else {
+    $("score-intro").innerHTML = `Claude will look up reviews for the first <strong>${scorePicks.length}</strong> wines in your list that don't have a Claude score yet` +
+      (skipped ? ` (${skipped} already scored ${skipped === 1 ? "was" : "were"} skipped)` : "") +
+      `, and give each a score out of 100. The scores are kept and shared with the family, so nobody looks them up twice.`;
+    $("score-list").innerHTML = scorePicks.map((w) => `<li>${esc(w.name)}${w.vintage ? ` <span class="hint">${esc(String(w.vintage))}</span>` : ""}</li>`).join("");
+    $("score-steps").hidden = $("score-go").hidden = false;
+  }
+  $("score-text").value = scorePicks.length ? scorePrompt() : "";
+  $("score-dialog").showModal?.();
+}
+
+// Step 2: open Claude with the question (copied too, as a backup).
+async function goScoreClaude() {
+  const prompt = scorePrompt();
+  const { url, prefilled } = claudeLink(prompt);
+  let copied = false, win;
+  const open = () => { win = window.open(url, "_blank"); if (win) win.opener = null; };
+  if (prefilled) { open(); copied = await copyText(prompt); } else { copied = await copyText(prompt); open(); }
+  const res = $("score-result");
+  res.hidden = false;
+  const then = ` When it's done (a few minutes), click <strong>💾 Save these scores to my Wine Finder</strong> at the end of its answer.`;
+  res.innerHTML = !win ? `Your browser stopped the new tab from opening. Please press the button again, or <a href="${esc(url)}" target="_blank" rel="noopener">open Claude here</a>.`
+    : prefilled ? `Claude is open in a new tab. Go to it, check the question, and ${SEND}.${then}`
+    : copied ? `Claude is open in a new tab. In it, ${PASTE}.${then}`
+    : `Claude is open in a new tab. Please copy the question from the box below, then ${PASTE}.${then}`;
+  $("score-go").textContent = "Open Claude again";
+}
+
 function claudePrompt(mode = claudeMode) {
   const about = String(storeGet(STORE.aboutMe, "") || "").trim();
   return (mode === "rank" ? RANK_TEMPLATE : PROMPT_TEMPLATE)
@@ -1349,7 +1433,7 @@ function ratingsHtml(w) {
   const same = (a, b) => b && JSON.stringify(a) === JSON.stringify(b);
   if (r.claude && !same(r.claude, f.claude)) {
     const c = r.claude;
-    parts.push(`<span class="rating rating-claude">Claude's rating <strong>${c.points ?? "no reviews found"}</strong>` +
+    parts.push(`<span class="rating rating-claude">${c.quick ? "CR" : "Claude's rating"} <strong>${c.points ?? "no reviews found"}</strong>` +
       `${c.vintage ? ` (${esc(String(c.vintage))})` : ""}${c.note ? ` · ${esc(c.note)}` : ""}` +
       ` <span class="rating-date">${esc(shortDate(c.date))}</span></span>`);
   }
@@ -1417,18 +1501,22 @@ function clearMyRating(id) {
   refreshRatedViews();
 }
 
-// The link Claude makes: <page>#save=CODE~POINTS~VINTAGE~NOTE;CODE~...
+// Every wine code a link may carry: a store listing, a family cellar wine, or one added by hand or by name.
+const WINE_CODE = /^(bcl|bsw|zyn|luc|wsh|lcbo|cellar|manual|typed)-[\w.-]{1,80}$/;
+
+// The link Claude makes: <page>#save=CODE~POINTS~VINTAGE~NOTE;CODE~... (#scores= for quick scores)
 // It comes from Claude's answer, so every field is checked and nothing is saved
 // until the person presses "Save these ratings".
 function parseSaveHash(hash) {
-  const m = /^#save=([\s\S]*)$/.exec(hash || "");
+  const m = /^#(save|scores)=([\s\S]*)$/.exec(hash || "");
   if (!m) return parseShareHash(hash);
-  let raw = m[1].replace(/\+/g, " ");
+  const quick = m[1] === "scores"; // quick scores: no write-up to keep
+  let raw = m[2].replace(/\+/g, " ");
   try { raw = decodeURIComponent(raw); } catch { /* keep as is */ }
   const items = [];
   for (const part of raw.split(";")) {
     const [code = "", pts = "", vin = "", ...rest] = part.split("~").map((s) => s.trim());
-    if (!/^(bcl|bsw|zyn|cellar|manual|typed)-[\w.-]{1,80}$/.test(code)) continue;
+    if (!WINE_CODE.test(code)) continue;
     const n = parseInt(pts, 10);
     const points = /^\d{2,3}$/.test(pts) && n >= 50 && n <= 100 ? n : null;
     if (pts && points === null) continue; // a score we can't trust: skip rather than guess
@@ -1437,6 +1525,7 @@ function parseSaveHash(hash) {
       points,
       vintage: /^(19|20)\d\d$/.test(vin) ? +vin : /^nv$/i.test(vin) ? "NV" : null,
       note: rest.join(" ").replace(/\s+/g, " ").slice(0, 80) || null,
+      ...(quick ? { quick: true } : {}),
     });
   }
   return items;
@@ -1452,7 +1541,7 @@ function parseShareHash(hash) {
   const items = [];
   for (const part of raw.split(";")) {
     const [code = "", cp = "", vin = "", cnote = "", mp = "", mnote = "", name = ""] = part.split("~").map((s) => s.trim());
-    if (!/^(bcl|bsw|zyn|cellar|manual|typed)-[\w.-]{1,80}$/.test(code)) continue;
+    if (!WINE_CODE.test(code)) continue;
     const claudeOk = cp === "" || score(cp) !== null, mine = score(mp);
     if (!claudeOk) continue;
     const hasClaude = cp !== "" || cnote !== "" || vin !== "";
@@ -1480,13 +1569,13 @@ function offerSavedRatings() {
   pendingHash = location.hash;
   history.replaceState(history.state, "", location.pathname + location.search); // don't offer it again on reload
   pendingSave = items;
-  const shared = items.some((it) => it.shared);
+  const shared = items.some((it) => it.shared), quick = items.some((it) => it.quick);
   const nameOf = (it) => findWine(it.id)?.name || (sharedIdOf(it.id) && findWine(sharedIdOf(it.id))?.name) || ratingOf(it.id).name || it.name;
   const n = `${items.length} ${items.length === 1 ? "wine" : "wines"}`;
   $("save-q").textContent = !items.length ? "This link didn't contain any ratings that could be read."
-    : shared ? `Ratings emailed from family for ${n}. Save them?` : `Save Claude's ratings for ${n}?`;
+    : shared ? `Ratings emailed from family for ${n}. Save them?` : quick ? `Save Claude's scores for ${n}?` : `Save Claude's ratings for ${n}?`;
   $("save-list").innerHTML = items.map((it) => `<li><strong>${esc(nameOf(it) || `Wine ${it.id} (not found on this computer)`)}</strong>` +
-    (it.claude === false ? "" : `<br>Claude's rating: <strong>${it.points ?? "no reviews found"}</strong>${it.vintage ? ` (${esc(String(it.vintage))})` : ""}${it.note ? ` · ${esc(it.note)}` : ""}`) +
+    (it.claude === false ? "" : `<br>Claude's ${it.quick ? "score" : "rating"}: <strong>${it.points ?? "no reviews found"}</strong>${it.vintage ? ` (${esc(String(it.vintage))})` : ""}${it.note ? ` · ${esc(it.note)}` : ""}`) +
     (it.mine ? `<br>Family member's own rating: <strong>${it.mine.points}</strong>${it.mine.note ? ` · ${esc(it.mine.note)}` : ""}` : "") +
     `</li>`).join("");
   $("save-help").hidden = items.length > 0;
@@ -1495,7 +1584,7 @@ function offerSavedRatings() {
   $("save-yes").dataset.done = "";
   $("save-no").hidden = false;
   $("save-result").innerHTML = "";
-  $("save-writeup").hidden = items.length === 0 || shared;
+  $("save-writeup").hidden = items.length === 0 || shared || quick;
   $("save-writeup-text").value = "";
   writeupText = "";
   $("save-name-row").hidden = !!myName();
@@ -1524,7 +1613,7 @@ async function confirmSavedRatings() {
     const name = findWine(it.id)?.name || real(ratingOf(it.id).name) || it.name || real(frOf(it.id).name) ||
       (it.id.startsWith("typed-") ? it.id.slice(6).replace(/-/g, " ") : it.id); // a typed wine's code is its name
     const r = { ...ratingOf(it.id), name };
-    const claude = it.claude !== false ? { points: it.points, vintage: it.vintage, note: it.note, date: today } : null;
+    const claude = it.claude !== false ? { points: it.points, vintage: it.vintage, note: it.note, date: today, ...(it.quick ? { quick: true } : {}) } : null;
     const mine = it.mine ? { ...it.mine, date: today } : null;
     if (claude) r.claude = claude;
     if (mine) r.mine = mine;
@@ -1537,7 +1626,13 @@ async function confirmSavedRatings() {
   storeSet(STORE.notes, notes);
   pendingSave = null;
   const nNotes = Object.keys(parts).length;
-  const gotText = nNotes ? `Claude's write-up kept for ${nNotes} ${nNotes === 1 ? "wine" : "wines"}.` : "No write-up was found, so only the ratings were saved.";
+  const quick = items.some((it) => it.quick);
+  const gotText = quick ? "Your list is now sorted by Claude's score, then price." : nNotes ? `Claude's write-up kept for ${nNotes} ${nNotes === 1 ? "wine" : "wines"}.` : "No write-up was found, so only the ratings were saved.";
+  if (quick) { // show the scored list straight away: best scored first, then by price
+    state.sorts = ["claude-desc", "price-asc", ""];
+    state.shown = PAGE_SIZE;
+    renderSorts();
+  }
   $("save-yes").disabled = true;
   $("save-result").textContent = "Saving…";
   try {
@@ -1647,7 +1742,7 @@ const claudeScore = (w) => ratingOf(w.id).claude?.points ?? frOf(w.id).claude?.p
 
 function frHtml(w) {
   const f = frOf(w.id), parts = [];
-  if (f.claude) parts.push(`<span class="rating rating-fr">FR <strong>${f.claude.points ?? "no reviews"}</strong> (Claude)` +
+  if (f.claude) parts.push(`<span class="rating rating-fr">${f.claude.quick ? "CR" : "FR"} <strong>${f.claude.points ?? "no reviews"}</strong> (Claude)` +
     `${f.claude.vintage ? ` · ${esc(String(f.claude.vintage))}` : ""}${f.claude.note ? ` · ${esc(f.claude.note)}` : ""}</span>`);
   if (f.family) parts.push(`<span class="rating rating-fr">FR <strong>${f.family.points}</strong> (family)` +
     `${f.family.note ? ` · ${esc(f.family.note)}` : ""}</span>`);
@@ -2043,13 +2138,14 @@ function relatedRatings(w) {
     seen.add(id);
     out.push({ f: r, label: `researched as “${r.name}”` });
   }
-  // ratings given to a store's listing of the same wine (BC Liquor, BSW, ZYN)
-  const STORE_OF = { bcl: "BC Liquor - LDB", bsw: "BSW Liquor", zyn: "ZYN" };
+  // ratings given to a store's listing of the same wine, at any store
+  const STORE_OF = { bcl: "BC Liquor - LDB", bsw: "BSW Liquor", zyn: "ZYN", luc: "Lucullus (Switzerland)",
+    wsh: "Weinshop365 (Switzerland)", lcbo: "LCBO" };
   for (const [id, r] of Object.entries(familyRatings)) {
     const store = STORE_OF[id.split("-")[0]];
     if (seen.has(id) || !store || !r.name || !sameWineName(w.name, r.name)) continue;
     seen.add(id);
-    out.push({ f: r, label: `rated as “${r.name}” (${store})` });
+    out.push({ f: r, label: `rated as “${r.name}” at ${store}` });
   }
   return out;
 }
@@ -2059,7 +2155,7 @@ function familyLinksHtml(w) {
     `${m.vintages.length ? ` (${esc(m.vintages.join(", "))})` : ""}</span>`);
   const rel = relatedRatings(w).map(({ f, label }) => {
     const c = f.claude, fam = f.family;
-    return `<span class="rating rating-fr rating-related">FR <strong>${fam ? fam.points : c?.points ?? "no reviews"}</strong> ` +
+    return `<span class="rating rating-fr rating-related">${!fam && c?.quick ? "CR" : "FR"} <strong>${fam ? fam.points : c?.points ?? "no reviews"}</strong> ` +
       `(${fam ? "family" : "Claude"})${!fam && c?.vintage ? ` · ${esc(String(c.vintage))}` : ""} · ${esc(label)}</span>`;
   });
   return badges.length || rel.length ? `<p class="wine-detail family-links">${[...badges, ...rel].join(" ")}</p>` : "";
@@ -2892,7 +2988,7 @@ document.addEventListener("visibilitychange", () => { if (document.hidden) saveP
 async function restorePlace() {
   const nav = performance.getEntriesByType?.("navigation")?.[0]?.type;
   if (nav !== "back_forward" && nav !== "reload") return; // a fresh visit starts clean
-  if (/^#(save|share|dine)=/.test(location.hash)) return;  // a link from Claude has its own job
+  if (/^#(save|scores|share|dine)=/.test(location.hash)) return;  // a link from Claude has its own job
   let saved;
   try { saved = JSON.parse(sessionStorage.getItem("wf.place") || "null"); } catch { saved = null; }
   if (!saved || !saved.state) return;
@@ -3068,6 +3164,9 @@ function wireEvents() {
     else if (t.dataset.action === "hide-notice") closeClaudeSteps();
     else if (t.dataset.action === "hits-in-list") showHitsInList();
     else if (t.dataset.action === "lcbo-unlock") unlockLcbo($("lcbo-code").value);
+    else if (t.dataset.action === "score-claude") openScoreDialog();
+    else if (t.dataset.action === "score-go") goScoreClaude();
+    else if (t.dataset.action === "score-close") $("score-dialog").close();
     else if (t.dataset.typed != null) {
       if (!addTypedWine(t.dataset.typed)) toggleShortlist(typedId(t.dataset.typed)); // pressed again: take it off
       const box = t.closest(".elsewhere");
@@ -3497,7 +3596,7 @@ async function init() {
   renderAll();
   updatePickCounts();
   if (!history.state?.wfView) history.replaceState({ wfView: currentView(), y: 0 }, "");
-  if (/^#(save|share|dine)=/.test(location.hash)) announceNewerTab(); // older Wine Finder tabs step aside
+  if (/^#(save|scores|share|dine)=/.test(location.hash)) announceNewerTab(); // older Wine Finder tabs step aside
   offerSavedRatings();
   unlockFromLink();
   offerDinePicks();

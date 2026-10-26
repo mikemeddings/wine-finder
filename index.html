@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-26.4">
+<link rel="stylesheet" href="app.css?v=2026-10-26.5">
 </head>
 <body>
 <header class="top">
@@ -135,6 +135,7 @@
 
   <div class="sl-bar" id="sl-bar">
     <span>Short List for Claude: <strong class="sl-count">0</strong> <span class="sl-summary" id="sl-summary"></span></span>
+    <button type="button" class="btn btn-score" data-action="score-claude">Sort top 25 using Claude</button>
     <button type="button" class="btn btn-primary" data-view="shortlist">See the list and ask Claude</button>
   </div>
 </main>
@@ -531,6 +532,23 @@
   </div>
 </dialog>
 
+<dialog id="score-dialog" class="dialog dialog-wide" aria-labelledby="score-title">
+  <h2 id="score-title" class="notes-title">Sort the top 25 using Claude</h2>
+  <p id="score-intro"></p>
+  <ol id="score-list" class="score-list"></ol>
+  <ol id="score-steps" class="steps">
+    <li>Claude opens in a new tab with the question <strong>already typed in</strong>. (It shows a “Use caution” note for every question that arrives by link: this one comes from your Wine Finder, so it's fine.)</li>
+    <li>Press <strong>Enter</strong> to send it. Claude takes a few minutes to look up the reviews.</li>
+    <li>At the end of its answer, click <strong>💾 Save these scores to my Wine Finder</strong>. Your list comes back sorted by Claude's score, then price.</li>
+  </ol>
+  <p id="score-result" class="status-box" role="status" hidden></p>
+  <details><summary>See the question</summary><textarea id="score-text" readonly></textarea></details>
+  <div class="dialog-actions">
+    <button type="button" class="btn btn-big btn-claude" id="score-go" data-action="score-go">Open Claude with my question</button>
+    <button type="button" class="linklike" data-action="score-close">Close</button>
+  </div>
+</dialog>
+
 <dialog id="dine-dialog" class="dialog dialog-wide" aria-labelledby="dine-title">
   <h2 id="dine-title" class="notes-title" tabindex="-1">🍷 Tonight's picks</h2>
   <p id="dine-when" class="note-meta"></p>
@@ -573,6 +591,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-26.4"></script>
+<script src="app.js?v=2026-10-26.5"></script>
 </body>
 </html>
