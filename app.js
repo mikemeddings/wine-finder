@@ -100,12 +100,14 @@ const SWEET_BANDS = [
   { label: "Medium-sweet", lo: 5, hi: 7 },
   { label: "Sweet", lo: 8, hi: 10 },
 ];
-const ALL_SOURCES = ["BC Liquor", "BSW Liquor", "ZYN", "Lucullus", "LCBO"];
+const ALL_SOURCES = ["BC Liquor", "BSW Liquor", "ZYN", "Lucullus", "Weinshop365", "LCBO"];
 // How each source is named on screen, in the shortlist and in the Claude question.
-const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB", Lucullus: "Lucullus (Switzerland)" };
-const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn", Lucullus: "luc", LCBO: "lcbo" };
+const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB", Lucullus: "Lucullus (Switzerland)", Weinshop365: "Weinshop365 (Switzerland)" };
+const SOURCE_CLASS = { "BC Liquor": "bcl", "BSW Liquor": "bsw", ZYN: "zyn", Lucullus: "luc", Weinshop365: "w365", LCBO: "lcbo" };
 const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 100;
+// A standard bottle: 750 ml, or 700 ml as Swiss wines (Vaud, Valais) often come.
+const STANDARD_ML = new Set([700, 750]);
 const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk", dineHistory: "wf.dineHistory", lcbo: "wf.lcbo" };
 
 // ---- Helpers -----------------------------------------------------------------
@@ -116,8 +118,8 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
 const fold = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 const money = (n) => "$" + Number(n).toFixed(2);
 // Swiss prices: the shop's own price in francs, then roughly what that is in Canadian dollars
-// (w.price, which the price filter and sorting use). Excl. VAT, as Lucullus publishes it.
-const vatNote = (w) => (w.vat === "excl" ? " excl. VAT" : "");
+// (w.price, which the price filter and sorting use). VAT as each shop publishes it.
+const vatNote = (w) => (w.vat === "excl" ? " excl. VAT" : w.vat === "incl" ? " incl. VAT" : "");
 const priceStr = (w) => (w.currency ? `${w.currency} ${Number(w.price_local).toFixed(2)}${vatNote(w)} (≈ ${money(w.price)})` : money(w.price));
 const priceHtml = (w) => (w.currency
   ? `${esc(w.currency)} ${Number(w.price_local).toFixed(2)} <span class="price-cad">≈ ${money(w.price)}</span>`
@@ -185,6 +187,7 @@ const STORE_GROUPS = [
   // so its button opens the home page and Basil searches there.
   { place: "Switzerland", note: "Prices in Swiss francs. Mövenpick opens on its home page (in French): search there.", stores: [
     { name: "Lucullus (Stans)", url: "https://www.lucullus.ch/en/search?search={q}" },
+    { name: "Weinshop365", url: "https://weinshop365.ch/en/suche?q={q}" },
     { name: "Mövenpick Wein (Geneva shops)", url: "https://www.moevenpick-wein.com/fr/" },
     { name: "Flaschenpost", url: "https://www.flaschenpost.ch/en/wine?searchParam={q}" },
   ] },
@@ -367,7 +370,7 @@ function matches(w, skip, st = state) {
   if (skip !== "type" && st.types.size && !st.types.has(w.type)) return false;
   if (st.priceFrom != null && w.price != null && w.price < st.priceFrom) return false;
   if (st.priceTo != null && w.price != null && w.price > st.priceTo) return false;
-  if (st.bottleOnly && w.size_ml !== 750) return false;
+  if (st.bottleOnly && !STANDARD_ML.has(w.size_ml)) return false;
   if (st.newOnly && !w.new_since_last) return false;
   if (st.topOnly && !w.retailer_scores) return false;
   if (st.minAge && !(w.vintage && w.vintage <= THIS_YEAR - st.minAge)) return false;
@@ -568,7 +571,8 @@ function wineCard(w) {
   const detail = [sizeText(w), w.abv != null ? `${w.abv}% alcohol` : null, sweetText(w)].filter(Boolean).map(esc).join(" · ");
   const badges = sourceBadge(w.source) + (w.new_since_last ? `<span class="badge badge-new">New</span>` : "");
   const calgary = CALGARY.has(w.source) ? `<p class="wine-detail">Calgary retailer — check shipping to BC.</p>` : "";
-  const lcbo = w.source === "LCBO" ? lcboDetailHtml(w) : w.source === "Lucullus" ? lucullusDetailHtml(w) : "";
+  const lcbo = w.source === "LCBO" ? lcboDetailHtml(w) : w.source === "Lucullus" ? lucullusDetailHtml(w)
+    : w.source === "Weinshop365" ? weinshop365DetailHtml(w) : "";
   const scores = w.retailer_scores ? `<p class="wine-detail"><span class="badge badge-score">★ ${esc(w.retailer_scores)}</span></p>` : "";
   const retailer = w.url ? `<a class="btn ext" href="${esc(w.url)}" target="_blank" rel="noopener">${esc(sourceLabel(w.source))} page</a>` : "";
   return `<article class="wine wine-${esc(w.type)}${on ? " on-list" : ""}">
@@ -605,7 +609,7 @@ function renderResults() {
   else if (state.priceFrom != null) parts.push(`${money(state.priceFrom)} and up`);
   if (state.sweet.size) parts.push([...state.sweet].join(", ") + (state.notRated ? " (and not rated)" : ""));
   else if (!state.notRated) parts.push("sweetness rated only");
-  parts.push(state.bottleOnly ? "750 ml bottles" : "all sizes");
+  parts.push(state.bottleOnly ? "standard bottles" : "all sizes");
   if (state.newOnly) parts.push("new on the latest BC list");
   if (state.topOnly) parts.push("ZYN's 90+ under $35 list");
   if (state.minAge) parts.push(`${state.minAge} years or older`);
@@ -3248,7 +3252,7 @@ function renderFooter() {
   });
   const lcbo = lcboInfo();
   if (lcbo) parts.push(`LCBO: private ${lcbo.asOf} list, on this browser only`);
-  const fx = META.sources?.Lucullus?.fx;
+  const fx = META.sources?.Lucullus?.fx || META.sources?.Weinshop365?.fx;
   if (fx) parts.push(`Swiss prices in Canadian dollars are approximate (Bank of Canada rate ${fx.CAD_per_CHF} CAD per franc, ${fx.date})`);
   $("foot-editions").textContent = parts.join(" — ") || "Data date unknown.";
   $("foot-calgary").hidden = !knownSources().some((s) => CALGARY.has(s));
@@ -3373,6 +3377,21 @@ function loadLcbo() {
     storeSet(STORE.lcbo, null); // the browser's storage was cleared: ask for the code again
     renderSources();
   }).catch(() => { delete loading.LCBO; });
+}
+
+// Weinshop365 shows francs with Swiss VAT, sells single bottles and delivers across Switzerland.
+// "2026-10-26" -> "October 2026"
+const monthYear = (iso) => { const d = new Date(iso || ""); return isNaN(d) ? "a past date" : d.toLocaleDateString("en-CA", { month: "long", year: "numeric", timeZone: "UTC" }); };
+
+function weinshop365DetailHtml(w) {
+  const facts = [w.region, w.grape, w.producer].filter(Boolean).map(esc).join(" · ");
+  const fx = META.sources?.Weinshop365?.fx;
+  return (facts ? `<p class="wine-detail">${facts}</p>` : "") +
+    (w.price_was ? `<p class="wine-detail">On sale: was CHF ${Number(w.price_was).toFixed(2)}</p>` : "") +
+    `<p class="wine-detail">Price from the Weinshop365 list of ${esc(monthYear(META.sources?.Weinshop365?.edition))}: check the Weinshop365 page for today's price.</p>` +
+    `<p class="wine-detail">Weinshop365, Ramsei: delivers across Switzerland, free from CHF 200` +
+    (w.order_item ? "; ordered in for you, in cases of 6" : "") + `. Price includes Swiss VAT` +
+    (fx ? `; ≈ Canadian dollars at the Bank of Canada rate of ${esc(fx.date)}` : "") + `.</p>`;
 }
 
 // Lucullus sells by the case and quotes francs without Swiss VAT; say so on every card.

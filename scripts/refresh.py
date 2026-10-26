@@ -4,8 +4,9 @@ Usage:
     python scripts/refresh.py                     # all stores (about 8 minutes: the retailers are read politely)
     python scripts/refresh.py --local FILE        # BC from a CSV already on disk
     python scripts/refresh.py --skip-retailers    # BC only
-    python scripts/refresh.py --only zyn          # one store: bcl, zyn, bsw or luc
+    python scripts/refresh.py --only zyn          # one store: bcl, zyn, bsw, luc or w365
     python scripts/refresh.py --scheduled         # only the stores due this month (the monthly GitHub run)
+    python scripts/refresh.py --only w365         # Weinshop365: a one-time snapshot, re-read only when asked like this
 
 Each store has its own file (BC: wines.json, ZYN: wines-zyn.json, BSW: wines-bsw.json),
 named in meta.json as data_file so the page can load the Calgary lists only when needed.
@@ -23,6 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import src_bcl  # noqa: E402
 import src_lucullus  # noqa: E402
 import src_shopify  # noqa: E402
+import src_weinshop365  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
@@ -82,7 +84,8 @@ def refresh_bcl(local=None):
     }
 
 
-MIN_RECORDS = {"BC Liquor": 1000, "ZYN": 1000, "BSW Liquor": 3000, "Lucullus": 2000}  # fewer means a broken feed
+MIN_RECORDS = {"BC Liquor": 1000, "ZYN": 1000, "BSW Liquor": 3000, "Lucullus": 2000,
+               "Weinshop365": 500}  # fewer means a broken feed
 
 
 def refresh_shopify(name, fetch):
@@ -100,14 +103,24 @@ def refresh_lucullus():
     return records, {"status": "ok", "count": len(records), **extras}
 
 
+def refresh_weinshop365():
+    # Pages unchanged since last time aren't read again: hand over last run's records.
+    records, extras = src_weinshop365.fetch(_load(DATA / "wines-weinshop365.json", []))
+    if len(records) < MIN_RECORDS["Weinshop365"]:
+        raise ValueError(f"only {len(records)} wines parsed; refusing to replace data")
+    return records, {"status": "ok", "count": len(records), **extras}
+
+
 # (key, source name, data file, refresh function, months between scheduled refreshes)
 # Quarterly sources run in Jan, Apr, Jul and Oct (BC publishes about quarterly); monthly ones every month.
+# 0 = a snapshot: never refreshed by the schedule or an all-store run, only with --only.
 SOURCES = [
     ("bcl", src_bcl.SOURCE, "wines.json", lambda args: refresh_bcl(args.local), 3),
     ("zyn", src_shopify.ZYN_SOURCE, "wines-zyn.json", lambda args: refresh_shopify("ZYN", src_shopify.fetch_zyn), 3),
     ("bsw", src_shopify.BSW_SOURCE, "wines-bsw.json",
      lambda args: refresh_shopify("BSW Liquor", src_shopify.fetch_bsw), 3),
     ("luc", src_lucullus.SOURCE, "wines-lucullus.json", lambda args: refresh_lucullus(), 1),
+    ("w365", src_weinshop365.SOURCE, "wines-weinshop365.json", lambda args: refresh_weinshop365(), 0),
 ]
 
 
@@ -131,7 +144,7 @@ def main(argv=None):
     ran_ok = True
 
     for key, name, file, fn, every in SOURCES:
-        if (args.only and key != args.only) or (args.skip_retailers and key != "bcl") or                 (args.scheduled and not due(every, dt.date.today().month)):
+        if (args.only and key != args.only) or (args.skip_retailers and key != "bcl") or                 (not every and args.only != key) or (args.scheduled and not due(every, dt.date.today().month)):
             continue  # untouched: previous file and meta entry stay as they are
         path = DATA / file
         old_records = _load(path, [])

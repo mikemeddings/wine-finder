@@ -39,6 +39,21 @@
       "note": "Lucullus's full price list; prices in CHF excluding VAT, with approximate CAD",
       "data_file": "wines-lucullus.json",
       "refreshed": "2026-10-26"
+    },
+    "Weinshop365": {
+      "status": "ok",
+      "count": 981,
+      "edition": "2026-10-26",
+      "snapshot": true,
+      "currency": "CHF",
+      "fx": {
+        "CAD_per_CHF": 1.6969,
+        "date": "2026-10-23",
+        "source": "Bank of Canada"
+      },
+      "note": "wines from the shop's product pages; prices in CHF including VAT, with approximate CAD (327 pages read this run, 837 unchanged)",
+      "data_file": "wines-weinshop365.json",
+      "refreshed": "2026-10-26"
     }
   }
 }

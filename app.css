@@ -198,6 +198,7 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .badge-zyn { background: var(--plum); color: #fff; border-color: var(--plum); }
 .badge-lcbo { background: #b3261e; color: #fff; border-color: #b3261e; }
 .badge-luc { background: #6b4f00; color: #fff; border-color: #6b4f00; }
+.badge-w365 { background: #8a3c00; color: #fff; border-color: #8a3c00; }
 .price-cad { display: block; font-size: 0.8em; font-weight: 400; color: var(--muted, #555); }
 .lcbo-unlock { margin: 0.4rem 0 0.8rem 2.6rem; display: grid; gap: 0.5rem; }
 .lcbo-unlock label { font-weight: 700; }

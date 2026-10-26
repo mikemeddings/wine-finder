@@ -18,7 +18,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 30   # the Calgary stores are read politely: about 8 minutes
+    timeout-minutes: 30   # the Calgary stores are read politely: about 8 minutes (Weinshop365 is a snapshot, not run here)
     steps:
       - uses: actions/checkout@v4
 
