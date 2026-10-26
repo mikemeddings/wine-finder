@@ -1575,6 +1575,51 @@
     "note": "Old-vine Mourvèdre Gigondas; cellar it",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-146": {
+   "name": "Two Hands Shiraz Bella's Garden 2017",
+   "claude": {
+    "points": 94,
+    "vintage": 2017,
+    "note": "Pure, irresistible Barossa Shiraz; drink now",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-147": {
+   "name": "Two Hands Shiraz Lily's Garden 2017",
+   "claude": {
+    "points": 93,
+    "vintage": 2017,
+    "note": "Mineral, seamless McLaren Shiraz in prime",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-144": {
+   "name": "Stags' Leap Winery Petite Sirah Ne Cede Malis 2012",
+   "claude": {
+    "points": 93,
+    "vintage": 2012,
+    "note": "Robust, elegant Petite Sirah, now softening",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-145": {
+   "name": "Tensley Syrah Colson Canyon Vineyard 2018",
+   "claude": {
+    "points": 95,
+    "vintage": 2018,
+    "note": "Magical, dense Santa Barbara Syrah",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-136": {
+   "name": "Pirramimma Petit Verdot Ironstone 2013",
+   "claude": {
+    "points": 92,
+    "vintage": 2013,
+    "note": "Hulking Petit Verdot, now rewarding patience",
+    "date": "2026-10-25"
+   }
   }
  }
 }
