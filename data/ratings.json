@@ -1179,6 +1179,69 @@
     "note": "Velvety old-vine Grenache from a great year",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-44": {
+   "name": "Concha y Toro Cabernet Sauvignon Don Melchor 2017",
+   "claude": {
+    "points": 95,
+    "vintage": 2017,
+    "note": "Mineral, energetic Andean Cabernet in its prime",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-21": {
+   "name": "Bodega Catena Zapata Malbec Argentino 2018",
+   "claude": {
+    "points": 93,
+    "vintage": 2018,
+    "note": "Balsamic, violet-scented classic Mendoza Malbec",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-120": {
+   "name": "Bodegas Muga Rioja Prado Enea Gran Reserva 2010",
+   "claude": {
+    "points": 96,
+    "vintage": 2010,
+    "note": "Elegant, timeless Gran Reserva, just hitting stride",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-75": {
+   "name": "Gramercy Cellars Syrah Lagniappe 2015",
+   "claude": {
+    "points": 95,
+    "vintage": 2015,
+    "note": "Silky, savoury Washington Syrah in its prime",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-100": {
+   "name": "K Vintners Syrah The Beautiful 2017",
+   "claude": {
+    "points": 92,
+    "vintage": 2017,
+    "note": "Velvety Walla Walla Syrah, olive and violet",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-101": {
+   "name": "Melville Syrah Estate Donna's Block 2018",
+   "claude": {
+    "points": 93,
+    "vintage": 2018,
+    "note": "Cool-climate Sta. Rita Hills Syrah, fresh",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-18": {
+   "name": "Carlisle Syrah Rosella's Vineyard 2016",
+   "claude": {
+    "points": 93,
+    "vintage": 2016,
+    "note": "Peppery grand cru Monterey Syrah at ten",
+    "date": "2026-10-25"
+   }
   }
  }
 }
