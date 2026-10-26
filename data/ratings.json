@@ -927,6 +927,60 @@
     "note": "Polished Shiraz-Cabernet from a great year",
     "date": "2026-10-25"
    }
+  },
+  "cellar-c1-131": {
+   "name": "Penfolds Shiraz St. Henri 2010",
+   "claude": {
+    "points": 95,
+    "vintage": 2010,
+    "note": "Benchmark St Henri, now opening up",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-130": {
+   "name": "Penfolds Shiraz St. Henri 2012",
+   "claude": {
+    "points": 95,
+    "vintage": 2012,
+    "note": "Savoury, structured; just coming into its own",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-129": {
+   "name": "Penfolds Shiraz St. Henri 2018",
+   "claude": {
+    "points": 97,
+    "vintage": 2018,
+    "note": "Great modern St Henri, decades ahead",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-164": {
+   "name": "Yangarra Estate Grenache High Sands 2014",
+   "claude": {
+    "points": 96,
+    "vintage": 2014,
+    "note": "Stunning, graceful old-vine sand Grenache",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-47": {
+   "name": "Coriole Shiraz Lloyd Reserve 2015",
+   "claude": {
+    "points": 93,
+    "vintage": 2015,
+    "note": "Ancient-vine McLaren Shiraz in its prime",
+    "date": "2026-10-25"
+   }
+  },
+  "cellar-c1-52": {
+   "name": "Elderton Shiraz Single Vineyard Command 2014",
+   "claude": {
+    "points": 95,
+    "vintage": 2014,
+    "note": "Quintessential old-vine Barossa, restrained power",
+    "date": "2026-10-25"
+   }
   }
  }
 }
