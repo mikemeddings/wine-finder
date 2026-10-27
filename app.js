@@ -944,7 +944,8 @@ async function goScoreClaude() {
   const res = $("score-result");
   res.hidden = false;
   res.innerHTML = prefilled ? "Opening Claude…" : "Copying your question and opening Claude…";
-  await openClaudeHere(url, prompt);
+  const r = await openClaudeHere(url, prompt);
+  if (r.newTab) res.innerHTML = pasteMessage(r, url) + ` When it's done, click <strong>💾 Save these scores to my Wine Finder</strong> at the end of its answer.`;
 }
 
 function claudePrompt(mode = claudeMode) {
@@ -1047,11 +1048,26 @@ const CLAUDE_PREFILL_MAX = 7000;
 // a fresh Wine Finder tab, so this leaves two tabs (Claude and the Wine Finder) instead of
 // three; the browser's Back button in Claude also returns here. The question is copied
 // first, in case the link can't carry it all.
+// When the question is too long for the link it has to be pasted, so Claude opens in a new
+// tab instead and this page stays put, with the paste instructions on screen.
 async function openClaudeHere(url, prompt) {
+  if (!url.includes("?q=")) {
+    const copied = await copyText(prompt); // first: copying can fail once the new tab has focus
+    const win = window.open(url, "_blank");
+    if (win) win.opener = null;
+    return { newTab: true, opened: !!win, copied };
+  }
   const copied = await copyText(prompt);
   savePlace();
   location.assign(url);
-  return copied;
+  return { newTab: false, opened: true, copied };
+}
+
+// What to show after Claude opened in a new tab for a question that has to be pasted.
+function pasteMessage(r, url) {
+  if (!r.opened) return `Your browser stopped the new tab from opening. Please press the button again, or <a href="${esc(url)}" target="_blank" rel="noopener">open Claude here</a>.`;
+  return r.copied ? `Claude is open in a new tab. In it, ${PASTE}.`
+    : `Claude is open in a new tab. Please copy the question from the box below (select it and press <strong>Ctrl+C</strong>), then ${PASTE}.`;
 }
 
 function claudeLink(prompt) {
@@ -1073,7 +1089,7 @@ function askClaude(mode = "about") {
        <li>Above the question, Claude shows a note saying “Use caution before running this prompt”. It shows that for every question that arrives by link. This one comes from your Short List, so it's fine to send.</li>
        <li>Check the question, then ${SEND}.</li>
        <li>When Claude finishes, press Claude's <strong>copy button</strong> under its answer (two folders on top of each other, on the far left), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom. The Wine Finder comes back in a new tab; you can close Claude's tab afterwards.</li>`
-    : `<li>Claude opens <strong>in place of this page</strong>, and your question is copied.</li>
+    : `<li>Claude opens <strong>in a new tab</strong> (this page stays here with these steps), and your question is copied.</li>
        <li>Your list is too long to type in automatically, so ${PASTE}.</li>
        <li>When Claude finishes, press Claude's <strong>copy button</strong> under its answer (two folders on top of each other, on the far left), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom.</li>`;
   const notice = $("ask-notice");
@@ -1104,7 +1120,8 @@ async function goClaude() {
   const result = $("claude-result");
   result.hidden = false;
   result.innerHTML = prefilled ? "Opening Claude…" : "Copying your question and opening Claude…";
-  await openClaudeHere(url, prompt);
+  const r = await openClaudeHere(url, prompt);
+  if (r.newTab) result.innerHTML = pasteMessage(r, url);
 }
 
 function closeClaudeSteps() {
@@ -2788,7 +2805,8 @@ async function dineGo() {
   const steps = $("dine-steps");
   steps.hidden = false;
   steps.textContent = prefilled ? "Opening Claude…" : "Copying your question and opening Claude…";
-  await openClaudeHere(url, prompt);
+  const r = await openClaudeHere(url, prompt);
+  if (r.newTab) steps.innerHTML = pasteMessage(r, url);
 }
 
 // The link back: #dine=NAME~PRICE~SCORE~WHY;...  It comes from Claude's answer, so every
