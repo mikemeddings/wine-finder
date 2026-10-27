@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-26",
+ "updated": "2026-10-27",
  "ratings": {
   "bcl-220979": {
    "name": "Cabernet Sauvignon - Haras De Pirque Hussonet Reserva",
@@ -2317,6 +2317,15 @@
     "note": "Sommelier Steeves 91 2016, 92 2015",
     "date": "2026-10-26",
     "quick": true
+   }
+  },
+  "lcbo-392480": {
+   "name": "Mountain Fish Red Peloponnese",
+   "claude": {
+    "points": 87,
+    "vintage": "NV",
+    "note": "Juicy mountain Agiorgitiko great value check vintage",
+    "date": "2026-10-27"
    }
   }
  }
