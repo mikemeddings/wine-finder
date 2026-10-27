@@ -643,3 +643,10 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .food-adv { color: #8a5a00; }
 .grape-list .sweet-name > span:first-child { display: inline; }
 #grape-star-note .mini-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.4rem; }
+
+/* pairing boxes open on a click */
+details.classic-pair > summary, details.bold-pair > summary { cursor: pointer; list-style: none; }
+details.classic-pair > summary::-webkit-details-marker, details.bold-pair > summary::-webkit-details-marker { display: none; }
+details.classic-pair[open] > summary, details.bold-pair[open] > summary { margin-bottom: 0.25rem; }
+.pair-more::after { content: "▸ Show"; margin-left: 0.5rem; font-size: 0.85rem; font-weight: 600; text-decoration: underline; opacity: 0.8; }
+details[open] > summary .pair-more::after { content: "▾ Hide"; }

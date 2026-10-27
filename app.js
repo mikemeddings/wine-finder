@@ -615,37 +615,43 @@ function grapesOf(w) {
 const FOODS = ["Red meat", "Lamb", "Pork", "Chicken", "Fish", "Seafood", "Pasta and pizza", "Cheese", "Spicy food", "Dessert"];
 // What each grape is classically served with, in plain words: the strongest clue to a food
 // match that the stores' data gives. A grape listed for a food makes it a classic match.
+// Checked against Dornenburg & Page, What to Drink with What You Eat (2006), chapters 5 and 6:
+// the pairings it prints in capitals or marks as classic are listed here, and its "avoid"
+// notes narrow the lines (Zinfandel: not ham, mild cheese or Thai food).
 const GRAPE_FOOD = {
   "Cabernet Sauvignon": { "Red meat": "ribeye, prime rib and roast beef", "Lamb": "roast leg of lamb with rosemary", "Cheese": "aged Cheddar and other hard cheeses" },
-  "Merlot": { "Red meat": "roast beef, meatloaf and burgers", "Pork": "roast pork tenderloin", "Chicken": "roast chicken with mushrooms", "Pasta and pizza": "lasagna and meaty pasta" },
-  "Cabernet Franc": { "Pork": "roast pork and sausages", "Chicken": "herb-roasted chicken", "Lamb": "lamb with herbs", "Cheese": "goat cheese" },
-  "Pinot Noir": { "Chicken": "roast chicken, duck and turkey", "Pork": "pork tenderloin and ham", "Pasta and pizza": "mushroom risotto and mushroom pasta" },
-  "Gamay": { "Chicken": "roast chicken and picnic fare", "Pork": "charcuterie, sausages and pâté", "Pasta and pizza": "pizza and simple pasta" },
-  "Syrah / Shiraz": { "Red meat": "peppered steak, barbecue and game", "Lamb": "grilled lamb and lamb stew", "Pork": "barbecue pork and ribs" },
-  "Grenache / Garnacha": { "Lamb": "roast lamb and Provençal stews", "Red meat": "grilled meats and beef stew", "Pork": "roast pork and sausages" },
-  "Tempranillo": { "Lamb": "roast lamb", "Red meat": "grilled steak and roast beef", "Pork": "chorizo, jamón and roast pork", "Cheese": "Manchego" },
-  "Sangiovese": { "Pasta and pizza": "tomato pasta, pizza and lasagna", "Red meat": "Florentine steak and meatballs in tomato sauce", "Cheese": "Parmesan and Pecorino" },
+  "Merlot": { "Red meat": "roast beef, meatloaf and burgers", "Pork": "roast pork tenderloin", "Chicken": "roast chicken with mushrooms", "Pasta and pizza": "lasagna and meaty pasta", "Spicy food": "meaty Indian curries with chicken or lamb, and chili" },
+  "Cabernet Franc": { "Pork": "roast pork and sausages", "Chicken": "herb-roasted chicken", "Lamb": "lamb with herbs", "Cheese": "goat cheese", "Red meat": "lean roast beef and pepper steak", "Fish": "grilled salmon and turbot (a Chinon)" },
+  "Pinot Noir": { "Chicken": "roast chicken, duck and turkey", "Pork": "pork tenderloin and ham", "Pasta and pizza": "mushroom risotto and mushroom pasta", "Red meat": "beef bourguignon, lean roast beef and veal chops", "Lamb": "roast or stewed lamb", "Fish": "salmon (broiled, pan-roasted or grilled) and tuna", "Cheese": "washed-rind cheeses such as Reblochon and Époisses" },
+  "Gamay": { "Chicken": "roast chicken and picnic fare", "Pork": "charcuterie, sausages and pâté", "Pasta and pizza": "pizza and simple pasta", "Red meat": "burgers and steak frites" },
+  "Syrah / Shiraz": { "Red meat": "peppered steak, barbecue and game", "Lamb": "grilled lamb and lamb stew", "Pork": "barbecue pork and ribs", "Chicken": "barbecued chicken and grilled or Peking duck" },
+  "Grenache / Garnacha": { "Lamb": "roast lamb and Provençal stews", "Red meat": "grilled meats and beef stew", "Pork": "roast pork and sausages", "Spicy food": "chili and spicy Asian dishes (a Côtes du Rhône)" },
+  "Tempranillo": { "Lamb": "roast lamb", "Red meat": "grilled steak and roast beef", "Pork": "chorizo, jamón and roast pork", "Cheese": "Manchego", "Seafood": "a meaty paella with chorizo", "Spicy food": "chile-based dishes" },
+  "Sangiovese": { "Pasta and pizza": "tomato pasta, pizza and lasagna", "Red meat": "Florentine steak and meatballs in tomato sauce", "Cheese": "Parmesan and Pecorino", "Chicken": "chicken braised in tomato sauce, grilled or roasted" },
   "Nebbiolo": { "Red meat": "braised beef, osso buco, and mushroom or truffle dishes", "Lamb": "braised lamb", "Cheese": "aged hard cheeses" },
   "Montepulciano": { "Pasta and pizza": "pizza and pasta with meat sauce", "Red meat": "grilled sausages and burgers" },
-  "Corvina (Amarone, Valpolicella)": { "Red meat": "braised beef and rich stews (Amarone)", "Pasta and pizza": "pasta with ragù", "Cheese": "aged Parmesan and blue cheese" },
+  "Corvina (Amarone, Valpolicella)": { "Red meat": "braised beef and rich stews (Amarone)", "Pasta and pizza": "pasta with ragù", "Cheese": "aged Parmesan and blue cheese", "Chicken": "grilled or roast chicken (a Valpolicella)" },
   "Malbec": { "Red meat": "grilled steak, especially with chimichurri, and brisket", "Lamb": "grilled lamb", "Pork": "barbecue pork" },
-  "Zinfandel / Primitivo": { "Red meat": "barbecue ribs, burgers and pulled beef", "Pork": "pulled pork and barbecue", "Spicy food": "barbecue and spiced dishes", "Pasta and pizza": "pizza" },
+  "Zinfandel / Primitivo": { "Red meat": "barbecue ribs, burgers and pulled beef", "Pork": "barbecued ribs, pulled pork and spicy sausage, rather than ham or charcuterie", "Chicken": "barbecued chicken", "Spicy food": "spicy meat dishes and sweet barbecue sauce, rather than Thai or Chinese food", "Pasta and pizza": "pasta with meat or spicy sauce, and sausage pizza", "Cheese": "rich, strong cheeses such as blue or feta, rather than mild Cheddar" },
   "Touriga Nacional": { "Red meat": "roast and grilled meats and stews", "Lamb": "roast lamb" },
   "Carmenère": { "Red meat": "grilled meats with herbs", "Pork": "roast pork", "Spicy food": "mildly spiced dishes" },
   "Pinotage": { "Red meat": "barbecue and smoked meats", "Pork": "sausages" },
-  "Barbera": { "Pasta and pizza": "pizza, tomato pasta and risotto", "Pork": "sausages and charcuterie", "Chicken": "chicken cacciatore" },
-  "Chardonnay": { "Chicken": "roast chicken and creamy chicken dishes", "Pasta and pizza": "creamy pasta", "Seafood": "crab, lobster and scallops" },
-  "Sauvignon Blanc": { "Fish": "white fish with lemon or herbs", "Seafood": "oysters, shrimp and ceviche", "Cheese": "goat cheese", "Chicken": "herb chicken and salads" },
-  "Riesling": { "Spicy food": "Thai, Indian and Szechuan dishes", "Pork": "pork with apples", "Fish": "trout and smoked fish" },
-  "Pinot Grigio / Gris": { "Fish": "light white fish", "Seafood": "shrimp, clams and seafood pasta", "Pasta and pizza": "light pasta dishes" },
+  "Barbera": { "Pasta and pizza": "pizza, tomato pasta and risotto", "Pork": "sausages and charcuterie", "Chicken": "chicken cacciatore", "Red meat": "grilled or roasted meat, veal chops and bacon cheeseburgers" },
+  "Chardonnay": { "Chicken": "roast chicken and creamy chicken dishes", "Pasta and pizza": "creamy pasta", "Seafood": "crab, lobster and scallops", "Cheese": "Brie, Camembert and triple-crème cheeses, and Comté" },
+  "Sauvignon Blanc": { "Fish": "white fish with lemon or herbs", "Seafood": "oysters, shrimp and ceviche", "Cheese": "goat cheese", "Chicken": "herb chicken and salads", "Spicy food": "Thai and Mexican dishes with lemongrass, seafood or vegetables (a New Zealand one)" },
+  "Riesling": { "Spicy food": "Thai, Indian and Szechuan dishes", "Pork": "pork with apples, choucroute and sausages", "Fish": "trout and smoked fish", "Seafood": "crab", "Cheese": "blue, soft and triple-crème cheeses" },
+  "Pinot Grigio / Gris": { "Fish": "light white fish", "Seafood": "shrimp, clams and seafood pasta", "Pasta and pizza": "light pasta dishes", "Pork": "roast pork and prosciutto", "Cheese": "goat, sheep's-milk and smoked cheeses" },
   "Gewürztraminer": { "Spicy food": "Thai, Indian and Moroccan dishes", "Cheese": "Munster and other washed-rind cheeses", "Pork": "pork with fruit" },
   "Chenin Blanc": { "Pork": "pork with apples", "Chicken": "roast chicken", "Spicy food": "lightly spiced dishes" },
-  "Viognier": { "Chicken": "chicken with apricots or in cream", "Spicy food": "mild curries", "Seafood": "lobster and scallops" },
-  "Grüner Veltliner": { "Fish": "white fish", "Chicken": "schnitzel and roast chicken", "Spicy food": "Asian dishes" },
-  "Albariño": { "Seafood": "shellfish, octopus and grilled seafood", "Fish": "grilled white fish" },
+  "Viognier": { "Chicken": "chicken with apricots or in cream", "Spicy food": "mild curries", "Seafood": "lobster and scallops", "Fish": "white fish, fish stews and smoked fish" },
+  "Grüner Veltliner": { "Fish": "white fish", "Chicken": "schnitzel and roast chicken", "Spicy food": "Asian dishes", "Pork": "pork, sausages and bacon" },
+  "Albariño": { "Seafood": "shellfish, octopus and grilled seafood", "Fish": "grilled white fish", "Spicy food": "spicy shellfish and spicy grilled fish" },
   "Muscat / Moscato": { "Dessert": "fruit desserts", "Spicy food": "spicy dishes" },
   "Glera (Prosecco)": { "Seafood": "fried calamari", "Fish": "fried fish" },
 };
+// Dishes Dornenburg & Page's What to Drink with What You Eat (2006) list for each grape, by
+// food, strongest first: 4 = marked classic, 3 = very highly recommended, 2 = frequently.
+const BOOK_DISHES = {"Muscat / Moscato":{"Dessert":[["cookies",3],["peaches",3],["rhubarb",3],["tiramisu",3]],"Cheese":[["assorted cheeses",3],["Taleggio",2],["Roquefort",2],["Montenebro",2]]},"Sauvignon Blanc":{"Fish":[["mackerel",3],["sardines",3],["red snapper",3],["smoked trout",3]],"Seafood":[["ceviche",4],["shellfish",4],["shrimp",3],["mussels",3]],"Cheese":[["Goat",4],["Chèvre",4],["cheese goat (especially fresh chévre)",4],["Crottin",3]],"Chicken":[["fried chicken",3],["chicken (especially creamy dishes)",3],["herbed chicken",2],["grilled chicken",2]],"Spicy food":[["chiles",3],["guacamole",3],["thai cuisine",3],["indian cuisine",3]],"Pasta and pizza":[["baked primavera light cream sauce with vegetables",2]],"Dessert":[["pineapple desserts",3]],"Red meat":[["veal (especially with cream sauce)",2]]},"Chenin Blanc":{"Dessert":[["peaches",2],["cheesecake",2],["strawberries",2],["apple desserts",2]],"Cheese":[["Saint-Nectaire",2],["cheese (especially goat)",2]],"Chicken":[["chicken (especially barbecued or with creamy sauce)",2]],"Seafood":[["scallops (especially baked)",3],["crab",2],["lobster",2],["scallops",2]],"Spicy food":[["indian cuisine",2],["mexican cuisine",2],["spicy foods and dishes",2]],"Fish":[["fish (especially mild white)",3],["trout (especially baked or with cream sauce)",3],["trout",2],["salmon",2]],"Pork":[["pork (especially roasted)",2],["pork with fruit or fruit sauce",2]]},"Riesling":{"Dessert":[["plums",3],["peaches",3],["cheesecake",3],["blueberries",3]],"Pork":[["choucroute",4],["sausage",3],["roasted pork",3]],"Spicy food":[["thai cuisine",4],["chiles",3],["wasabi",3],["curries",3]],"Fish":[["trout",3],["smoked fish",3],["smoked trout",3],["smoked salmon",3]],"Seafood":[["crab",4],["scallops",3],["soft-shell crab",3],["sautéed scallops",3]],"Cheese":[["Edam",3],["Gouda, Aged",3],["cheese (especially blue, soft, or triple crème)",3],["Brie",2]],"Chicken":[["chicken (especially poached or lightly sautéed)",3],["cold chicken",2],["chicken liver",2],["sweet-and-sour chicken",2]],"Red meat":[["veal",2],["veal with cream sauce",2],["veal wiener schnitzel",2]]},"Sémillon":{"Dessert":[["strawberries",2],["apples desserts",2],["pumpkin desserts",2]],"Fish":[["fish (especially grilled or stewed)",3],["mackerel",2],["red snapper",2]],"Seafood":[["mussels",2],["seafood and seafood soup",2]],"Chicken":[["chicken (especially roasted)",3]],"Pork":[["pork (especially chops, and especially with apples or other fruit)",3]],"Spicy food":[["spicy dishes",2]]},"Gamay":{"Pork":[["charcuterie or cold cuts (especially with beaujolais cru)",4],["sausage",3],["saucisson french garlicky sausage",3]],"Cheese":[["Brie",2],["Feta",2],["Emmental",2],["Muenster",2]],"Chicken":[["chicken (especially grilled or roasted)",3],["cold chicken",2],["roasted turkey",2],["grilled chicken",2]],"Spicy food":[["chili",2],["spicy dishes",2],["indian cuisine",2],["mexican cuisine",2]],"Red meat":[["hamburgers",3],["veal",2],["corned beef",2],["steak tartare",2]],"Pasta and pizza":[["macaroni and cheese",2]],"Fish":[["tuna",2],["mackerel",2],["tuna (especially grilled)",2]],"Seafood":[["calamari chicken",2],["lobster roll turkey",2],["roast beef lobster roll",2]],"Dessert":[["raspberries and raspberry desserts",2]]},"Chardonnay":{"Pork":[["bacon",2],["charcuterie",2],["roasted pork",2]],"Fish":[["sole",4],["tuna",3],["sushi",3]],"Cheese":[["Brie",3],["Cheddar",3],["Gruyère",3],["Havarti",3]],"Dessert":[["cheesecake",2],["fresh fruit desserts",2]],"Chicken":[["chicken (especially baked, fried, grilled, roasted, or in cream sauce)",4],["roasted chicken",3],["baked chicken, with cream sauce",3],["duck",2]],"Spicy food":[["curries",2],["guacamole",2],["quesadillas",2],["indian cuisine",2]],"Seafood":[["lobster",4],["oysters",4],["crayfish",3],["scallops",3]],"Pasta and pizza":[["baked al fredo",3],["macaroni and cheese",3],["risotto",2]],"Red meat":[["veal with cream sauce",3],["veal",2],["roasted veal",2],["veal (especially in cream sauce or roasted)",2]]},"Pinot Noir":{"Pork":[["bacon",3],["pork (especially loin)",3],["pork loin (especially roasted)",3]],"Red meat":[["beef bourguignon",4],["veal (especially chops)",3],["beef (especially braised, roasted, or stewed, with fuller-bodied wines)",3],["game",2]],"Cheese":[["Reblochon",3],["Pont-L’Eveque",3],["Brie",2],["Edam",2]],"Chicken":[["duck (especially roasted)",4],["roasted chicken",3],["coq au vin chicken, with red wine sauce",3],["chicken (especially braised, poached, or roasted)",3]],"Spicy food":[["chiles",2],["indian cuisine",2],["mexican cuisine",2],["spicy foods and dishes",2]],"Fish":[["tuna",4],["salmon",4],["salmon (especially broiled, pan-roasted, poached, or grilled)",4],["swordfish",3]],"Lamb":[["lamb (especially roasted or stewed)",2]],"Pasta and pizza":[["risotto with mushrooms",3],["macaroni and cheese",2]],"Seafood":[["calamari spinach",2]],"Dessert":[["strawberries",2]]},"Syrah / Shiraz":{"Pork":[["wild boar",3],["sausage (especially grilled)",3],["barbecue (especially spareribs)",3],["bacon",2]],"Red meat":[["game",3],["hamburgers",3],["stewed steak",3],["grilled steak",3]],"Cheese":[["cheese (especially aged or hard)",3],["Cheddar",2],["Provolone",2],["smoked cheese",2]],"Chicken":[["duck",2],["grilled chicken",2],["roasted chicken",2],["chicken tandoori",2]],"Spicy food":[["red spicy, fruity, tannic",3],["chili",2],["chiles",2],["spicy meat",2]],"Dessert":[["empanadas",2]],"Lamb":[["lamb (especially braised)",3],["braised lamb",2]],"Fish":[["tuna (especially grilled or stewed)",3],["salmon",2]],"Seafood":[["lobster",3]],"Pasta and pizza":[["pasta (especially rich)",2]]},"Tempranillo":{"Pork":[["pork (especially barbecued or roasted)",3],["bacon",2],["chorizo (especially with fruity or young rioja)",2]],"Cheese":[["Manchego",3],["cheese, manchego",3],["Serena",2],["Cabrales",2]],"Chicken":[["duck",2],["roasted chicken",2],["poultry (especially roasted)",2],["duck (especially grilled or roasted)",2]],"Spicy food":[["chiles",3]],"Lamb":[["lamb (especially braised, grilled, roasted, sautéed, or stewed)",4],["lamb and lamb chops (especially roasted)",3],["moussaka",2],["braised lamb",2]],"Seafood":[["paella",3]],"Red meat":[["veal scallopine",2],["veal (especially scallopine)",2],["beef (especially braised or stewed)",2]],"Fish":[["fish (especially grilled)",2]]},"Nebbiolo":{"Red meat":[["game",3],["braised beef",3],["beef (especially braised, grilled, or stewed)",3],["pot roast",2]],"Pork":[["wild boar",2]],"Cheese":[["Fontina",3],["Parmesan",3],["gorgonzola",3],["Castelmagno",3]],"Pasta and pizza":[["risotto",2],["risotto with mushrooms",2],["risotto with white truffles",2],["pasta (especially tomato-sauced)",2]],"Chicken":[["duck and duck confit",2]],"Lamb":[["stew (especially beef or lamb)",2],["lamb (especially grilled or roasted)",2]]},"Cabernet Sauvignon":{"Red meat":[["veal",3],["hamburgers",3],["grilled steak",3],["steak rib eye",3]],"Cheese":[["Cheddar",3],["Camembert",3],["Pierre Robert",3],["cheese (especially aged, blue, or stinky)",3]],"Chicken":[["duck",2],["chicken paprika",2],["roasted chicken",2],["cornish game hens",2]],"Lamb":[["lamb (especially roasted)",4],["baby delicately flavored lamb",2]],"Pasta and pizza":[["baked bolognese",2]],"Spicy food":[["southwestern cuisine",2]],"Dessert":[["chocolate (especially dark bittersweet)",2]]},"Sangiovese":{"Red meat":[["aged steak or grilled",3],["veal (especially chops)",3],["steak (especially grilled)",3],["veal",2]],"Pork":[["sausage",3],["wild boar",3],["prosciutto",2],["grilled pork",2]],"Pasta and pizza":[["pasta with meat or tomato sauce",4],["lasagna",3]],"Cheese":[["Pecorino",3],["cheese (especially aged asiago, gouda, parmesan, pecorino)",3],["Parmesan",2],["Raclette",2]],"Chicken":[["fried chicken",2],["roasted chicken",2],["chicken cacciatore",2],["pasta with meat sauce",2]],"Spicy food":[["chiles pasilla",2]],"Lamb":[["lamb and lamb chops (especially roasted)",3],["moussaka",2]]},"Merlot":{"Red meat":[["steak filet mignon",3],["veal and veal chops",3],["beef (especially grilled or roasted)",3],["steak (especially filet mignon or grilled)",3]],"Cheese":[["cheese (especially blue and other full-flavored cheese)",3],["Romano",2],["Cheddar",2],["Provolone",2]],"Chicken":[["turkey (especially roasted)",3],["duck (especially grilled or roasted)",3],["chicken (especially braised, grilled, or roasted)",3],["chicken liver",2]],"Dessert":[["empanadas",2]],"Spicy food":[["indian cuisine",3],["mexican cuisine",2]],"Fish":[["tuna",2],["salmon",2],["grilled tuna",2],["japanese cuisine",2]],"Lamb":[["lamb and lamb chops (especially grilled, roasted, or stewed)",3]],"Pasta and pizza":[["baked bolognese",2],["macaroni and cheese",2],["tomatoes and tomato sauce",2]],"Pork":[["pork (especially loin, and especially grilled or roasted)",3],["sausage",2],["pork chops (especially grilled or roasted)",2]],"Seafood":[["calamari vegetable, grilled",2]]},"Zinfandel / Primitivo":{"Red meat":[["hamburgers",4],["grilled hamburgers",4],["grilled steak",3]],"Cheese":[["Monterey Jack",3],["cheese (especially rich or strong)",3],["hamburgers (especially grilled, and especially with cheese)",3],["Cheddar",2]],"Chicken":[["barbecued meat (especially chicken or pork especially ribs)",4],["duck",3],["turkey (especially roasted)",3]],"Spicy food":[["barbecue sauce, sweet not spicy",4],["chili",3],["chiles",3],["curries",3]],"Dessert":[["figs",2]],"Pork":[["barbecued meat (especially chicken or pork especially ribs)",4],["sausage",3],["pork (especially chops or roasted)",3],["sausage (especially spicy or grilled)",3]],"Pasta and pizza":[["pasta (especially with meat or spicy sauce)",3],["baked bolognese",2],["pizza with sausage",2],["tomatoes and tomato sauce",2]]},"Grenache / Garnacha":{"Red meat":[["braised beef",3],["game",2],["veal",2],["hamburgers",2]],"Cheese":[["Emmental",2],["Roquefort",2],["Port Salut",2],["Saint-Nectaire",2]],"Chicken":[["roasted chicken",2],["chicken (especially roasted)",2],["duck (especially roasted or as confit)",2],["tikka masala indian-style butter chicken",2]],"Spicy food":[["red spicy, dense, earthy, rich",3],["chili",2]],"Lamb":[["lamb (especially grilled)",3],["braised lamb",2]],"Seafood":[["lobster",2],["calamari niçoise",2]],"Pork":[["sausage",2]],"Fish":[["grilled tuna",2]]},"Petite Sirah":{"Red meat":[["steak (especially grilled)",2]],"Spicy food":[["mexican food",2]]},"Cabernet Franc":{"Pork":[["pork (especially with fruit sauce or roasted)",3],["sausage",2],["cabbage and cabbage-based dishes",2]],"Cheese":[["Goat",2],["cheeses (especially strong-flavored)",2]],"Red meat":[["beef (especially lean, and especially roasted)",3],["veal",2],["steak (especially with pepper)",2]],"Chicken":[["duck",3]],"Lamb":[["lamb (especially chops, loin, or roasted)",3]],"Fish":[["salmon (especially grilled)",3],["grilled salmon",2]]},"Gewürztraminer":{"Pork":[["sausage",3],["pork (especially roasted)",3],["pork with fruit or fruit sauce",3]],"Spicy food":[["curries",3],["thai cuisine",3],["indian cuisine",3],["chinese cuisine",3]],"Cheese":[["Muenster",4],["assorted cheeses",4],["cheese (especially soft or strong/aged, *muenster, roquefort)",3],["smoked food (especially cheese, fish, meat, and other dishes)",3]],"Seafood":[["lobster",2],["fried squid",2],["crab with black bean sauce",2],["shellfish (especially spicy preparations)",2]],"Fish":[["smoked food (especially cheese, fish, meat, and other dishes)",3],["trout",2],["monkfish",2],["smoked salmon",2]],"Dessert":[["ginger desserts",2],["sweet desserts lemon",2],["onions (especially sweet)",2],["fruits (especially tropical, and especially fruity desserts)",2]],"Chicken":[["turkey",3],["pâté (especially duck liver)",2],["duck (especially peking or roasted)",2],["chicken (especially stronger-flavored)",2]]},"Albariño":{"Seafood":[["shellfish",3],["shellfish dishes (especially spicy)",3],["ceviche",2],["mussels, steamed",2]],"Fish":[["fish (especially grilled or spicy preparations)",3]],"Spicy food":[["shellfish dishes (especially spicy)",3],["fish (especially grilled or spicy preparations)",3],["seafood (especially spicy dishes)",2]]},"Barbera":{"Cheese":[["Fontina",2],["Morbier",2],["cheese (especially full-flavored)",2],["hamburgers (especially with bacon and cheese)",2]],"Chicken":[["roasted chicken",2],["chicken (especially grilled or roasted)",2]],"Spicy food":[["chiles pasilla",2],["mexican cuisine",2]],"Pasta and pizza":[["tomatoes and tomato sauce",4],["pasta (especially with tomato, rich cream, meat, or pesto sauce)",4],["pizza (especially pepperoni)",3]],"Pork":[["prosciutto",3],["salami",2],["sausage (especially grilled)",2],["pork (especially grilled or roasted chops)",2]],"Seafood":[["calamari tomato",2]],"Red meat":[["veal chops (especially grilled or roasted)",2],["hamburgers (especially with bacon and cheese)",2]],"Lamb":[["lamb (especially grilled, roasted, or stewed)",2]]},"Dolcetto":{"Cheese":[["pasta (especially with cheese or vegetables)",3],["Fontina",2],["Provolone",2]],"Chicken":[["chicken (especially grilled, roasted, or with tomato sauce)",3],["roasted chicken",2]],"Pasta and pizza":[["pasta (especially with simple sauce)",3],["chicken (especially grilled, roasted, or with tomato sauce)",3],["risotto",2]],"Pork":[["prosciutto",2]],"Red meat":[["hamburgers",2]],"Fish":[["grilled salmon",2]]},"Pinot Grigio / Gris":{"Cheese":[["cheese (especially goat, sheep’s milk, or smoked)",3],["Fontina",2],["macaroni and cheese",2],["smoked cheese, fish, and meat",2]],"Spicy food":[["indian cuisine",2],["chiles jalapeño",2],["spicy food, mildly",2],["spicy foods and dishes",2]],"Seafood":[["clams",4],["mussels",3],["scallops",3],["calamari seafood",3]],"Fish":[["salmon",3],["fish (especially white, and especially baked, grilled, or poached)",3],["sole",2],["trout",2]],"Pork":[["prosciutto",3],["pork (especially roasted)",3],["sausage",2]],"Pasta and pizza":[["pasta (especially with seafood or shellfish)",3],["risotto",2],["macaroni and cheese",2]],"Red meat":[["veal",2],["veal with cream sauce",2]],"Chicken":[["chicken (especially fried, grilled, poached, roasted, or sautéed)",3]],"Dessert":[["onions (especially cooked)",2]]},"Corvina (Amarone, Valpolicella)":{"Cheese":[["Parmesan",3],["cheese (especially blue, creamy, or salty)",3],["Robiola",2],["Provolone",2]],"Pasta and pizza":[["pasta (especially with lighter, or tomato sauce, or baked)",3],["risotto (especially with gorgonzola, mushroom, sausage, or vegetables)",3],["gnocchi",2],["risotto",2]],"Pork":[["sausage (especially pork or grilled)",3],["risotto (especially with gorgonzola, mushroom, sausage, or vegetables)",3],["salami",2]],"Lamb":[["lamb (especially braised, grilled, stewed, or with spices)",3]],"Red meat":[["veal (especially roasted)",2],["short ribs (especially braised)",2]],"Fish":[["tuna",2],["pasta (especially with fish or tomato sauce)",2]],"Dessert":[["nuts (especially pecans, and nut desserts)",2],["chocolate (especially dark, and chocolate desserts)",2]],"Chicken":[["chicken (especially grilled or roasted)",3],["turkey (especially roasted)",2]],"Spicy food":[["mexican food",2]]},"Pinot Blanc":{"Pork":[["choucroute",2]],"Pasta and pizza":[["risotto with vegetables",2]],"Seafood":[["scallops",3],["oysters",2],["calamari green",2],["shellfish",2]],"Fish":[["salmon",3],["sole",2],["trout",2],["soup fish",2]],"Chicken":[["turkey (especially roasted)",3],["chicken (especially roasted or as a salad)",3],["salad (especially green or chicken)",2]]},"Viognier":{"Seafood":[["lobster",3],["crab",2],["mussels",2],["scallops",2]],"Spicy food":[["curries",3],["indian food",2],["indian cuisine",2],["curries with fish, seafood, or poultry",2]],"Fish":[["fish (especially white or stewed)",3],["monkfish",2],["smoked fish and other foods",2]],"Pork":[["pork (especially roasted)",3],["pork with fruit or fruit sauce",2]],"Chicken":[["chicken (especially roasted or with cream sauce)",3],["duck (especially roasted)",2]],"Red meat":[["veal",2]]},"Garganega (Soave)":{"Fish":[["fish (especially baked, fried, poached, or other light preparation)",3],["sardines",2],["fritto misto",2]],"Pasta and pizza":[["pasta (especially with seafood)",3],["risotto",2],["risotto with shrimp or squid",2]],"Seafood":[["pasta (especially with seafood)",3],["shrimp",2],["scallops",2],["calamari seafood",2]],"Chicken":[["chicken (especially as a salad)",3]]},"Malbec":{"Lamb":[["lamb (especially barbecued, braised, or roasted)",3],["braised lamb",2]],"Spicy food":[["mexican cuisine",2]],"Chicken":[["duck and duck confit",2]],"Red meat":[["grilled steak",3],["beef (especially roasted or stewed)",3]],"Pork":[["sausage",2],["pizza (especially with mushrooms or sausage)",2]],"Pasta and pizza":[["pizza (especially with mushrooms or sausage)",2]]},"Marsanne / Roussanne":{"Seafood":[["lobster (especially boiled or steamed)",2]]},"Montepulciano":{"Pasta and pizza":[["pasta (especially with meat, mushroom, or tomato sauce)",3],["pizza with pepperoni",2]],"Lamb":[["lamb (especially braised, grilled, roasted, or stewed)",3]],"Pork":[["pork (especially grilled or roasted)",2]]},"Mourvèdre / Monastrell":{"Fish":[["red snapper",2]],"Seafood":[["calamari niçoise",3]],"Pork":[["sausage",2]],"Chicken":[["poultry (especially grilled)",2]],"Red meat":[["steak (especially grilled)",2]]},"Grüner Veltliner":{"Seafood":[["scallops",3],["lobster",2]],"Fish":[["sushi",3],["swordfish with peppercorn crust",2]],"Red meat":[["veal (especially roasted)",3],["veal wiener schnitzel",2]],"Cheese":[["cheese (especially stinky, fatty, rich, or blue)",2]],"Spicy food":[["thai food and spices",2]]},"Aglianico":{"Red meat":[["beef (especially braised, grilled or stewed)",2]],"Cheese":[["cheese (especially aged)",2]],"Lamb":[["lamb (especially grilled)",2]],"Pork":[["sausage",2]],"Spicy food":[["spicy dishes",2]]},"Tannat":{"Chicken":[["duck and duck confit",2]]},"Vermentino":{"Fish":[["fish (especially simple)",3]],"Pasta and pizza":[["pasta (especially with pesto)",2]]}};
 // The LCBO's tasting notes often say what to serve the wine with. That sentence is shown on
 // the wine, and on the same wine at another store, only in browsers that have unlocked the
 // LCBO's private list (it never reaches the public site).
@@ -735,11 +741,11 @@ function foodsOf(w) {
       if (body !== "full") out.push("Fish", "Seafood");
       out.push("Chicken");
       if (body !== "light") out.push("Pork", "Pasta and pizza");
-      if (body === "full") out.push("Cheese");
+      out.push("Cheese"); // whites are the safer cheese match (Harrington; Dornenburg & Page)
       if (sweet === "off-dry") out.push("Spicy food");
     }
   } else if (t === "Rosé") out.push("Fish", "Seafood", "Chicken", "Pork", "Pasta and pizza", "Spicy food");
-  else if (t === "Sparkling") out.push(...(sweetish ? ["Dessert"] : ["Fish", "Seafood", "Chicken"]));
+  else if (t === "Sparkling") out.push(...(sweetish ? ["Dessert"] : ["Fish", "Seafood", "Chicken", "Cheese"]));
   else if (t === "Dessert" || (t === "Fortified" && sweet !== "dry")) out.push("Dessert", "Cheese");
   else if (t === "Fortified") out.push("Seafood", "Cheese"); // fino, manzanilla
   w._styleFoods = [...out]; // matched by style alone (the rest come from the grape or the store's note)
@@ -749,49 +755,138 @@ function foodsOf(w) {
   return (w._foods = out);
 }
 
-// Adventurous pairings: what wine writers and sommeliers suggest beyond the old rules. Each
-// card names what the grape suits, then one line of advice drawn from sources read in full:
-// red with fish (Fiona Beckett, "Salmon and Pinot Noir": seared, grilled, barbecued or spicy-
-// crusted fish; poached or butter sauces still suit a white; Wine Folly; Wild Alaskan Company),
-// Pinot with shellfish (VinePair, "10 Wine Pairings That Break the Rules"; the 2009 Mercian
-// study reported by Phys.org traced a fishy aftertaste with scallops to iron in some wines),
-// and white with steak (Wine Spectator's Dr. Vinny, 2018; VinePair's "Ask Adam", 2023).
-// No blanket warnings: whether a given red clashes can't be told from any store's data.
-const ADV_GRAPE = {
-  "Fish": {
-    "Pinot Noir": "salmon or seared tuna, especially with mushrooms",
-    "Gamay": "cod or tuna, and it's lovely lightly chilled",
-    "Barbera": "halibut, cioppino and tomato-based fish stews",
-    "Grenache / Garnacha": "spicy fish dishes and fish stews",
-    "Mencía": "grilled sardines and octopus",
-    "Merlot": "grilled salmon with herbs or a red-wine glaze",
-    "Carmenère": "grilled salmon or tuna with herbs",
-    "Zweigelt": "trout or salmon",
-    "Corvina (Amarone, Valpolicella)": "grilled salmon or tuna (a light Valpolicella)",
-  },
-  "Red meat": {
-    "Chardonnay": "steak with butter or béarnaise, and veal",
-    "Viognier": "veal, or herb-roasted beef",
-    "Marsanne / Roussanne": "veal, or herb-roasted beef",
-    "Riesling": "steak, when the Riesling is an older one",
-  },
-};
-function advAdvice(w, food) {
-  const g = grapesOf(w).find((x) => grapeFits(w, x) && ADV_GRAPE[food]?.[x]);
-  const dish = ruleDish(w, food) || (g ? ADV_GRAPE[food][g] : pairDish(w, food));
-  const base = pairSentence(w, food, dish);
-  // shellfish: the one caution the research supports (VinePair; the 2009 iron study)
-  return base;
+// Adventurous pairings: matches beyond the usual rules that wine writers, sommeliers and two
+// pairing books back, each with the dish they name, why it works, the caution they give, and
+// the source. Sources read in full: Dornenburg & Page, What to Drink with What You Eat (2006,
+// "D&P", by chapter and entry); Harrington, Food and Wine Pairing (2008, by page); Fiona
+// Beckett (Decanter, 2026; "Salmon and Pinot Noir"); Wine Folly; Majestic; InsideHook
+// (Beverly Crandon); St. Louis Magazine (John Sears); VinePair; Food & Wine (2017).
+// A rule only counts when the food isn't already a classic match for the wine.
+const TANNIC_GRAPES = ["Cabernet Sauvignon", "Nebbiolo", "Tannat", "Petite Sirah", "Aglianico", "Mourvèdre / Monastrell", "Touriga Nacional", "Saperavi", "Syrah / Shiraz", "Malbec"];
+const LIGHT_REDS = ["Pinot Noir", "Gamay", "Barbera", "Dolcetto", "Zweigelt", "Blaufränkisch", "Cabernet Franc", "Corvina (Amarone, Valpolicella)", "Mencía"];
+const ADV_RULES = [
+  // ---- Fish
+  { food: "Fish", when: (c) => c.red && c.dry && c.body !== "full" && !c.tannic && c.has(LIGHT_REDS),
+    dish: (c) => c.pick({ "Gamay": "cod, mackerel or sardines, lightly chilled", "Barbera": "grilled bass, halibut or tuna", "Mencía": "grilled sardines and octopus",
+      "Cabernet Franc": "grilled salmon or turbot", "Corvina (Amarone, Valpolicella)": "flounder or grilled tuna", "Dolcetto": "grilled salmon or tuna" }) || "grilled salmon or tuna, or white fish cooked with bacon or mushrooms",
+    why: "Low tannin keeps fish from tasting metallic, and grilling gives fish the weight for a red",
+    warn: "skip it with delicate poached fish", src: "Harrington p. 155, 172; D&P ch. 5, “Fish”" },
+  { food: "Fish", when: (c) => c.red && c.dry && c.has(["Merlot", "Zinfandel / Primitivo", "Syrah / Shiraz", "Cabernet Sauvignon", "Grenache / Garnacha", "Nero d'Avola", "Tempranillo"]),
+    dish: (c) => c.pick({ "Syrah / Shiraz": "peppercorn-crusted swordfish or grilled tuna", "Cabernet Sauvignon": "black-pepper tuna or swordfish", "Nero d'Avola": "swordfish with capers",
+      "Zinfandel / Primitivo": "grilled tuna, or tuna sushi", "Tempranillo": "spicy fish dishes and grilled fish" }) || "grilled tuna or swordfish",
+    why: "Tuna and swordfish are steak-like fish that take a red: “Tuna, which is a steak like fish, lends itself to red wine” (Michael Flynn)",
+    warn: "never with delicate white fish: tannin turns it metallic", src: "D&P ch. 3 and ch. 5, “Tuna”, “Swordfish”; Harrington p. 155" },
+  { food: "Fish", when: (c) => c.white && c.dry && c.body === "full",
+    dish: (c) => c.pick({ "Chardonnay": "cod, monkfish or grilled salmon, especially with a butter sauce" }) || "richer fish with butter or cream sauces",
+    why: "A big, oaky white matches grilled salmon's weight, and butter bridges the two",
+    warn: "not with raw fish or sushi: oak clashes", src: "Harrington p. 172; D&P ch. 5, “Cod”, “Fish: butter sauce”" },
+  // ---- Seafood
+  { food: "Seafood", when: (c) => c.red && c.dry && c.body !== "full" && !c.tannic && c.has(["Pinot Noir", "Gamay", "Barbera", "Cabernet Franc", "Montepulciano", "Grenache / Garnacha"]),
+    dish: (c) => c.pick({ "Gamay": "clams, squid, or shrimp with garlic and anchovy", "Cabernet Franc": "grilled lobster", "Montepulciano": "octopus stewed with tomatoes",
+      "Barbera": "sauced seafood, especially in tomato" }) || "lobster or crab, or shellfish in a tomato, mushroom or soy sauce",
+    why: "A light, low-tannin red works when the sauce or the lobster's richness bridges to it",
+    warn: "not with raw oysters, plain shrimp or scallops, which the books list under avoid for red wine", src: "D&P ch. 5, “Lobster”, “Seafood”; Harrington p. 211" },
+  { food: "Seafood", when: (c) => c.white && c.dry && c.body === "full",
+    dish: () => "grilled shrimp, oyster stew or baked oysters in cream",
+    why: "A buttery white matches rich, cooked shellfish",
+    warn: "never with raw oysters: “oak is the biggest no-no” (Rebecca Charles)", src: "D&P ch. 5, “Shrimp”, “Oysters”; Harrington p. 70" },
+  // ---- Red meat
+  { food: "Red meat", when: (c) => c.sparkling && c.rose, dish: () => "rare roast beef or beef carpaccio",
+    why: "A rosé sparkling suits beef “served the color of the Champagne, i.e., rare”", warn: "", src: "D&P ch. 5 and ch. 6, “Champagne: rosé”; Harrington p. 134" },
+  { food: "Red meat", when: (c) => c.white && c.has(["Riesling"]) && !c.sweetish, dish: () => "steak tartare, or a roast-beef sandwich",
+    why: "A high-acid Riesling cuts raw or cold beef, which “disproved the notion that red meat requires red wine”", warn: "not with a big grilled steak", src: "D&P preface and ch. 5, “Steak tartare”; Harrington p. 85" },
+  { food: "Red meat", when: (c) => c.white && c.dry && c.body === "full" && c.has(["Chardonnay", "Viognier", "Marsanne / Roussanne"]),
+    dish: (c) => c.pick({ "Viognier": "filet mignon with a citrus hollandaise", "Marsanne / Roussanne": "Asian- or Southwest-style beef with lime" }) || "steak with béarnaise, or veal",
+    why: "A rich white can stand up to beef when a buttery or citrus sauce bridges them", warn: "not with plain steak: the books list Chardonnay as one to avoid with red meat", src: "D&P ch. 5, “Steak: with Béarnaise”; ch. 6, “Condrieu”" },
+  // ---- Lamb
+  { food: "Lamb", when: (c) => c.sparkling && c.rose, dish: () => "rare rack of lamb or noisettes, served pink",
+    why: "Red fruit and bubbles suit delicate, rosy lamb", warn: "", src: "D&P ch. 6, “Champagne: rosé”; Fiona Beckett, Decanter 2026" },
+  { food: "Lamb", when: (c) => c.rosé && c.dry, dish: () => "grilled lamb, baby lamb, or kebabs and souvlaki",
+    why: "A dark, strong rosé works like a light red with grilled lamb", warn: "", src: "D&P ch. 5, “Lamb: baby”, “Lamb: kebabs”; Fiona Beckett, Decanter 2026" },
+  { food: "Lamb", when: (c) => c.white && !c.sweetish && c.has(["Viognier", "Marsanne / Roussanne", "Assyrtiko", "Riesling", "Gewürztraminer", "Pinot Grigio / Gris"]),
+    dish: (c) => c.pick({ "Viognier": "Moroccan lamb tagine or lamb korma", "Marsanne / Roussanne": "lamb tagine or navarin", "Assyrtiko": "garlic-and-herb grilled lamb, Greek style",
+      "Riesling": "spiced lamb curry", "Gewürztraminer": "spiced lamb curry or tagine", "Pinot Grigio / Gris": "lamb kebabs and souvlaki" }),
+    why: "Spices, citrus and herbs, not the meat, decide the wine, and a sharp or aromatic white can echo them", warn: "not with a plain roast leg", src: "D&P ch. 5, “Lamb: curry”, “Lamb: tagine”; Fiona Beckett, Decanter 2026" },
+  // ---- Pork
+  { food: "Pork", when: (c) => c.red && (c.tannic || (c.body === "full" && c.tannin === "firm")),
+    dish: (c) => c.pick({ "Malbec": "cassoulet or a thick grilled pork chop", "Syrah / Shiraz": "slow-cooked pork belly or barbecued ribs", "Nebbiolo": "roast pork", "Aglianico": "grilled sausages",
+      "Cabernet Sauvignon": "slow-roasted pork shoulder or barbecued ribs", "Tannat": "cassoulet" }) || "cassoulet, pork belly or barbecued ribs",
+    why: "The fat tames the tannin and the tannin cuts the fat; of Cahors with cassoulet: “Together, they become a revelation” (Craig Shelton)",
+    warn: "not with ham or prosciutto: salt makes tannin taste bitter", src: "D&P ch. 5, “Cassoulet”; Harrington p. 132, 172; Food & Wine 2017" },
+  { food: "Pork", when: (c) => c.sparkling && !c.sweetish, dish: () => "a glazed pork roast with apples, or chorizo",
+    why: "Bubbles and acidity cut the fat and lift the sweet glaze", warn: "", src: "Harrington p. 131; D&P ch. 5, “Sausage: chorizo”" },
+  { food: "Pork", when: (c) => c.fortified && !c.sweetish, dish: () => "Spanish cured ham",
+    why: "A dry fino or manzanilla sherry's salty tang mirrors the ham", warn: "", src: "D&P ch. 5, “Ham” and the sherry box" },
+  // ---- Chicken
+  { food: "Chicken", when: (c) => c.red && c.body !== "light" && c.has(["Zinfandel / Primitivo", "Syrah / Shiraz", "Cabernet Sauvignon", "Nebbiolo", "Tempranillo", "Grenache / Garnacha"]),
+    dish: (c) => c.pick({ "Zinfandel / Primitivo": "tandoori or barbecued chicken, or Buffalo wings", "Syrah / Shiraz": "chicken tikka masala or barbecued chicken", "Cabernet Sauvignon": "paprika chicken or roast chicken",
+      "Nebbiolo": "braised or stewed chicken", "Tempranillo": "roast chicken (a Rioja Reserva)", "Grenache / Garnacha": "chicken tikka masala" }),
+    why: "Spice, smoke and a rich sauce give chicken enough weight for a bigger red", warn: "not with plain poached white meat, which can taste metallic", src: "D&P ch. 5, “Chicken”, “Tandoori” (Alpana Singh); ch. 6, “Bordeaux, red”" },
+  { food: "Chicken", when: (c) => c.fortified && !c.sweetish, dish: () => "fried chicken",
+    why: "Dry sherry cleanses the palate and its salty tang mirrors the fried crust: “It's a staggering match” (Paul Grieco)", warn: "", src: "D&P ch. 5, “Chicken: fried”" },
+  // ---- Pasta and pizza
+  { food: "Pasta and pizza", when: (c) => c.sparkling && !c.sweetish, dish: () => "pizza, especially white pizza, and creamy pasta",
+    why: "In Naples white pizza goes with “all things with bubbles”, and bubbles cut cream and cheese", warn: "", src: "D&P ch. 5, “Pizza” (Scicolone), “Pasta: cream sauce”; Food & Wine 2017" },
+  { food: "Pasta and pizza", when: (c) => c.red && (c.tannic || (c.body === "full" && c.tannin === "firm")),
+    dish: (c) => c.pick({ "Corvina (Amarone, Valpolicella)": "spaghetti carbonara", "Syrah / Shiraz": "sausage pizza", "Malbec": "mushroom-and-sausage pizza", "Aglianico": "lamb ragù",
+      "Nebbiolo": "pasta with truffle butter", "Cabernet Sauvignon": "deep-dish or meaty pizza" }) || "deep-dish pizza or pasta with a rich meat ragù",
+    why: "A big red needs a big dish: meat, cheese and fat to soften its tannin",
+    warn: "not with sweet tomato sauce or sweet takeaway pizza: “I think it is the worst pairing” (Greg Harrington, of Chianti with American pizza)", src: "D&P ch. 5, “Pizza”, “Pasta”; Majestic" },
+  { food: "Pasta and pizza", when: (c) => c.white && c.body === "light" && c.has(["Riesling"]), dish: () => "pasta with cheese or cream sauce",
+    why: "A Kabinett's acidity and touch of sweetness cut the richness", warn: "", src: "D&P ch. 5, “Pasta”" },
+  // ---- Cheese
+  { food: "Cheese", when: (c) => c.red && c.has(["Gamay", "Dolcetto", "Barbera", "Zweigelt", "Blaufränkisch"]) && c.body !== "full",
+    dish: () => "a charcuterie-and-cheese plate with Reblochon, Camembert or aged sheep's cheese",
+    why: "Low tannin doesn't fight the cheese the way a big red does", warn: "", src: "D&P ch. 8 (Johnnes); ch. 5, “Cheese: Brie”" },
+  // ---- Spicy food
+  { food: "Spicy food", when: (c) => c.red && c.dry && c.body !== "light" && c.has(["Syrah / Shiraz", "Malbec", "Tempranillo", "Merlot", "Cabernet Sauvignon", "Barbera", "Sangiovese"]),
+    dish: (c) => c.pick({ "Syrah / Shiraz": "Indian food, or dishes with ancho chiles", "Malbec": "dishes with chipotle", "Tempranillo": "dishes with chipotle or other dried chiles",
+      "Merlot": "spicier Indian curries with meat", "Cabernet Sauvignon": "goat or lamb curry, or black-pepper steak", "Barbera": "dishes with pasilla chiles", "Sangiovese": "dishes with pasilla chiles" }),
+    why: "Warm spices and dried chiles echo a red's spice: “dried chiles work best with reds” (Jill Gubesch)",
+    warn: "keep the heat mild: “tannin and alcohol amplify the heat” (Lirette)", src: "D&P ch. 5, “Chiles”, “Indian”; InsideHook (Crandon); Harrington p. 198, 200" },
+  { food: "Spicy food", when: (c) => c.sparkling && !c.sweetish, dish: () => "spicy Mexican, Chinese or Indian food",
+    why: "“For spice, I like bubbles” (David Rosengarten): bubbles refresh, and a bolder sparkling stands up to heat", warn: "a Cava or a bold sparkling rather than a delicate Champagne",
+    src: "D&P ch. 5, “Mexican”; ch. 6, “Sparkling wine”" },
+  { food: "Spicy food", when: (c) => c.white && c.dry && c.body === "full", dish: () => "coconut curries and spicier Cajun dishes",
+    why: "A fruit-forward New World white has the body for rich, spiced sauces", warn: "keep the heat moderate", src: "Harrington p. 191; D&P ch. 5, “Curries”, “Thai”" },
+  // ---- Dessert
+  { food: "Dessert", when: (c) => c.red && c.dry && c.body === "full" && c.has(["Cabernet Sauvignon"]), dish: () => "bittersweet dark chocolate",
+    why: "Harrington finds bittersweet chocolate and Cabernet a pleasant match, when the chocolate is no sweeter than the wine",
+    warn: "disputed: “The idea that red wine and chocolate go together disturbs me” (Joseph Spellman)", src: "Harrington p. 155; D&P ch. 5, “Chocolate”" },
+  { food: "Dessert", when: (c) => c.red && c.dry && c.has(["Zinfandel / Primitivo"]) && c.abv >= 15, dish: () => "80% bittersweet chocolate",
+    why: "A big, ripe Zinfandel has the body and sweetness of fruit to stand up to dark chocolate", warn: "not milk chocolate", src: "St. Louis Magazine (John Sears); D&P ch. 4 (Alevras)" },
+  { food: "Dessert", when: (c) => c.red && c.dry && c.body !== "full" && c.has(["Gamay", "Pinot Noir", "Cabernet Franc"]), dish: () => "strawberries, raspberries or berry desserts that aren't very sweet",
+    why: "A fruity red echoes the berries", warn: "", src: "Harrington p. 298, 299; D&P ch. 5, “Berries”, “Strawberries”" },
+  { food: "Dessert", when: (c) => c.sparkling && !c.sweetish, dish: () => "coffee and nut desserts, or anything not very sweet",
+    why: "Dry bubbles work only when the dessert is less sweet than the wine", warn: "never wedding cake: “is horrifying!” (Madeline Triffon)", src: "D&P ch. 5, “Coffee desserts”, “Cake”; Harrington p. 301" },
+  { food: "Dessert", when: (c) => c.white && c.dry && c.body === "full" && c.has(["Chardonnay"]), dish: () => "cheesecake",
+    why: "“With cheesecake, you want a big, buttery California Chardonnay” (David Rosengarten)", warn: "", src: "D&P ch. 5, “Cheesecake”" },
+];
+function advContext(w) {
+  const s = wineStyle(w), gs = grapesOf(w).filter((g) => grapeFits(w, g)), sweet = s.sweet.v, t = w.type;
+  const name = fold([w.name, w.region_or_grape].filter(Boolean).join(" "));
+  return {
+    body: s.body.v, tannin: s.tannin.v, abv: w.abv || 0, sweetish: sweet === "sweet" || sweet === "medium-sweet", dry: sweet !== "sweet" && sweet !== "medium-sweet",
+    red: t === "Red", white: t === "White", rosé: t === "Rosé", sparkling: t === "Sparkling", fortified: t === "Fortified",
+    rose: /\bros(e|é)\b/.test(name), tannic: gs.some((g) => TANNIC_GRAPES.includes(g)),
+    has: (list) => gs.some((g) => list.includes(g)), pick: (map) => { const g = gs.find((x) => map[x]); return g ? map[g] : null; },
+  };
+}
+function advAdvice(w, rule) {
+  const c = advContext(w);
+  const dish = ruleDish(w, rule.food) || rule.dish(c);
+  return `${pairSentence(w, rule.food, dish)} ${rule.why}${rule.warn ? `; ${rule.warn}` : ""}. (${rule.src})`;
 }
 function boldFoodsOf(w) {
-  const s = wineStyle(w), body = s.body.v, tannin = s.tannin.v, sweet = s.sweet.v, g = grapesOf(w), out = [];
-  const dry = sweet !== "sweet" && sweet !== "medium-sweet";
-  const tannic = ["Cabernet Sauvignon", "Nebbiolo", "Tannat", "Petite Sirah", "Aglianico", "Mourvèdre / Monastrell", "Touriga Nacional", "Saperavi", "Syrah / Shiraz"].some((x) => g.includes(x));
-  if (w.type === "Red" && dry && body !== "full" && !tannic && (tannin === "soft" || ["Pinot Noir", "Gamay", "Barbera", "Zweigelt"].some((x) => g.includes(x))))
-    out.push({ food: "Fish", advice: advAdvice(w, "Fish") });
-  if (w.type === "Red" && dry && g.includes("Pinot Noir") && body !== "full") out.push({ food: "Seafood", advice: advAdvice(w, "Seafood") });
-  if (w.type === "White" && dry && body === "full") out.push({ food: "Red meat", advice: advAdvice(w, "Red meat") });
-  return out.filter((b) => !foodsOf(w).includes(b.food)); // already a classic match: nothing bold about it
+  const k = `${ratingsVer}|${ratedNamesVer}|${storeListsKey()}`;
+  if (w._bold && w._boldKey === k) return w._bold;
+  const c = advContext(w), classic = foodsOf(w), out = [];
+  for (const rule of ADV_RULES) {
+    if (classic.includes(rule.food) || out.some((b) => b.food === rule.food) || sweetOnly(w, rule.food) && rule.food !== "Dessert") continue;
+    if (rule.when(c) && rule.dish(c)) out.push({ food: rule.food, rule, get advice() { return advAdvice(w, rule); } });
+  }
+  w._boldKey = k;
+  return (w._bold = out);
 }
 // What a classic match is best with, for this kind of wine. Fish and seafood follow Wine
 // Folly's fish guide (zesty whites for delicate fish, richer whites for richer fish and
@@ -934,7 +1029,8 @@ function pairDish(w, food) {
     case "Pork": return t === "Red" ? (body === "light" ? "pork tenderloin, ham and sausages" : "roast pork, chops and ribs") : "roast pork, chops and ham";
     case "Chicken": return t === "Red" ? "roast chicken and chicken with mushrooms" : body === "full" ? "roast chicken and creamy chicken dishes" : "grilled chicken and lighter dishes with herbs or lemon";
     case "Pasta and pizza": return t === "Red" ? (body === "full" ? "pasta with meat sauce and lasagna" : "tomato pasta and pizza") : body === "full" ? "creamy pasta such as carbonara" : "pasta with seafood, pesto or tomato";
-    case "Cheese": return sweetish || t === "Dessert" || t === "Fortified" ? "blue and strong, salty cheeses" : t === "Red" ? "hard, aged cheeses such as Cheddar, Gouda or Parmesan" : "creamy, nutty cheeses such as Brie or Comté";
+    case "Cheese": return sweetish || t === "Dessert" || t === "Fortified" ? "blue and strong, salty cheeses" : t === "Red" ? (body === "full" || tannin === "firm" ? "hard, aged cheeses such as Parmesan, aged Cheddar or Gouda" : "soft and washed-rind cheeses such as Brie or Reblochon")
+      : t === "Sparkling" ? "Brie, Camembert and triple-crème cheeses" : body === "full" ? "creamy, nutty cheeses such as Brie or Comté" : "fresh goat cheese, feta and young cheeses";
     case "Spicy food": return sweetish || sweet === "off-dry" ? "Thai, Indian or Szechuan dishes" : "mildly spiced dishes";
     case "Dessert": return "desserts no sweeter than the wine";
     default: return "this kind of dish";
@@ -1029,20 +1125,60 @@ function pairSentence(w, food, dish) {
 // The advice that holds for every wine with a food, shown once under Food (not on each card).
 // Red with fish: Fiona Beckett; steak and tannin: Wine Spectator; spice and alcohol: VinePair;
 // shellfish and iron: the 2009 study reported by Phys.org.
+// One short line from the experts quoted in Dornenburg & Page, per food (checked word for word).
+const FOOD_QUOTES = {
+  "Fish": ["Tuna, which is a steak like fish, lends itself to red wine", "Michael Flynn"],
+  "Seafood": ["it will taste like it is out of a can", "Bernard Sun, on red wine with delicate shellfish"],
+  "Red meat": ["disproved the notion that red meat requires red wine", "Dornenburg & Page, on German Riesling with beef tartare"],
+  "Lamb": ["served the color of the Champagne, i.e., rare", "Dornenburg & Page, on rosé Champagne with lamb"],
+  "Pork": ["Together, they become a revelation.", "Craig Shelton, on Cahors with cassoulet"],
+  "Chicken": ["It's a staggering match.", "Paul Grieco, on dry sherry with fried chicken"],
+  "Pasta and pizza": ["I think it is the worst pairing", "Greg Harrington, on Chianti with sweet American pizza"],
+  "Cheese": ["Tannins often clash with cheeses, so red wines are less successful", "Max McCalman"],
+  "Spicy food": ["For spice, I like bubbles", "David Rosengarten"],
+  "Dessert": ["The idea that red wine and chocolate go together disturbs me.", "Joseph Spellman, master sommelier"],
+};
 const FOOD_GUIDE = {
   "Fish": "Whites: crisp, light ones for delicate fish and lemon or herb sauces, fuller ones for salmon, halibut and cream sauces. Reds with fish: light, soft ones, best when the fish is seared, grilled or barbecued, or has a spicy crust; poached fish and butter sauces usually call for a white.",
   "Seafood": "Crisp whites and sparkling for oysters, mussels and shrimp; fuller whites for lobster and crab. A 2009 study found some reds can leave a fishy aftertaste with shellfish, depending on the wine's iron, so a red here is an experiment.",
   "Red meat": "The fat in the meat smooths out a red's firm tannins, so bigger reds suit richer cuts and softer reds leaner ones. A full, oaky white also has the weight for steak, especially with butter or béarnaise.",
   "Lamb": "Fuller reds for roasts and stews, softer, fruitier ones for grilled chops with herbs.",
-  "Pork": "Pork goes both ways: fruitier reds for barbecue and sweet glazes, fuller whites for roasts and creamy sauces.",
+  "Pork": "Pork goes both ways. Riesling is the classic white (with choucroute, sausages and roast pork) and Pinot Noir or Beaujolais the classic reds; fruitier reds for barbecue and sweet glazes, fuller whites for creamy sauces.",
   "Chicken": "Match the sauce more than the bird: light whites for herbs and lemon, fuller whites for cream, light reds for mushrooms or roast chicken.",
   "Pasta and pizza": "Tomato sauces want acidity: a juicy red or a crisp white. Creamy sauces suit a fuller white; meat sauces a fuller red.",
-  "Cheese": "Hard, aged cheeses with reds; creamy and nutty cheeses with whites; blue and salty cheeses with something sweet.",
+  "Cheese": "Whites are the safer choice with most cheeses: tasters in Harrington's research rated them closest to an ideal match, and tannin often clashes. Crisp whites for goat cheese, Champagne for Brie and triple-crème, Riesling or Gewürztraminer for washed-rind and blue. Big reds for hard, aged cheeses such as Parmesan or aged Cheddar; something sweet for blue.",
   "Spicy food": "A touch of sweetness cools the heat, and high alcohol makes it seem hotter, so off-dry and lower-alcohol wines do best.",
   "Dessert": "The wine should be at least as sweet as the dessert.",
 };
 
-function classicAdvice(w, food) { return pairSentence(w, food, pairDish(w, food)); }
+// The book's dishes for this wine's grape and food, up to three, leaving out what the sentence
+// already names; a lighter wine leans to grilled, poached and cold dishes, a fuller one to
+// braised, roasted and stewed ones, so two wines of a grape needn't get the same three.
+const LIGHT_COOK = /\b(poached|grilled|cold|lean|lighter|light|raw|sauteed|steamed|tartare|carpaccio|simple)\b/;
+const RICH_COOK = /\b(braised|roasted|roast|stewed|rich|fuller|barbecued|cream|smoked|aged|strong)\b/;
+function bookDishes(w, food, main = "") {
+  if (sweetOnly(w, food)) return null;
+  const g = grapesOf(w).find((x) => grapeFits(w, x) && BOOK_DISHES[x]?.[food]);
+  if (!g) return null;
+  const body = wineStyle(w).body.v, want = body === "light" ? LIGHT_COOK : body === "full" ? RICH_COOK : null, said = fold(main);
+  const list = BOOK_DISHES[g][food]
+    .filter(([d]) => !said.includes(fold(d).split(/,| \(/)[0].replace(/^(grilled|roasted|braised|cold) /, "")))
+    .map(([d, lvl], i) => ({ d, lvl, sc: lvl * 2 + (want && want.test(fold(d)) ? 1 : 0) - i / 100 }))
+    .sort((a, b) => b.sc - a.sc).slice(0, 3);
+  return list.length ? { g, list } : null;
+}
+function bookLine(w, food, main) {
+  const b = bookDishes(w, food, main);
+  if (!b) {
+    const g = grapesOf(w).find((x) => grapeFits(w, x) && BOOK_DISHES[x]?.[food]);
+    const cl = g && !sweetOnly(w, food) && BOOK_DISHES[g][food].find(([, lvl]) => lvl === 4);
+    return cl ? ` Dornenburg & Page's pairing guide marks ${cl[0].split(/,| \(/)[0]} as a classic with ${PLAIN_GRAPE(g)}.` : "";
+  }
+  const names = b.list.map((x) => x.d), classic = b.list.find((x) => x.lvl === 4);
+  const join = names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}` : names[0];
+  return ` Dornenburg & Page's pairing guide lists ${PLAIN_GRAPE(b.g)} with ${join}${classic ? `, marking ${classic.d.split(/,| \(/)[0]} as a classic` : ""}.`;
+}
+function classicAdvice(w, food) { const d = pairDish(w, food); return pairSentence(w, food, d) + bookLine(w, food, d); }
 
 function foodMatchScore(w) {
   if (!state.food.size) return null;
@@ -1065,11 +1201,15 @@ function boldAdviceHtml(w) {
   // the classic lines and the store's own note share one purple paragraph, to save room
   // a match that rests only on the store's own note is described by that note alone
   const ownLine = (f) => grapeFoodLine(w, f) || (w._styleFoods || []).includes(f);
-  const classicBits = [...classic.filter(ownLine).map((f) => `<strong>Classic pairing with ${esc(f.toLowerCase())}:</strong> ${esc(classicAdvice(w, f))}`),
+  // each box shows only its heading; the write-up opens on a click, to keep the card short
+  const own = classic.filter(ownLine), many = own.length > 1;
+  const classicBits = [...own.map((f) => `${many ? `<strong>With ${esc(f.toLowerCase())}:</strong> ` : ""}${esc(classicAdvice(w, f))}`),
     ...(said && saysTicked ? [`<strong>The LCBO's note${w.source === "LCBO" ? "" : " for this wine"}:</strong> “${esc(said)}”`] : []),
     ...(claudePair(w) ? [`<strong>Claude's pick for this wine (from its research):</strong> ${esc(claudePair(w))}.`] : [])];
-  return (classicBits.length ? `<p class="classic-pair"><svg class="pair-icon" aria-hidden="true"><use href="#i-dine"/></svg> ${classicBits.join(" ")}</p>` : "") +
-    bold.map((b) => `<p class="bold-pair">🍷 <strong>Adventurous pairing with ${esc(b.food.toLowerCase())}:</strong> ${esc(b.advice)}</p>`).join("");
+  const title = own.length === 1 ? `Classic pairing with ${own[0].toLowerCase()}` : own.length ? `Classic pairings: ${own.map((f) => f.toLowerCase()).join(" · ")}` : "Pairing notes for this wine";
+  const more = `<span class="pair-more" aria-hidden="true"></span>`;
+  return (classicBits.length ? `<details class="classic-pair"><summary><svg class="pair-icon" aria-hidden="true"><use href="#i-dine"/></svg> <strong>${esc(title)}</strong>${more}</summary>${classicBits.join(" ")}</details>` : "") +
+    bold.map((b) => `<details class="bold-pair"><summary>🍷 <strong>Adventurous pairing with ${esc(b.food.toLowerCase())}</strong>${more}</summary>${esc(b.advice)}</details>`).join("");
 }
 
 // Tick lists with counts, like Country: each counts wines with the other choices applied.
@@ -1209,7 +1349,8 @@ function renderFood() {
       line += `${line ? "<br>" : ""}<strong>Hidden by your colour choice:</strong> ${what} also go with ${esc([...state.food].join(" or ").toLowerCase())}${state.foodBold ? " (classic or adventurous)" : ""}. <button type="button" class="btn btn-mini" data-action="show-hidden-types">Show them too</button>`;
     }
   }
-  const guide = [...state.food].map((f) => FOOD_GUIDE[f] ? `<br><strong>How to pair with ${esc(f.toLowerCase())}:</strong> ${esc(FOOD_GUIDE[f])}` : "").join("");
+  const guide = [...state.food].map((f) => FOOD_GUIDE[f] ? `<br><strong>How to pair with ${esc(f.toLowerCase())}:</strong> ${esc(FOOD_GUIDE[f])}` +
+    (FOOD_QUOTES[f] ? ` <em>“${esc(FOOD_QUOTES[f][0])}”</em> (${esc(FOOD_QUOTES[f][1])})` : "") : "").join("");
   $("food-note").innerHTML = line + guide;
   $("food-note").hidden = !$("food-note").innerHTML;
 }
@@ -3483,6 +3624,22 @@ function dineBudgetText() {
   return `$${dine.lo} to $${dine.hi}`;
 }
 
+// What the pairing books say for each food on the restaurant page, given to Claude with the
+// photo: classic styles, one adventurous idea, and what to avoid (Dornenburg & Page;
+// Harrington; Fiona Beckett). Only the foods chosen are sent, to keep the link short.
+const DINE_GUIDE = {
+  "Red meat": "classic: Cabernet, Syrah, Malbec, Zinfandel with fattier cuts; Pinot Noir with beef bourguignon or lean roast beef; Beaujolais with burgers or well-done steak. Adventurous: rosé Champagne with rare beef; Riesling with steak tartare. Avoid: tannic reds with well-done steak.",
+  "Lamb": "classic: Syrah, Rioja, Cabernet, Pinot Noir. Adventurous: rosé Champagne with rare rack; dry rosé with kebabs; Viognier with tagine. Avoid: big tannic reds with lamb curry.",
+  "Fish": "classic: crisp whites for delicate fish, fuller whites for salmon or butter sauces; Pinot Noir with salmon or tuna. Adventurous: Merlot, Zinfandel or Syrah with grilled tuna or swordfish. Avoid: tannic or oaky wines with delicate or raw fish.",
+  "Seafood": "classic: Champagne, Muscadet, Sancerre, Albariño, Riesling with crab. Adventurous: Pinot Noir with lobster or shellfish in tomato or mushroom sauce; dry sherry with shrimp. Avoid: red with raw oysters, plain shrimp or scallops; oak with raw shellfish.",
+  "Chicken": "classic: Chardonnay, Pinot Noir, Beaujolais. Adventurous: Zinfandel with tandoori or barbecued chicken; dry sherry or Champagne with fried chicken. Avoid: tannic Bordeaux with plain white meat.",
+  "Pork": "classic: Riesling, Pinot Noir, Beaujolais, Gewürztraminer with fruit sauces. Adventurous: Cahors or Syrah with cassoulet or pork belly; sparkling with glazed pork. Avoid: tannic reds with ham or prosciutto.",
+  "Pasta": "classic: Chianti, Barbera, Montepulciano with tomato and meat sauces; Chardonnay with cream sauces. Adventurous: Prosecco with creamy pasta. Avoid: tannic reds with sweet tomato sauce.",
+  "Pizza": "classic: Barbera, Chianti, dry Lambrusco, Zinfandel with sausage. Adventurous: Champagne or Prosecco, especially with white pizza. Avoid: Chianti with sweet American-style pizza.",
+  "Cheese": "classic: whites are the safer match (Sancerre with goat cheese, Champagne with Brie, Gewürztraminer or Riesling with washed-rind and blue); big reds only with hard, aged cheeses. Adventurous: Beaujolais with a cheese and charcuterie plate. Avoid: tannic reds with goat cheese or Manchego.",
+  "Spicy food": "classic: off-dry Riesling or Gewürztraminer, low alcohol. Adventurous: bubbles (Cava rather than delicate Champagne); ripe Zinfandel or Shiraz with spiced meat, not heat. Avoid: tannic, oaky or high-alcohol wines with real heat.",
+};
+const DINE_PRINCIPLES = "Pairing principles from Harrington's Food and Wine Pairing: the wine should be at least as sweet and as acidic as the food; salt and fried food love bubbles; fat and protein soften tannin; salt, chilli heat and lean meat make tannin harsher; match the weight of wine and dish; heat wants off-dry, lower-alcohol wine.";
 const DINE_TEMPLATE = `I'm at a restaurant and I'm attaching a photo of the wine list. Please read every wine and price on it, then help me choose. {CHOICES} {ABOUT_ME}
 
 Please:
@@ -3490,6 +3647,7 @@ Please:
 - Then recommend your top 5 wines from this list only, best first (fewer if fewer suit my food and budget). For each: the wine exactly as written on the list and its price on the list; what it is, in two or three sentences; what critics say about it, in your own words, with a score, its source and the vintage it's for, if you know one; why it suits my food and budget; and whether the price is fair compared with what the bottle usually costs in a store (restaurants often charge two to three times the store price).
 - Then, under the heading "Wines to skip", list up to 5 wines on this list I should avoid for this meal and budget (never one of your picks, and fewer if few deserve it). Give each one reason, exactly one of: Overpriced, Wrong for your food, Weak reviews, Past its best, and one sentence why.
 - If you can't read part of the photo, say so rather than guessing.
+- {GUIDE}- If the list has a good one, make one of your picks an adventurous match (a pairing beyond the usual rules that the guidance above or sommeliers back), say plainly that it's the adventurous pick and why it works, and warn me about any wine on the list that would clash with my food.
 - Keep it easy to read on a phone: I'm at the table. A clear heading for each pick, and no tables.
 
 At the very end, below a horizontal line (---), write this link as the largest heading (one #), exactly in this form: first the count, then one entry per pick in the same order, all joined by semicolons:
@@ -3514,10 +3672,16 @@ function dinePrompt() {
     if (budget) bits.push(`My budget is ${budget} for a bottle (glass prices can be anything sensible).`);
   }
   const about = String(storeGet(STORE.aboutMe, "") || "").trim();
-  return DINE_TEMPLATE
+  const guide = [...dine.food].filter((f) => DINE_GUIDE[f]).map((f) => `${f}: ${DINE_GUIDE[f]}`);
+  const build = (g) => DINE_TEMPLATE
+    .replace("{GUIDE}", g.length ? `Use this pairing guidance from two pairing books (Dornenburg & Page, What to Drink with What You Eat; Harrington, Food and Wine Pairing) alongside your own knowledge. ${DINE_PRINCIPLES} ${g.join(" ")}\n` : `${DINE_PRINCIPLES}\n`)
     .replace("{CHOICES}", bits.join(" "))
     .replace("{ABOUT_ME}", about ? `About me: ${about}` : "")
     .replace("{BASE}", location.href.split("#")[0].split("?")[0]);
+  // the books' guidance goes only while the whole prompt still fits in the link
+  let out = build(guide);
+  while (guide.length && claudeLink(out).prefilled === false) { guide.pop(); out = build(guide); }
+  return out;
 }
 
 function renderDine() {
