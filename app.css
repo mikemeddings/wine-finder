@@ -614,3 +614,14 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .country-list.leaving-out input[type="checkbox"]:checked { border-color: var(--danger); background: var(--danger-tint); }
 .country-list.leaving-out input[type="checkbox"]:checked::before { content: "✕"; color: var(--danger); font-weight: 700; font-size: 1.1rem; line-height: 1; }
 .country-list.leaving-out .check:has(input:checked) { background: var(--danger-tint); border-color: var(--danger); text-decoration: line-through; }
+/* Grapes: description under each name; a star for grapes common with the food ticked. */
+.grape-list { max-height: 26rem; }
+.food-star { color: #b38a1d; }
+.food-note { margin: 0.4rem 0 0; padding: 0.4rem 0.6rem; background: var(--green-tint); border-left: 4px solid var(--green); font-size: 1rem; }
+.grape-list.leaving-out input[type="checkbox"] { appearance: none; -webkit-appearance: none; width: 1.6rem; height: 1.6rem;
+  border: 2px solid var(--line); border-radius: 0.3rem; background: #fff; display: inline-grid; place-content: center; cursor: pointer; }
+.grape-list.leaving-out input[type="checkbox"]:checked { border-color: var(--danger); background: var(--danger-tint); }
+.grape-list.leaving-out input[type="checkbox"]:checked::before { content: "✕"; color: var(--danger); font-weight: 700; font-size: 1.1rem; line-height: 1; }
+.grape-list.leaving-out .check:has(input:checked) { background: var(--danger-tint); border-color: var(--danger); text-decoration: line-through; }
+.grape-guide dt { font-weight: 700; margin-top: 0.5rem; color: var(--wine); }
+.grape-guide dd { margin: 0 0 0 1rem; }

@@ -310,6 +310,7 @@ function defaultState() {
     countries: new Set(),
     countryOut: false, // true: the ticked countries are left out ("all countries except USA")
     grapes: new Set(),  // Grape: any of these
+    grapeOut: false,    // true: the ticked grapes are left out ("all grapes except Cabernet Sauvignon")
     grapeQ: "",
     food: new Set(),    // Food it goes with: any of these (estimated from the wine's style)
     vintFrom: null, vintTo: null, // Vintage slider (wines without a vintage drop out while it's set)
@@ -332,6 +333,7 @@ function defaultState() {
     ratedOnly: false, // "Scored by Claude or the family": any Claude, CellarTracker or family score
     readyNow: false,
     fruity: false,    // "Fruity & ripe"
+    longFinish: false, // "Long finish": Claude's answer only (no store gives it)
     pickLabel: "",    // the quick pick that set these filters, for the "Showing:" line
     sorts: ["best-desc", "", ""], // the Sort by box (older saved places may hold three levels)
     shown: PAGE_SIZE,
@@ -358,7 +360,7 @@ function matches(w, skip, st = state) {
   }
   if (st.bottleOnly && !STANDARD_ML.has(w.size_ml)) return false;
   if (st.newOnly && !w.new_since_last) return false;
-  if (skip !== "grape" && st.grapes.size && !grapesOf(w).some((g) => st.grapes.has(g))) return false;
+  if (skip !== "grape" && st.grapes.size && grapesOf(w).some((g) => st.grapes.has(g)) === st.grapeOut) return false;
   if (skip !== "food" && st.food.size && !foodsOf(w).some((f) => st.food.has(f))) return false;
   if (st.vintFrom != null || st.vintTo != null || st.oldOnly) {
     if (!w.vintage) return false;
@@ -372,13 +374,14 @@ function matches(w, skip, st = state) {
   if (st.continent && continentOf(w) !== st.continent) return false;
   if (st.ratedOnly && familyScore(w) == null) return false;
   if (st.wellRated && !wellRated(w)) return false;
-  if (st.body.size || st.tannin.size || st.sweetStyle.size || st.readyNow || st.fruity) {
+  if (st.body.size || st.tannin.size || st.sweetStyle.size || st.readyNow || st.fruity || st.longFinish) {
     const look = wineStyle(w);
     if (st.body.size && !st.body.has(look.body.v)) return false;
     if (st.tannin.size && !st.tannin.has(look.tannin.v)) return false;
     if (st.sweetStyle.size && !st.sweetStyle.has(look.sweet.v)) return false;
     if (st.readyNow && !look.ready.ready) return false;
     if (st.fruity && !look.fruity.v) return false;
+    if (st.longFinish && look.finish.v !== "long") return false;
   }
   // "Include wines whose sweetness is estimated" unticked: only wines with a measured figure
   if (!st.notRated && !wineStyle(w).sweet.measured) return false;
@@ -399,6 +402,9 @@ const SORT_KEYS = {
   vintage: { get: (w) => w.vintage, up: "Vintage: oldest first", down: "Vintage: newest first", first: "down" },
   abv: { get: (w) => w.abv, up: "Alcohol %: lowest first", down: "Alcohol %: highest first" },
   // the four steps, then the store's own figure within a step (grams of sugar, or BC's code)
+  // a wine's (first) grape, or the grape you ticked if it's a blend containing it
+  grape: { get: (w) => { const g = grapesOf(w); return (state.grapes.size && !state.grapeOut && g.find((x) => state.grapes.has(x))) || g[0] || null; },
+    text: true, up: "Grape: A to Z", down: "Grape: Z to A" },
   sweet: { get: (w) => { const v = wineStyle(w).sweet.v; return v ? SWEET_LEVELS.indexOf(v) * 1000 + estimatedStyle(w).sweetFine : null; },
     up: "Sweetness: driest first", down: "Sweetness: sweetest first", first: "down" },
   // Claude's score for this listing, or for the same wine at another store or in a cellar
@@ -635,19 +641,107 @@ function tickCounts(skip, valuesOf) {
   for (const w of findPool()) if (matches(w, skip)) for (const v of valuesOf(w)) counts.set(v, (counts.get(v) || 0) + 1);
   return counts;
 }
+// What each grape tastes like, in plain words, for anyone who doesn't know their grapes.
+const GRAPE_INFO = {
+  "Cabernet Sauvignon": "full-bodied, blackcurrant and cedar, firm tannins; ages well",
+  "Merlot": "medium to full, plum and chocolate, soft and smooth",
+  "Cabernet Franc": "medium-bodied, red berries, pepper and herbs",
+  "Pinot Noir": "light, cherry and raspberry, silky, gentle tannins",
+  "Gamay": "light and juicy, strawberry and cherry, very soft (Beaujolais)",
+  "Syrah / Shiraz": "full-bodied, blackberry and pepper; riper and softer as Australian Shiraz",
+  "Grenache / Garnacha": "full and warm, ripe strawberry and spice, soft tannins",
+  "Tempranillo": "medium to full, cherry, leather and vanilla (Rioja, Ribera del Duero)",
+  "Sangiovese": "medium-bodied, sour cherry and herbs, lively, firm (Chianti, Brunello)",
+  "Nebbiolo": "full, rose and tar, high tannin; needs age (Barolo, Barbaresco)",
+  "Montepulciano": "medium, dark cherry, soft and easy (Montepulciano d'Abruzzo)",
+  "Corvina (Amarone, Valpolicella)": "from light and cherry (Valpolicella) to rich and raisined (Amarone)",
+  "Malbec": "full-bodied, plum and blackberry, soft tannins (Argentina)",
+  "Zinfandel / Primitivo": "full, jammy blackberry and spice, soft",
+  "Touriga Nacional": "full, dark fruit and violets, firm (Portugal's Douro and Dão)",
+  "Carmenère": "medium to full, dark fruit with a green-pepper note, soft (Chile)",
+  "Pinotage": "full, smoky dark fruit (South Africa)",
+  "Tannat": "very full, dark fruit, very firm tannins (Uruguay, Madiran)",
+  "Mourvèdre / Monastrell": "full, dark fruit and earth, firm",
+  "Barbera": "medium, bright cherry, juicy, low tannin",
+  "Dolcetto": "light to medium, black cherry and almond, soft",
+  "Aglianico": "full, dark fruit and smoke, firm (southern Italy)",
+  "Nero d'Avola": "full, ripe plum, soft (Sicily)",
+  "Petite Sirah": "very full and inky, blueberry, firm",
+  "Petit Verdot": "full, dark and floral, firm; usually blended",
+  "Carignan": "medium to full, dark fruit and spice, rustic",
+  "Mencía": "medium, red fruit and floral, fresh (Spain's Bierzo)",
+  "Blaufränkisch": "medium, dark cherry and spice, lively (Austria)",
+  "Zweigelt": "light to medium, cherry, soft (Austria)",
+  "Saperavi": "full, dark fruit, firm (Georgia)",
+  "Xinomavro": "medium, sour cherry and tomato leaf, firm (Greece; like Nebbiolo)",
+  "Agiorgitiko": "medium to full, plum and spice, soft (Greece)",
+  "Chardonnay": "from crisp and lemony (Chablis) to rich, buttery and oaky",
+  "Sauvignon Blanc": "light and zesty, citrus, gooseberry and fresh herbs",
+  "Riesling": "aromatic, lime and peach, high acidity; bone dry to sweet",
+  "Pinot Grigio / Gris": "light and crisp (Grigio) to rounder and spicier (Gris)",
+  "Gewürztraminer": "full and perfumed, lychee and rose, often off-dry",
+  "Chenin Blanc": "apple and honey, dry to sweet (Vouvray)",
+  "Viognier": "full, apricot and blossom, soft",
+  "Grüner Veltliner": "light to medium, green apple and white pepper (Austria)",
+  "Albariño": "light and fresh, citrus and sea-salt (Spain, Portugal)",
+  "Sémillon": "waxy and lemony when dry; honeyed in Sauternes",
+  "Muscat / Moscato": "grapey and floral, usually sweet and light",
+  "Vermentino": "light, citrus and herbs, crisp (Italy, southern France)",
+  "Verdejo": "light, citrus and fennel (Rueda)",
+  "Godello": "medium, pear and mineral (Spain)",
+  "Chasselas": "light, delicate, mineral (Switzerland)",
+  "Garganega (Soave)": "light to medium, almond and lemon",
+  "Cortese (Gavi)": "light and crisp, lime and green apple",
+  "Pinot Blanc": "light to medium, apple, soft and gentle",
+  "Marsanne / Roussanne": "full, pear, honey and nuts (Rhône whites)",
+  "Assyrtiko": "dry, lemon and mineral, very crisp (Santorini)",
+  "Torrontés": "aromatic, floral and peachy, dry (Argentina)",
+  "Fiano": "medium, pear and hazelnut (southern Italy)",
+  "Furmint": "dry and crisp, or the sweet Tokaji of Hungary",
+  "Glera (Prosecco)": "light sparkling, pear and apple",
+};
+const grapeLabel = (g) => `<span class="sweet-name">${esc(g)}${foodStar.has(g) ? ` <span class="food-star" title="Suggested for the food you ticked">★</span>` : ""}` +
+  `${GRAPE_INFO[g] ? `<small>${esc(GRAPE_INFO[g])}</small>` : ""}</span>`;
+let foodStar = new Set(); // grapes most common among wines for the ticked food
 function renderGrapes() {
   if (!$("grape-list")) return;
   const counts = tickCounts("grape", grapesOf), q = fold(state.grapeQ);
   const names = [...new Set([...counts.keys(), ...state.grapes])].filter((g) => !q || fold(g).includes(q))
     .sort((a, b) => (counts.get(b) || 0) - (counts.get(a) || 0) || a.localeCompare(b));
   $("grape-list").innerHTML = names.length
-    ? names.map((g) => { const c = counts.get(g) || 0; return checkbox("grape", g, state.grapes.has(g), esc(g), c, c ? "" : " zero"); }).join("")
+    ? names.map((g) => { const c = counts.get(g) || 0; return checkbox("grape", g, state.grapes.has(g), grapeLabel(g), c, c ? "" : " zero"); }).join("")
     : `<p class="hint">No grape matches “${esc(state.grapeQ)}”.</p>`;
+  // what the stars mean, right where they are
+  const foods = [...state.food].map((f) => f.toLowerCase()).join(" or ");
+  $("grape-star-note").innerHTML = foodStar.size && !state.grapeOut
+    ? `<strong>★ Suggested for ${esc(foods)}:</strong> the grapes most often found among the wines that go with it. A pointer only: tick any you like.` : "";
+  $("grape-star-note").hidden = !$("grape-star-note").innerHTML;
+  $("grape-list").classList.toggle("leaving-out", state.grapeOut);
+  $("grape-out").setAttribute("aria-pressed", String(state.grapeOut));
+  $("grape-out").textContent = state.grapeOut ? "✓ Leaving out grapes" : "Leave out grapes";
+  $("grape-all").hidden = state.grapeOut;
+  $("grape-hint").textContent = state.grapeOut
+    ? "Tick a grape to leave it out (it shows an ✕); every other grape is shown, and wines whose grape isn't known stay in. Press the button again to go back to choosing."
+    : "From the store's grape list, the name, or the region (Barolo is Nebbiolo, Rioja is Tempranillo). A blend counts for each grape it names. Tick one or more.";
 }
+// Food doesn't choose grapes: it narrows the wines, and the grape counts follow. So with a
+// food ticked, say which grapes those wines most often are (and star them in the grape list).
 function renderFood() {
   if (!$("food-list")) return;
   const counts = tickCounts("food", foodsOf);
   $("food-list").innerHTML = FOODS.map((f) => { const c = counts.get(f) || 0; return checkbox("food", f, state.food.has(f), esc(f), c, c ? "" : " zero"); }).join("");
+  foodStar = new Set();
+  let line = "";
+  if (state.food.size) {
+    const g = tickCounts("grape", grapesOf); // the wines for this food (and your other choices), by grape
+    const top = [...g].sort((a, b) => b[1] - a[1]).slice(0, 5);
+    foodStar = new Set(top.map(([name]) => name));
+    if (top.length) line = `Good with ${[...state.food].map((f) => f.toLowerCase()).join(" or ")}, most often: ` +
+      top.map(([name, n]) => `<strong>${esc(name)}</strong> (${n.toLocaleString()})`).join(", ") +
+      `. These are marked ★ under Grape; ticking a food doesn't choose a grape for you.`;
+  }
+  $("food-note").innerHTML = line;
+  $("food-note").hidden = !line;
 }
 
 // Vintage and alcohol sliders: lowest and highest, the count changing as they move.
@@ -818,7 +912,7 @@ function renderResults() {
   else if (!state.notRated) parts.push("sweetness rated only");
   parts.push(state.bottleOnly ? "standard bottles" : "all sizes");
   if (state.newOnly) parts.push("new on the latest BC list");
-  if (state.grapes.size) parts.push(`grape: ${[...state.grapes].map(esc).join(" or ")}`);
+  if (state.grapes.size) parts.push(state.grapeOut ? `all grapes except ${[...state.grapes].map(esc).join(" and ")}` : `grape: ${[...state.grapes].map(esc).join(" or ")}`);
   if (state.food.size) parts.push(`goes with ${[...state.food].map((f) => esc(f.toLowerCase())).join(" or ")} (estimated)`);
   if (state.vintFrom != null || state.vintTo != null) parts.push(`vintage ${state.vintFrom ?? "any"}–${state.vintTo ?? "now"}`);
   if (state.oldOnly) parts.push("10 years or older");
@@ -830,6 +924,7 @@ function renderResults() {
   if (state.ratedOnly) parts.push("scored by Claude, CellarTracker or the family");
   if (state.wellRated) parts.push(`rated ${WELL_RATED}+`);
   if (state.fruity) parts.push("fruity & ripe (Claude's answer, else estimated)");
+  if (state.longFinish) parts.push("long finish (Claude-scored wines)");
   if (state.readyNow) parts.push("ready to drink now");
   if (state.pickLabel) parts.unshift(`<strong>${esc(state.pickLabel)}</strong>`);
   if (cellarOn()) {
@@ -873,12 +968,13 @@ function choicesMade(st = state) {
   if (st.countries.size) out.push([(st.countryOut ? "leaving out " : "") + (st.countries.size > 2 ? `${st.countries.size} countries` : [...st.countries].join(st.countryOut ? " and " : " or ")), (x) => { x.countries = new Set(); }]);
   if (st.wellRated) out.push(["Only well rated", FINDER_CLEAR.wellRated]);
   if (st.fruity) out.push(["Fruity & ripe", FINDER_CLEAR.fruity]);
+  if (st.longFinish) out.push(["Long finish", FINDER_CLEAR.longFinish]);
   if (st.readyNow) out.push(["Ready to drink now", FINDER_CLEAR.readyNow]);
   if (st.ratedOnly) out.push(["Scored by Claude or the family", FINDER_CLEAR.ratedOnly]);
   if (st.q) out.push([`the words “${st.q}”`, (x) => { x.q = ""; }]);
   if (!st.notRated) out.push(["measured sweetness only", (x) => { x.notRated = true; }]);
   if (st.newOnly) out.push(["new wines only", (x) => { x.newOnly = false; }]);
-  if (st.grapes.size) out.push([[...st.grapes].join(" or "), (x) => { x.grapes = new Set(); }]);
+  if (st.grapes.size) out.push([(st.grapeOut ? "leaving out " : "") + [...st.grapes].join(st.grapeOut ? " and " : " or "), (x) => { x.grapes = new Set(); }]);
   if (st.food.size) out.push([`goes with ${[...st.food].join(" or ")}`, (x) => { x.food = new Set(); }]);
   if (st.vintFrom != null || st.vintTo != null) out.push(["the vintage range", (x) => { x.vintFrom = x.vintTo = null; }]);
   if (st.oldOnly) out.push(["10 years or older", (x) => { x.oldOnly = false; }]);
@@ -961,8 +1057,8 @@ function renderSortStatus() {
 function renderAll() {
   renderFinder();
   renderSidePrice();
-  renderGrapes();
   renderFood();
+  renderGrapes();
   renderRanges();
   renderSources();
   renderCountries();
@@ -977,8 +1073,8 @@ function refresh() {
   renderFinder();
   renderSweet();
   renderSidePrice();
-  renderGrapes();
   renderFood();
+  renderGrapes();
   renderRanges();
   renderCountries();
   renderTypes();
@@ -1076,14 +1172,14 @@ For each wine, please:
 - Search the web for professional reviews and community notes (for example Wine Enthusiast, Decanter, James Suckling, Vinous, Jancis Robinson, CellarTracker).
 - Give your own overall score out of 100, based on what the reviewers say (your judgement, not a copy of any one critic's score), and the vintage it applies to. If you only find reviews of another vintage, you may use them, but give that vintage.
 - In up to eight words, say what your score rests on, for example: WE 92, Decanter 90 for 2021.
-- Describe its style from the reviews and the tasting notes: body (light, medium or full), tannin (soft, medium or firm; for whites, leave it empty), sweetness (dry, off-dry, medium-sweet or sweet), whether it's fruit-forward (ripe and fruity-tasting even when dry, like many Malbecs or Australian Shiraz: yes or no), and when to drink it (from year to year).
+- Describe its style from the reviews and the tasting notes: body (light, medium or full), tannin (soft, medium or firm; for whites, leave it empty), sweetness (dry, off-dry, medium-sweet or sweet), whether it's fruit-forward (ripe and fruity-tasting even when dry, like many Malbecs or Australian Shiraz: yes or no), how long its flavour lasts after swallowing (the finish: short, medium or long), and when to drink it (from year to year).
 - If you can't find any reviews, say so plainly rather than estimating the score; give the style only if you know the wine.
 
-Keep the answer short: one line per wine, in my order, as: number. wine — score (vintage) — what it rests on — body, tannin, sweetness, fruit-forward or not — drink from–to.
+Keep the answer short: one line per wine, in my order, as: number. wine — score (vintage) — what it rests on — body, tannin, sweetness, fruit-forward or not, finish — drink from–to.
 
 Last of all, after a horizontal line (---), give me a link to save the scores, as the largest heading (one #), itself the link, exactly in this form, one entry per wine joined by semicolons:
-# [💾 Save these scores to my Wine Finder]({BASE}#scores=CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT;CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT)
-CODE is the wine's code in square brackets in my list; POINTS is your score (leave it empty if you found no reviews); VINTAGE is the vintage your score is for, or NV; NOTE is what it rests on, up to eight words, with + instead of spaces and no semicolons or tildes; BODY is light, medium or full; TANNIN is soft, medium or firm (empty for whites); SWEET is dry, off-dry, medium-sweet or sweet; DRINK is the drinking window as 2024-2030; FRUIT is yes if it's fruit-forward, otherwise no. Leave any of these empty if you don't know.`;
+# [💾 Save these scores to my Wine Finder]({BASE}#scores=CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT~FINISH;CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT~FINISH)
+CODE is the wine's code in square brackets in my list; POINTS is your score (leave it empty if you found no reviews); VINTAGE is the vintage your score is for, or NV; NOTE is what it rests on, up to eight words, with + instead of spaces and no semicolons or tildes; BODY is light, medium or full; TANNIN is soft, medium or firm (empty for whites); SWEET is dry, off-dry, medium-sweet or sweet; DRINK is the drinking window as 2024-2030; FRUIT is yes if it's fruit-forward, otherwise no; FINISH is short, medium or long. Leave any of these empty if you don't know.`;
 
 let scorePicks = [];
 
@@ -1852,19 +1948,20 @@ function clearMyRating(id) {
 // The style Claude gives with a quick score: BODY~TANNIN~SWEET~DRINK, each checked
 // against its few allowed words (anything else is dropped rather than guessed).
 const CR_STYLE = { body: ["light", "medium", "full"], tannin: ["soft", "medium", "firm"], sweet: SWEET_LEVELS };
-function readStyle([body = "", tannin = "", sweet = "", drink = "", fruit = ""]) {
+function readStyle([body = "", tannin = "", sweet = "", drink = "", fruit = "", finish = ""]) {
   const pick = (v, list) => (list.includes(v.toLowerCase()) ? v.toLowerCase() : null);
   const out = { body: pick(body, CR_STYLE.body), tannin: pick(tannin, CR_STYLE.tannin), sweet: pick(sweet.replace(/\s+/g, "-"), CR_STYLE.sweet) };
   const m = /^((?:19|20)\d\d)\s*[-–]\s*((?:19|20)\d\d)$/.exec(drink);
   if (m && +m[1] <= +m[2]) { out.drinkFrom = +m[1]; out.drinkTo = +m[2]; }
   if (/^(yes|no)$/i.test(fruit.trim())) out.fruity = /^yes$/i.test(fruit.trim());
+  if (/^(short|medium|long)$/i.test(finish.trim())) out.finish = finish.trim().toLowerCase();
   return Object.fromEntries(Object.entries(out).filter(([, v]) => v != null));
 }
 
 // "full-bodied, soft tannins, dry · drink 2024–2030"
 function styleText(c) {
   if (!c) return "";
-  const bits = [c.body && `${c.body}-bodied`, c.tannin && `${c.tannin} tannins`, c.sweet, c.fruity && "fruit-forward"].filter(Boolean).join(", ");
+  const bits = [c.body && `${c.body}-bodied`, c.tannin && `${c.tannin} tannins`, c.sweet, c.fruity && "fruit-forward", c.finish && `${c.finish} finish`].filter(Boolean).join(", ");
   const drink = c.drinkFrom ? `drink ${c.drinkFrom}–${c.drinkTo}` : "";
   return [bits, drink].filter(Boolean).join(" · ");
 }
@@ -1989,7 +2086,7 @@ async function confirmSavedRatings() {
     const name = findWine(it.id)?.name || real(ratingOf(it.id).name) || it.name || real(frOf(it.id).name) ||
       (it.id.startsWith("typed-") ? it.id.slice(6).replace(/-/g, " ") : it.id); // a typed wine's code is its name
     const r = { ...ratingOf(it.id), name };
-    const style = Object.fromEntries(["body", "tannin", "sweet", "fruity", "drinkFrom", "drinkTo"].filter((k) => it[k] != null).map((k) => [k, it[k]]));
+    const style = Object.fromEntries(["body", "tannin", "sweet", "fruity", "finish", "drinkFrom", "drinkTo"].filter((k) => it[k] != null).map((k) => [k, it[k]]));
     const claude = it.claude !== false ? { points: it.points, vintage: it.vintage, note: it.note, date: today, ...(it.quick ? { quick: true, ...style } : {}) } : null;
     const mine = it.mine ? { ...it.mine, date: today } : null;
     if (claude) r.claude = claude;
@@ -2126,7 +2223,7 @@ function ratedTwin(w) {
   if (ratedNamesVer !== ver) {
     ratedNamesVer = ver;
     ratedNames = Object.entries(familyRatings)
-      .filter(([, r]) => r.name && (r.claude?.points || r.family?.points || r.claude?.body || r.claude?.drinkFrom || r.claude?.fruity != null))
+      .filter(([, r]) => r.name && (r.claude?.points || r.family?.points || r.claude?.body || r.claude?.drinkFrom || r.claude?.fruity != null || r.claude?.finish))
       .map(([id, r]) => ({ id, r, key: [...storeTokens(r.name)].sort((a, b) => b.length - a.length)[0] || "" }))
       .filter((x) => x.key.length > 2);
   }
@@ -2736,7 +2833,7 @@ function estimatedStyle(w) {
 // Claude's own answer for this wine (its own listing, the same wine at another store, or
 // a family cellar), if it gave style or a drinking window.
 function claudeStyle(w) {
-  const has = (c) => c && (c.body || c.sweet || c.drinkFrom || c.fruity != null);
+  const has = (c) => c && (c.body || c.sweet || c.drinkFrom || c.fruity != null || c.finish);
   const own = ratingOf(w.id).claude || frOf(w.id).claude;
   if (has(own)) return own;
   const twin = ratedTwin(w)?.claude;
@@ -2772,7 +2869,7 @@ function wineStyleNow(w) {
   const pick = (k) => (cl?.[k] != null ? { v: cl[k], src: "Claude" } : { v: est[k], src: est[k] != null ? "estimate" : null });
   return { continent: continentOf(w), body: pick("body"), tannin: w.type === "Red" ? pick("tannin") : { v: null, src: null },
     sweet: { ...pick("sweet"), how: cl?.sweet ? "Claude's answer" : est.sweetHow, measured: !!cl?.sweet || est.sweetMeasured },
-    fruity: pick("fruity"), ready: readiness(w, est, cl) };
+    fruity: pick("fruity"), finish: { v: cl?.finish || null, src: cl?.finish ? "Claude" : null }, ready: readiness(w, est, cl) };
 }
 
 function familyLinksHtml(w) {
@@ -3725,7 +3822,7 @@ function setFinder(key, v) {
   const on = finderOn(key, v);
   if (key === "price") { state.priceFrom = null; state.priceTo = on ? null : v; }
   else if (key === "colour") state.types = on ? new Set() : new Set([v]);
-  else if (key === "wellRated" || key === "readyNow" || key === "ratedOnly" || key === "fruity") state[key] = !state[key];
+  else if (key === "wellRated" || key === "readyNow" || key === "ratedOnly" || key === "fruity" || key === "longFinish") state[key] = !state[key];
   else if (MULTI_ROWS.has(key)) { const set = new Set(state[key]); on ? set.delete(v) : set.add(v); state[key] = set; }
   else {
     state[key] = on ? "" : v;
@@ -3757,6 +3854,7 @@ const FINDER_CLEAR = {
   wellRated: (st) => { st.wellRated = false; },
   readyNow: (st) => { st.readyNow = false; },
   fruity: (st) => { st.fruity = false; },
+  longFinish: (st) => { st.longFinish = false; },
   ratedOnly: (st) => { st.ratedOnly = false; },
 };
 function finderValues(key, w) {
@@ -3768,6 +3866,7 @@ function finderValues(key, w) {
   if (key === "wellRated") return wellRated(w) ? [1] : [];
   if (key === "readyNow") return wineStyle(w).ready.ready ? [1] : [];
   if (key === "fruity") return wineStyle(w).fruity.v ? [1] : [];
+  if (key === "longFinish") return wineStyle(w).finish.v === "long" ? [1] : [];
   return familyScore(w) != null ? [1] : []; // ratedOnly
 }
 // One pass over the wines per row: the other rows' choices stay, this row's is undone.
@@ -3811,7 +3910,8 @@ function renderFinder() {
     (hint ? `<span class="finder-hint">${esc(hint)}</span>` : "") + `</div>`);
   rows.push(`<div class="finder-row"><span class="finder-label">Also</span>` +
     tap("wellRated", 1, `Only well rated (${WELL_RATED}+)`, state.wellRated, n("wellRated", 1)) +
-    tap("readyNow", 1, "Ready to drink now", state.readyNow, n("readyNow", 1)) + `</div>`);
+    tap("readyNow", 1, "Ready to drink now", state.readyNow, n("readyNow", 1)) +
+    tap("longFinish", 1, "Long finish (Claude-scored)", state.longFinish, n("longFinish", 1)) + `</div>`);
   const stores = [...[...state.sources].filter((x) => !ALL_SOURCES.includes(x)), ...storesTicked().map(sourceLabel)].join(", ") || "nothing ticked yet";
   rows.push(`<p class="finder-stores">Looking in: <strong>${esc(stores)}</strong>
     <button type="button" class="btn btn-mini" data-action="finder-stores">Change stores</button></p>`);
@@ -3879,7 +3979,7 @@ function countrySelectHtml() {
 
 // ---- Quick picks: "Scored by Claude or the family" and each person's own -----------------
 // Saved picks live on this computer only (localStorage), so Dad's are his and Jon's are his.
-const PICK_KEYS = ["countries", "countryOut", "grapes", "food", "vintFrom", "vintTo", "oldOnly", "abvFrom", "abvTo", "types", "sweet", "priceFrom", "priceTo", "notRated", "bottleOnly", "q",
+const PICK_KEYS = ["countries", "countryOut", "grapes", "grapeOut", "food", "longFinish", "vintFrom", "vintTo", "oldOnly", "abvFrom", "abvTo", "types", "sweet", "priceFrom", "priceTo", "notRated", "bottleOnly", "q",
   "body", "tannin", "sweetStyle", "continent", "wellRated", "ratedOnly", "readyNow", "fruity", "sorts", "sources"];
 const myPicks = () => { const p = storeGet(STORE.myPicks, []); return Array.isArray(p) ? p : []; };
 
@@ -3916,6 +4016,18 @@ function pickCount(st) {
   return pool.reduce((k, w) => k + matches(w, null, st), 0);
 }
 
+// "Smooth & bold": the most-asked-for taste, full body without bitter tannins, in one tap.
+const smoothBoldOn = () => state.body.size === 1 && state.body.has("full") && state.tannin.size === 1 && state.tannin.has("soft");
+function toggleSmoothBold() {
+  const on = smoothBoldOn();
+  state.body = on ? new Set() : new Set(["full"]);
+  state.tannin = on ? new Set() : new Set(["soft"]);
+  if (!on && state.types.size && !state.types.has("Red")) state.types = new Set(["Red"]); // soft tannins means a red
+  state.pickLabel = "";
+  state.shown = PAGE_SIZE;
+  refresh();
+}
+
 function renderMyPicks() {
   const box = $("my-picks");
   if (!box) return;
@@ -3923,7 +4035,10 @@ function renderMyPicks() {
   // "Scored by Claude or the family" filters on top of the other choices, like every other
   // button here: tap to switch it on, tap again to switch it off.
   const fav = pickCount({ ...cloneState(state), ratedOnly: true });
-  box.innerHTML = `<span class="my-pick"><button type="button" class="btn pick-btn" data-finder="ratedOnly" data-v="1" aria-pressed="${state.ratedOnly}">` +
+  const sb = smoothBoldOn();
+  box.innerHTML = `<span class="my-pick"><button type="button" class="btn pick-btn" data-action="smooth-bold" aria-pressed="${sb}">` +
+    `${sb ? "✓" : "🍷"} Smooth & bold <span class="pick-count">· full-bodied, soft tannins · ${pickCount({ ...cloneState(state), body: new Set(["full"]), tannin: new Set(["soft"]) })?.toLocaleString() ?? "…"}</span></button></span>` +
+    `<span class="my-pick"><button type="button" class="btn pick-btn" data-finder="ratedOnly" data-v="1" aria-pressed="${state.ratedOnly}">` +
     `${state.ratedOnly ? "✓" : "⭐"} Scored by Claude or the family <span class="pick-count">· ${fav == null ? "…" : fav.toLocaleString()}</span></button></span>` +
     picks.map((p, i) => pickButtonHtml(`data-mypick="${i}"`, p.label, pickCount(pickToState(p)),
       `<button type="button" class="btn btn-mini pick-x" data-unpick="${i}" aria-label="Remove the quick pick ${esc(p.label)}">✕</button>`)).join("");
@@ -4016,6 +4131,7 @@ function debounce(fn, ms) {
 
 function wireEvents() {
   renderFinder();
+  if ($("grape-guide")) $("grape-guide").innerHTML = Object.entries(GRAPE_INFO).map(([g, d]) => `<dt>${esc(g)}</dt><dd>${esc(d)}</dd>`).join("");
   const folds = storeGet(STORE.folds, {});
   for (const name of Object.keys(FOLDS)) setFold(name, folds?.[name] !== false, false);
   wireMyWines();
@@ -4034,6 +4150,7 @@ function wireEvents() {
     else if (t.dataset.action === "finder-show") $("results-h").scrollIntoView({ block: "start" });
     else if (t.dataset.action === "finder-stores") openStoreChoices();
     else if (t.dataset.action === "empty-fix") applyEmptyFix();
+    else if (t.dataset.action === "smooth-bold") toggleSmoothBold();
     else if (t.dataset.view) { showView(t.dataset.view); if (t.dataset.focus) $(t.dataset.focus)?.focus(); }
     else if (t.dataset.add) {
       const id = t.dataset.add;
@@ -4141,6 +4258,18 @@ function wireEvents() {
     refresh();
   });
   $("country-none").addEventListener("click", () => { state.countries.clear(); state.shown = PAGE_SIZE; refresh(); });
+  $("grape-all").addEventListener("click", () => {
+    for (const g of tickCounts("grape", grapesOf).keys()) if (!state.grapeQ || fold(g).includes(fold(state.grapeQ))) state.grapes.add(g);
+    state.shown = PAGE_SIZE;
+    refresh();
+  });
+  $("grape-none").addEventListener("click", () => { state.grapes.clear(); state.shown = PAGE_SIZE; refresh(); });
+  $("grape-out").addEventListener("click", () => { // switching what a tick means starts the list afresh
+    state.grapeOut = !state.grapeOut;
+    state.grapes.clear();
+    state.shown = PAGE_SIZE;
+    refresh();
+  });
   $("country-out").addEventListener("click", () => { // switching what a tick means starts the list afresh
     state.countryOut = !state.countryOut;
     state.countries.clear();

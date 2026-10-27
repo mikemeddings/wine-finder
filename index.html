@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-27.28">
+<link rel="stylesheet" href="app.css?v=2026-10-27.30">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -108,13 +108,21 @@
           <legend>Grape</legend>
           <label for="grape-q" class="hint">Type to find a grape</label>
           <input type="search" id="grape-q" autocomplete="off">
-          <p class="hint">From the store's grape list, the name, or the region (Barolo is Nebbiolo, Rioja is Tempranillo). A blend counts for each grape it names. Tick one or more.</p>
-          <div id="grape-list" class="country-list"></div>
+          <div class="mini-row">
+            <button type="button" class="btn btn-mini" id="grape-all">Select all</button>
+            <button type="button" class="btn btn-mini" id="grape-none">Clear all</button>
+            <button type="button" class="btn btn-mini btn-out" id="grape-out" aria-pressed="false">Leave out grapes</button>
+          </div>
+          <p class="hint" id="grape-hint">From the store's grape list, the name, or the region (Barolo is Nebbiolo, Rioja is Tempranillo). A blend counts for each grape it names. Tick one or more.</p>
+          <p class="food-note" id="grape-star-note" hidden></p>
+          <div id="grape-list" class="country-list grape-list"></div>
+          <p class="hint"><button type="button" class="linklike" data-help="help-grapes">What do these grapes taste like?</button></p>
         </fieldset>
 
         <fieldset>
           <legend>Food it goes with</legend>
           <div id="food-list"></div>
+          <p class="food-note" id="food-note" hidden></p>
           <p class="hint">Estimated from the wine's colour, body, tannin and sweetness: a guide, not a sommelier. Tick one or more.</p>
         </fieldset>
 
@@ -311,6 +319,7 @@
       <li><a href="#help-research">Research a wine with Claude</a></li>
       <li><a href="#help-dine">At a restaurant</a></li>
       <li><a href="#help-cellars">Family cellars</a></li>
+      <li><a href="#help-grapes">Grapes explained</a></li>
       <li><a href="#help-ratings">Ratings explained</a></li>
       <li><a href="#help-mywines">My wines</a></li>
       <li class="help-keeper"><a href="#help-keeper">For the website keeper</a></li>
@@ -396,6 +405,12 @@
     </ul>
     <p>Only wine names and scores are shared: never prices, bin locations, notes or bottle counts.</p>
     <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+
+  <section id="help-grapes" class="help-topic">
+    <h3>Grapes explained</h3>
+    <p>What each grape usually tastes like, in plain words. A guide only: where it's grown, the winemaker and the vintage all change it. If you like full body without bitter tannins, look for <strong>Malbec, Zinfandel, Grenache, Shiraz, Amarone</strong> and <strong>Carmenère</strong>, or tap <strong>🍷 Smooth &amp; bold</strong> in Find me a wine.</p>
+    <dl id="grape-guide" class="grape-guide"></dl>
   </section>
 
   <section id="help-ratings" class="help-topic">
@@ -643,6 +658,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-27.28"></script>
+<script src="app.js?v=2026-10-27.30"></script>
 </body>
 </html>
