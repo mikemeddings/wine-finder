@@ -2268,10 +2268,11 @@ function storeMatchesOf(cellarId) {
   return storeMatchIndex.get(cellarId) || [];
 }
 
-// A cellar keeps no prices. Shown with stores ticked, a cellar wine takes the price of its
-// match at those stores: a standard bottle first, then the cheapest.
+// A cellar wine's own price never counts (the keeper's own copy of a cellar may hold what
+// the owner paid). Shown with stores ticked, it takes the price of its match at those
+// stores: a standard bottle first, then the cheapest; with no store ticked it has none.
 function priceOf(w, st = state) {
-  if (w.price != null || w.kind !== "cellar") return w.price ?? null;
+  if (w.kind !== "cellar") return w.price ?? null;
   const ticked = storesTicked(st);
   let best = null;
   for (const s of ticked.length ? storeMatchesOf(w.id) : []) {
