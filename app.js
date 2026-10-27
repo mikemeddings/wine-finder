@@ -1321,7 +1321,8 @@ function renderGrapes() {
       `<span class="food-star tier-1">★</span> pairs, but less often chosen` + (foodAdv.size ? ` · <span class="food-adv">🍷</span> adventurous` : "") +
       ` (stars from Dornenburg & Page's pairing guide). Tick any grapes you like, one or many.` +
       `<span class="mini-row">${tierBtn(3, "go-to grapes")}${tierBtn(2, "common grapes")}${tierBtn(1, "off-the-beaten-path grapes")}` +
-      `${foodAdv.size ? `<button type="button" class="btn btn-mini" data-action="tick-adv">Tick 🍷 adventurous grapes (${foodAdv.size})</button>` : ""}</span>` : "";
+      `${foodAdv.size ? `<button type="button" class="btn btn-mini" data-action="tick-adv">Tick 🍷 adventurous grapes (${foodAdv.size})</button>` : ""}` +
+      `${state.grapes.size ? `<button type="button" class="btn btn-mini" data-action="untick-grapes">Untick all grapes (${state.grapes.size})</button>` : ""}</span>` : "";
   $("grape-star-note").hidden = !$("grape-star-note").innerHTML;
   $("grape-list").classList.toggle("leaving-out", state.grapeOut);
   $("grape-out").setAttribute("aria-pressed", String(state.grapeOut));
@@ -4820,6 +4821,12 @@ function wireEvents() {
     else if (t.dataset.action === "finder-stores") openStoreChoices();
     else if (t.dataset.action === "empty-fix") applyEmptyFix();
     else if (t.dataset.action === "smooth-bold") toggleSmoothBold();
+    else if (t.dataset.action === "untick-grapes") {
+      state.grapes = new Set();
+      state.grapeOut = false;
+      state.shown = PAGE_SIZE;
+      refresh();
+    }
     else if (t.dataset.action === "tick-tier" || t.dataset.action === "tick-adv") {
       if (state.grapeOut) { state.grapeOut = false; state.grapes = new Set(); }
       const want = +t.dataset.tier;
