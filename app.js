@@ -931,17 +931,10 @@ function openScoreDialog() {
 async function goScoreClaude() {
   const prompt = scorePrompt();
   const { url, prefilled } = claudeLink(prompt);
-  let copied = false, win;
-  const open = () => { win = window.open(url, "_blank"); if (win) win.opener = null; };
-  if (prefilled) { open(); copied = await copyText(prompt); } else { copied = await copyText(prompt); open(); }
   const res = $("score-result");
   res.hidden = false;
-  const then = ` When it's done (a few minutes), click <strong>💾 Save these scores to my Wine Finder</strong> at the end of its answer.`;
-  res.innerHTML = !win ? `Your browser stopped the new tab from opening. Please press the button again, or <a href="${esc(url)}" target="_blank" rel="noopener">open Claude here</a>.`
-    : prefilled ? `Claude is open in a new tab. Go to it, check the question, and ${SEND}.${then}`
-    : copied ? `Claude is open in a new tab. In it, ${PASTE}.${then}`
-    : `Claude is open in a new tab. Please copy the question from the box below, then ${PASTE}.${then}`;
-  $("score-go").textContent = "Open Claude again";
+  res.innerHTML = prefilled ? "Opening Claude…" : "Copying your question and opening Claude…";
+  await openClaudeHere(url, prompt);
 }
 
 function claudePrompt(mode = claudeMode) {
@@ -1040,6 +1033,17 @@ function setStatus(msg) {
 // back to the clipboard alone.
 const CLAUDE_PREFILL_MAX = 7000;
 
+// Claude opens in this tab, in place of the Wine Finder. Claude's own link back always opens
+// a fresh Wine Finder tab, so this leaves two tabs (Claude and the Wine Finder) instead of
+// three; the browser's Back button in Claude also returns here. The question is copied
+// first, in case the link can't carry it all.
+async function openClaudeHere(url, prompt) {
+  const copied = await copyText(prompt);
+  savePlace();
+  location.assign(url);
+  return copied;
+}
+
 function claudeLink(prompt) {
   const prefillUrl = `${CLAUDE_URL}?q=${encodeURIComponent(prompt)}`;
   const prefilled = prefillUrl.length <= CLAUDE_PREFILL_MAX;
@@ -1055,11 +1059,11 @@ function askClaude(mode = "about") {
   claudeMode = mode;
   const { prefilled } = claudeLink(claudePrompt());
   const what = prefilled
-    ? `<li>Claude opens in a new tab with your question <strong>already typed in</strong>.</li>
+    ? `<li>Claude opens <strong>in place of this page</strong>, with your question <strong>already typed in</strong>.</li>
        <li>Above the question, Claude shows a note saying “Use caution before running this prompt”. It shows that for every question that arrives by link. This one comes from your Short List, so it's fine to send.</li>
        <li>Check the question, then ${SEND}.</li>
-       <li>When Claude finishes, press Claude's <strong>copy button</strong> under its answer (two folders on top of each other, on the far left), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom.</li>`
-    : `<li>Claude opens in a new tab, and your question is copied.</li>
+       <li>When Claude finishes, press Claude's <strong>copy button</strong> under its answer (two folders on top of each other, on the far left), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom. The Wine Finder comes back in a new tab; you can close Claude's tab afterwards.</li>`
+    : `<li>Claude opens <strong>in place of this page</strong>, and your question is copied.</li>
        <li>Your list is too long to type in automatically, so ${PASTE}.</li>
        <li>When Claude finishes, press Claude's <strong>copy button</strong> under its answer (two folders on top of each other, on the far left), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom.</li>`;
   const notice = $("ask-notice");
@@ -1087,29 +1091,10 @@ function askClaude(mode = "about") {
 async function goClaude() {
   const prompt = claudePrompt();
   const { url, prefilled } = claudeLink(prompt);
-  // Browsers let a click open a tab only for a few seconds, and copying can be slow.
-  // When the link carries the question, open first and copy as a backup afterwards;
-  // otherwise the copy is essential, so do it first.
-  let copied = false, win;
-  const open = () => { win = window.open(url, "_blank"); if (win) win.opener = null; }; // "noopener" would make this return null
-  if (prefilled) { open(); copied = await copyText(prompt); }
-  else { copied = await copyText(prompt); open(); }
-
-  let msg;
-  if (!win) msg = `Your browser stopped the new tab from opening. Please press the button again, or <a href="${esc(url)}" target="_blank" rel="noopener">open Claude here</a>.`;
-  else if (prefilled) msg = `Claude is open in a new tab. Go to it, check the question, and ${SEND}.` +
-    (copied ? ` If its message box is empty, click in it and press <strong>Ctrl+V</strong>: the question is copied.` : "");
-  else if (copied) msg = `Claude is open in a new tab. In it, ${PASTE}.`;
-  else msg = `Claude is open in a new tab. Please copy the question from the box below (it's selected: press <strong>Ctrl+C</strong>), then ${PASTE}.`;
-
   const result = $("claude-result");
   result.hidden = false;
-  result.innerHTML = msg;
-  $("go-claude").textContent = "Open Claude again";
-  if (!copied && !prefilled) {
-    $("ask-notice").querySelector("details").open = true;
-    $("prompt-text").focus(); $("prompt-text").select(); $("prompt-text").scrollTop = 0;
-  }
+  result.innerHTML = prefilled ? "Opening Claude…" : "Copying your question and opening Claude…";
+  await openClaudeHere(url, prompt);
 }
 
 function closeClaudeSteps() {
@@ -2790,19 +2775,10 @@ async function dineGo() {
   storeSet(STORE.dineAsk, { ask: dineAskText(), at: new Date().toISOString() });
   const prompt = dinePrompt();
   const { url, prefilled } = claudeLink(prompt);
-  let copied = false, win;
-  const open = () => { win = window.open(url, "_blank"); if (win) win.opener = null; };
-  if (prefilled) { open(); copied = await copyText(prompt); } else { copied = await copyText(prompt); open(); }
   const steps = $("dine-steps");
   steps.hidden = false;
-  steps.innerHTML = win ? `<ol class="steps dine-steps-list">
-      <li><strong>Claude is open in a new tab</strong> with your question already written.${copied ? " If its message box is empty, tap in it and paste: the question is copied." : ""}</li>
-      <li>In Claude, tap <strong>＋</strong> or <strong>📷</strong> (at the left of the message box), <strong>take a photo of the wine list</strong> (straight on, the part you're interested in), then send.</li>
-      <li>When Claude finishes, tap <strong>🍷 Back to my Wine Finder with tonight's picks</strong> at the very bottom of its answer.</li>
-    </ol>`
-    : `Your browser stopped the new tab from opening. <a href="${esc(url)}" target="_blank" rel="noopener">Open Claude here</a>.`;
-  $("dine-go").textContent = "Open Claude again";
-  steps.scrollIntoView({ block: "nearest" });
+  steps.textContent = prefilled ? "Opening Claude…" : "Copying your question and opening Claude…";
+  await openClaudeHere(url, prompt);
 }
 
 // The link back: #dine=NAME~PRICE~SCORE~WHY;...  It comes from Claude's answer, so every

@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-27.20">
+<link rel="stylesheet" href="app.css?v=2026-10-27.21">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -330,7 +330,7 @@
     <p>Claude looks up each wine's reviews, background and history, suggests food to go with it, and gives its own score out of 100. Open it with <strong>Research</strong> or <strong>Short List</strong> at the top (the number on Short List is how many wines are on it).</p>
     <ol>
       <li><strong>Add wines</strong>: type a name in the box, or press “＋ Add to Short List for Claude Research” on any wine.</li>
-      <li><strong>Ask Claude</strong>: press <strong>② Ask Claude about these</strong> (or “rank these by reviews”). Claude opens in a new tab with the question already written; press Enter to send it. Claude's note “Use caution before running this prompt” appears for every question that arrives this way; this one is fine to send.</li>
+      <li><strong>Ask Claude</strong>: press <strong>② Ask Claude about these</strong> (or “rank these by reviews”). Claude opens in place of the Wine Finder with the question already written; press Enter to send it. Claude's save link brings the Wine Finder back in a new tab, so you can close Claude's tab afterwards (or use the browser's Back button to return without saving). Claude's note “Use caution before running this prompt” appears for every question that arrives this way; this one is fine to send.</li>
       <li><strong>Save the research</strong>: when Claude finishes, two clicks:
         <img class="save-steps-img" src="images/save-steps.png?v=3" alt="Step 1: click the copy icon (two folders on top of each other) on the far left of the grey row under Claude's answer. Step 2: click the 💾 Save these ratings to my Wine Finder link."></li>
     </ol>
@@ -454,6 +454,11 @@
       <input type="range" id="dine-hi" min="0" max="300" step="5" value="300">
     </div>
     <div id="dine-budget" class="chips"></div>
+    <ol class="steps dine-steps-list">
+      <li>Press <strong>Open Claude</strong>: Claude opens <strong>in place of this page</strong>, with your question already written.</li>
+      <li>In Claude, tap <strong>＋</strong> or <strong>📷</strong> (at the left of the message box), <strong>take a photo of the wine list</strong> (straight on, the part you're interested in), then send.</li>
+      <li>When Claude finishes, tap <strong>🍷 Back to my Wine Finder with tonight's picks</strong> at the very bottom of its answer. Your picks open in the Wine Finder; you can close Claude's tab afterwards.</li>
+    </ol>
     <p class="dine-actions">
       <button type="button" class="btn btn-primary btn-big" id="dine-go">Open Claude</button>
     </p>
@@ -555,7 +560,7 @@
   <p id="score-intro"></p>
   <ol id="score-list" class="score-list"></ol>
   <ol id="score-steps" class="steps">
-    <li>Claude opens in a new tab with the question <strong>already typed in</strong>. (It shows a “Use caution” note for every question that arrives by link: this one comes from your Wine Finder, so it's fine.)</li>
+    <li>Claude opens <strong>in place of this page</strong>, with the question <strong>already typed in</strong>. (It shows a “Use caution” note for every question that arrives by link: this one comes from your Wine Finder, so it's fine.)</li>
     <li>Press <strong>Enter</strong> to send it. Claude takes a few minutes to look up the reviews.</li>
     <li>At the end of its answer, click <strong>💾 Save these scores to my Wine Finder</strong>. The scores are saved straight away (no extra Save click), and your list comes back sorted best rated first, and each wine shows its style (body, tannin, sweetness, fruit-forward or not) and when to drink it.</li>
   </ol>
@@ -609,6 +614,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-27.20"></script>
+<script src="app.js?v=2026-10-27.21"></script>
 </body>
 </html>
