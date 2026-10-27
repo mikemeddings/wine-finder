@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-27.26">
+<link rel="stylesheet" href="app.css?v=2026-10-27.28">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -105,9 +105,36 @@
         </fieldset>
 
         <fieldset>
+          <legend>Grape</legend>
+          <label for="grape-q" class="hint">Type to find a grape</label>
+          <input type="search" id="grape-q" autocomplete="off">
+          <p class="hint">From the store's grape list, the name, or the region (Barolo is Nebbiolo, Rioja is Tempranillo). A blend counts for each grape it names. Tick one or more.</p>
+          <div id="grape-list" class="country-list"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Food it goes with</legend>
+          <div id="food-list"></div>
+          <p class="hint">Estimated from the wine's colour, body, tannin and sweetness: a guide, not a sommelier. Tick one or more.</p>
+        </fieldset>
+
+        <fieldset>
           <legend>Price</legend>
           <div id="side-price"></div>
           <p class="hint">Slide all the way right for no upper limit. The count changes as you slide.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Vintage</legend>
+          <div id="vint-range"></div>
+          <label class="check"><input type="checkbox" id="old-only"> 10 years or older</label>
+          <p class="hint">Wines without a vintage (NV) drop out while a vintage is chosen.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Alcohol</legend>
+          <div id="abv-range"></div>
+          <p class="hint">Only BC Liquor and the LCBO list the alcohol; other stores' wines drop out while a range is chosen.</p>
         </fieldset>
 
         <fieldset>
@@ -299,7 +326,7 @@
     <ul>
       <li><strong>Search words</strong>: a name, producer, region or grape.</li>
       <li><strong>Sold by</strong>: BC Liquor – LDB, the Calgary stores BSW Liquor and ZYN (check shipping to BC), Lucullus and Weinshop365 in Switzerland (prices in Swiss francs as each shop shows them, Lucullus without VAT and Weinshop365 with it, plus an approximate Canadian-dollar price), and LCBO (Ontario). LCBO is a private family list: the first time you tick it, enter the unlock code from the family email (or click the link in that email). After that it stays on that browser.</li>
-      <li><strong>Country</strong> (tick the ones you want; or press <strong>Leave out countries</strong> and tick the ones you don't want, such as USA, which then show an ✕), <strong>Type of wine</strong>, <strong>Price</strong> (two sliders, lowest and highest, with a live count) and <strong>Sweetness</strong>: Dry, Off-dry, Medium-sweet or Sweet, the same four steps as in Find me a wine (choosing in one place chooses in both). BC Liquor's sugar code (0–10) and the LCBO's grams of sugar a litre decide it where the store gives them; each wine card says which, for example “Off-dry (LCBO: 8 g/L sugar)” or “Dry (estimated)”. Untick <strong>Include wines whose sweetness is estimated</strong> to see only wines with a measured figure.</li>
+      <li><strong>Country</strong> (tick the ones you want; or press <strong>Leave out countries</strong> and tick the ones you don't want, such as USA, which then show an ✕), <strong>Type of wine</strong>, <strong>Grape</strong> (from the store's grape list, the name, or the region: Barolo counts as Nebbiolo), <strong>Food it goes with</strong> (an estimate from the wine's style), <strong>Vintage</strong> and <strong>Alcohol</strong> (sliders; wines without a vintage or alcohol figure drop out while you use them, and only BC Liquor and the LCBO give the alcohol), <strong>Price</strong> (two sliders, lowest and highest, with a live count) and <strong>Sweetness</strong>: Dry, Off-dry, Medium-sweet or Sweet, the same four steps as in Find me a wine (choosing in one place chooses in both). BC Liquor's sugar code (0–10) and the LCBO's grams of sugar a litre decide it where the store gives them; each wine card says which, for example “Off-dry (LCBO: 8 g/L sugar)” or “Dry (estimated)”. Untick <strong>Include wines whose sweetness is estimated</strong> to see only wines with a measured figure.</li>
     </ul>
     <p>The <strong>Showing:</strong> line sums up what you've chosen. <strong>Sort by</strong> puts the list in order. <strong>Best rated first</strong> (the usual order; ratings come from Claude, CellarTracker and the family, never from the stores) puts wines Claude has scored first (including a score given to the same wine at another store), then CellarTracker scores, then the family's own, then ZYN's 90+ list, then everything else, cheapest first. Other choices include price, name, country, vintage, alcohol, sweetness, Claude's score, my rating (on this computer), family members' ratings (real people only), CellarTracker score and “In the family's cellars first”, each either way round. The two <strong>then by</strong> boxes break ties: for example Country, then Best rated first, then Price low to high. <strong>CellarTracker score</strong> is the cellar owner's own score on CellarTracker, or the CellarTracker community score when they haven't given one.</p>
     <p>Each <strong>wine card</strong> shows the price, the store, the alcohol and sweetness, and any family ratings. Its buttons:</p>
@@ -616,6 +643,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-27.26"></script>
+<script src="app.js?v=2026-10-27.28"></script>
 </body>
 </html>

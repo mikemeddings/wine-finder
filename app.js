@@ -309,6 +309,12 @@ function defaultState() {
     sources: new Set(["BC Liquor"]),
     countries: new Set(),
     countryOut: false, // true: the ticked countries are left out ("all countries except USA")
+    grapes: new Set(),  // Grape: any of these
+    grapeQ: "",
+    food: new Set(),    // Food it goes with: any of these (estimated from the wine's style)
+    vintFrom: null, vintTo: null, // Vintage slider (wines without a vintage drop out while it's set)
+    oldOnly: false,     // "10 years or older"
+    abvFrom: null, abvTo: null,   // Alcohol slider (only BC Liquor and the LCBO give it)
     countryQ: "",
     types: new Set(),
     priceFrom: null,
@@ -352,6 +358,17 @@ function matches(w, skip, st = state) {
   }
   if (st.bottleOnly && !STANDARD_ML.has(w.size_ml)) return false;
   if (st.newOnly && !w.new_since_last) return false;
+  if (skip !== "grape" && st.grapes.size && !grapesOf(w).some((g) => st.grapes.has(g))) return false;
+  if (skip !== "food" && st.food.size && !foodsOf(w).some((f) => st.food.has(f))) return false;
+  if (st.vintFrom != null || st.vintTo != null || st.oldOnly) {
+    if (!w.vintage) return false;
+    if ((st.vintFrom != null && w.vintage < st.vintFrom) || (st.vintTo != null && w.vintage > st.vintTo)) return false;
+    if (st.oldOnly && w.vintage > THIS_YEAR - 10) return false;
+  }
+  if (st.abvFrom != null || st.abvTo != null) {
+    if (w.abv == null) return false;
+    if ((st.abvFrom != null && w.abv < st.abvFrom) || (st.abvTo != null && w.abv > st.abvTo)) return false;
+  }
   if (st.continent && continentOf(w) !== st.continent) return false;
   if (st.ratedOnly && familyScore(w) == null) return false;
   if (st.wellRated && !wellRated(w)) return false;
@@ -510,6 +527,168 @@ function visibleCountries(all, q = fold(state.countryQ)) {
     .sort((a, b) => a.localeCompare(b));
 }
 
+// ---- Grape, food, vintage and alcohol (side panel) -------------------------------------------
+// A wine's grapes: the store's grape field (LCBO, Weinshop365, cellars) and the words in its
+// name and region, including regions that mean a grape (Barolo is Nebbiolo, Rioja is
+// Tempranillo). A blend gets each grape it names. Order matters only for the region words.
+const GRAPES = [
+  ["Cabernet Sauvignon", /\bcabernet sauvignon\b|\bcab(ernet)? sauv\b|\bcabernet\b(?!\s+franc)|\bpauillac\b|\bmargaux\b|\bsaint.julien\b|\bst.julien\b|\bsaint.estephe\b|\bst.estephe\b|\bhaut.medoc\b|\bmedoc\b/],
+  ["Merlot", /\bmerlot\b|\bpomerol\b|\bsaint.emilion\b|\bst.emilion\b/],
+  ["Cabernet Franc", /\bcabernet franc\b|\bchinon\b|\bbourgueil\b|\bsaumur.champigny\b/],
+  ["Pinot Noir", /\bpinot noir\b|\bpinot nero\b|\bspatburgunder\b|\bblauburgunder\b/],
+  ["Gamay", /\bgamay\b|\bbeaujolais\b|\bmorgon\b|\bfleurie\b|\bmoulin.a.vent\b|\bbrouilly\b|\bjulienas\b|\bchiroubles\b|\bregnie\b|\bchenas\b/],
+  ["Syrah / Shiraz", /\bsyrah\b|\bshiraz\b|\bhermitage\b|\bcrozes\b|\bcornas\b|\bcote.rotie\b|\bsaint.joseph\b|\bst.joseph\b/],
+  ["Grenache / Garnacha", /\bgrenache\b|\bgarnacha\b|\bcannonau\b|\bchateauneuf\b|\bgigondas\b|\bvacqueyras\b|\bpriorat\b/],
+  ["Tempranillo", /\btempranillo\b|\btinto fino\b|\btinta de toro\b|\btinta roriz\b|\baragonez\b|\brioja\b|\bribera del duero\b|\btoro\b/],
+  ["Sangiovese", /\bsangiovese\b|\bchianti\b|\bbrunello\b|\bmontalcino\b|\bvino nobile\b|\bmorellino\b/],
+  ["Nebbiolo", /\bnebbiolo\b|\bbarolo\b|\bbarbaresco\b|\bgattinara\b|\bghemme\b/],
+  ["Montepulciano", /\bmontepulciano\b/], // but Vino Nobile di Montepulciano is the town: Sangiovese (see grapesOf)
+  ["Corvina (Amarone, Valpolicella)", /\bcorvina\b|\bamarone\b|\bvalpolicella\b|\bripasso\b/],
+  ["Malbec", /\bmalbec\b|\bcahors\b/],
+  ["Zinfandel / Primitivo", /\bzinfandel\b|\bprimitivo\b/],
+  ["Touriga Nacional", /\btouriga\b/],
+  ["Carmenère", /\bcarmenere\b/],
+  ["Pinotage", /\bpinotage\b/],
+  ["Tannat", /\btannat\b|\bmadiran\b/],
+  ["Mourvèdre / Monastrell", /\bmourvedre\b|\bmonastrell\b|\bmataro\b|\bbandol\b|\bjumilla\b/],
+  ["Barbera", /\bbarbera\b/],
+  ["Dolcetto", /\bdolcetto\b/],
+  ["Aglianico", /\baglianico\b|\btaurasi\b/],
+  ["Nero d'Avola", /\bnero d.?avola\b/],
+  ["Petite Sirah", /\bpetite? sirah\b|\bdurif\b/],
+  ["Petit Verdot", /\bpetit verdot\b/],
+  ["Carignan", /\bcarignan\b|\bcarinena\b/],
+  ["Mencía", /\bmencia\b|\bbierzo\b/],
+  ["Blaufränkisch", /\bblaufrankisch\b|\bkekfrankos\b|\blemberger\b/],
+  ["Zweigelt", /\bzweigelt\b/],
+  ["Saperavi", /\bsaperavi\b/],
+  ["Xinomavro", /\bxinomavro\b|\bnaoussa\b/],
+  ["Agiorgitiko", /\bagiorgitiko\b|\bnemea\b/],
+  ["Chardonnay", /\bchardonnay\b|\bchablis\b|\bmeursault\b|\bpuligny\b|\bchassagne\b|\bpouilly.fuisse\b|\bmacon\b|\bmontrachet\b|\bcorton.charlemagne\b/],
+  ["Sauvignon Blanc", /\bsauvignon blanc\b|\bsancerre\b|\bpouilly.fume\b|\bfume blanc\b/],
+  ["Riesling", /\briesling\b/],
+  ["Pinot Grigio / Gris", /\bpinot grigio\b|\bpinot gris\b/],
+  ["Gewürztraminer", /\bgewurztraminer\b|\bgewurz\b/],
+  ["Chenin Blanc", /\bchenin\b|\bvouvray\b|\bsavennieres\b|\bmontlouis\b/],
+  ["Viognier", /\bviognier\b|\bcondrieu\b/],
+  ["Grüner Veltliner", /\bgruner\b/],
+  ["Albariño", /\balbarino\b|\balvarinho\b/],
+  ["Sémillon", /\bsemillon\b/],
+  ["Muscat / Moscato", /\bmuscat\b|\bmoscato\b|\bmoscatel\b/],
+  ["Vermentino", /\bvermentino\b/],
+  ["Verdejo", /\bverdejo\b/],
+  ["Godello", /\bgodello\b/],
+  ["Chasselas", /\bchasselas\b|\bdezaley\b|\bfendant\b/],
+  ["Garganega (Soave)", /\bgarganega\b|\bsoave\b/],
+  ["Cortese (Gavi)", /\bcortese\b|\bgavi\b/],
+  ["Pinot Blanc", /\bpinot blanc\b|\bpinot bianco\b|\bweissburgunder\b/],
+  ["Marsanne / Roussanne", /\bmarsanne\b|\broussanne\b/],
+  ["Assyrtiko", /\bassyrtiko\b/],
+  ["Torrontés", /\btorrontes\b/],
+  ["Fiano", /\bfiano\b/],
+  ["Furmint", /\bfurmint\b|\btokaji\b/],
+  ["Glera (Prosecco)", /\bglera\b|\bprosecco\b/],
+];
+function grapesOf(w) {
+  if (w._grapes) return w._grapes;
+  const t = fold([w.name, w.grape, w.region, w.region_or_grape, w.varietal].filter(Boolean).join(" "));
+  const out = GRAPES.filter(([, re]) => re.test(t)).map(([name]) => name);
+  return (w._grapes = /\bvino nobile\b/.test(t) ? out.filter((g) => g !== "Montepulciano") : out);
+}
+
+// Food it goes with, estimated from colour, body, tannin, sweetness and fruitiness (the same
+// thinking as the restaurant page): a guide, not a sommelier.
+const FOODS = ["Red meat", "Lamb", "Pork", "Chicken", "Fish", "Seafood", "Pasta and pizza", "Cheese", "Spicy food", "Dessert"];
+function foodsOf(w) {
+  const k = `${ratedNamesVer}`;
+  if (w._foods && w._foodsKey === k) return w._foods;
+  const s = wineStyle(w), body = s.body.v, tannin = s.tannin.v, sweet = s.sweet.v, t = w.type, out = [];
+  const sweetish = sweet === "sweet" || sweet === "medium-sweet";
+  if (t === "Red") {
+    if (body === "full" || tannin === "firm") out.push("Red meat");
+    if (body !== "light") out.push("Lamb");
+    if (body !== "full" || tannin === "soft") out.push("Pork");
+    if (body === "light") out.push("Chicken");
+    if (body !== "full" || tannin !== "firm") out.push("Pasta and pizza");
+    if (body === "full" || tannin === "firm") out.push("Cheese");
+    if (s.fruity.v && tannin !== "firm") out.push("Spicy food");
+  } else if (t === "White") {
+    if (sweetish) out.push("Spicy food", "Dessert", "Cheese");
+    else {
+      if (body !== "full") out.push("Fish", "Seafood");
+      out.push("Chicken");
+      if (body !== "light") out.push("Pork", "Pasta and pizza");
+      if (body === "full") out.push("Cheese");
+      if (sweet === "off-dry") out.push("Spicy food");
+    }
+  } else if (t === "Rosé") out.push("Fish", "Seafood", "Chicken", "Pork", "Pasta and pizza", "Spicy food");
+  else if (t === "Sparkling") out.push(...(sweetish ? ["Dessert"] : ["Fish", "Seafood", "Chicken"]));
+  else if (t === "Dessert" || (t === "Fortified" && sweet !== "dry")) out.push("Dessert", "Cheese");
+  else if (t === "Fortified") out.push("Seafood", "Cheese"); // fino, manzanilla
+  w._foodsKey = k;
+  return (w._foods = out);
+}
+
+// Tick lists with counts, like Country: each counts wines with the other choices applied.
+function tickCounts(skip, valuesOf) {
+  const counts = new Map();
+  for (const w of findPool()) if (matches(w, skip)) for (const v of valuesOf(w)) counts.set(v, (counts.get(v) || 0) + 1);
+  return counts;
+}
+function renderGrapes() {
+  if (!$("grape-list")) return;
+  const counts = tickCounts("grape", grapesOf), q = fold(state.grapeQ);
+  const names = [...new Set([...counts.keys(), ...state.grapes])].filter((g) => !q || fold(g).includes(q))
+    .sort((a, b) => (counts.get(b) || 0) - (counts.get(a) || 0) || a.localeCompare(b));
+  $("grape-list").innerHTML = names.length
+    ? names.map((g) => { const c = counts.get(g) || 0; return checkbox("grape", g, state.grapes.has(g), esc(g), c, c ? "" : " zero"); }).join("")
+    : `<p class="hint">No grape matches “${esc(state.grapeQ)}”.</p>`;
+}
+function renderFood() {
+  if (!$("food-list")) return;
+  const counts = tickCounts("food", foodsOf);
+  $("food-list").innerHTML = FOODS.map((f) => { const c = counts.get(f) || 0; return checkbox("food", f, state.food.has(f), esc(f), c, c ? "" : " zero"); }).join("");
+}
+
+// Vintage and alcohol sliders: lowest and highest, the count changing as they move.
+const VINT_SLIDE = { min: 1970, max: THIS_YEAR, step: 1 };
+const ABV_SLIDE = { min: 5, max: 20, step: 0.5 };
+function rangeHtml(id, conf, lo, hi, fmt) {
+  return `<div class="price-slider side-slider">
+    <label for="${id}-lo">From: <strong id="${id}-lo-v">${fmt(lo ?? conf.min, "lo")}</strong></label>
+    <input type="range" id="${id}-lo" min="${conf.min}" max="${conf.max}" step="${conf.step}" value="${lo ?? conf.min}">
+    <label for="${id}-hi">To: <strong id="${id}-hi-v">${fmt(hi ?? conf.max, "hi")}</strong></label>
+    <input type="range" id="${id}-hi" min="${conf.min}" max="${conf.max}" step="${conf.step}" value="${hi ?? conf.max}">
+    <p class="ps-count" id="${id}-count" aria-live="polite">${rangeCountText()}</p>
+  </div>`;
+}
+const vintFmt = (v, end) => (end === "lo" && v <= VINT_SLIDE.min ? "any" : end === "hi" && v >= VINT_SLIDE.max ? "newest" : String(v));
+const abvFmt = (v, end) => (end === "lo" && v <= ABV_SLIDE.min ? "any" : end === "hi" && v >= ABV_SLIDE.max ? "any" : `${v}%`);
+function rangeCountText() {
+  const n = findPool().reduce((k, w) => k + matches(w), 0);
+  return `<strong>${n.toLocaleString()} ${n === 1 ? "wine" : "wines"}</strong> with your choices`;
+}
+function renderRanges() {
+  if ($("vint-range")) $("vint-range").innerHTML = rangeHtml("vs", VINT_SLIDE, state.vintFrom, state.vintTo, vintFmt);
+  if ($("abv-range")) $("abv-range").innerHTML = rangeHtml("as", ABV_SLIDE, state.abvFrom, state.abvTo, abvFmt);
+  if ($("old-only")) $("old-only").checked = state.oldOnly;
+}
+let rangeFrame = 0;
+function rangeSlide(id, which, done) {
+  const conf = id === "vs" ? VINT_SLIDE : ABV_SLIDE, fmt = id === "vs" ? vintFmt : abvFmt;
+  let lo = +$(`${id}-lo`).value, hi = +$(`${id}-hi`).value;
+  if (lo > hi) { if (which === "lo") hi = lo; else lo = hi; $(`${id}-lo`).value = lo; $(`${id}-hi`).value = hi; }
+  const [kFrom, kTo] = id === "vs" ? ["vintFrom", "vintTo"] : ["abvFrom", "abvTo"];
+  state[kFrom] = lo > conf.min ? lo : null;
+  state[kTo] = hi < conf.max ? hi : null;
+  $(`${id}-lo-v`).textContent = fmt(lo, "lo");
+  $(`${id}-hi-v`).textContent = fmt(hi, "hi");
+  state.shown = PAGE_SIZE;
+  if (done) { refresh(); return; }
+  cancelAnimationFrame(rangeFrame);
+  rangeFrame = requestAnimationFrame(() => { $(`${id}-count`).innerHTML = rangeCountText(); });
+}
+
 function renderTypes() {
   const counts = countBy("type", "type");
   $("type-list").innerHTML = TYPES
@@ -537,7 +716,8 @@ function syncInputs() {
 }
 
 function filtersOnCount() {
-  return state.countries.size + state.types.size + state.sweetStyle.size + (state.priceFrom != null) +
+  return state.countries.size + state.types.size + state.sweetStyle.size + state.grapes.size + state.food.size +
+    (state.vintFrom != null || state.vintTo != null) + state.oldOnly + (state.abvFrom != null || state.abvTo != null) + (state.priceFrom != null) +
     (state.priceTo != null) + !!state.q + state.newOnly + !state.bottleOnly + !state.notRated;
 }
 
@@ -638,6 +818,11 @@ function renderResults() {
   else if (!state.notRated) parts.push("sweetness rated only");
   parts.push(state.bottleOnly ? "standard bottles" : "all sizes");
   if (state.newOnly) parts.push("new on the latest BC list");
+  if (state.grapes.size) parts.push(`grape: ${[...state.grapes].map(esc).join(" or ")}`);
+  if (state.food.size) parts.push(`goes with ${[...state.food].map((f) => esc(f.toLowerCase())).join(" or ")} (estimated)`);
+  if (state.vintFrom != null || state.vintTo != null) parts.push(`vintage ${state.vintFrom ?? "any"}–${state.vintTo ?? "now"}`);
+  if (state.oldOnly) parts.push("10 years or older");
+  if (state.abvFrom != null || state.abvTo != null) parts.push(`alcohol ${state.abvFrom ?? ABV_SLIDE.min}–${state.abvTo ?? ABV_SLIDE.max}%`);
   if (state.continent) parts.push(esc(state.continent));
   const or = (set) => [...set].join(" or ");
   const look = [state.body.size && `${or(state.body)}-bodied`, state.tannin.size && `${or(state.tannin)} tannins`, state.sweetStyle.size && or(state.sweetStyle)].filter(Boolean);
@@ -693,6 +878,11 @@ function choicesMade(st = state) {
   if (st.q) out.push([`the words “${st.q}”`, (x) => { x.q = ""; }]);
   if (!st.notRated) out.push(["measured sweetness only", (x) => { x.notRated = true; }]);
   if (st.newOnly) out.push(["new wines only", (x) => { x.newOnly = false; }]);
+  if (st.grapes.size) out.push([[...st.grapes].join(" or "), (x) => { x.grapes = new Set(); }]);
+  if (st.food.size) out.push([`goes with ${[...st.food].join(" or ")}`, (x) => { x.food = new Set(); }]);
+  if (st.vintFrom != null || st.vintTo != null) out.push(["the vintage range", (x) => { x.vintFrom = x.vintTo = null; }]);
+  if (st.oldOnly) out.push(["10 years or older", (x) => { x.oldOnly = false; }]);
+  if (st.abvFrom != null || st.abvTo != null) out.push(["the alcohol range", (x) => { x.abvFrom = x.abvTo = null; }]);
   return out;
 }
 
@@ -771,6 +961,9 @@ function renderSortStatus() {
 function renderAll() {
   renderFinder();
   renderSidePrice();
+  renderGrapes();
+  renderFood();
+  renderRanges();
   renderSources();
   renderCountries();
   renderTypes();
@@ -784,6 +977,9 @@ function refresh() {
   renderFinder();
   renderSweet();
   renderSidePrice();
+  renderGrapes();
+  renderFood();
+  renderRanges();
   renderCountries();
   renderTypes();
   renderResults();
@@ -3396,7 +3592,7 @@ function goBack() { if (navDepth > 0) history.back(); else showView("find"); }
 // Leaving the site (a link in a write-up, a store's page…) and coming back with Back reloads
 // the page, which would start over. So the page notes where you were when you leave (this tab
 // only) and picks it up again on the way back: page, filters, sort, scroll and an open write-up.
-const SET_KEYS = ["sources", "countries", "types", "sweet", "body", "tannin", "sweetStyle"];
+const SET_KEYS = ["sources", "countries", "types", "sweet", "body", "tannin", "sweetStyle", "grapes", "food"];
 let openNotesId = null;
 function savePlace() {
   try {
@@ -3683,7 +3879,7 @@ function countrySelectHtml() {
 
 // ---- Quick picks: "Scored by Claude or the family" and each person's own -----------------
 // Saved picks live on this computer only (localStorage), so Dad's are his and Jon's are his.
-const PICK_KEYS = ["countries", "countryOut", "types", "sweet", "priceFrom", "priceTo", "notRated", "bottleOnly", "q",
+const PICK_KEYS = ["countries", "countryOut", "grapes", "food", "vintFrom", "vintTo", "oldOnly", "abvFrom", "abvTo", "types", "sweet", "priceFrom", "priceTo", "notRated", "bottleOnly", "q",
   "body", "tannin", "sweetStyle", "continent", "wellRated", "ratedOnly", "readyNow", "fruity", "sorts", "sources"];
 const myPicks = () => { const p = storeGet(STORE.myPicks, []); return Array.isArray(p) ? p : []; };
 
@@ -3986,7 +4182,7 @@ function wireEvents() {
       return;
     }
     if (group) {
-      const set = { source: state.sources, country: state.countries, type: state.types, sweetStyle: state.sweetStyle }[group];
+      const set = { source: state.sources, country: state.countries, type: state.types, sweetStyle: state.sweetStyle, grape: state.grapes, food: state.food }[group];
       if (group === "source" && cellarOn()) { // narrowing the cellar to wines this store sells
         if (t.checked) set.add(t.value); else set.delete(t.value);
         state.shown = PAGE_SIZE;
@@ -4006,6 +4202,7 @@ function wireEvents() {
       if (t.checked) $("lcbo-code").focus();
       return;
     } else if (t.id === "not-rated") state.notRated = t.checked;
+    else if (t.id === "old-only") state.oldOnly = t.checked;
     else if (t.id === "bottle-only") state.bottleOnly = t.checked;
     else return;
     state.shown = PAGE_SIZE;
@@ -4025,13 +4222,17 @@ function wireEvents() {
   $("q").addEventListener("input", debounce(() => { state.q = $("q").value.trim(); state.shown = PAGE_SIZE; refresh(); }, 200));
   $("country-q").addEventListener("input", () => { state.countryQ = $("country-q").value; renderCountries(); });
   const slider = (el) => /^(ps|sp)-(lo|hi)$/.exec(el.id); // [id, which slider, lo/hi]
+  const range = (el) => /^(vs|as)-(lo|hi)$/.exec(el.id);  // vintage and alcohol
   document.addEventListener("input", (e) => {
-    const m = slider(e.target);
+    const m = slider(e.target), r = range(e.target);
     if (m) priceSlide(m[2], false, m[1]);
+    else if (r) rangeSlide(r[1], r[2], false);
+    else if (e.target.id === "grape-q") { state.grapeQ = e.target.value; renderGrapes(); }
   });
   document.addEventListener("change", (e) => {
-    const m = slider(e.target);
+    const m = slider(e.target), r = range(e.target);
     if (m) { priceSlide(m[2], true, m[1]); return; }
+    if (r) { rangeSlide(r[1], r[2], true); return; }
     if (e.target.id !== "finder-country") return;
     state.countries = e.target.value ? new Set([e.target.value]) : new Set();
     state.countryOut = false;
