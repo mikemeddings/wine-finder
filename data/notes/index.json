@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-25",
+ "updated": "2026-10-27",
  "notes": {
   "typed-losada-vinos-de-finca-mencia-bierzo-altos-de-losada-la-bienquerida": {
    "name": "Losada Vinos de Finca Mencía Bierzo Altos de Losada La Bienquerida",
@@ -855,6 +855,11 @@
    "name": "Domaine Gourt de Mautens (Jérôme Bressy) Vaucluse Rouge 2012",
    "from": "Claude (researched for Mike)",
    "date": "2026-10-25"
+  },
+  "lcbo-392480": {
+   "name": "Mountain Fish Red Peloponnese",
+   "from": "Mike",
+   "date": "2026-10-27"
   }
  }
 }
