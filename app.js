@@ -63,14 +63,14 @@ Please treat my list exactly as given — all of these wines, not just similar o
 
 const CLAUDE_URL = "https://claude.ai/new";
 const CLAUDE_SOFT_LIMIT = 15;
-const PRICE_STEPS = [15, 20, 25, 30, 40, 50, 75, 100, 150, 200, 500];
 const TYPES = ["Red", "White", "Rosé", "Sparkling", "Fortified", "Dessert", "Sake", "Other"];
-const SWEET_BANDS = [
-  { label: "Dry", lo: 0, hi: 1 },
-  { label: "Off-dry", lo: 2, hi: 4 },
-  { label: "Medium-sweet", lo: 5, hi: 7 },
-  { label: "Sweet", lo: 8, hi: 10 },
-];
+// Sweetness, in four steps, the same in "Find me a wine" and the side panel. BC Liquor gives
+// a sugar code (0-10) and the LCBO grams of sugar a litre; for other stores it's estimated.
+const SWEET_LEVELS = ["dry", "off-dry", "medium-sweet", "sweet"];
+const SWEET_LABEL = { dry: "Dry", "off-dry": "Off-dry", "medium-sweet": "Medium-sweet", sweet: "Sweet" };
+const sweetFromCode = (c) => (c <= 1 ? "dry" : c <= 4 ? "off-dry" : c <= 7 ? "medium-sweet" : "sweet");
+const sweetFromSugar = (g) => (g <= 4 ? "dry" : g <= 12 ? "off-dry" : g <= 45 ? "medium-sweet" : "sweet");
+const OLD_SWEET = { Dry: "dry", "Off-dry": "off-dry", "Medium-sweet": "medium-sweet", Sweet: "sweet" }; // older saved picks
 const ALL_SOURCES = ["BC Liquor", "BSW Liquor", "ZYN", "Lucullus", "Weinshop365", "LCBO"];
 // How each source is named on screen, in the shortlist and in the Claude question.
 const SOURCE_LABELS = { "BC Liquor": "BC Liquor - LDB", Lucullus: "Lucullus (Switzerland)", Weinshop365: "Weinshop365 (Switzerland)" };
@@ -114,10 +114,10 @@ function sizeText(w) {
   let s = !ml ? "size unknown" : ml >= 1000 ? `${+(ml / 1000).toFixed(3)} L` : `${ml} ml`;
   return w.pack > 1 ? `pack of ${w.pack} × ${s}` : s;
 }
+// "Off-dry (BC sugar code 3 of 10)", "Dry (LCBO: 3 g/L sugar)", "Dry (estimated)"
 function sweetText(w) {
-  if (w.sweetness == null) return "Sweetness not rated";
-  const b = SWEET_BANDS.find((b) => w.sweetness >= b.lo && w.sweetness <= b.hi);
-  return `${b ? b.label : "Sweetness"} (${w.sweetness} of 10)`;
+  const s = wineStyle(w).sweet;
+  return s.v ? `${SWEET_LABEL[s.v]} (${s.how})` : "Sweetness unknown";
 }
 function searchName(w) {
   return w.name.replace(/ - /g, " ").replace(/\s+/g, " ").trim();
@@ -362,12 +362,8 @@ function matches(w, skip, st = state) {
     if (st.readyNow && !look.ready.ready) return false;
     if (st.fruity && !look.fruity.v) return false;
   }
-  if (w.sweetness == null) {
-    if (!st.notRated) return false;
-  } else if (st.sweet.size) {
-    const ok = SWEET_BANDS.some((b) => st.sweet.has(b.label) && w.sweetness >= b.lo && w.sweetness <= b.hi);
-    if (!ok) return false;
-  }
+  // "Include wines whose sweetness is estimated" unticked: only wines with a measured figure
+  if (!st.notRated && !wineStyle(w).sweet.measured) return false;
   if (st.q) {
     for (const t of fold(st.q).split(/\s+/)) if (t && !w._s.includes(t)) return false;
   }
@@ -384,7 +380,9 @@ const SORT_KEYS = {
   country: { get: (w) => (w.country === "Country not stated" ? null : w.country), text: true, up: "Country: A to Z", down: "Country: Z to A" },
   vintage: { get: (w) => w.vintage, up: "Vintage: oldest first", down: "Vintage: newest first", first: "down" },
   abv: { get: (w) => w.abv, up: "Alcohol %: lowest first", down: "Alcohol %: highest first" },
-  sweet: { get: (w) => w.sweetness, up: "Sweetness: driest first", down: "Sweetness: sweetest first", first: "down" },
+  // the four steps, then the store's own figure within a step (grams of sugar, or BC's code)
+  sweet: { get: (w) => { const v = wineStyle(w).sweet.v; return v ? SWEET_LEVELS.indexOf(v) * 1000 + (w.sugar ?? (w.sweetness != null ? w.sweetness * 10 : 0)) : null; },
+    up: "Sweetness: driest first", down: "Sweetness: sweetest first", first: "down" },
   // Claude's score for this listing, or for the same wine at another store or in a cellar
   claude: { get: (w) => claudeScore(w) ?? ratedTwin(w)?.claude?.points, up: "Claude's score: lowest first", down: "Claude's score: highest first", first: "down" },
   mine: { get: (w) => ratingOf(w.id).mine?.points, up: "My rating (on this computer): lowest first", down: "My rating (on this computer): highest first", first: "down" },
@@ -511,24 +509,26 @@ function renderTypes() {
     .join("");
 }
 
+// The side panel's sweetness boxes: the same four steps as "Find me a wine", with what
+// each means in BC's code and the LCBO's grams of sugar, and how many wines each has.
+const SWEET_DETAIL = { dry: "BC 0–1 · LCBO up to 4 g/L", "off-dry": "BC 2–4 · LCBO 4–12 g/L",
+  "medium-sweet": "BC 5–7 · LCBO 12–45 g/L", sweet: "BC 8–10 · LCBO over 45 g/L" };
 function renderSweet() {
-  $("sweet-list").innerHTML = SWEET_BANDS
-    .map((b) => checkbox("sweet", b.label, state.sweet.has(b.label), `${b.label} <span class="hint" style="display:inline">(${b.lo}–${b.hi})</span>`, null))
-    .join("");
+  const c = lastFinderCounts?.sweetStyle;
+  $("sweet-list").innerHTML = SWEET_LEVELS.map((v) => checkbox("sweetStyle", v, state.sweetStyle.has(v),
+    `<span class="sweet-name">${SWEET_LABEL[v]}<small>${SWEET_DETAIL[v]}</small></span>`, c ? c.get(v) || 0 : null)).join("");
 }
 
 function syncInputs() {
   $("q").value = state.q;
   $("country-q").value = state.countryQ;
-  $("price-from").value = state.priceFrom ?? "";
-  $("price-to").value = state.priceTo ?? "";
   $("not-rated").checked = state.notRated;
   $("bottle-only").checked = state.bottleOnly;
   renderSorts();
 }
 
 function filtersOnCount() {
-  return state.countries.size + state.types.size + state.sweet.size + (state.priceFrom != null) +
+  return state.countries.size + state.types.size + state.sweetStyle.size + (state.priceFrom != null) +
     (state.priceTo != null) + !!state.q + state.newOnly + !state.bottleOnly + !state.notRated;
 }
 
@@ -624,7 +624,7 @@ function renderResults() {
   if (state.priceFrom != null && state.priceTo != null) parts.push(`${money(state.priceFrom)} to ${money(state.priceTo)}`);
   else if (state.priceTo != null) parts.push(`up to ${money(state.priceTo)}`);
   else if (state.priceFrom != null) parts.push(`${money(state.priceFrom)} and up`);
-  if (state.sweet.size) parts.push([...state.sweet].join(", ") + (state.notRated ? " (and not rated)" : ""));
+  if (!state.notRated) parts.push("measured sweetness only");
   else if (!state.notRated) parts.push("sweetness rated only");
   parts.push(state.bottleOnly ? "standard bottles" : "all sizes");
   if (state.newOnly) parts.push("new on the latest BC list");
@@ -681,7 +681,7 @@ function choicesMade(st = state) {
   if (st.readyNow) out.push(["Ready to drink now", FINDER_CLEAR.readyNow]);
   if (st.ratedOnly) out.push(["Scored by Claude or the family", FINDER_CLEAR.ratedOnly]);
   if (st.q) out.push([`the words “${st.q}”`, (x) => { x.q = ""; }]);
-  if (st.sweet.size) out.push(["the sweetness boxes", (x) => { x.sweet = new Set(); }]);
+  if (!st.notRated) out.push(["measured sweetness only", (x) => { x.notRated = true; }]);
   if (st.newOnly) out.push(["new wines only", (x) => { x.newOnly = false; }]);
   return out;
 }
@@ -760,6 +760,7 @@ function renderSortStatus() {
 
 function renderAll() {
   renderFinder();
+  renderSidePrice();
   renderSources();
   renderCountries();
   renderTypes();
@@ -771,6 +772,8 @@ function renderAll() {
 // Re-render everything except the input being typed in.
 function refresh() {
   renderFinder();
+  renderSweet();
+  renderSidePrice();
   renderCountries();
   renderTypes();
   renderResults();
@@ -867,14 +870,14 @@ For each wine, please:
 - Search the web for professional reviews and community notes (for example Wine Enthusiast, Decanter, James Suckling, Vinous, Jancis Robinson, CellarTracker).
 - Give your own overall score out of 100, based on what the reviewers say (your judgement, not a copy of any one critic's score), and the vintage it applies to. If you only find reviews of another vintage, you may use them, but give that vintage.
 - In up to eight words, say what your score rests on, for example: WE 92, Decanter 90 for 2021.
-- Describe its style from the reviews and the tasting notes: body (light, medium or full), tannin (soft, medium or firm; for whites, leave it empty), sweetness (dry, off-dry or sweet), whether it's fruit-forward (ripe and fruity-tasting even when dry, like many Malbecs or Australian Shiraz: yes or no), and when to drink it (from year to year).
+- Describe its style from the reviews and the tasting notes: body (light, medium or full), tannin (soft, medium or firm; for whites, leave it empty), sweetness (dry, off-dry, medium-sweet or sweet), whether it's fruit-forward (ripe and fruity-tasting even when dry, like many Malbecs or Australian Shiraz: yes or no), and when to drink it (from year to year).
 - If you can't find any reviews, say so plainly rather than estimating the score; give the style only if you know the wine.
 
 Keep the answer short: one line per wine, in my order, as: number. wine — score (vintage) — what it rests on — body, tannin, sweetness, fruit-forward or not — drink from–to.
 
 Last of all, after a horizontal line (---), give me a link to save the scores, as the largest heading (one #), itself the link, exactly in this form, one entry per wine joined by semicolons:
 # [💾 Save these scores to my Wine Finder]({BASE}#scores=CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT;CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT)
-CODE is the wine's code in square brackets in my list; POINTS is your score (leave it empty if you found no reviews); VINTAGE is the vintage your score is for, or NV; NOTE is what it rests on, up to eight words, with + instead of spaces and no semicolons or tildes; BODY is light, medium or full; TANNIN is soft, medium or firm (empty for whites); SWEET is dry, off-dry or sweet; DRINK is the drinking window as 2024-2030; FRUIT is yes if it's fruit-forward, otherwise no. Leave any of these empty if you don't know.`;
+CODE is the wine's code in square brackets in my list; POINTS is your score (leave it empty if you found no reviews); VINTAGE is the vintage your score is for, or NV; NOTE is what it rests on, up to eight words, with + instead of spaces and no semicolons or tildes; BODY is light, medium or full; TANNIN is soft, medium or firm (empty for whites); SWEET is dry, off-dry, medium-sweet or sweet; DRINK is the drinking window as 2024-2030; FRUIT is yes if it's fruit-forward, otherwise no. Leave any of these empty if you don't know.`;
 
 let scorePicks = [];
 
@@ -1629,7 +1632,7 @@ function clearMyRating(id) {
 
 // The style Claude gives with a quick score: BODY~TANNIN~SWEET~DRINK, each checked
 // against its few allowed words (anything else is dropped rather than guessed).
-const CR_STYLE = { body: ["light", "medium", "full"], tannin: ["soft", "medium", "firm"], sweet: ["dry", "off-dry", "sweet"] };
+const CR_STYLE = { body: ["light", "medium", "full"], tannin: ["soft", "medium", "firm"], sweet: SWEET_LEVELS };
 function readStyle([body = "", tannin = "", sweet = "", drink = "", fruit = ""]) {
   const pick = (v, list) => (list.includes(v.toLowerCase()) ? v.toLowerCase() : null);
   const out = { body: pick(body, CR_STYLE.body), tannin: pick(tannin, CR_STYLE.tannin), sweet: pick(sweet.replace(/\s+/g, "-"), CR_STYLE.sweet) };
@@ -2429,7 +2432,8 @@ const WHITE_STYLE = [
   [/\bchardonnay\b|\bbourgogne blanc\b|\bmacon\b/, "medium"],
   [/\bviognier\b|\bcondrieu\b|\bmarsanne\b|\broussanne\b|\bgewurz\b|\bpinot gris\b|\bwhite rhone\b/, "full"],
 ];
-const SWEET_WORDS = /\bspatlese\b|\bauslese\b|\bbeerenauslese\b|\btrockenbeerenauslese\b|\btba\b|\beiswein\b|\bice.?wine\b|\blate harvest\b|\bvendanges tardives\b|\bsauternes\b|\bbarsac\b|\btokaji\b|\bmoscato d.?asti\b|\bdemi.sec\b|\bsemi.sweet\b|\bdoux\b|\bdolce\b|\bamabile\b|\bpassito\b|\brecioto\b|\bvin santo\b|\bpedro ximenez\b|\bcream sherry\b/;
+const MEDIUM_SWEET_WORDS = /\bspatlese\b|\bdemi.sec\b|\bsemi.sweet\b|\bmedium.sweet\b|\bamabile\b|\bmoelleux\b|\babboccato\b/;
+const SWEET_WORDS = /\bauslese\b|\bbeerenauslese\b|\btrockenbeerenauslese\b|\btba\b|\beiswein\b|\bice.?wine\b|\blate harvest\b|\bvendanges tardives\b|\bsauternes\b|\bbarsac\b|\btokaji\b|\bmoscato d.?asti\b|\bdoux\b|\bdolce\b|\bpassito\b|\brecioto\b|\bvin santo\b|\bpedro ximenez\b|\bcream sherry\b/;
 const OFFDRY_WORDS = /\bkabinett\b|\boff.dry\b|\bmedium.dry\b|\bsemi.dry\b|\bwhite zinfandel\b|\bmoscato\b|\bfeinherb\b/;
 const DRY_FORTIFIED = /\bfino\b|\bmanzanilla\b|\bamontillado\b|\bsercial\b|\bdry sherry\b/;
 
@@ -2467,8 +2471,7 @@ function estimatedStyle(w) {
     const hit = WHITE_STYLE.find(([re]) => re.test(t));
     if (hit) body = hit[1];
   } else if (type === "Rosé" || type === "Sparkling") body = "light";
-  else if (type === "Dessert") { body = "full"; sweet = "sweet"; }
-  else if (type === "Fortified") { body = "full"; sweet = DRY_FORTIFIED.test(t) ? "dry" : "sweet"; }
+  else if (type === "Dessert" || type === "Fortified") body = "full";
   // the store's own words beat the grape rule
   if (/\bfull.bodied\b|\bfull bodied\b/.test(note)) body = "full";
   else if (/\blight.bodied\b|\blight bodied\b/.test(note)) body = "light";
@@ -2479,22 +2482,24 @@ function estimatedStyle(w) {
   }
   // alcohol nudges an unknown body
   if (!body && w.abv) body = w.abv >= 14.5 ? "full" : w.abv <= 12 ? "light" : "medium";
-  // sweetness: the store's own figure first (BC's 0-10 code, LCBO's grams of sugar a litre)
-  if (!sweet) {
-    if (w.sweetness != null) sweet = w.sweetness <= 1 ? "dry" : w.sweetness <= 4 ? "off-dry" : "sweet";
-    else if (w.sugar != null) sweet = w.sugar <= 6 ? "dry" : w.sugar <= 25 ? "off-dry" : "sweet";
-    else if (SWEET_WORDS.test(t)) sweet = "sweet";
-    else if (OFFDRY_WORDS.test(t)) sweet = "off-dry";
-    else if (type === "Red" || type === "Rosé" || type === "Sparkling" || (type === "White" && body)) sweet = "dry";
-  }
-  const fruity = sweet === "sweet" ? false : fruityEstimate(w, t, note, tannin);
-  return (w._est = { body, tannin: type === "Red" ? tannin : null, sweet, fruity });
+  // sweetness: the store's own figure first (BC's 0-10 sugar code, the LCBO's grams of sugar
+  // a litre), measured; otherwise estimated from the type and the words in the name
+  let sweetHow = "estimated", sweetMeasured = false;
+  if (w.sweetness != null) { sweet = sweetFromCode(w.sweetness); sweetHow = `BC sugar code ${w.sweetness} of 10`; sweetMeasured = true; }
+  else if (w.sugar != null) { sweet = sweetFromSugar(w.sugar); sweetHow = `LCBO: ${+(+w.sugar).toFixed(1)} g/L sugar`; sweetMeasured = true; }
+  else if (type === "Fortified") sweet = DRY_FORTIFIED.test(t) ? "dry" : "sweet";
+  else if (type === "Dessert" || SWEET_WORDS.test(t)) sweet = "sweet";
+  else if (MEDIUM_SWEET_WORDS.test(t)) sweet = "medium-sweet";
+  else if (OFFDRY_WORDS.test(t)) sweet = "off-dry";
+  else if (type === "Red" || type === "Rosé" || type === "Sparkling" || type === "White") sweet = "dry";
+  const fruity = sweet === "sweet" || sweet === "medium-sweet" ? false : fruityEstimate(w, t, note, tannin);
+  return (w._est = { body, tannin: type === "Red" ? tannin : null, sweet, sweetHow, sweetMeasured, fruity });
 }
 
 // Claude's own answer for this wine (its own listing, the same wine at another store, or
 // a family cellar), if it gave style or a drinking window.
 function claudeStyle(w) {
-  const has = (c) => c && (c.body || c.drinkFrom || c.fruity != null);
+  const has = (c) => c && (c.body || c.sweet || c.drinkFrom || c.fruity != null);
   const own = ratingOf(w.id).claude || frOf(w.id).claude;
   if (has(own)) return own;
   const twin = ratedTwin(w)?.claude;
@@ -2528,7 +2533,8 @@ function wineStyleNow(w) {
   const est = estimatedStyle(w), cl = claudeStyle(w);
   const pick = (k) => (cl?.[k] != null ? { v: cl[k], src: "Claude" } : { v: est[k], src: est[k] != null ? "estimate" : null });
   return { continent: continentOf(w), body: pick("body"), tannin: w.type === "Red" ? pick("tannin") : { v: null, src: null },
-    sweet: pick("sweet"), fruity: pick("fruity"), ready: readiness(w, est, cl) };
+    sweet: { ...pick("sweet"), how: cl?.sweet ? "Claude's answer" : est.sweetHow, measured: !!cl?.sweet || est.sweetMeasured },
+    fruity: pick("fruity"), ready: readiness(w, est, cl) };
 }
 
 function familyLinksHtml(w) {
@@ -3468,9 +3474,11 @@ const finderRows = () => {
     "The dry, grippy feel on your gums and tongue, like strong tea. Choose one or more."],
   ["Taste (reds)", "fruity", [[1, "Fruity & ripe", "Malbec, Zinfandel, Australian Shiraz"]],
     "Tastes ripe and fruity, even though it's dry."],
-  ["Sweetness", "sweetStyle", [["dry", "Dry", "most table wines"], ["off-dry", "Off-dry", "a touch of sugar, like Kabinett Riesling"],
-    ["sweet", "Sweet", "dessert wines, Port, icewine"]],
-    "Sugar actually left in the wine. Choose one or more."],
+  ["Sweetness", "sweetStyle", [["dry", "Dry", "most table wines · BC 0–1 · LCBO ≤4 g/L"],
+    ["off-dry", "Off-dry", "Kabinett Riesling · BC 2–4 · LCBO 4–12 g/L"],
+    ["medium-sweet", "Medium-sweet", "Spätlese, demi-sec · BC 5–7 · LCBO 12–45 g/L"],
+    ["sweet", "Sweet", "Sauternes, icewine, Port · BC 8–10 · LCBO over 45 g/L"]],
+    "Sugar actually left in the wine: BC Liquor's sugar code and the LCBO's grams per litre where they give them, otherwise estimated. Choose one or more."],
   ["From", "continent", Object.keys(CONTINENTS).map((c) => [c, c])],
   ].filter(([, key]) => redRowsApply() || (key !== "tannin" && key !== "fruity"));
 };
@@ -3548,6 +3556,7 @@ function finderCounts() {
   return out;
 }
 
+let lastFinderCounts = null; // the side panel's sweetness boxes reuse them
 function renderFinder() {
   if (!$("finder-rows")) return;
   if (!redRowsApply() && (state.tannin.size || state.fruity)) { // a hidden row mustn't keep filtering
@@ -3556,6 +3565,7 @@ function renderFinder() {
     renderResults();
   }
   const counts = WINES.length ? finderCounts() : null;
+  lastFinderCounts = counts;
   const one = (key, v) => (counts ? counts[key].get(String(v)) || 0 : null);
   // In a row that takes several choices, a lit button shows its own wines, and an unlit
   // one the total you'd have by adding it.
@@ -3583,17 +3593,21 @@ function renderFinder() {
 // limit". While a handle moves, only the count beside it changes; the rest of the page
 // catches up when it's let go.
 const SLIDE = { max: 300, step: 5 };
-function priceSliderHtml() {
+// The same slider appears in "Find me a wine" (ids ps-…) and in the side panel (ids sp-…).
+function priceSliderHtml(id = "ps", cls = "price-slider") {
   if (cellarOn() && !storesTicked().length)
-    return `<span class="finder-hint">A cellar keeps no prices: tick a store under Sold by to filter by that store's price.</span>`;
+    return `<span class="finder-hint no-price-note">A cellar keeps no prices: tick a store under Sold by to filter by that store's price.</span>`;
   const lo = state.priceFrom ?? 0, hi = state.priceTo ?? SLIDE.max;
-  return `<div class="price-slider">
-    <label for="ps-lo">Lowest: <strong id="ps-lo-v">$${lo}</strong></label>
-    <input type="range" id="ps-lo" min="0" max="${SLIDE.max}" step="${SLIDE.step}" value="${Math.min(lo, SLIDE.max)}">
-    <label for="ps-hi">Highest: <strong id="ps-hi-v">${hi >= SLIDE.max ? "no limit" : `$${hi}`}</strong></label>
-    <input type="range" id="ps-hi" min="0" max="${SLIDE.max}" step="${SLIDE.step}" value="${Math.min(hi, SLIDE.max)}">
-    <p class="ps-count" id="ps-count" aria-live="polite">${priceCountText()}</p>
+  return `<div class="${cls}">
+    <label for="${id}-lo">Lowest: <strong id="${id}-lo-v">$${lo}</strong></label>
+    <input type="range" id="${id}-lo" min="0" max="${SLIDE.max}" step="${SLIDE.step}" value="${Math.min(lo, SLIDE.max)}">
+    <label for="${id}-hi">Highest: <strong id="${id}-hi-v">${hi >= SLIDE.max ? "no limit" : `$${hi}`}</strong></label>
+    <input type="range" id="${id}-hi" min="0" max="${SLIDE.max}" step="${SLIDE.step}" value="${Math.min(hi, SLIDE.max)}">
+    <p class="ps-count" id="${id}-count" aria-live="polite">${priceCountText()}</p>
   </div>`;
+}
+function renderSidePrice() {
+  if ($("side-price")) $("side-price").innerHTML = priceSliderHtml("sp", "price-slider side-slider");
 }
 function priceCountText(st = state) {
   const n = findPool().reduce((k, w) => k + matches(w, null, st), 0);
@@ -3602,18 +3616,18 @@ function priceCountText(st = state) {
   return `<strong>${n.toLocaleString()} ${n === 1 ? "wine" : "wines"}</strong> ${range}`;
 }
 let slideFrame = 0;
-function priceSlide(which, done) {
-  let lo = +$("ps-lo").value, hi = +$("ps-hi").value;
-  if (lo > hi) { if (which === "lo") hi = lo; else lo = hi; $("ps-lo").value = lo; $("ps-hi").value = hi; }
+function priceSlide(which, done, id = "ps") {
+  let lo = +$(`${id}-lo`).value, hi = +$(`${id}-hi`).value;
+  if (lo > hi) { if (which === "lo") hi = lo; else lo = hi; $(`${id}-lo`).value = lo; $(`${id}-hi`).value = hi; }
   state.priceFrom = lo > 0 ? lo : null;
   state.priceTo = hi < SLIDE.max ? hi : null;
-  $("ps-lo-v").textContent = `$${lo}`;
-  $("ps-hi-v").textContent = hi >= SLIDE.max ? "no limit" : `$${hi}`;
+  $(`${id}-lo-v`).textContent = `$${lo}`;
+  $(`${id}-hi-v`).textContent = hi >= SLIDE.max ? "no limit" : `$${hi}`;
   state.pickLabel = "";
   state.shown = PAGE_SIZE;
   if (done) { syncInputs(); refresh(); return; }
   cancelAnimationFrame(slideFrame);
-  slideFrame = requestAnimationFrame(() => { $("ps-count").innerHTML = priceCountText(); });
+  slideFrame = requestAnimationFrame(() => { $(`${id}-count`).innerHTML = priceCountText(); });
 }
 
 // "Any country", or one country, from the continent chosen (or all), with how many wines each has.
@@ -3652,6 +3666,7 @@ function pickToState(p) {
     const v = p.st[k]; // body, tannin and sweetness were single words in the first saved picks
     st[k] = SET_KEYS.includes(k) ? new Set(Array.isArray(v) ? v : v ? [v] : []) : v;
   }
+  for (const old of Array.isArray(p.st?.sweet) ? p.st.sweet : []) if (OLD_SWEET[old]) st.sweetStyle.add(OLD_SWEET[old]);
   // stores this browser can open (LCBO only once unlocked), and cellars it still has
   const ok = new Set([...knownSources(), ...cellarSources()]);
   st.sources = new Set([...st.sources].filter((x) => ok.has(x)));
@@ -3762,18 +3777,6 @@ function openStoreChoices() {
   $("fs-source").scrollIntoView({ block: "start" });
 }
 
-function stepPrice(id, dir) {
-  const key = id === "price-from" ? "priceFrom" : "priceTo";
-  const cur = state[key];
-  let next;
-  if (dir > 0) next = cur == null ? PRICE_STEPS[0] : PRICE_STEPS.find((s) => s > cur) ?? null;
-  else next = cur == null ? PRICE_STEPS[PRICE_STEPS.length - 1] : [...PRICE_STEPS].reverse().find((s) => s < cur) ?? null;
-  state[key] = next;
-  $(id).value = next ?? "";
-  state.shown = PAGE_SIZE;
-  refresh();
-}
-
 // ---- Events ------------------------------------------------------------------
 
 function debounce(fn, ms) {
@@ -3815,7 +3818,6 @@ function wireEvents() {
       if (!$("view-shortlist").hidden) renderShortlist(); // added from the Short List page's own box
     } else if (t.dataset.remove) { toggleShortlist(t.dataset.remove); renderShortlist(); }
     else if (t.dataset.ew) toggleElsewhere(t);
-    else if (t.dataset.target) stepPrice(t.dataset.target, +t.dataset.dir);
     else if (t.dataset.action === "start-over") startOver();
     else if (t.dataset.action === "goto-ew") { // "Where can I buy…?" is on the Research a wine page
       showView("shortlist");
@@ -3909,12 +3911,6 @@ function wireEvents() {
     refresh();
   });
   $("country-none").addEventListener("click", () => { state.countries.clear(); state.shown = PAGE_SIZE; refresh(); });
-  $("price-any").addEventListener("click", () => {
-    state.priceFrom = state.priceTo = null;
-    $("price-from").value = $("price-to").value = "";
-    state.shown = PAGE_SIZE;
-    refresh();
-  });
 
   $("show-more").addEventListener("click", () => { state.shown += PAGE_SIZE; renderResults(); });
   $("filter-toggle").addEventListener("click", () => {
@@ -3950,7 +3946,7 @@ function wireEvents() {
       return;
     }
     if (group) {
-      const set = { source: state.sources, country: state.countries, type: state.types, sweet: state.sweet }[group];
+      const set = { source: state.sources, country: state.countries, type: state.types, sweetStyle: state.sweetStyle }[group];
       if (group === "source" && cellarOn()) { // narrowing the cellar to wines this store sells
         if (t.checked) set.add(t.value); else set.delete(t.value);
         state.shown = PAGE_SIZE;
@@ -3988,19 +3984,14 @@ function wireEvents() {
 
   $("q").addEventListener("input", debounce(() => { state.q = $("q").value.trim(); state.shown = PAGE_SIZE; refresh(); }, 200));
   $("country-q").addEventListener("input", () => { state.countryQ = $("country-q").value; renderCountries(); });
-  for (const id of ["price-from", "price-to"]) {
-    $(id).addEventListener("input", debounce(() => {
-      const v = parseFloat($(id).value);
-      state[id === "price-from" ? "priceFrom" : "priceTo"] = Number.isFinite(v) && v >= 0 ? v : null;
-      state.shown = PAGE_SIZE;
-      refresh();
-    }, 300));
-  }
+  const slider = (el) => /^(ps|sp)-(lo|hi)$/.exec(el.id); // [id, which slider, lo/hi]
   document.addEventListener("input", (e) => {
-    if (e.target.id === "ps-lo" || e.target.id === "ps-hi") priceSlide(e.target.id === "ps-lo" ? "lo" : "hi", false);
+    const m = slider(e.target);
+    if (m) priceSlide(m[2], false, m[1]);
   });
   document.addEventListener("change", (e) => {
-    if (e.target.id === "ps-lo" || e.target.id === "ps-hi") { priceSlide(e.target.id === "ps-lo" ? "lo" : "hi", true); return; }
+    const m = slider(e.target);
+    if (m) { priceSlide(m[2], true, m[1]); return; }
     if (e.target.id !== "finder-country") return;
     state.countries = e.target.value ? new Set([e.target.value]) : new Set();
     state.pickLabel = "";

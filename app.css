@@ -601,3 +601,9 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .pick-btn[aria-pressed="true"] { background: var(--wine); border-color: var(--wine); color: #fff; }
 .pick-btn[aria-pressed="true"] .pick-count { color: #fff; }
 .wine-seq { display: block; font-size: 0.95rem; font-weight: 600; color: var(--muted); margin-bottom: 0.1rem; }
+/* The side panel's price slider: narrower, labels above each slider. */
+.side-slider { grid-template-columns: minmax(0, 1fr); padding-left: 0; }
+.side-slider label { margin-top: 0.2rem; }
+.no-price-note { font-weight: 700; color: var(--wine-dark); }
+.sweet-name { display: inline-flex; flex-direction: column; line-height: 1.25; }
+.sweet-name small { font-size: 0.9rem; color: var(--muted); }

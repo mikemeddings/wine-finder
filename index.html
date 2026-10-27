@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-27.17">
+<link rel="stylesheet" href="app.css?v=2026-10-27.19">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -105,30 +105,15 @@
 
         <fieldset>
           <legend>Price</legend>
-          <div class="price-row">
-            <label for="price-from">Price from $</label>
-            <div class="stepper">
-              <button type="button" class="btn step" data-target="price-from" data-dir="-1" aria-label="Lower the starting price">−</button>
-              <input type="number" id="price-from" inputmode="decimal" min="0" placeholder="Any">
-              <button type="button" class="btn step" data-target="price-from" data-dir="1" aria-label="Raise the starting price">+</button>
-            </div>
-          </div>
-          <div class="price-row">
-            <label for="price-to">Price to $</label>
-            <div class="stepper">
-              <button type="button" class="btn step" data-target="price-to" data-dir="-1" aria-label="Lower the top price">−</button>
-              <input type="number" id="price-to" inputmode="decimal" min="0" placeholder="Any">
-              <button type="button" class="btn step" data-target="price-to" data-dir="1" aria-label="Raise the top price">+</button>
-            </div>
-          </div>
-          <button type="button" class="btn btn-mini" id="price-any">Any price</button>
-          <p class="hint">The − and + buttons jump between $15, 20, 25, 30, 40, 50, 75, 100, 150, 200 and 500. An empty box means any price.</p>
+          <div id="side-price"></div>
+          <p class="hint">Slide all the way right for no upper limit. The count changes as you slide.</p>
         </fieldset>
 
         <fieldset>
           <legend>Sweetness</legend>
           <div id="sweet-list"></div>
-          <label class="check check-strong"><input type="checkbox" id="not-rated" checked> Include wines with no sweetness rating</label>
+          <label class="check check-strong"><input type="checkbox" id="not-rated" checked> Include wines whose sweetness is estimated</label>
+          <p class="hint">Only BC Liquor (its sugar code, 0 to 10) and the LCBO (grams of sugar a litre) measure sweetness; Claude's quick scores also give it. Untick to see only those.</p>
         </fieldset>
 
         <fieldset>
@@ -307,13 +292,13 @@
 
   <section id="help-find" class="help-topic">
     <h3>Finding wines</h3>
-    <p><strong>Find me a wine</strong>, at the top, has big buttons: colour, price, body, tannin, “Fruity & ripe”, sweetness, where it's from, “Only well rated” and “Ready to drink now”. Tap <strong>▴ Hide choices</strong> to fold the panel away (your choices stay, summed up in one line; your quick picks stay visible), and <strong>▾ Show choices</strong> to open it again; each computer remembers how you left it. Tap one to choose it, tap it again to undo it; the list below changes as you go. In <strong>Body</strong>, <strong>Tannin</strong> and <strong>Sweetness</strong> you can choose more than one, for example Medium and Full-bodied for wines that are either. Tannin and “Fruity & ripe” are for reds, so they're hidden when you choose only White, Rosé or Sparkling. The number on each button is how many wines you'd get by tapping it, with your other choices; a dashed button would give none. If nothing matches, the page says which choices rule everything out and offers to show the wines without them. <strong>Fruity & ripe</strong> is for reds that taste ripe and fruity even though they're dry, like many Malbecs, Zinfandels and Australian Shiraz; <strong>Sweet</strong> means sugar actually left in the wine, as in dessert wines. Body, tannin, fruitiness, sweetness and “ready now” are Claude's answer where Claude has scored the wine (“Get quick Claude scores (next 25)”), and otherwise an estimate from the grape, region and alcohol. <strong>“Only well rated”</strong> means 90 points or more from Claude, CellarTracker or the family, or on ZYN's own 90+ list.</p>
+    <p><strong>Find me a wine</strong>, at the top, has big buttons: colour, price, body, tannin, “Fruity & ripe”, sweetness, where it's from, “Only well rated” and “Ready to drink now”. Tap <strong>▴ Hide choices</strong> to fold the panel away (your choices stay, summed up in one line; your quick picks stay visible), and <strong>▾ Show choices</strong> to open it again; each computer remembers how you left it. Tap one to choose it, tap it again to undo it; the list below changes as you go. In <strong>Body</strong>, <strong>Tannin</strong> and <strong>Sweetness</strong> you can choose more than one, for example Medium and Full-bodied for wines that are either. Tannin and “Fruity & ripe” are for reds, so they're hidden when you choose only White, Rosé or Sparkling. The number on each button is how many wines you'd get by tapping it, with your other choices; a dashed button would give none. If nothing matches, the page says which choices rule everything out and offers to show the wines without them. <strong>Fruity & ripe</strong> is for reds that taste ripe and fruity even though they're dry, like many Malbecs, Zinfandels and Australian Shiraz; <strong>Sweetness</strong> has four steps, Dry, Off-dry, Medium-sweet and Sweet, for sugar actually left in the wine; each button shows what it means in BC's sugar code and the LCBO's grams per litre. Body, tannin, fruitiness, sweetness and “ready now” are Claude's answer where Claude has scored the wine (“Get quick Claude scores (next 25)”), and otherwise an estimate from the grape, region and alcohol. <strong>“Only well rated”</strong> means 90 points or more from Claude, CellarTracker or the family, or on ZYN's own 90+ list.</p>
     <p><strong>Quick picks:</strong> <strong>⭐ Scored by Claude or the family</strong> keeps only wines that Claude, CellarTracker or a family member has scored, on top of your other choices; the number says how many that leaves. Tap it again to switch it off. Under the price buttons, a <strong>slider</strong> sets the lowest and highest price, and the count beside it changes as you move it. With a family cellar and a store both ticked, a cellar wine takes that store's price, so “Under $100” means wines the store sells for under $100; the heading says how many of the cellar's wines the store sells, and each store under Sold by shows that number too. Once you've chosen what you like, tap <strong>💾 Save as my quick pick</strong> and give it a name: it becomes a button of your own, on this computer only. Tap ✕ beside it to remove it.</p>
     <p><strong>Filters</strong> (on the left; on a phone, tap “Show filters”) narrow the list:</p>
     <ul>
       <li><strong>Search words</strong>: a name, producer, region or grape.</li>
       <li><strong>Sold by</strong>: BC Liquor – LDB, the Calgary stores BSW Liquor and ZYN (check shipping to BC), Lucullus and Weinshop365 in Switzerland (prices in Swiss francs as each shop shows them, Lucullus without VAT and Weinshop365 with it, plus an approximate Canadian-dollar price), and LCBO (Ontario). LCBO is a private family list: the first time you tick it, enter the unlock code from the family email (or click the link in that email). After that it stays on that browser.</li>
-      <li><strong>Country</strong>, <strong>Type of wine</strong>, <strong>Price</strong> (the − and + buttons jump between common prices) and <strong>Sweetness</strong>.</li>
+      <li><strong>Country</strong>, <strong>Type of wine</strong>, <strong>Price</strong> (two sliders, lowest and highest, with a live count) and <strong>Sweetness</strong>: Dry, Off-dry, Medium-sweet or Sweet, the same four steps as in Find me a wine (choosing in one place chooses in both). BC Liquor's sugar code (0–10) and the LCBO's grams of sugar a litre decide it where the store gives them; each wine card says which, for example “Off-dry (LCBO: 8 g/L sugar)” or “Dry (estimated)”. Untick <strong>Include wines whose sweetness is estimated</strong> to see only wines with a measured figure.</li>
     </ul>
     <p>The <strong>Showing:</strong> line sums up what you've chosen. <strong>Sort by</strong> puts the list in order. <strong>Best rated first</strong> (the usual order; ratings come from Claude, CellarTracker and the family, never from the stores) puts wines Claude has scored first (including a score given to the same wine at another store), then CellarTracker scores, then the family's own, then ZYN's 90+ list, then everything else, cheapest first. Other choices include price, name, country, vintage, alcohol, sweetness, Claude's score, my rating (on this computer), family members' ratings (real people only), CellarTracker score and “In the family's cellars first”, each either way round. The two <strong>then by</strong> boxes break ties: for example Country, then Best rated first, then Price low to high. <strong>CellarTracker score</strong> is the cellar owner's own score on CellarTracker, or the CellarTracker community score when they haven't given one.</p>
     <p>Each <strong>wine card</strong> shows the price, the store, the alcohol and sweetness, and any family ratings. Its buttons:</p>
@@ -624,6 +609,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-27.17"></script>
+<script src="app.js?v=2026-10-27.19"></script>
 </body>
 </html>
