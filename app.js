@@ -313,6 +313,7 @@ function defaultState() {
     grapeOut: false,    // true: the ticked grapes are left out ("all grapes except Cabernet Sauvignon")
     grapeQ: "",
     food: new Set(),    // Food it goes with: any of these (estimated from the wine's style)
+    foodBold: false,    // also the adventurous pairings (a red with fish…), each with advice
     vintFrom: null, vintTo: null, // Vintage slider (wines without a vintage drop out while it's set)
     oldOnly: false,     // "10 years or older"
     abvFrom: null, abvTo: null,   // Alcohol slider (only BC Liquor and the LCBO give it)
@@ -361,7 +362,8 @@ function matches(w, skip, st = state) {
   if (st.bottleOnly && !STANDARD_ML.has(w.size_ml)) return false;
   if (st.newOnly && !w.new_since_last) return false;
   if (skip !== "grape" && st.grapes.size && grapesOf(w).some((g) => st.grapes.has(g)) === st.grapeOut) return false;
-  if (skip !== "food" && st.food.size && !foodsOf(w).some((f) => st.food.has(f))) return false;
+  if (skip !== "food" && st.food.size && !foodsOf(w).some((f) => st.food.has(f)) &&
+    !(st.foodBold && boldFoodsOf(w).some((b) => st.food.has(b.food)))) return false;
   if (st.vintFrom != null || st.vintTo != null || st.oldOnly) {
     if (!w.vintage) return false;
     if ((st.vintFrom != null && w.vintage < st.vintFrom) || (st.vintTo != null && w.vintage > st.vintTo)) return false;
@@ -402,6 +404,12 @@ const SORT_KEYS = {
   vintage: { get: (w) => w.vintage, up: "Vintage: oldest first", down: "Vintage: newest first", first: "down" },
   abv: { get: (w) => w.abv, up: "Alcohol %: lowest first", down: "Alcohol %: highest first" },
   // the four steps, then the store's own figure within a step (grams of sugar, or BC's code)
+  // how well the wine suits the food ticked: the store says so, then a grape known for it,
+  // then a classic by style, then adventurous
+  food: { get: (w) => foodMatchScore(w), up: "Food match: weakest first", down: "Best food match first", first: "down" },
+  // the adventurous matches for the food ticked (with adventurous pairings included) ahead of the classics
+  adventure: { get: (w) => (state.food.size && state.foodBold ? (boldFoodsOf(w).some((b) => state.food.has(b.food)) ? 1 : 0) : null),
+    up: "Classic pairings first", down: "Adventurous pairings first", first: "down" },
   // a wine's (first) grape, or the grape you ticked if it's a blend containing it
   grape: { get: (w) => { const g = grapesOf(w); return (state.grapes.size && !state.grapeOut && g.find((x) => state.grapes.has(x))) || g[0] || null; },
     text: true, up: "Grape: A to Z", down: "Grape: Z to A" },
@@ -605,8 +613,111 @@ function grapesOf(w) {
 // Food it goes with, estimated from colour, body, tannin, sweetness and fruitiness (the same
 // thinking as the restaurant page): a guide, not a sommelier.
 const FOODS = ["Red meat", "Lamb", "Pork", "Chicken", "Fish", "Seafood", "Pasta and pizza", "Cheese", "Spicy food", "Dessert"];
+// What each grape is classically served with, in plain words: the strongest clue to a food
+// match that the stores' data gives. A grape listed for a food makes it a classic match.
+const GRAPE_FOOD = {
+  "Cabernet Sauvignon": { "Red meat": "ribeye, prime rib and roast beef", "Lamb": "roast leg of lamb with rosemary", "Cheese": "aged Cheddar and other hard cheeses" },
+  "Merlot": { "Red meat": "roast beef, meatloaf and burgers", "Pork": "roast pork tenderloin", "Chicken": "roast chicken with mushrooms", "Pasta and pizza": "lasagna and meaty pasta" },
+  "Cabernet Franc": { "Pork": "roast pork and sausages", "Chicken": "herb-roasted chicken", "Lamb": "lamb with herbs", "Cheese": "goat cheese" },
+  "Pinot Noir": { "Chicken": "roast chicken, duck and turkey", "Pork": "pork tenderloin and ham", "Pasta and pizza": "mushroom risotto and mushroom pasta" },
+  "Gamay": { "Chicken": "roast chicken and picnic fare", "Pork": "charcuterie, sausages and pâté", "Pasta and pizza": "pizza and simple pasta" },
+  "Syrah / Shiraz": { "Red meat": "peppered steak, barbecue and game", "Lamb": "grilled lamb and lamb stew", "Pork": "barbecue pork and ribs" },
+  "Grenache / Garnacha": { "Lamb": "roast lamb and Provençal stews", "Red meat": "grilled meats and beef stew", "Pork": "roast pork and sausages" },
+  "Tempranillo": { "Lamb": "roast lamb", "Red meat": "grilled steak and roast beef", "Pork": "chorizo, jamón and roast pork", "Cheese": "Manchego" },
+  "Sangiovese": { "Pasta and pizza": "tomato pasta, pizza and lasagna", "Red meat": "Florentine steak and meatballs in tomato sauce", "Cheese": "Parmesan and Pecorino" },
+  "Nebbiolo": { "Red meat": "braised beef, osso buco, and mushroom or truffle dishes", "Lamb": "braised lamb", "Cheese": "aged hard cheeses" },
+  "Montepulciano": { "Pasta and pizza": "pizza and pasta with meat sauce", "Red meat": "grilled sausages and burgers" },
+  "Corvina (Amarone, Valpolicella)": { "Red meat": "braised beef and rich stews (Amarone)", "Pasta and pizza": "pasta with ragù", "Cheese": "aged Parmesan and blue cheese" },
+  "Malbec": { "Red meat": "grilled steak, especially with chimichurri, and brisket", "Lamb": "grilled lamb", "Pork": "barbecue pork" },
+  "Zinfandel / Primitivo": { "Red meat": "barbecue ribs, burgers and pulled beef", "Pork": "pulled pork and barbecue", "Spicy food": "barbecue and spiced dishes", "Pasta and pizza": "pizza" },
+  "Touriga Nacional": { "Red meat": "roast and grilled meats and stews", "Lamb": "roast lamb" },
+  "Carmenère": { "Red meat": "grilled meats with herbs", "Pork": "roast pork", "Spicy food": "mildly spiced dishes" },
+  "Pinotage": { "Red meat": "barbecue and smoked meats", "Pork": "sausages" },
+  "Barbera": { "Pasta and pizza": "pizza, tomato pasta and risotto", "Pork": "sausages and charcuterie", "Chicken": "chicken cacciatore" },
+  "Chardonnay": { "Chicken": "roast chicken and creamy chicken dishes", "Pasta and pizza": "creamy pasta", "Seafood": "crab, lobster and scallops" },
+  "Sauvignon Blanc": { "Fish": "white fish with lemon or herbs", "Seafood": "oysters, shrimp and ceviche", "Cheese": "goat cheese", "Chicken": "herb chicken and salads" },
+  "Riesling": { "Spicy food": "Thai, Indian and Szechuan dishes", "Pork": "pork with apples", "Fish": "trout and smoked fish" },
+  "Pinot Grigio / Gris": { "Fish": "light white fish", "Seafood": "shrimp, clams and seafood pasta", "Pasta and pizza": "light pasta dishes" },
+  "Gewürztraminer": { "Spicy food": "Thai, Indian and Moroccan dishes", "Cheese": "Munster and other washed-rind cheeses", "Pork": "pork with fruit" },
+  "Chenin Blanc": { "Pork": "pork with apples", "Chicken": "roast chicken", "Spicy food": "lightly spiced dishes" },
+  "Viognier": { "Chicken": "chicken with apricots or in cream", "Spicy food": "mild curries", "Seafood": "lobster and scallops" },
+  "Grüner Veltliner": { "Fish": "white fish", "Chicken": "schnitzel and roast chicken", "Spicy food": "Asian dishes" },
+  "Albariño": { "Seafood": "shellfish, octopus and grilled seafood", "Fish": "grilled white fish" },
+  "Muscat / Moscato": { "Dessert": "fruit desserts", "Spicy food": "spicy dishes" },
+  "Glera (Prosecco)": { "Seafood": "fried calamari", "Fish": "fried fish" },
+};
+// The LCBO's tasting notes often say what to serve the wine with. That sentence is shown on
+// the wine, and on the same wine at another store, only in browsers that have unlocked the
+// LCBO's private list (it never reaches the public site).
+const FOOD_WORDS = {
+  "Red meat": /\b(steak|beef|red meat|(?<!(mushroom|veggie|vegetarian|bean|salmon|chicken|turkey) )burgers?|prime rib|brisket|ribs?|veal|venison|game)\b/,
+  "Lamb": /\blamb\b/, "Pork": /\b(pork|ham|sausages?|charcuterie|prosciutto|bacon)\b/,
+  "Chicken": /\b(chicken|poultry|turkey|duck)\b/, "Fish": /\b(fish|salmon|tuna|cod|halibut|trout|sea bass)\b/,
+  "Seafood": /\b(seafood|shellfish|oysters?|shrimp|prawns?|mussels|clams|crab|lobster|scallops|calamari)\b/,
+  "Pasta and pizza": /\b(pasta|pizza|lasagna|spaghetti|risotto)\b/, "Cheese": /\bcheeses?\b/,
+  "Spicy food": /\b(spicy|curry|curries|thai|indian|szechuan|asian)\b/, "Dessert": /\b(dessert|chocolate|cake|tart|pie)\b/,
+};
+const SERVE = /\b(pair|pairs|serve|enjoy|match|try it|try this|perfect|great|ideal|delicious|lovely|terrific)\b[^.]*\b(with|alongside|for)\b/i;
+function noteFoodSentence(note) {
+  if (!note) return "";
+  const parts = note.split(/(?<=[.!?])\s+/);
+  return parts.find((p) => SERVE.test(p) && Object.values(FOOD_WORDS).some((re) => re.test(p.toLowerCase())))?.trim().slice(0, 220) || "";
+}
+// LCBO listings with a food sentence, found by name for the same wine at another store.
+let lcboFoodIndex = null, lcboFoodKey = "";
+function lcboFoodNote(w) {
+  if (w.source === "LCBO") return noteFoodSentence(w.note);
+  const key = storeListsKey();
+  if (lcboFoodKey !== key) {
+    lcboFoodKey = key;
+    lcboFoodIndex = new Map();
+    for (const l of WINES) {
+      if (l.source !== "LCBO") continue;
+      const sentence = noteFoodSentence(l.note);
+      if (!sentence) continue;
+      const toks = storeTokens(l.name);
+      const k = [...toks].sort((a, b) => b.length - a.length)[0];
+      if (k) (lcboFoodIndex.get(k) || lcboFoodIndex.set(k, []).get(k)).push({ l, sentence });
+    }
+  }
+  if (w._lcboFoodKey === key) return w._lcboFood;
+  w._lcboFoodKey = key;
+  const toks = storeTokens(w.name);
+  for (const t of toks) for (const { l, sentence } of lcboFoodIndex.get(t) || [])
+    if (typesAgree(w.type, l.type) && sameWineName(w.name, l.name)) return (w._lcboFood = sentence);
+  return (w._lcboFood = "");
+}
+// The dishes Claude named for this wine in a quick score (its own, or the same wine's elsewhere),
+// and the foods among them.
+const claudePair = (w) => claudeStyle(w)?.pair || "";
+function claudeFoods(w) {
+  const s = claudePair(w).toLowerCase();
+  return new Set(s ? FOODS.filter((f) => FOOD_WORDS[f].test(s)) : []);
+}
+// The foods the store's own note names.
+function storeFoods(w) {
+  const s = lcboFoodNote(w).toLowerCase();
+  return new Set(s ? FOODS.filter((f) => FOOD_WORDS[f].test(s)) : []);
+}
+
+// The grape's line for a food, as [grape, line], when one of the wine's grapes has one. Only
+// a grape of the wine's own colour counts: the dash of white Viognier in a red Côte-Rôtie
+// doesn't make it a match for lobster.
+const WHITE_GRAPES = new Set(["Chardonnay", "Sauvignon Blanc", "Riesling", "Pinot Grigio / Gris", "Gewürztraminer", "Chenin Blanc",
+  "Viognier", "Grüner Veltliner", "Albariño", "Sémillon", "Muscat / Moscato", "Vermentino", "Verdejo", "Godello", "Chasselas",
+  "Garganega (Soave)", "Cortese (Gavi)", "Pinot Blanc", "Marsanne / Roussanne", "Assyrtiko", "Torrontés", "Fiano", "Furmint", "Glera (Prosecco)"]);
+const grapeFits = (w, g) => (w.type === "Red" ? !WHITE_GRAPES.has(g) : w.type === "White" ? WHITE_GRAPES.has(g)
+  : w.type === "Sparkling" && g === "Glera (Prosecco)"); // rosé and other sparkling use their style lines
+// A sweet wine keeps to desserts, cheese and spice, whatever its grape.
+const sweetOnly = (w, food) => ["sweet", "medium-sweet"].includes(wineStyle(w).sweet.v) && !["Dessert", "Cheese", "Spicy food"].includes(food);
+function grapeFoodLine(w, food) {
+  if (sweetOnly(w, food)) return null;
+  for (const g of grapesOf(w)) if (grapeFits(w, g) && GRAPE_FOOD[g]?.[food]) return [g, GRAPE_FOOD[g][food]];
+  return null;
+}
+
 function foodsOf(w) {
-  const k = `${ratedNamesVer}`;
+  const k = `${ratingsVer}|${ratedNamesVer}|${storeListsKey()}`; // the LCBO's notes count once its list is loaded; Claude's dishes once saved
   if (w._foods && w._foodsKey === k) return w._foods;
   const s = wineStyle(w), body = s.body.v, tannin = s.tannin.v, sweet = s.sweet.v, t = w.type, out = [];
   const sweetish = sweet === "sweet" || sweet === "medium-sweet";
@@ -631,8 +742,334 @@ function foodsOf(w) {
   else if (t === "Sparkling") out.push(...(sweetish ? ["Dessert"] : ["Fish", "Seafood", "Chicken"]));
   else if (t === "Dessert" || (t === "Fortified" && sweet !== "dry")) out.push("Dessert", "Cheese");
   else if (t === "Fortified") out.push("Seafood", "Cheese"); // fino, manzanilla
+  w._styleFoods = [...out]; // matched by style alone (the rest come from the grape or the store's note)
+  // a grape known for a food, or the store's own note naming it, makes it a classic match too
+  for (const f of FOODS) if (!out.includes(f) && (grapeFoodLine(w, f) || storeFoods(w).has(f) || claudeFoods(w).has(f))) out.push(f);
   w._foodsKey = k;
   return (w._foods = out);
+}
+
+// Adventurous pairings: what wine writers and sommeliers suggest beyond the old rules. Each
+// card names what the grape suits, then one line of advice drawn from sources read in full:
+// red with fish (Fiona Beckett, "Salmon and Pinot Noir": seared, grilled, barbecued or spicy-
+// crusted fish; poached or butter sauces still suit a white; Wine Folly; Wild Alaskan Company),
+// Pinot with shellfish (VinePair, "10 Wine Pairings That Break the Rules"; the 2009 Mercian
+// study reported by Phys.org traced a fishy aftertaste with scallops to iron in some wines),
+// and white with steak (Wine Spectator's Dr. Vinny, 2018; VinePair's "Ask Adam", 2023).
+// No blanket warnings: whether a given red clashes can't be told from any store's data.
+const ADV_GRAPE = {
+  "Fish": {
+    "Pinot Noir": "salmon or seared tuna, especially with mushrooms",
+    "Gamay": "cod or tuna, and it's lovely lightly chilled",
+    "Barbera": "halibut, cioppino and tomato-based fish stews",
+    "Grenache / Garnacha": "spicy fish dishes and fish stews",
+    "Mencía": "grilled sardines and octopus",
+    "Merlot": "grilled salmon with herbs or a red-wine glaze",
+    "Carmenère": "grilled salmon or tuna with herbs",
+    "Zweigelt": "trout or salmon",
+    "Corvina (Amarone, Valpolicella)": "grilled salmon or tuna (a light Valpolicella)",
+  },
+  "Red meat": {
+    "Chardonnay": "steak with butter or béarnaise, and veal",
+    "Viognier": "veal, or herb-roasted beef",
+    "Marsanne / Roussanne": "veal, or herb-roasted beef",
+    "Riesling": "steak, when the Riesling is an older one",
+  },
+};
+function advAdvice(w, food) {
+  const g = grapesOf(w).find((x) => grapeFits(w, x) && ADV_GRAPE[food]?.[x]);
+  const dish = ruleDish(w, food) || (g ? ADV_GRAPE[food][g] : pairDish(w, food));
+  const base = pairSentence(w, food, dish);
+  // shellfish: the one caution the research supports (VinePair; the 2009 iron study)
+  return base;
+}
+function boldFoodsOf(w) {
+  const s = wineStyle(w), body = s.body.v, tannin = s.tannin.v, sweet = s.sweet.v, g = grapesOf(w), out = [];
+  const dry = sweet !== "sweet" && sweet !== "medium-sweet";
+  const tannic = ["Cabernet Sauvignon", "Nebbiolo", "Tannat", "Petite Sirah", "Aglianico", "Mourvèdre / Monastrell", "Touriga Nacional", "Saperavi", "Syrah / Shiraz"].some((x) => g.includes(x));
+  if (w.type === "Red" && dry && body !== "full" && !tannic && (tannin === "soft" || ["Pinot Noir", "Gamay", "Barbera", "Zweigelt"].some((x) => g.includes(x))))
+    out.push({ food: "Fish", advice: advAdvice(w, "Fish") });
+  if (w.type === "Red" && dry && g.includes("Pinot Noir") && body !== "full") out.push({ food: "Seafood", advice: advAdvice(w, "Seafood") });
+  if (w.type === "White" && dry && body === "full") out.push({ food: "Red meat", advice: advAdvice(w, "Red meat") });
+  return out.filter((b) => !foodsOf(w).includes(b.food)); // already a classic match: nothing bold about it
+}
+// What a classic match is best with, for this kind of wine. Fish and seafood follow Wine
+// Folly's fish guide (zesty whites for delicate fish, richer whites for richer fish and
+// sauces, dry rosé with meaty fish, sparkling with raw fish and fish tacos); steak and tannin
+// follows Wine Spectator's Dr. Vinny; spice and alcohol, and white wine with tomato sauce,
+// follow VinePair. The rest is everyday pairing advice, not quoted from anyone.
+// ---- Pairing sentences, built from each wine's own details --------------------------------
+// Every tag names the wine (its region or style, else its grape), describes it from what we
+// know about it (body, tannin, sweetness with the store's own figure, alcohol, fruit), says
+// what it suits (the grape's dishes, else dishes for its style) and why, and adds a serving
+// tip where one applies. So two wines only read the same when they really are alike.
+const PLAIN_GRAPE = (g) => g.replace(/ \(.*\)$/, "").split(" / ")[0];
+// "this Copper Moon Merlot", "this Bierzo from Alvaro Palacios", "this Masi Modello Merlot".
+// BC writes names as "Region - Producer" or "Producer - Grape"; the side that names a grape or
+// a region is the style, the other side the producer. When it can't tell, just the grape.
+const NO_YEAR = (x) => String(x || "").replace(/\(repack\)/gi, "").replace(/(?<!\d)(19|20)\d\d(?!\d)/g, " ").replace(/\b(VQA|DOC|DOCG|AOC|AC|IGT)\b/g, "").replace(/\s+/g, " ").trim();
+const namesStyle = (x) => {
+  const t = fold(x);
+  return GRAPES.some(([, re]) => re.test(t)) || RED_STYLE.some(([re]) => re.test(t)) || WHITE_STYLE.some(([re]) => re.test(t));
+};
+function wineIdentity(w) {
+  const name = NO_YEAR(w.name), dash = name.indexOf(" - ");
+  const grape = grapesOf(w).find((x) => grapeFits(w, x));
+  const plainGrape = grape ? PLAIN_GRAPE(grape) : String(w.type || "wine").toLowerCase();
+  if (dash > 1) {
+    const left = name.slice(0, dash).trim(), right = name.slice(dash + 3).trim();
+    const onlyGrape = (x) => { const t = nameTokens(x); return t.length > 0 && t.every((y) => GRAPE_WORDS.has(y)); };
+    if (onlyGrape(left)) return `this ${right} ${left}`;             // "Merlot - Duckhorn Napa"
+    if (onlyGrape(right) || (namesStyle(right) && !namesStyle(left))) return `this ${left} ${right}`; // "Copper Moon - Merlot"
+    if (namesStyle(left)) return `this ${left} from ${right}`;       // "Bierzo - Descendientes De J Palacios"
+    return `this ${plainGrape}`;
+  }
+  // other stores give the full name: use it when it's short enough to read
+  return name && name.length <= 45 ? `this ${name}` : `this ${plainGrape}`;
+}
+function wineLook(w) {
+  const s = wineStyle(w), bits = [];
+  if (s.body.v) bits.push(s.body.v === "full" ? "full-bodied" : s.body.v === "medium" ? "medium-bodied" : "light");
+  if (w.type === "Red" && (s.tannin.v === "soft" || s.tannin.v === "firm")) bits.push(s.tannin.v);
+  if (s.sweet.v && s.sweet.v !== "dry") bits.push(s.sweet.v);
+  if (s.fruity.v) bits.push("fruit-forward");
+  const kind = { Red: "red", White: "white", "Rosé": "rosé", Sparkling: "sparkling wine", Dessert: "dessert wine", Fortified: "fortified wine" }[w.type] || "wine";
+  const words = [...bits, kind].join(bits.length > 1 ? ", " : " ").replace(/, (red|white|rosé|sparkling wine|dessert wine|fortified wine|wine)$/, " $1");
+  return `${/^[aeiou]/i.test(words) ? "an" : "a"} ${words}`;
+}
+// Dishes chosen by grape together with region and body, so a Marlborough Sauvignon and a
+// Sancerre, or a Chablis and a buttery California Chardonnay, get different advice. Each rule:
+// [food, grape, region words or null, body ("light"/"medium"/"full"/"notlight") or null, dish].
+// The first rule that fits wins; otherwise the grape's own line, then the style's. Everyday
+// pairing knowledge, not quoted from any source.
+const DISH_RULES = [
+  // fish: whites
+  ["Fish", "Chardonnay", /\b(chablis|macon|petit chablis)\b/, null, "oysters, sole or a delicate white fish with lemon butter"],
+  ["Fish", "Chardonnay", /\b(burgundy|bourgogne|meursault|puligny|chassagne|beaune)\b/, null, "sole meunière or halibut in a light butter sauce"],
+  ["Fish", "Chardonnay", null, "light", "sole, trout or a delicate white fish with lemon butter"],
+  ["Fish", "Chardonnay", /\b(california|napa|sonoma|australia|chile|argentina|south africa)\b/, "full", "salmon or halibut in a cream sauce, or crab cakes"],
+  ["Fish", "Chardonnay", null, "full", "salmon in a cream sauce, or lobster"],
+  ["Fish", "Chardonnay", null, null, "cod or halibut with a butter sauce"],
+  ["Fish", "Sauvignon Blanc", /\b(marlborough|new zealand|awatere)\b/, null, "shellfish, ceviche or Thai fish cakes"],
+  ["Fish", "Sauvignon Blanc", /\b(sancerre|pouilly|loire|touraine|menetou)\b/, null, "trout or pike with herbs, or a goat-cheese starter"],
+  ["Fish", "Sauvignon Blanc", /\b(bordeaux|graves|pessac|entre.deux.mers)\b/, null, "grilled sea bass or a seafood salad"],
+  ["Fish", "Sauvignon Blanc", /\b(chile|casablanca|leyda|south africa|western cape|elgin)\b/, null, "grilled fish tacos or fish with salsa verde"],
+  ["Fish", "Sauvignon Blanc", /\b(california|napa|fume)\b/, null, "grilled halibut or swordfish"],
+  ["Fish", "Riesling", /\b(mosel|rheingau|pfalz|nahe|germany|kabinett|spatlese)\b/, null, "smoked trout or pickled herring"],
+  ["Fish", "Riesling", /\b(alsace|austria|wachau)\b/, null, "pan-fried trout or fish in a cream sauce"],
+  ["Fish", "Riesling", /\b(clare|eden|australia)\b/, null, "seafood with lime, or Thai fish"],
+  ["Fish", "Riesling", /\b(niagara|ontario|okanagan|british columbia|finger lakes|washington)\b/, null, "pan-fried pickerel or trout"],
+  ["Fish", "Pinot Grigio / Gris", /\b(italy|veneto|friuli|alto adige|delle venezie|trentino)\b/, null, "fritto misto or grilled sea bass"],
+  ["Fish", "Pinot Grigio / Gris", /\b(alsace|oregon|okanagan|new zealand)\b/, null, "salmon or a richer white fish"],
+  ["Fish", "Albariño", null, null, "octopus, grilled sardines or seafood rice"],
+  ["Fish", "Grüner Veltliner", null, null, "fried fish, schnitzel-style, or trout"],
+  ["Fish", "Chenin Blanc", /\b(vouvray|loire|savennieres|saumur|montlouis)\b/, null, "pike or river fish in a cream sauce"],
+  ["Fish", "Chenin Blanc", /\b(south africa|swartland|stellenbosch|western cape)\b/, null, "grilled fish with a little spice"],
+  ["Fish", "Viognier", null, null, "lobster, monkfish or a fish curry"],
+  ["Fish", "Glera (Prosecco)", null, null, "fried calamari and fish and chips"],
+  // fish: reds (adventurous)
+  ["Fish", "Pinot Noir", /\b(oregon|willamette|burgundy|bourgogne|sonoma coast)\b/, null, "salmon with mushrooms"],
+  ["Fish", "Pinot Noir", /\b(new zealand|central otago|marlborough|martinborough)\b/, null, "seared tuna or salmon"],
+  ["Fish", "Pinot Noir", /\b(california|chile|australia|south africa)\b/, null, "barbecued or cedar-plank salmon"],
+  ["Fish", "Gamay", null, null, "cod or a tuna niçoise, lightly chilled"],
+  ["Fish", "Merlot", /\b(okanagan|british columbia|bordeaux|ontario|niagara)\b/, null, "grilled salmon with herbs"],
+  ["Fish", "Merlot", null, null, "barbecued salmon with a sweet glaze"],
+  // red meat: reds
+  ["Red meat", "Cabernet Sauvignon", /\b(napa|sonoma|california|paso robles)\b/, null, "a ribeye or prime rib"],
+  ["Red meat", "Cabernet Sauvignon", /\b(bordeaux|pauillac|margaux|medoc|saint.julien|st.julien|saint.estephe|pessac)\b/, null, "roast beef or a rack of lamb"],
+  ["Red meat", "Cabernet Sauvignon", /\b(chile|maipo|colchagua|australia|coonawarra|argentina|south africa)\b/, null, "barbecued steak"],
+  ["Red meat", "Cabernet Sauvignon", /\b(okanagan|british columbia|washington|columbia valley|niagara)\b/, null, "grilled striploin"],
+  ["Red meat", "Malbec", /\b(argentina|mendoza|uco|salta)\b/, null, "grilled steak with chimichurri"],
+  ["Red meat", "Malbec", /\b(cahors|france)\b/, null, "beef stew or duck"],
+  ["Red meat", "Syrah / Shiraz", /\b(rhone|hermitage|crozes|cornas|cote.rotie|saint.joseph|st.joseph)\b/, null, "peppered steak or venison"],
+  ["Red meat", "Syrah / Shiraz", /\b(australia|barossa|mclaren|south australia)\b/, null, "barbecued brisket or ribs"],
+  ["Red meat", "Syrah / Shiraz", /\b(washington|okanagan|british columbia|california)\b/, null, "grilled flank steak with pepper"],
+  ["Red meat", "Sangiovese", /\b(brunello|montalcino)\b/, null, "a Florentine T-bone"],
+  ["Red meat", "Sangiovese", /\b(chianti)\b/, null, "meatballs in tomato sauce or a grilled steak"],
+  ["Red meat", "Tempranillo", /\b(rioja)\b/, null, "roast lamb or beef, and chorizo"],
+  ["Red meat", "Tempranillo", /\b(ribera|toro)\b/, null, "grilled steak or roast beef"],
+  ["Red meat", "Nebbiolo", null, null, "braised beef, osso buco, or anything with mushrooms or truffle"],
+  ["Red meat", "Grenache / Garnacha", /\b(chateauneuf|gigondas|vacqueyras|rhone)\b/, null, "beef daube or a rich stew"],
+  ["Red meat", "Grenache / Garnacha", /\b(spain|priorat|campo de borja|calatayud)\b/, null, "grilled lamb or beef skewers"],
+  ["Red meat", "Merlot", /\b(bordeaux|pomerol|saint.emilion|st.emilion)\b/, null, "roast beef or filet mignon"],
+  ["Red meat", "Merlot", null, "notlight", "roast beef, meatloaf or burgers"],
+  ["Red meat", "Zinfandel / Primitivo", null, null, "barbecue ribs, burgers or pulled beef"],
+  // red meat: whites (adventurous)
+  ["Red meat", "Chardonnay", /\b(california|napa|sonoma|australia)\b/, "full", "steak with béarnaise or creamed spinach"],
+  ["Red meat", "Chardonnay", /\b(burgundy|bourgogne|meursault)\b/, null, "veal or a steak in a butter sauce"],
+];
+function ruleDish(w, food) {
+  if (sweetOnly(w, food)) return null;
+  const t = fold([w.name, w.region, w.region_or_grape, w.country].filter(Boolean).join(" ")), body = wineStyle(w).body.v;
+  const gs = grapesOf(w).filter((g) => grapeFits(w, g));
+  for (const [f, g, re, b, dish] of DISH_RULES) {
+    if (f !== food || !gs.includes(g) || (re && !re.test(t))) continue;
+    if (b && !(b === "notlight" ? body && body !== "light" : body === b)) continue;
+    return dish;
+  }
+  return null;
+}
+
+// What this wine suits with a food, as a noun phrase: the grape's own dishes first.
+function pairDish(w, food) {
+  const rd = ruleDish(w, food);
+  if (rd) return rd;
+  const gl = grapeFoodLine(w, food);
+  if (gl) return gl[1];
+  const s = wineStyle(w), body = s.body.v, tannin = s.tannin.v, sweet = s.sweet.v, t = w.type;
+  const sweetish = sweet === "sweet" || sweet === "medium-sweet";
+  switch (food) {
+    case "Fish":
+      if (t === "Rosé") return "salmon, tuna and grilled or Mediterranean-style fish";
+      if (t === "Sparkling") return "sushi, smoked salmon, fish tacos and fried fish";
+      if (t === "Fortified") return "smoked or salted fish";
+      if (t === "Red") return body === "light" ? "salmon, trout or seared tuna" : "meatier fish such as swordfish or barbecued salmon";
+      return body === "light" ? "delicate white fish such as sole, haddock or sea bass, with lemon, herb or butter sauces"
+        : "richer fish such as salmon, halibut or cod, with cream or butter sauces";
+    case "Seafood": return t === "White" && body !== "light" ? "lobster, crab and scallops" : t === "Red" ? "crab, lobster and mussels" : "oysters, mussels, clams, shrimp and ceviche";
+    case "Red meat":
+      if (t === "White") return body === "full" ? "steak with butter or béarnaise, and veal" : "steak tartare";
+      return body === "full" || tannin === "firm" ? "grilled or roast steak, prime rib and braises" : "burgers, meatloaf and stews";
+    case "Lamb": return body === "full" ? "roast leg of lamb and lamb stew" : "grilled lamb chops";
+    case "Pork": return t === "Red" ? (body === "light" ? "pork tenderloin, ham and sausages" : "roast pork, chops and ribs") : "roast pork, chops and ham";
+    case "Chicken": return t === "Red" ? "roast chicken and chicken with mushrooms" : body === "full" ? "roast chicken and creamy chicken dishes" : "grilled chicken and lighter dishes with herbs or lemon";
+    case "Pasta and pizza": return t === "Red" ? (body === "full" ? "pasta with meat sauce and lasagna" : "tomato pasta and pizza") : body === "full" ? "creamy pasta such as carbonara" : "pasta with seafood, pesto or tomato";
+    case "Cheese": return sweetish || t === "Dessert" || t === "Fortified" ? "blue and strong, salty cheeses" : t === "Red" ? "hard, aged cheeses such as Cheddar, Gouda or Parmesan" : "creamy, nutty cheeses such as Brie or Comté";
+    case "Spicy food": return sweetish || sweet === "off-dry" ? "Thai, Indian or Szechuan dishes" : "mildly spiced dishes";
+    case "Dessert": return "desserts no sweeter than the wine";
+    default: return "this kind of dish";
+  }
+}
+// Facts about this particular wine that change the advice: its alcohol (BC and the LCBO give
+// it), whether it comes from a warm or a cool place, and its measured sugar.
+const WARM_PLACES = /\b(california|napa|sonoma|paso robles|lodi|australia|barossa|mclaren|argentina|mendoza|chile|south africa|spain|portugal|sicily|puglia|apulia|sardinia|rhone|languedoc|roussillon|washington|columbia valley|okanagan desert|israel|lebanon|greece)\b/;
+const COOL_PLACES = /\b(burgundy|bourgogne|loire|alsace|champagne|germany|mosel|austria|new zealand|marlborough|central otago|ontario|niagara|prince edward county|oregon|willamette|tasmania|switzerland|okanagan|british columbia|nova scotia|england|chablis|beaujolais|piedmont|alto adige)\b/;
+function climateOf(w) {
+  const t = fold([w.name, w.region, w.region_or_grape, w.country].filter(Boolean).join(" "));
+  if (COOL_PLACES.test(t)) return "cool";
+  if (WARM_PLACES.test(t) || ["USA", "United States", "Australia", "Argentina", "Chile", "South Africa", "Spain", "Portugal"].includes(w.country)) return "warm";
+  return null;
+}
+function wineFacts(w, food) {
+  const s = wineStyle(w), abv = w.abv, sweet = s.sweet, t = w.type, climate = climateOf(w);
+  const sugar = sweet.measured && /\d/.test(sweet.how) ? ` (${sweet.how})` : "";
+  if (food === "Spicy food") {
+    if (sweet.v && sweet.v !== "dry") return `its touch of sweetness${sugar} cools the heat`;
+    if (abv >= 14) return `at ${abv}% alcohol it will make the heat seem stronger, so keep it to mild spice`;
+    if (abv && abv <= 12.5) return `at a modest ${abv}% alcohol it won't fan the heat`;
+  }
+  if ((food === "Cheese" || food === "Dessert") && sweet.v && sweet.v !== "dry") return `its sweetness${sugar} suits ${food === "Cheese" ? "salty blue cheeses" : "a dessert no sweeter than it"}`;
+  // what alcohol and place mean for this food
+  const ripe = abv >= 14 || (climate === "warm" && !(abv && abv <= 12.5));
+  const fresh = (abv && abv <= 12.5) || (climate === "cool" && !(abv >= 14));
+  const pct = abv ? `at ${abv}% alcohol, ` : "";
+  const place = climate === "warm" && ripe ? "warm-climate " : climate === "cool" && fresh ? "cool-climate " : "";
+  if (food === "Fish" || food === "Seafood") {
+    if (t === "White" && ripe) return `${pct}its ${place}riper fruit suits grilled or richer fish rather than delicate fillets`;
+    if (t === "White" && fresh) return `${pct}its ${place}freshness suits delicate fish and lemon`;
+    if (t === "Red" && ripe) return `${pct}a ${place}riper red: keep to meaty fish such as tuna or barbecued salmon`;
+    if (t === "Red" && fresh) return `${pct}a ${place}lighter red, gentle enough for salmon or trout`;
+  }
+  if (food === "Red meat" || food === "Lamb") {
+    if (abv >= 14) return `${pct}a ${place}ripe, powerful style for charred, richer cuts`;
+    if (abv && abv <= 12.5) return `${pct}a lighter style, better with leaner cuts`;
+    if (climate === "warm") return `${pct}a warm-climate, ripe style that suits the grill`;
+    if (climate === "cool") return `${pct}a cool-climate, fresher style for simpler roasts`;
+  }
+  if (food === "Pork" || food === "Chicken") {
+    if (ripe) return `${pct}its ${place}ripe fruit suits barbecue and sweet glazes`;
+    if (fresh) return `${pct}its ${place}freshness suits herbs, lemon and simple roasts`;
+  }
+  if (food === "Pasta and pizza") {
+    if (fresh) return `${pct}its ${place}freshness matches tomato's acidity`;
+    if (ripe) return `${pct}a ${place}riper style for meaty sauces`;
+  }
+  return "";
+}
+const serveTip = (w) => (w.type === "Red" && wineStyle(w).body.v === "light" ? " Serve it slightly cool." : "");
+const capFirst = (x) => x.charAt(0).toUpperCase() + x.slice(1);
+// "This Copper Moon Merlot (a medium-bodied, soft red) suits grilled salmon with herbs; at 14%
+// alcohol, a warm-climate, riper style: better with grilled… Serve it slightly cool."
+// The price says what kind of meal it's for: an everyday bottle or a special one.
+const PRICE_MEAL = {
+  low: { "Fish": "fish tacos or fish and chips", "Seafood": "a shrimp or mussel supper", "Red meat": "burgers or a weeknight steak",
+    "Lamb": "lamb burgers or kofta", "Pork": "sausages or pork chops", "Chicken": "a weeknight roast chicken", "Pasta and pizza": "pizza night",
+    "Cheese": "a casual cheese plate", "Spicy food": "takeout curry or tacos", "Dessert": "a simple fruit dessert" },
+  high: { "Fish": "a whole roast fish, halibut or lobster", "Seafood": "lobster or a seafood platter", "Red meat": "prime rib or a dry-aged steak",
+    "Lamb": "a rack of lamb", "Pork": "a pork roast or porchetta", "Chicken": "a roast capon or coq au vin", "Pasta and pizza": "a special pasta such as truffle or lobster",
+    "Cheese": "a fine aged cheese board", "Spicy food": "a special curry or Szechuan feast", "Dessert": "a special dessert" },
+};
+function priceNote(w, food, dish = "") {
+  const p = priceOf(w);
+  if (p == null) return "";
+  if (p < 15) return dish.includes(PRICE_MEAL.low[food]) || dish === WEEKNIGHT_DISH[food] || dish === LEAN_DISH[food] ? " An easy weeknight bottle."
+    : ` An easy weeknight bottle: think ${PRICE_MEAL.low[food] || "everyday meals"}.`;
+  if (p >= 40) return GRAND_DISH.test(dish) ? " A special-occasion bottle." : ` A special-occasion bottle: worth ${PRICE_MEAL.high[food] || "a special dinner"}.`;
+  return "";
+}
+// A dish that agrees with the wine: lighter or lower-alcohol wines get the leaner version of a
+// meat dish, and an everyday bottle isn't pointed at prime rib or lobster.
+const GRAND_DISH = /prime rib|ribeye|dry-aged|rack of lamb|lobster|halibut|filet mignon|florentine|t-bone|roast leg of lamb|whole roast/i;
+const LEAN_DISH = { "Red meat": "flank steak, burgers or a beef stir-fry", "Lamb": "grilled lamb chops or kofta" };
+const WEEKNIGHT_DISH = { "Red meat": "a weeknight steak, burgers or meatloaf", "Lamb": "lamb chops or lamb burgers",
+  "Fish": "pan-fried fish, fish tacos or fish and chips", "Seafood": "shrimp, mussels or a seafood pasta" };
+function fitDish(w, food, dish) {
+  const body = wineStyle(w).body.v, light = (body && body !== "full") || (w.abv && w.abv <= 12.5);
+  if (LEAN_DISH[food] && w.type === "Red" && light && GRAND_DISH.test(dish)) dish = LEAN_DISH[food];
+  const p = priceOf(w);
+  if (p != null && p < 15 && WEEKNIGHT_DISH[food] && GRAND_DISH.test(dish)) dish = WEEKNIGHT_DISH[food];
+  return dish;
+}
+function pairSentence(w, food, dish) {
+  dish = fitDish(w, food, dish);
+  const fact = wineFacts(w, food);
+  return `${capFirst(wineIdentity(w))} (${wineLook(w)}) suits ${dish}${fact ? `; ${fact}` : ""}.${priceNote(w, food, dish)}${serveTip(w)}`;
+}
+
+// The advice that holds for every wine with a food, shown once under Food (not on each card).
+// Red with fish: Fiona Beckett; steak and tannin: Wine Spectator; spice and alcohol: VinePair;
+// shellfish and iron: the 2009 study reported by Phys.org.
+const FOOD_GUIDE = {
+  "Fish": "Whites: crisp, light ones for delicate fish and lemon or herb sauces, fuller ones for salmon, halibut and cream sauces. Reds with fish: light, soft ones, best when the fish is seared, grilled or barbecued, or has a spicy crust; poached fish and butter sauces usually call for a white.",
+  "Seafood": "Crisp whites and sparkling for oysters, mussels and shrimp; fuller whites for lobster and crab. A 2009 study found some reds can leave a fishy aftertaste with shellfish, depending on the wine's iron, so a red here is an experiment.",
+  "Red meat": "The fat in the meat smooths out a red's firm tannins, so bigger reds suit richer cuts and softer reds leaner ones. A full, oaky white also has the weight for steak, especially with butter or béarnaise.",
+  "Lamb": "Fuller reds for roasts and stews, softer, fruitier ones for grilled chops with herbs.",
+  "Pork": "Pork goes both ways: fruitier reds for barbecue and sweet glazes, fuller whites for roasts and creamy sauces.",
+  "Chicken": "Match the sauce more than the bird: light whites for herbs and lemon, fuller whites for cream, light reds for mushrooms or roast chicken.",
+  "Pasta and pizza": "Tomato sauces want acidity: a juicy red or a crisp white. Creamy sauces suit a fuller white; meat sauces a fuller red.",
+  "Cheese": "Hard, aged cheeses with reds; creamy and nutty cheeses with whites; blue and salty cheeses with something sweet.",
+  "Spicy food": "A touch of sweetness cools the heat, and high alcohol makes it seem hotter, so off-dry and lower-alcohol wines do best.",
+  "Dessert": "The wine should be at least as sweet as the dessert.",
+};
+
+function classicAdvice(w, food) { return pairSentence(w, food, pairDish(w, food)); }
+
+function foodMatchScore(w) {
+  if (!state.food.size) return null;
+  let best = null;
+  const said = storeFoods(w), cl = claudeFoods(w), bold = state.foodBold ? boldFoodsOf(w).map((b) => b.food) : [];
+  for (const f of state.food) {
+    const sc = said.has(f) || cl.has(f) ? 4 : grapeFoodLine(w, f) ? 3 : foodsOf(w).includes(f) ? 2 : bold.includes(f) ? 1 : null;
+    if (sc != null && (best == null || sc > best)) best = sc;
+  }
+  return best;
+}
+
+// The badge on a card for each food ticked: a classic match (the usual recommendation), or,
+// with adventurous pairings included, an adventurous one with its advice.
+function boldAdviceHtml(w) {
+  if (!state.food.size) return "";
+  const classic = foodsOf(w).filter((f) => state.food.has(f));
+  const bold = state.foodBold ? boldFoodsOf(w).filter((b) => state.food.has(b.food)) : [];
+  const said = lcboFoodNote(w), saysTicked = [...storeFoods(w)].some((f) => state.food.has(f));
+  // the classic lines and the store's own note share one purple paragraph, to save room
+  // a match that rests only on the store's own note is described by that note alone
+  const ownLine = (f) => grapeFoodLine(w, f) || (w._styleFoods || []).includes(f);
+  const classicBits = [...classic.filter(ownLine).map((f) => `<strong>Classic pairing with ${esc(f.toLowerCase())}:</strong> ${esc(classicAdvice(w, f))}`),
+    ...(said && saysTicked ? [`<strong>The LCBO's note${w.source === "LCBO" ? "" : " for this wine"}:</strong> “${esc(said)}”`] : []),
+    ...(claudePair(w) ? [`<strong>Claude's pick for this wine (from its research):</strong> ${esc(claudePair(w))}.`] : [])];
+  return (classicBits.length ? `<p class="classic-pair"><svg class="pair-icon" aria-hidden="true"><use href="#i-dine"/></svg> ${classicBits.join(" ")}</p>` : "") +
+    bold.map((b) => `<p class="bold-pair">🍷 <strong>Adventurous pairing with ${esc(b.food.toLowerCase())}:</strong> ${esc(b.advice)}</p>`).join("");
 }
 
 // Tick lists with counts, like Country: each counts wines with the other choices applied.
@@ -700,9 +1137,12 @@ const GRAPE_INFO = {
   "Furmint": "dry and crisp, or the sweet Tokaji of Hungary",
   "Glera (Prosecco)": "light sparkling, pear and apple",
 };
-const grapeLabel = (g) => `<span class="sweet-name">${esc(g)}${foodStar.has(g) ? ` <span class="food-star" title="Suggested for the food you ticked">★</span>` : ""}` +
+const grapeLabel = (g) => `<span class="sweet-name"><span>${esc(g)}` +
+  `${foodStar.has(g) ? ` <span class="food-star" title="A classic grape for the food you ticked">★</span>` : ""}` +
+  `${foodAdv.has(g) ? ` <span class="food-adv" title="An adventurous grape for the food you ticked">🍷</span>` : ""}</span>` +
   `${GRAPE_INFO[g] ? `<small>${esc(GRAPE_INFO[g])}</small>` : ""}</span>`;
-let foodStar = new Set(); // grapes most common among wines for the ticked food
+let foodStar = new Set(); // the most common classic grapes for the ticked food
+let foodAdv = new Set();  // grapes whose matches for the ticked food are mostly adventurous
 function renderGrapes() {
   if (!$("grape-list")) return;
   const counts = tickCounts("grape", grapesOf), q = fold(state.grapeQ);
@@ -713,8 +1153,12 @@ function renderGrapes() {
     : `<p class="hint">No grape matches “${esc(state.grapeQ)}”.</p>`;
   // what the stars mean, right where they are
   const foods = [...state.food].map((f) => f.toLowerCase()).join(" or ");
-  $("grape-star-note").innerHTML = foodStar.size && !state.grapeOut
-    ? `<strong>★ Suggested for ${esc(foods)}:</strong> the grapes most often found among the wines that go with it. A pointer only: tick any you like.` : "";
+  $("grape-star-note").innerHTML = (foodStar.size || foodAdv.size) && !state.grapeOut
+    ? `<span class="food-star">★</span> <strong>Classic for ${esc(foods)}</strong>` +
+      (foodAdv.size ? ` · <span class="food-adv">🍷</span> <strong>Adventurous for ${esc(foods)}</strong>` : "") +
+      `: the grapes most often found among the wines that go with it. Tick any you like, one or many.` +
+      `<span class="mini-row">${foodStar.size ? `<button type="button" class="btn btn-mini" data-action="tick-classic">Tick all ★ classic grapes</button>` : ""}` +
+      `${foodAdv.size ? `<button type="button" class="btn btn-mini" data-action="tick-adv">Tick all 🍷 adventurous grapes</button>` : ""}</span>` : "";
   $("grape-star-note").hidden = !$("grape-star-note").innerHTML;
   $("grape-list").classList.toggle("leaving-out", state.grapeOut);
   $("grape-out").setAttribute("aria-pressed", String(state.grapeOut));
@@ -726,22 +1170,48 @@ function renderGrapes() {
 }
 // Food doesn't choose grapes: it narrows the wines, and the grape counts follow. So with a
 // food ticked, say which grapes those wines most often are (and star them in the grape list).
+let hiddenTypes = new Set();
+const TYPE_PLURAL = { Red: "reds", White: "whites", "Rosé": "rosés", Sparkling: "sparkling wines", Dessert: "dessert wines", Fortified: "fortified wines" };
 function renderFood() {
   if (!$("food-list")) return;
-  const counts = tickCounts("food", foodsOf);
+  const counts = tickCounts("food", (w) => [...new Set([...foodsOf(w), ...(state.foodBold ? boldFoodsOf(w).map((b) => b.food) : [])])]);
   $("food-list").innerHTML = FOODS.map((f) => { const c = counts.get(f) || 0; return checkbox("food", f, state.food.has(f), esc(f), c, c ? "" : " zero"); }).join("");
+  // Which grapes the wines for this food are, split into classic and adventurous matches:
+  // ★ marks the most common classic grapes, 🍷 the grapes whose matches are mostly adventurous.
   foodStar = new Set();
+  foodAdv = new Set();
   let line = "";
   if (state.food.size) {
-    const g = tickCounts("grape", grapesOf); // the wines for this food (and your other choices), by grape
-    const top = [...g].sort((a, b) => b[1] - a[1]).slice(0, 5);
+    const classicN = new Map(), advN = new Map();
+    for (const w of findPool()) {
+      if (!matches(w, "grape")) continue;
+      const classic = foodsOf(w).some((f) => state.food.has(f));
+      for (const g of grapesOf(w)) { if (!grapeFits(w, g) && w.type !== "Rosé") continue; const m = classic ? classicN : advN; m.set(g, (m.get(g) || 0) + 1); }
+    }
+    const top = [...classicN].sort((a, b) => b[1] - a[1]).slice(0, 5);
     foodStar = new Set(top.map(([name]) => name));
-    if (top.length) line = `Good with ${[...state.food].map((f) => f.toLowerCase()).join(" or ")}, most often: ` +
-      top.map(([name, n]) => `<strong>${esc(name)}</strong> (${n.toLocaleString()})`).join(", ") +
-      `. These are marked ★ under Grape; ticking a food doesn't choose a grape for you.`;
+    const adv = state.foodBold ? [...advN].filter(([g, n]) => n > (classicN.get(g) || 0)).sort((a, b) => b[1] - a[1]) : [];
+    foodAdv = new Set(adv.map(([g]) => g));
+    const foods = [...state.food].map((f) => f.toLowerCase()).join(" or ");
+    const list = (arr) => arr.map(([name, n]) => `<strong>${esc(name)}</strong> (${n.toLocaleString()})`).join(", ");
+    if (top.length) line = `<span class="food-star">★</span> <strong>Classic grapes for ${esc(foods)}:</strong> ${list(top)}.`;
+    if (adv.length) line += `<br><span class="food-adv">🍷</span> <strong>Adventurous grapes:</strong> ${list(adv.slice(0, 6))}.`;
+    if (line) line += ` These are marked under Grape; ticking a food doesn't choose a grape for you.`;
   }
-  $("food-note").innerHTML = line;
-  $("food-note").hidden = !line;
+  // matches the colour choice hides, e.g. adventurous whites for steak while only Red is ticked
+  hiddenTypes = new Set();
+  if (state.food.size && state.types.size) {
+    const n = new Map();
+    for (const w of findPool()) if (!state.types.has(w.type) && matches(w, "type")) n.set(w.type, (n.get(w.type) || 0) + 1);
+    if (n.size) {
+      hiddenTypes = new Set(n.keys());
+      const what = [...n].sort((a, b) => b[1] - a[1]).map(([t, k]) => `${k.toLocaleString()} ${esc(TYPE_PLURAL[t] || t.toLowerCase())}`).join(", ");
+      line += `${line ? "<br>" : ""}<strong>Hidden by your colour choice:</strong> ${what} also go with ${esc([...state.food].join(" or ").toLowerCase())}${state.foodBold ? " (classic or adventurous)" : ""}. <button type="button" class="btn btn-mini" data-action="show-hidden-types">Show them too</button>`;
+    }
+  }
+  const guide = [...state.food].map((f) => FOOD_GUIDE[f] ? `<br><strong>How to pair with ${esc(f.toLowerCase())}:</strong> ${esc(FOOD_GUIDE[f])}` : "").join("");
+  $("food-note").innerHTML = line + guide;
+  $("food-note").hidden = !$("food-note").innerHTML;
 }
 
 // Vintage and alcohol sliders: lowest and highest, the count changing as they move.
@@ -766,6 +1236,7 @@ function renderRanges() {
   if ($("vint-range")) $("vint-range").innerHTML = rangeHtml("vs", VINT_SLIDE, state.vintFrom, state.vintTo, vintFmt);
   if ($("abv-range")) $("abv-range").innerHTML = rangeHtml("as", ABV_SLIDE, state.abvFrom, state.abvTo, abvFmt);
   if ($("old-only")) $("old-only").checked = state.oldOnly;
+  if ($("food-bold")) $("food-bold").checked = state.foodBold;
 }
 let rangeFrame = 0;
 function rangeSlide(id, which, done) {
@@ -899,40 +1370,7 @@ function renderResults() {
   $("result-count").innerHTML = countHeadingHtml(n) +
     (hiddenSizes ? `<span class="count-note">standard bottles; ${hiddenSizes.toLocaleString()} other ${hiddenSizes === 1 ? "size" : "sizes"} hidden</span>` : "");
 
-  const parts = [];
-  if (state.q) parts.push(`words “${esc(state.q)}”`);
-  if (state.countries.size)
-    parts.push((state.countryOut ? "all countries except " : "") +
-      (state.countries.size > 6 ? `${state.countries.size} countries` : [...state.countries].map(esc).join(state.countryOut ? " and " : ", ")));
-  if (state.types.size) parts.push([...state.types].map(esc).join(", "));
-  if (state.priceFrom != null && state.priceTo != null) parts.push(`${money(state.priceFrom)} to ${money(state.priceTo)}`);
-  else if (state.priceTo != null) parts.push(`up to ${money(state.priceTo)}`);
-  else if (state.priceFrom != null) parts.push(`${money(state.priceFrom)} and up`);
-  if (!state.notRated) parts.push("measured sweetness only");
-  else if (!state.notRated) parts.push("sweetness rated only");
-  parts.push(state.bottleOnly ? "standard bottles" : "all sizes");
-  if (state.newOnly) parts.push("new on the latest BC list");
-  if (state.grapes.size) parts.push(state.grapeOut ? `all grapes except ${[...state.grapes].map(esc).join(" and ")}` : `grape: ${[...state.grapes].map(esc).join(" or ")}`);
-  if (state.food.size) parts.push(`goes with ${[...state.food].map((f) => esc(f.toLowerCase())).join(" or ")} (estimated)`);
-  if (state.vintFrom != null || state.vintTo != null) parts.push(`vintage ${state.vintFrom ?? "any"}–${state.vintTo ?? "now"}`);
-  if (state.oldOnly) parts.push("10 years or older");
-  if (state.abvFrom != null || state.abvTo != null) parts.push(`alcohol ${state.abvFrom ?? ABV_SLIDE.min}–${state.abvTo ?? ABV_SLIDE.max}%`);
-  if (state.continent) parts.push(esc(state.continent));
-  const or = (set) => [...set].join(" or ");
-  const look = [state.body.size && `${or(state.body)}-bodied`, state.tannin.size && `${or(state.tannin)} tannins`, state.sweetStyle.size && or(state.sweetStyle)].filter(Boolean);
-  if (look.length) parts.push(`${look.join(", ")} (Claude's answer, else estimated)`);
-  if (state.ratedOnly) parts.push("scored by Claude, CellarTracker or the family");
-  if (state.wellRated) parts.push(`rated ${WELL_RATED}+`);
-  if (state.fruity) parts.push("fruity & ripe (Claude's answer, else estimated)");
-  if (state.longFinish) parts.push("long finish (Claude-scored wines)");
-  if (state.readyNow) parts.push("ready to drink now");
-  if (state.pickLabel) parts.unshift(`<strong>${esc(state.pickLabel)}</strong>`);
-  if (cellarOn()) {
-    const stores = storesTicked(), cellarsTicked = state.sources.size - stores.length;
-    parts.unshift([...state.sources].filter((s) => !ALL_SOURCES.includes(s)).map(esc).join(", ") +
-      (stores.length ? `, sold by ${stores.map(sourceLabel).map(esc).join(" or ")}` : cellarsTicked > 1 ? " (the whole cellars)" : " (the whole cellar)"));
-  } else if (state.sources.size > 1) parts.unshift([...state.sources].map(sourceLabel).map(esc).join(", "));
-  $("active-filters").innerHTML = `<strong>Showing:</strong> ${parts.join(" · ")}`;
+  renderChoiceChips();
   renderSortStatus();
 
   if (!n) {
@@ -946,7 +1384,8 @@ function renderResults() {
     // "3 of 15" on each card, in the order shown
     const of = n.toLocaleString();
     $("result-list").innerHTML = lastResults.slice(0, state.shown).map((w, i) =>
-      wineCard(w).replace('<h3 class="wine-name">', `<h3 class="wine-name"><span class="wine-seq">${(i + 1).toLocaleString()} of ${of}</span>`)).join("");
+      wineCard(w).replace('<h3 class="wine-name">', `<h3 class="wine-name"><span class="wine-seq">${(i + 1).toLocaleString()} of ${of}</span>`)
+        .replace('<div class="wine-actions">', `${boldAdviceHtml(w)}<div class="wine-actions">`)).join("");
   }
   const more = n - state.shown;
   $("show-more").hidden = more <= 0;
@@ -957,11 +1396,37 @@ function renderResults() {
     (on ? ` (${on} chosen)` : "");
 }
 
+// "Your choices": where the wines come from, then each choice as a chip with its own ✕,
+// so one can be dropped without opening the panels.
+let choiceChips = [];
+function renderChoiceChips() {
+  const stores = storesTicked(), cels = [...state.sources].filter((x) => !ALL_SOURCES.includes(x));
+  const where = !state.sources.size ? "No store or cellar ticked"
+    : cels.length ? `${cels.join(", ")}${stores.length ? `, sold by ${stores.map(sourceLabel).join(" or ")}` : " (the whole cellar)"}`
+    : `At ${stores.map(sourceLabel).join(", ")}`;
+  choiceChips = [...choicesMade(),
+    ...(state.bottleOnly ? [["Standard bottles", (x) => { x.bottleOnly = false; }]] : [])];
+  const chips = choiceChips.map(([label], k) =>
+    `<span class="chip">${esc(label)}<button type="button" class="chip-x" data-chip="${k}" aria-label="Remove: ${esc(label)}">✕</button></span>`);
+  $("active-filters").innerHTML = `<span class="choices-head">Your choices</span> <span class="choices-where">${esc(where)}</span>` +
+    (state.pickLabel ? ` <span class="chip chip-pick">${esc(state.pickLabel)}</span>` : "") +
+    (chips.length ? ` ${chips.join(" ")}` : ` <span class="hint-inline">nothing else chosen: everything is shown</span>`);
+}
+function removeChip(k) {
+  const c = choiceChips[k];
+  if (!c) return;
+  c[1](state);
+  state.pickLabel = "";
+  state.shown = PAGE_SIZE;
+  syncInputs();
+  refresh();
+}
+
 // The choices now made, each as [what to call it, how to undo it].
 function choicesMade(st = state) {
   const out = [], label = (key, v) => finderRows().find((r) => r[1] === key)?.[2].find((o) => o[0] === v)?.[1] || v;
   if (st.priceFrom != null || st.priceTo != null)
-    out.push([st.priceFrom == null ? `Under $${st.priceTo}` : "the price", FINDER_CLEAR.price]);
+    out.push([st.priceFrom == null ? `Under $${st.priceTo}` : st.priceTo == null ? `$${st.priceFrom} and up` : `$${st.priceFrom}–$${st.priceTo}`, FINDER_CLEAR.price]);
   if (st.types.size) out.push([[...st.types].join(" or "), FINDER_CLEAR.colour]);
   for (const key of ["body", "tannin", "sweetStyle"]) if (st[key].size) out.push([[...st[key]].map((v) => label(key, v)).join(" or "), FINDER_CLEAR[key]]);
   if (st.continent) out.push([st.continent, FINDER_CLEAR.continent]);
@@ -975,10 +1440,10 @@ function choicesMade(st = state) {
   if (!st.notRated) out.push(["measured sweetness only", (x) => { x.notRated = true; }]);
   if (st.newOnly) out.push(["new wines only", (x) => { x.newOnly = false; }]);
   if (st.grapes.size) out.push([(st.grapeOut ? "leaving out " : "") + [...st.grapes].join(st.grapeOut ? " and " : " or "), (x) => { x.grapes = new Set(); }]);
-  if (st.food.size) out.push([`goes with ${[...st.food].join(" or ")}`, (x) => { x.food = new Set(); }]);
-  if (st.vintFrom != null || st.vintTo != null) out.push(["the vintage range", (x) => { x.vintFrom = x.vintTo = null; }]);
+  if (st.food.size) out.push([`Goes with ${[...st.food].join(" or ").toLowerCase()}${st.foodBold ? " (adventurous too)" : ""}`, (x) => { x.food = new Set(); }]);
+  if (st.vintFrom != null || st.vintTo != null) out.push([`Vintage ${st.vintFrom ?? "any"}–${st.vintTo ?? "newest"}`, (x) => { x.vintFrom = x.vintTo = null; }]);
   if (st.oldOnly) out.push(["10 years or older", (x) => { x.oldOnly = false; }]);
-  if (st.abvFrom != null || st.abvTo != null) out.push(["the alcohol range", (x) => { x.abvFrom = x.abvTo = null; }]);
+  if (st.abvFrom != null || st.abvTo != null) out.push([`Alcohol ${st.abvFrom ?? ABV_SLIDE.min}–${st.abvTo ?? ABV_SLIDE.max}%`, (x) => { x.abvFrom = x.abvTo = null; }]);
   return out;
 }
 
@@ -1173,13 +1638,14 @@ For each wine, please:
 - Give your own overall score out of 100, based on what the reviewers say (your judgement, not a copy of any one critic's score), and the vintage it applies to. If you only find reviews of another vintage, you may use them, but give that vintage.
 - In up to eight words, say what your score rests on, for example: WE 92, Decanter 90 for 2021.
 - Describe its style from the reviews and the tasting notes: body (light, medium or full), tannin (soft, medium or firm; for whites, leave it empty), sweetness (dry, off-dry, medium-sweet or sweet), whether it's fruit-forward (ripe and fruity-tasting even when dry, like many Malbecs or Australian Shiraz: yes or no), how long its flavour lasts after swallowing (the finish: short, medium or long), and when to drink it (from year to year).
+- Name the dishes it's best with, from the reviews, the producer's notes and its style, in up to eight words, as specific as you can (for example: lamb chops with rosemary, mushroom risotto).
 - If you can't find any reviews, say so plainly rather than estimating the score; give the style only if you know the wine.
 
-Keep the answer short: one line per wine, in my order, as: number. wine — score (vintage) — what it rests on — body, tannin, sweetness, fruit-forward or not, finish — drink from–to.
+Keep the answer short: one line per wine, in my order, as: number. wine — score (vintage) — what it rests on — body, tannin, sweetness, fruit-forward or not, finish — drink from–to — best with.
 
 Last of all, after a horizontal line (---), give me a link to save the scores, as the largest heading (one #), itself the link, exactly in this form, one entry per wine joined by semicolons:
-# [💾 Save these scores to my Wine Finder]({BASE}#scores=CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT~FINISH;CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT~FINISH)
-CODE is the wine's code in square brackets in my list; POINTS is your score (leave it empty if you found no reviews); VINTAGE is the vintage your score is for, or NV; NOTE is what it rests on, up to eight words, with + instead of spaces and no semicolons or tildes; BODY is light, medium or full; TANNIN is soft, medium or firm (empty for whites); SWEET is dry, off-dry, medium-sweet or sweet; DRINK is the drinking window as 2024-2030; FRUIT is yes if it's fruit-forward, otherwise no; FINISH is short, medium or long. Leave any of these empty if you don't know.`;
+# [💾 Save these scores to my Wine Finder]({BASE}#scores=CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT~FINISH~PAIR;CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT~FINISH~PAIR)
+CODE is the wine's code in square brackets in my list; POINTS is your score (leave it empty if you found no reviews); VINTAGE is the vintage your score is for, or NV; NOTE is what it rests on, up to eight words, with + instead of spaces and no semicolons or tildes; BODY is light, medium or full; TANNIN is soft, medium or firm (empty for whites); SWEET is dry, off-dry, medium-sweet or sweet; DRINK is the drinking window as 2024-2030; FRUIT is yes if it's fruit-forward, otherwise no; FINISH is short, medium or long; PAIR is the dishes it's best with, up to eight words, with + instead of spaces and no semicolons or tildes. Leave any of these empty if you don't know.`;
 
 let scorePicks = [];
 
@@ -1948,13 +2414,15 @@ function clearMyRating(id) {
 // The style Claude gives with a quick score: BODY~TANNIN~SWEET~DRINK, each checked
 // against its few allowed words (anything else is dropped rather than guessed).
 const CR_STYLE = { body: ["light", "medium", "full"], tannin: ["soft", "medium", "firm"], sweet: SWEET_LEVELS };
-function readStyle([body = "", tannin = "", sweet = "", drink = "", fruit = "", finish = ""]) {
+function readStyle([body = "", tannin = "", sweet = "", drink = "", fruit = "", finish = "", pair = ""]) {
   const pick = (v, list) => (list.includes(v.toLowerCase()) ? v.toLowerCase() : null);
   const out = { body: pick(body, CR_STYLE.body), tannin: pick(tannin, CR_STYLE.tannin), sweet: pick(sweet.replace(/\s+/g, "-"), CR_STYLE.sweet) };
   const m = /^((?:19|20)\d\d)\s*[-–]\s*((?:19|20)\d\d)$/.exec(drink);
   if (m && +m[1] <= +m[2]) { out.drinkFrom = +m[1]; out.drinkTo = +m[2]; }
   if (/^(yes|no)$/i.test(fruit.trim())) out.fruity = /^yes$/i.test(fruit.trim());
   if (/^(short|medium|long)$/i.test(finish.trim())) out.finish = finish.trim().toLowerCase();
+  pair = pair.replace(/[<>]/g, "").replace(/\s+/g, " ").trim().replace(/[.;]+$/, "");
+  if (pair.length > 2) out.pair = pair.slice(0, 90);
   return Object.fromEntries(Object.entries(out).filter(([, v]) => v != null));
 }
 
@@ -1963,7 +2431,7 @@ function styleText(c) {
   if (!c) return "";
   const bits = [c.body && `${c.body}-bodied`, c.tannin && `${c.tannin} tannins`, c.sweet, c.fruity && "fruit-forward", c.finish && `${c.finish} finish`].filter(Boolean).join(", ");
   const drink = c.drinkFrom ? `drink ${c.drinkFrom}–${c.drinkTo}` : "";
-  return [bits, drink].filter(Boolean).join(" · ");
+  return [bits, drink, c.pair && `best with ${c.pair}`].filter(Boolean).join(" · ");
 }
 
 // Every wine code a link may carry: a store listing, a family cellar wine, or one added by hand or by name.
@@ -2086,7 +2554,7 @@ async function confirmSavedRatings() {
     const name = findWine(it.id)?.name || real(ratingOf(it.id).name) || it.name || real(frOf(it.id).name) ||
       (it.id.startsWith("typed-") ? it.id.slice(6).replace(/-/g, " ") : it.id); // a typed wine's code is its name
     const r = { ...ratingOf(it.id), name };
-    const style = Object.fromEntries(["body", "tannin", "sweet", "fruity", "finish", "drinkFrom", "drinkTo"].filter((k) => it[k] != null).map((k) => [k, it[k]]));
+    const style = Object.fromEntries(["body", "tannin", "sweet", "fruity", "finish", "pair", "drinkFrom", "drinkTo"].filter((k) => it[k] != null).map((k) => [k, it[k]]));
     const claude = it.claude !== false ? { points: it.points, vintage: it.vintage, note: it.note, date: today, ...(it.quick ? { quick: true, ...style } : {}) } : null;
     const mine = it.mine ? { ...it.mine, date: today } : null;
     if (claude) r.claude = claude;
@@ -2223,7 +2691,7 @@ function ratedTwin(w) {
   if (ratedNamesVer !== ver) {
     ratedNamesVer = ver;
     ratedNames = Object.entries(familyRatings)
-      .filter(([, r]) => r.name && (r.claude?.points || r.family?.points || r.claude?.body || r.claude?.drinkFrom || r.claude?.fruity != null || r.claude?.finish))
+      .filter(([, r]) => r.name && (r.claude?.points || r.family?.points || r.claude?.body || r.claude?.drinkFrom || r.claude?.fruity != null || r.claude?.finish || r.claude?.pair))
       .map(([id, r]) => ({ id, r, key: [...storeTokens(r.name)].sort((a, b) => b.length - a.length)[0] || "" }))
       .filter((x) => x.key.length > 2);
   }
@@ -2810,8 +3278,13 @@ function estimatedStyle(w) {
     if (/\b(soft|supple|silky|velvety|smooth|round|gentle) tannins?\b/.test(note)) tannin = "soft";
     else if (/\b(firm|grippy|chewy|robust|bold|structured|muscular|powerful|dense) tannins?\b/.test(note)) tannin = "firm";
   }
-  // alcohol nudges an unknown body
+  // alcohol nudges an unknown body, and corrects a guess that disagrees with it: a 12% Douro
+  // isn't full-bodied, a 14.5% red isn't light (the LCBO's own "full-bodied" words stand)
   if (!body && w.abv) body = w.abv >= 14.5 ? "full" : w.abv <= 12 ? "light" : "medium";
+  else if (w.abv && !/\bbodied\b/.test(note)) {
+    if (body === "full" && w.abv <= 12.5) body = "medium";
+    else if (body === "light" && w.abv >= 14.5) body = "medium";
+  }
   // sweetness: the store's own figure first (BC's 0-10 sugar code, the LCBO's grams of sugar
   // a litre), measured; otherwise estimated from the type and the words in the name
   // A cellar wine has no figure of its own: it borrows the one a store gives for the same wine.
@@ -2833,7 +3306,7 @@ function estimatedStyle(w) {
 // Claude's own answer for this wine (its own listing, the same wine at another store, or
 // a family cellar), if it gave style or a drinking window.
 function claudeStyle(w) {
-  const has = (c) => c && (c.body || c.sweet || c.drinkFrom || c.fruity != null || c.finish);
+  const has = (c) => c && (c.body || c.sweet || c.drinkFrom || c.fruity != null || c.finish || c.pair);
   const own = ratingOf(w.id).claude || frOf(w.id).claude;
   if (has(own)) return own;
   const twin = ratedTwin(w)?.claude;
@@ -3979,7 +4452,7 @@ function countrySelectHtml() {
 
 // ---- Quick picks: "Scored by Claude or the family" and each person's own -----------------
 // Saved picks live on this computer only (localStorage), so Dad's are his and Jon's are his.
-const PICK_KEYS = ["countries", "countryOut", "grapes", "grapeOut", "food", "longFinish", "vintFrom", "vintTo", "oldOnly", "abvFrom", "abvTo", "types", "sweet", "priceFrom", "priceTo", "notRated", "bottleOnly", "q",
+const PICK_KEYS = ["countries", "countryOut", "grapes", "grapeOut", "food", "foodBold", "longFinish", "vintFrom", "vintTo", "oldOnly", "abvFrom", "abvTo", "types", "sweet", "priceFrom", "priceTo", "notRated", "bottleOnly", "q",
   "body", "tannin", "sweetStyle", "continent", "wellRated", "ratedOnly", "readyNow", "fruity", "sorts", "sources"];
 const myPicks = () => { const p = storeGet(STORE.myPicks, []); return Array.isArray(p) ? p : []; };
 
@@ -4151,6 +4624,18 @@ function wireEvents() {
     else if (t.dataset.action === "finder-stores") openStoreChoices();
     else if (t.dataset.action === "empty-fix") applyEmptyFix();
     else if (t.dataset.action === "smooth-bold") toggleSmoothBold();
+    else if (t.dataset.action === "tick-classic" || t.dataset.action === "tick-adv") {
+      if (state.grapeOut) { state.grapeOut = false; state.grapes = new Set(); }
+      for (const g of t.dataset.action === "tick-classic" ? foodStar : foodAdv) state.grapes.add(g);
+      state.shown = PAGE_SIZE;
+      refresh();
+    }
+    else if (t.dataset.action === "show-hidden-types") {
+      for (const x of hiddenTypes) state.types.add(x);
+      state.shown = PAGE_SIZE;
+      refresh();
+    }
+    else if (t.dataset.chip) removeChip(+t.dataset.chip);
     else if (t.dataset.view) { showView(t.dataset.view); if (t.dataset.focus) $(t.dataset.focus)?.focus(); }
     else if (t.dataset.add) {
       const id = t.dataset.add;
@@ -4331,6 +4816,7 @@ function wireEvents() {
       if (t.checked) $("lcbo-code").focus();
       return;
     } else if (t.id === "not-rated") state.notRated = t.checked;
+    else if (t.id === "food-bold") state.foodBold = t.checked;
     else if (t.id === "old-only") state.oldOnly = t.checked;
     else if (t.id === "bottle-only") state.bottleOnly = t.checked;
     else return;

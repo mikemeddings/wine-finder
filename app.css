@@ -625,3 +625,21 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .grape-list.leaving-out .check:has(input:checked) { background: var(--danger-tint); border-color: var(--danger); text-decoration: line-through; }
 .grape-guide dt { font-weight: 700; margin-top: 0.5rem; color: var(--wine); }
 .grape-guide dd { margin: 0 0 0 1rem; }
+/* "Your choices": a clear box, each choice a chip with its own ✕. */
+.active-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.5rem; padding: 0.6rem 0.8rem; background: #fff;
+  border: 2px solid var(--wine); border-left-width: 0.5rem; border-radius: 0.6rem; color: var(--text); font-size: 1.1rem; }
+.choices-head { font-weight: 700; color: var(--wine); font-size: 1.2rem; margin-right: 0.3rem; }
+.choices-where { font-weight: 600; margin-right: 0.3rem; }
+.chip { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.15rem 0.3rem 0.15rem 0.7rem; border: 2px solid var(--wine);
+  border-radius: 999px; background: var(--wine-tint); color: var(--wine-dark); font-weight: 600; }
+.chip-pick { padding-right: 0.7rem; background: var(--gold-tint); border-color: #b38a1d; color: var(--gold); }
+.chip-x { font: inherit; font-size: 0.95rem; line-height: 1; width: 1.6rem; height: 1.6rem; border: 0; border-radius: 50%;
+  background: var(--wine); color: #fff; cursor: pointer; }
+.chip-x:hover { background: var(--wine-dark); }
+.bold-pair { grid-column: 1 / -1; margin: 0.3rem 0 0; padding: 0.4rem 0.6rem; background: #fff3d6; border-left: 4px solid #b38a1d; font-size: 1.05rem; }
+/* Classic pairing: same shape as the adventurous line, in purple, so the two stand apart. */
+.classic-pair { grid-column: 1 / -1; margin: 0.3rem 0 0; padding: 0.4rem 0.6rem; background: var(--plum-tint); border-left: 4px solid var(--plum); color: var(--plum); font-size: 1.05rem; }
+.pair-icon { width: 1.2rem; height: 1.2rem; vertical-align: -0.2rem; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.food-adv { color: #8a5a00; }
+.grape-list .sweet-name > span:first-child { display: inline; }
+#grape-star-note .mini-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.4rem; }
