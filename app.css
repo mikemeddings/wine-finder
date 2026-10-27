@@ -198,6 +198,7 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .badge-zyn { background: var(--plum); color: #fff; border-color: var(--plum); }
 .badge-lcbo { background: #b3261e; color: #fff; border-color: #b3261e; }
 .badge-luc { background: #6b4f00; color: #fff; border-color: #6b4f00; }
+.rating-style { background: #f4efe6; border-color: #b9a27a; color: #4a3b22; }
 .btn-score { background: #e8f3ef; border-color: var(--teal); color: var(--teal); font-weight: 700; }
 .score-list { columns: 2; column-gap: 2rem; margin: 0.5rem 0 1rem; }
 @media (max-width: 700px) { .score-list { columns: 1; } }
@@ -512,3 +513,91 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .help-faq dt { font-weight: 700; margin-top: 0.6rem; }
 .help-faq dd { margin-left: 1rem; }
 .help-backbar { margin: 0 0 0.8rem; }
+
+/* "Find me a wine": rows of big tap-buttons; a lit one is filled wine-red. */
+.finder { background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: 0.8rem 1rem; margin-bottom: 1rem; }
+.finder-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; margin: 0.45rem 0; }
+.finder-label { flex: 0 0 8.5rem; font-weight: 700; color: var(--wine); }
+.tap { min-height: 2.75rem; padding: 0.3rem 1rem; border: 2px solid var(--line); border-radius: 999px; background: #fff;
+  color: var(--text); font: inherit; font-size: 1.1rem; font-weight: 600; cursor: pointer; }
+.tap:hover { background: var(--wine-tint); }
+.tap[aria-pressed="true"] { background: var(--wine); border-color: var(--wine); color: #fff; }
+.tap[aria-pressed="true"]::before { content: "✓ "; }
+.finder-country select { font: inherit; font-size: 1.1rem; min-height: 2.75rem; border: 2px solid var(--line); border-radius: 8px; padding: 0.2rem 0.5rem; max-width: 100%; }
+.finder-stores { margin: 0.6rem 0 0.2rem; }
+.finder-foot { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; margin-top: 0.6rem; }
+.finder-save-form { display: inline-flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.finder-save-form input { font: inherit; min-height: 2.75rem; padding: 0.2rem 0.6rem; border: 2px solid var(--line); border-radius: 8px; min-width: 16rem; max-width: 100%; }
+.my-picks { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.4rem; }
+.my-pick { display: inline-flex; align-items: stretch; }
+.pick-btn { display: inline-block; text-align: left; background: var(--gold-tint); border: 2px solid #b38a1d; color: var(--gold); }
+.my-pick .pick-x { margin-left: -2px; border: 2px solid #b38a1d; background: #fff; color: var(--gold); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 40rem) {
+  .finder-label { flex-basis: 100%; }
+  .finder-save-form input { min-width: 0; flex: 1 1 100%; }
+}
+.tap-n { display: inline-block; min-width: 1.6em; margin-left: 0.25rem; padding: 0 0.4em; border-radius: 999px;
+  background: var(--panel); color: var(--text); font-size: 0.9em; font-weight: 600; text-align: center; }
+.tap[aria-pressed="true"] .tap-n { background: #fff; color: var(--wine-dark); }
+.tap-zero { border-style: dashed; color: var(--muted); background: #f1ece5; }
+/* Buttons with examples: two lines, a softer corner. */
+.tap-ex { display: inline-flex; flex-direction: column; align-items: flex-start; text-align: left; border-radius: 14px; padding: 0.35rem 0.9rem; }
+.tap-ex small { font-size: 0.85rem; font-weight: 400; color: var(--muted); line-height: 1.3; }
+.tap[aria-pressed="true"] small { color: #fff; }
+.finder-hint { flex: 1 1 100%; padding-left: 8.95rem; font-size: 1rem; color: var(--muted); margin-top: -0.15rem; }
+@media (max-width: 40rem) { .finder-hint { padding-left: 0; } }
+.tap-ex[aria-pressed="true"]::before { content: none; }
+.tap-ex[aria-pressed="true"] > span:first-child::before { content: "✓ "; }
+.sort-note { grid-column: 1 / -1; margin: 0.1rem 0 0; font-size: 1rem; }
+.sort-status { margin: -0.3rem 0 0.8rem; padding: 0.5rem 0.8rem; background: var(--warn-bg); border-left: 4px solid var(--warn-line); border-radius: 6px; font-size: 1.05rem; }
+/* Folding boxes: a header row with the title and a Hide / Show button. */
+.fold-head { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; }
+.fold-head h2 { margin: 0; }
+.fold:not(.folded) .fold-head { margin-bottom: 0.6rem; }
+.fold-btn { flex: none; min-height: 2.5rem; font-size: 1.05rem; }
+.folded .my-picks { margin: 0.5rem 0 0; }
+.fold-summary { margin: 0.4rem 0 0; font-size: 1.05rem; }
+.ew-box h3 { color: var(--teal); margin: 0 0 0.5rem; font-size: 1.4rem; }
+.count-note { display: block; font-size: 1rem; font-weight: 400; color: var(--muted); }
+/* Folded finder: the summary sits in the header, and Show choices is a filled button. */
+.fold-head .fold-summary { flex: 1 1 18rem; margin: 0; font-size: 1.1rem; color: var(--text); }
+.fold-count { color: var(--muted); }
+.folded .fold-btn { background: var(--wine); border-color: var(--wine); color: #fff; font-size: 1.15rem; min-height: 2.9rem; padding: 0.4rem 1.2rem;
+  box-shadow: 0 2px 6px rgba(90, 20, 32, 0.35); }
+.folded .fold-btn:hover { background: var(--wine-dark); filter: none; }
+.fold-head { flex-wrap: wrap; }
+
+/* Top bar: each button is a line icon above a short label, so they all fit on one row
+   on a laptop, and in two even rows on a phone. */
+.icon-sprite { display: none; }
+.views { align-items: stretch; gap: 0.4rem; }
+.nav-btn { position: relative; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.15rem;
+  min-width: 5.8rem; min-height: 4.1rem; padding: 0.35rem 0.6rem; border-width: 2px; border-style: solid; border-radius: 0.6rem;
+  font: inherit; font-size: 1rem; font-weight: 700; line-height: 1.15; cursor: pointer; }
+.nav-btn svg { width: 1.7rem; height: 1.7rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.nav-badge { position: absolute; top: 0.2rem; right: 0.3rem; min-width: 1.5rem; padding: 0 0.35rem; border-radius: 999px;
+  background: #d9a33b; color: #2e1c00; font-size: 0.85rem; line-height: 1.5rem; text-align: center; }
+.view-btn[aria-pressed="true"] .nav-badge { background: var(--wine); color: #fff; }
+@media (max-width: 40rem) {
+  .views { display: grid; grid-template-columns: repeat(4, 1fr); width: 100%; }
+  .nav-btn { min-width: 0; padding: 0.3rem 0.2rem; font-size: 0.95rem; }
+}
+/* Filters: the main way to narrow the list, so it's framed in wine with a wine header bar
+   and lifted off the page (the panel itself keeps its parchment colour). */
+.filters { border: 2px solid var(--wine); padding: 0 0 1rem; overflow: hidden; box-shadow: 0 2px 10px rgba(90, 20, 32, 0.18); }
+.filters-title { margin: 0 0 0.8rem; padding: 0.6rem 1rem; background: var(--wine); color: #fff; }
+.filters-title::after { content: " · narrow the list here"; font-size: 1.05rem; font-weight: 400; }
+.filters-title .help-i { color: #fff; border-color: #fff; }
+.filter-body, .filter-toggle { margin-left: 1rem; margin-right: 1rem; }
+@media (max-width: 62.49em) { .filter-toggle { margin-top: 1rem; width: calc(100% - 2rem); } }
+/* Price slider under the price buttons, as on the restaurant page, with a live count. */
+.price-slider { flex: 1 1 100%; display: grid; grid-template-columns: auto minmax(10rem, 22rem); gap: 0.1rem 0.8rem; align-items: center;
+  padding-left: 8.95rem; font-size: 1.05rem; }
+.price-slider input[type="range"] { width: 100%; height: 2.2rem; accent-color: var(--wine); }
+.ps-count { grid-column: 1 / -1; justify-self: start; margin: 0.3rem 0 0.2rem; padding: 0.3rem 0.8rem; border: 2px solid var(--green);
+  border-radius: 0.5rem; background: var(--green-tint); color: #154015; font-size: 1.1rem; }
+.ps-count strong { color: var(--green); }
+.pick-btn[aria-pressed="true"] { background: var(--wine); border-color: var(--wine); color: #fff; }
+.pick-btn[aria-pressed="true"] .pick-count { color: #fff; }
+.wine-seq { display: block; font-size: 0.95rem; font-weight: 600; color: var(--muted); margin-bottom: 0.1rem; }

@@ -2,44 +2,15 @@
 
 // ---- Easy-to-edit settings ------------------------------------------------
 
-// One-tap presets. Each sets the filters from scratch, and its button shows how many
-// wines it finds (a pick that finds none is hidden). Keys:
-//   stores: "all" or a list such as ["ZYN"] (default: BC Liquor only)
-//   countries, types, sweet, priceFrom, priceTo, q (every word must appear)
-//   minAge: vintage at least this many years old; topOnly: on a store's 90+ list
-//   allSizes: every bottle size (default: 750 ml only)
-//   colour: wine, gold, teal, green, plum, blue (see .pick-* in app.css)
-const QUICK_PICKS = [
-  { label: "Portugal reds $20–50", colour: "wine", countries: ["Portugal"], types: ["Red"], priceFrom: 20, priceTo: 50 },
-  { label: "Under $25 whites", colour: "gold", types: ["White"], priceTo: 25 },
-  { label: "Something unusual", colour: "teal", stores: "all",
-    detail: "Georgia, Greece, Hungary, Lebanon, Moldova… at any store",
-    countries: ["Georgia", "Greece", "Hungary", "Lebanon", "Moldova", "South Africa", "Croatia",
-                "Slovenia", "Montenegro", "Romania", "Bulgaria", "Uruguay", "Israel", "Morocco", "Ukraine"] },
-  { label: "Moldovan wines", colour: "teal", stores: "all", detail: "at any store", countries: ["Moldova"] },
-  { label: "Fortified classics", colour: "plum", stores: "all", detail: "Port, Madeira, Sherry", types: ["Fortified"] },
-  { label: "Wines with some age", colour: "blue", stores: "all", detail: "10 years or older", minAge: 10 },
-  { label: "ZYN's 90+ points under $35", colour: "green", stores: ["ZYN"], topOnly: true, detail: "ZYN's own list" },
-];
-
-// "Famous wines" buttons: the best-known names from each country, searched at every
-// store. A wine matches if its name contains one of these phrases as whole words
-// (accents, capitals and punctuation are ignored). Edit freely.
-const ICONS = {
-  Chile: ["don melchor", "almaviva", "sena", "vinedo chadwick", "clos apalta", "montes alpha m",
-          "purple angel", "casa real", "carmin de peumo", "altair"],
-  France: ["lafite rothschild", "chateau latour", "chateau margaux", "chateau haut brion", "la mission haut brion", "mouton rothschild",
-           "petrus", "cheval blanc", "ausone", "yquem", "romanee conti", "la tache", "krug", "dom perignon"],
-  Australia: ["penfolds grange", "hill of grace", "bin 707", "yattarna", "st henri", "runrig", "astralis",
-              "mount edelstone", "diana madeline"],
-  Portugal: ["barca velha", "vale meao", "pera manca", "noval nacional", "batuta", "charme",
-             "vinha maria teresa", "vintage port"],
-  Italy: ["sassicaia", "ornellaia", "masseto", "tignanello", "solaia", "monfortino", "biondi santi",
-          "quintarelli", "dal forno", "pergole torte", "flaccianello", "gaja", "bruno giacosa"],
-};
-const ICON_PICKS = Object.entries(ICONS).map(([country, names]) => ({
-  label: `${country} icons`, colour: "gold", stores: "all", countries: [country], names, allSizes: true,
-}));
+// "Find me a wine": the tap-buttons at the top of the page. Each row sets one filter, and
+// tapping a lit button again clears it. Everyone can save their own choices as a quick pick
+// (kept on their own computer). Edit the choices freely.
+const FINDER_PRICES = [20, 30, 50, 100, 200]; // "Under $20" … (the side panel takes any price)
+const FINDER_COLOURS = ["Red", "White", "Rosé", "Sparkling"];
+// "Only well rated": this score or more from Claude, CellarTracker or the family, or on
+// ZYN's own list of 90+ point wines.
+const WELL_RATED = 90;
+const MAX_MY_PICKS = 12;
 const THIS_YEAR = new Date().getFullYear();
 
 // The question copied for Claude. {ABOUT_ME} comes from Settings (stays on this computer).
@@ -108,7 +79,7 @@ const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 100;
 // A standard bottle: 750 ml, or 700 ml as Swiss wines (Vaud, Valais) often come.
 const STANDARD_ML = new Set([700, 750]);
-const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk", dineHistory: "wf.dineHistory", lcbo: "wf.lcbo" };
+const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk", dineHistory: "wf.dineHistory", lcbo: "wf.lcbo", myPicks: "wf.myPicks", folds: "wf.folds" };
 
 // ---- Helpers -----------------------------------------------------------------
 
@@ -298,9 +269,10 @@ function addTypedWine(name) {
 
 function showHitsInList() {
   const q = $("ew-top").querySelector(".ew-q").value.trim();
+  showView("find");
   state = defaultState();
   state.q = q;
-  state.sources = new Set(LOADED);
+  state.sources = new Set([...LOADED].filter((x) => ALL_SOURCES.includes(x))); // the stores, not a family cellar
   state.bottleOnly = false;
   renderAll();
   $("results-h").scrollIntoView({ block: "start" });
@@ -345,11 +317,16 @@ function defaultState() {
     bottleOnly: true,
     q: "",
     newOnly: false,
-    topOnly: false, // only wines on a store's own "90+ points" list (ZYN)
-    names: null,    // famous-wine phrases (an Icons pick)
-    minAge: null,   // vintage at least this many years old
-    pickLabel: "",  // the quick pick that set these filters, for the "Showing:" line
-    sorts: ["price-asc", "", ""], // Sort by, then by, then by ("" = nothing)
+    body: new Set(),       // "Find me a wine", any of: light / medium / full
+    tannin: new Set(),     // soft / medium / firm (reds)
+    sweetStyle: new Set(), // dry / off-dry / sweet
+    continent: "",
+    wellRated: false, // WELL_RATED or more, or on ZYN's 90+ list
+    ratedOnly: false, // "Scored by Claude or the family": any Claude, CellarTracker or family score
+    readyNow: false,
+    fruity: false,    // "Fruity & ripe"
+    pickLabel: "",    // the quick pick that set these filters, for the "Showing:" line
+    sorts: ["best-desc", "", ""], // the Sort by box (older saved places may hold three levels)
     shown: PAGE_SIZE,
   };
 }
@@ -368,13 +345,23 @@ function matches(w, skip, st = state) {
   }
   if (skip !== "country" && st.countries.size && !st.countries.has(w.country)) return false;
   if (skip !== "type" && st.types.size && !st.types.has(w.type)) return false;
-  if (st.priceFrom != null && w.price != null && w.price < st.priceFrom) return false;
-  if (st.priceTo != null && w.price != null && w.price > st.priceTo) return false;
+  if (st.priceFrom != null || st.priceTo != null) {
+    const p = priceOf(w, st);
+    if (p != null && ((st.priceFrom != null && p < st.priceFrom) || (st.priceTo != null && p > st.priceTo))) return false;
+  }
   if (st.bottleOnly && !STANDARD_ML.has(w.size_ml)) return false;
   if (st.newOnly && !w.new_since_last) return false;
-  if (st.topOnly && !w.retailer_scores) return false;
-  if (st.minAge && !(w.vintage && w.vintage <= THIS_YEAR - st.minAge)) return false;
-  if (st.names && !st.names.some((n) => w._w.includes(n))) return false;
+  if (st.continent && continentOf(w) !== st.continent) return false;
+  if (st.ratedOnly && familyScore(w) == null) return false;
+  if (st.wellRated && !wellRated(w)) return false;
+  if (st.body.size || st.tannin.size || st.sweetStyle.size || st.readyNow || st.fruity) {
+    const look = wineStyle(w);
+    if (st.body.size && !st.body.has(look.body.v)) return false;
+    if (st.tannin.size && !st.tannin.has(look.tannin.v)) return false;
+    if (st.sweetStyle.size && !st.sweetStyle.has(look.sweet.v)) return false;
+    if (st.readyNow && !look.ready.ready) return false;
+    if (st.fruity && !look.fruity.v) return false;
+  }
   if (w.sweetness == null) {
     if (!st.notRated) return false;
   } else if (st.sweet.size) {
@@ -391,17 +378,21 @@ function matches(w, skip, st = state) {
 // orders wines that tie on the first, and so on. A wine without the value (no vintage, no
 // score…) goes to the bottom of its group either way, and the next level orders those too.
 const SORT_KEYS = {
-  price: { get: (w) => w.price, up: "Price: low to high", down: "Price: high to low" },
+  best: { get: (w) => bestScore(w), up: "Best rated: lowest first", down: "Best rated first (Claude, then CellarTracker, then family)", first: "down" },
+  price: { get: (w) => priceOf(w), up: "Price: low to high", down: "Price: high to low" },
   name: { get: (w) => w.name, text: true, up: "Name: A to Z", down: "Name: Z to A" },
   country: { get: (w) => (w.country === "Country not stated" ? null : w.country), text: true, up: "Country: A to Z", down: "Country: Z to A" },
   vintage: { get: (w) => w.vintage, up: "Vintage: oldest first", down: "Vintage: newest first", first: "down" },
   abv: { get: (w) => w.abv, up: "Alcohol %: lowest first", down: "Alcohol %: highest first" },
   sweet: { get: (w) => w.sweetness, up: "Sweetness: driest first", down: "Sweetness: sweetest first", first: "down" },
-  claude: { get: (w) => claudeScore(w), up: "Claude's rating (all family research): lowest first", down: "Claude's rating (all family research): highest first", first: "down" },
-  mine: { get: (w) => ratingOf(w.id).mine?.points, up: "Your rating: lowest first", down: "Your rating: highest first", first: "down" },
-  family: { get: (w) => frScore(w.id), up: "Family rating (FR): lowest first", down: "Family rating (FR): highest first", first: "down" },
+  // Claude's score for this listing, or for the same wine at another store or in a cellar
+  claude: { get: (w) => claudeScore(w) ?? ratedTwin(w)?.claude?.points, up: "Claude's score: lowest first", down: "Claude's score: highest first", first: "down" },
+  mine: { get: (w) => ratingOf(w.id).mine?.points, up: "My rating (on this computer): lowest first", down: "My rating (on this computer): highest first", first: "down" },
+  // family members' own published scores only (never Claude's)
+  family: { get: (w) => frOf(w.id).family?.points ?? ratedTwin(w)?.family?.points, up: "Family members' ratings: lowest first", down: "Family members' ratings: highest first", first: "down" },
   // the cellar owner's own CellarTracker score, else the CellarTracker community score
   ct: { get: (w) => w.my_score ?? w.ct_score, up: "CellarTracker score: lowest first", down: "CellarTracker score: highest first", first: "down" },
+  cellars: { get: (w) => (cellarMatches(w).length ? 1 : null), up: "In the family's cellars last", down: "In the family's cellars first", first: "down" },
 };
 // Older saved places used one sort name.
 const OLD_SORTS = { name: "name-asc", country: "country-asc", vintage: "vintage-desc", abv: "abv-asc", sweet: "sweet-desc",
@@ -449,13 +440,16 @@ function renderSources() {
     $("source-legend").textContent = "Wines listed here";
     $("source-list").innerHTML = `<p class="source-only">${have.map(sourceBadge).join(" ")}</p>
       <p class="hint">Looking for another store?</p>
-      <button type="button" class="btn btn-ew" data-action="goto-ew">Where can I buy…? ↑</button>`;
+      <button type="button" class="btn btn-ew" data-action="goto-ew">Where can I buy…? →</button>`;
     renderCellarFilter();
     return;
   }
   const cel = [...state.sources].filter((s) => !ALL_SOURCES.includes(s));
   $("source-legend").textContent = cel.length ? `Sold by (of ${cel.join(", ")}'s wines)`.replace("'s cellar's", "'s") : "Sold by";
-  $("source-list").innerHTML = have.map((s) => checkbox("source", s, state.sources.has(s), sourceBadge(s), null)).join("") +
+  // With a cellar ticked, each store shows how many of its wines that store sells.
+  const celWines = cellarOn() ? cellarWinesTicked() : null;
+  const sells = (src) => (celWines && LOADED.has(src) ? celWines.filter((w) => storeMatchesOf(w.id).some((x) => x.source === src)).length : null);
+  $("source-list").innerHTML = have.map((s) => checkbox("source", s, state.sources.has(s), sourceBadge(s), sells(s))).join("") +
     lcboBoxHtml();
   renderCellarFilter();
 }
@@ -535,7 +529,7 @@ function syncInputs() {
 
 function filtersOnCount() {
   return state.countries.size + state.types.size + state.sweet.size + (state.priceFrom != null) +
-    (state.priceTo != null) + !!state.q + state.newOnly + state.topOnly + !state.bottleOnly + !state.notRated;
+    (state.priceTo != null) + !!state.q + state.newOnly + !state.bottleOnly + !state.notRated;
 }
 
 // ---- Rendering: results --------------------------------------------------------
@@ -594,10 +588,33 @@ function wineCard(w) {
 
 let lastResults = [];
 
+// The cellars ticked under "Family cellars", all their wines.
+function cellarWinesTicked(st = state) {
+  const cels = [...st.sources].filter((x) => !ALL_SOURCES.includes(x));
+  return cellarFindWines().filter((w) => cels.includes(w.source));
+}
+
+// "5,386 wines at BC Liquor - LDB"; "Cellar 1: the LCBO sells 50 of its 169 wines · 31 with
+// your choices"; or, with nothing ticked, what to tick.
+function countHeadingHtml(n) {
+  const cels = [...state.sources].filter((x) => !ALL_SOURCES.includes(x)), stores = storesTicked();
+  const wines = (k) => `${k.toLocaleString()} ${k === 1 ? "wine" : "wines"}`;
+  if (!state.sources.size) return "No store or cellar ticked";
+  if (!cels.length || !stores.length) return `${wines(n)} ${esc(storesPhrase())}`;
+  const all = cellarWinesTicked(), sold = all.filter((w) => storeMatchesOf(w.id).some((x) => stores.includes(x.source))).length;
+  const who = stores.length === 1 ? `the ${sourceLabel(stores[0])} sells` : `${stores.length} stores sell`;
+  return `${esc(cels.join(" and "))}: ${esc(who)} ${sold.toLocaleString()} of ${cels.length === 1 ? "its" : "their"} ${wines(all.length)}` +
+    (n !== sold ? ` · ${n.toLocaleString()} with your choices` : "");
+}
+
 function renderResults() {
   lastResults = findPool().filter((w) => matches(w)).sort(currentSort());
   const n = lastResults.length;
-  $("result-count").textContent = n === 1 ? "1 wine" : `${n.toLocaleString()} wines`;
+  // "5,386 wines at BC Liquor - LDB", and how many other bottle sizes the standard-bottle box hides
+  const hiddenSizes = state.bottleOnly ? findPool().reduce((k, w) =>
+    k + (!STANDARD_ML.has(w.size_ml) && matches(w, null, { ...state, bottleOnly: false })), 0) : 0;
+  $("result-count").innerHTML = countHeadingHtml(n) +
+    (hiddenSizes ? `<span class="count-note">standard bottles; ${hiddenSizes.toLocaleString()} other ${hiddenSizes === 1 ? "size" : "sizes"} hidden</span>` : "");
 
   const parts = [];
   if (state.q) parts.push(`words “${esc(state.q)}”`);
@@ -611,23 +628,35 @@ function renderResults() {
   else if (!state.notRated) parts.push("sweetness rated only");
   parts.push(state.bottleOnly ? "standard bottles" : "all sizes");
   if (state.newOnly) parts.push("new on the latest BC list");
-  if (state.topOnly) parts.push("ZYN's 90+ under $35 list");
-  if (state.minAge) parts.push(`${state.minAge} years or older`);
-  if (state.names) parts.push(`famous wines (${esc(state.pickLabel)})`);
+  if (state.continent) parts.push(esc(state.continent));
+  const or = (set) => [...set].join(" or ");
+  const look = [state.body.size && `${or(state.body)}-bodied`, state.tannin.size && `${or(state.tannin)} tannins`, state.sweetStyle.size && or(state.sweetStyle)].filter(Boolean);
+  if (look.length) parts.push(`${look.join(", ")} (Claude's answer, else estimated)`);
+  if (state.ratedOnly) parts.push("scored by Claude, CellarTracker or the family");
+  if (state.wellRated) parts.push(`rated ${WELL_RATED}+`);
+  if (state.fruity) parts.push("fruity & ripe (Claude's answer, else estimated)");
+  if (state.readyNow) parts.push("ready to drink now");
+  if (state.pickLabel) parts.unshift(`<strong>${esc(state.pickLabel)}</strong>`);
   if (cellarOn()) {
     const stores = storesTicked(), cellarsTicked = state.sources.size - stores.length;
     parts.unshift([...state.sources].filter((s) => !ALL_SOURCES.includes(s)).map(esc).join(", ") +
       (stores.length ? `, sold by ${stores.map(sourceLabel).map(esc).join(" or ")}` : cellarsTicked > 1 ? " (the whole cellars)" : " (the whole cellar)"));
   } else if (state.sources.size > 1) parts.unshift([...state.sources].map(sourceLabel).map(esc).join(", "));
   $("active-filters").innerHTML = `<strong>Showing:</strong> ${parts.join(" · ")}`;
+  renderSortStatus();
 
   if (!n) {
     const newHint = state.newOnly && !WINES.some((w) => w.new_since_last)
       ? "<p>“New” wines appear once a second BC price list has come out, so they can be compared.</p>" : "";
-    $("result-list").innerHTML = `<div class="empty">${newHint}<p>No wines match these choices. Try removing a filter, or start again.</p>
-      <button type="button" class="btn btn-primary" data-action="start-over">Start over</button></div>`;
+    $("result-list").innerHTML = !state.sources.size
+      ? `<div class="empty"><p>Tick a store under <strong>Sold by</strong>, or a family cellar under <strong>Family cellars</strong>, to see wines.</p></div>`
+      : `<div class="empty">${newHint}${emptyHelpHtml()}
+      <button type="button" class="btn" data-action="start-over">Start over</button></div>`;
   } else {
-    $("result-list").innerHTML = lastResults.slice(0, state.shown).map(wineCard).join("");
+    // "3 of 15" on each card, in the order shown
+    const of = n.toLocaleString();
+    $("result-list").innerHTML = lastResults.slice(0, state.shown).map((w, i) =>
+      wineCard(w).replace('<h3 class="wine-name">', `<h3 class="wine-name"><span class="wine-seq">${(i + 1).toLocaleString()} of ${of}</span>`)).join("");
   }
   const more = n - state.shown;
   $("show-more").hidden = more <= 0;
@@ -638,7 +667,99 @@ function renderResults() {
     (on ? ` (${on} chosen)` : "");
 }
 
+// The choices now made, each as [what to call it, how to undo it].
+function choicesMade(st = state) {
+  const out = [], label = (key, v) => finderRows().find((r) => r[1] === key)?.[2].find((o) => o[0] === v)?.[1] || v;
+  if (st.priceFrom != null || st.priceTo != null)
+    out.push([st.priceFrom == null ? `Under $${st.priceTo}` : "the price", FINDER_CLEAR.price]);
+  if (st.types.size) out.push([[...st.types].join(" or "), FINDER_CLEAR.colour]);
+  for (const key of ["body", "tannin", "sweetStyle"]) if (st[key].size) out.push([[...st[key]].map((v) => label(key, v)).join(" or "), FINDER_CLEAR[key]]);
+  if (st.continent) out.push([st.continent, FINDER_CLEAR.continent]);
+  if (st.countries.size) out.push([st.countries.size > 2 ? `${st.countries.size} countries` : [...st.countries].join(" or "), (x) => { x.countries = new Set(); }]);
+  if (st.wellRated) out.push(["Only well rated", FINDER_CLEAR.wellRated]);
+  if (st.fruity) out.push(["Fruity & ripe", FINDER_CLEAR.fruity]);
+  if (st.readyNow) out.push(["Ready to drink now", FINDER_CLEAR.readyNow]);
+  if (st.ratedOnly) out.push(["Scored by Claude or the family", FINDER_CLEAR.ratedOnly]);
+  if (st.q) out.push([`the words “${st.q}”`, (x) => { x.q = ""; }]);
+  if (st.sweet.size) out.push(["the sweetness boxes", (x) => { x.sweet = new Set(); }]);
+  if (st.newOnly) out.push(["new wines only", (x) => { x.newOnly = false; }]);
+  return out;
+}
+
+// For an empty list: the one choice (or two together) whose removal brings back the most wines.
+let emptyFix = null;
+function emptyHelpHtml() {
+  emptyFix = null;
+  const made = choicesMade(), pool = findPool();
+  const count = (undo) => { const st = cloneState(state); undo.forEach(([, f]) => f(st)); return pool.reduce((k, w) => k + matches(w, null, st), 0); };
+  let best = null;
+  for (const c of made) { const n = count([c]); if (n && (!best || n > best.n)) best = { undo: [c], n }; }
+  if (!best) {
+    for (let i = 0; i < made.length; i++) for (let j = i + 1; j < made.length; j++) {
+      const n = count([made[i], made[j]]);
+      if (n && (!best || n > best.n)) best = { undo: [made[i], made[j]], n };
+    }
+  }
+  if (!best) return `<p>No wines match these choices. Try removing a few, or start again.</p>`;
+  emptyFix = best.undo;
+  const names = best.undo.map(([l]) => `<strong>“${esc(l)}”</strong>`);
+  const why = names.length === 1 ? `${names[0]} rules out every wine here` : `${names[0]} and ${names[1]} together rule out every wine here`;
+  return `<p>No wines match all these choices: ${why}.</p>
+    <p><button type="button" class="btn btn-primary" data-action="empty-fix">Without ${names.length === 1 ? "it" : "them"}: show ${best.n.toLocaleString()} ${best.n === 1 ? "wine" : "wines"}</button></p>`;
+}
+
+function applyEmptyFix() {
+  if (!emptyFix) return;
+  emptyFix.forEach(([, f]) => f(state));
+  state.pickLabel = "";
+  state.shown = PAGE_SIZE;
+  syncInputs();
+  refresh();
+}
+
+// When the list is sorted by a rating, say how many wines actually have one, so a list
+// with none (shown cheapest first) doesn't look wrongly sorted.
+// For each rating sort: its name, which wines count as scored, and how to say so.
+const RATING_SORTS = {
+  best: { name: "Best rated first", has: (w) => familyScore(w) != null, scored: "scored by Claude or the family", from: "from Claude or the family" },
+  claude: { name: "Claude's score", has: (w) => SORT_KEYS.claude.get(w) != null, scored: "scored by Claude", from: "from Claude" },
+  mine: { name: "My rating", has: (w) => SORT_KEYS.mine.get(w) != null, scored: "rated by you on this computer", from: "from you" },
+  family: { name: "Family members' ratings", has: (w) => SORT_KEYS.family.get(w) != null, scored: "rated by a family member", from: "from a family member" },
+  ct: { name: "CellarTracker score", has: (w) => SORT_KEYS.ct.get(w) != null, scored: "with a CellarTracker score", from: "on CellarTracker" },
+};
+const SCORE_LIST_MAX = 100; // "Get quick Claude scores (next 25)" is suggested once the list is this short
+
+// When the list is sorted by a rating, say how many wines actually have one, so the
+// unscored ones (cheapest first) don't look wrongly sorted; and, for a short list, offer
+// to have Claude score more.
+function renderSortStatus() {
+  renderFinderSummary();
+  const box = $("sort-status");
+  if (!box) return;
+  const first = sortGroup(state.sorts[0] || ""), rs = RATING_SORTS[first], n = lastResults.length;
+  const rated = rs && n ? lastResults.filter(rs.has).length : n;
+  if (!rs || !n || rated === n) { box.hidden = true; return; }
+  const rest = n - rated, next = state.sorts[1] ? "in your “then by” order" : "cheapest first";
+  const zyn = first === "best" ? lastResults.filter((w) => !rs.has(w) && w.retailer_scores).length : 0;
+  const wines = (k) => `${k.toLocaleString()} ${k === 1 ? "wine" : "wines"}`;
+  let html = rated
+    ? `<strong>${esc(rs.name)}:</strong> the ${wines(rated)} ${rs.scored} ${rated === 1 ? "is" : "are"} at the top. ` +
+      (zyn ? `Next come ${wines(zyn)} on ZYN's 90+ list; then the ` : "The ") +
+      `other ${wines(rest - zyn)} ${rest - zyn === 1 ? "has" : "have"} no score yet and follow, ${next}.`
+    : `<strong>${esc(rs.name)}:</strong> ${n === 1 ? "this wine has" : `none of these ${wines(n)} has`} a score ${rs.from} yet, ` +
+      (zyn ? `so the ${wines(zyn)} on ZYN's 90+ list come first and the rest follow, ${next}.` : `so ${n === 1 ? "it's" : "they're"} shown ${next}.`);
+  if (first !== "mine") {
+    html += n > SCORE_LIST_MAX
+      ? `<br><span class="hint">To have Claude score some of these, narrow the list with Find me a wine first.</span>`
+      : `<br>Claude can run a quick check on ${rest <= 25 ? `the ${rest === 1 ? "remaining wine" : `${rest} remaining wines`}` : `the next 25 of the ${rest.toLocaleString()} remaining wines`} ` +
+        `to help your ranking: tap <strong>Get quick Claude scores (next 25)</strong> at the bottom of the page.`;
+  }
+  box.innerHTML = html;
+  box.hidden = false;
+}
+
 function renderAll() {
+  renderFinder();
   renderSources();
   renderCountries();
   renderTypes();
@@ -649,6 +770,7 @@ function renderAll() {
 
 // Re-render everything except the input being typed in.
 function refresh() {
+  renderFinder();
   renderCountries();
   renderTypes();
   renderResults();
@@ -733,7 +855,7 @@ Then write the link as the largest heading (one #), itself the link, exactly in 
 - End with one more horizontal line (---), so the save link stands apart from the buttons under the answer.
 CODE is the wine's code in square brackets in my list; POINTS is your rating (leave it empty if you found no reviews); VINTAGE is the vintage your rating is for, or NV; NOTE is up to eight words, with + instead of spaces and no semicolons or tildes.`;
 
-// "Sort top 25 using Claude": a quick review score for each wine, no write-up, so a
+// "Get quick Claude scores (next 25)": a quick review score for each wine, no write-up, so a
 // store's list can be sorted. Claude ends with a #scores= link (read by parseSaveHash).
 const SCORE_BATCH = 25;
 const SCORE_TEMPLATE = `I'd like a quick review score for each of these wines, so I can sort a shop's list by what reviewers say. {ABOUT_ME}
@@ -745,13 +867,14 @@ For each wine, please:
 - Search the web for professional reviews and community notes (for example Wine Enthusiast, Decanter, James Suckling, Vinous, Jancis Robinson, CellarTracker).
 - Give your own overall score out of 100, based on what the reviewers say (your judgement, not a copy of any one critic's score), and the vintage it applies to. If you only find reviews of another vintage, you may use them, but give that vintage.
 - In up to eight words, say what your score rests on, for example: WE 92, Decanter 90 for 2021.
-- If you can't find any reviews, say so plainly rather than estimating.
+- Describe its style from the reviews and the tasting notes: body (light, medium or full), tannin (soft, medium or firm; for whites, leave it empty), sweetness (dry, off-dry or sweet), whether it's fruit-forward (ripe and fruity-tasting even when dry, like many Malbecs or Australian Shiraz: yes or no), and when to drink it (from year to year).
+- If you can't find any reviews, say so plainly rather than estimating the score; give the style only if you know the wine.
 
-Keep the answer short: one line per wine, in my order, as: number. wine — score (vintage) — what it rests on.
+Keep the answer short: one line per wine, in my order, as: number. wine — score (vintage) — what it rests on — body, tannin, sweetness, fruit-forward or not — drink from–to.
 
 Last of all, after a horizontal line (---), give me a link to save the scores, as the largest heading (one #), itself the link, exactly in this form, one entry per wine joined by semicolons:
-# [💾 Save these scores to my Wine Finder]({BASE}#scores=CODE~POINTS~VINTAGE~NOTE;CODE~POINTS~VINTAGE~NOTE)
-CODE is the wine's code in square brackets in my list; POINTS is your score (leave it empty if you found no reviews); VINTAGE is the vintage your score is for, or NV; NOTE is what it rests on, up to eight words, with + instead of spaces and no semicolons or tildes.`;
+# [💾 Save these scores to my Wine Finder]({BASE}#scores=CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT;CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT)
+CODE is the wine's code in square brackets in my list; POINTS is your score (leave it empty if you found no reviews); VINTAGE is the vintage your score is for, or NV; NOTE is what it rests on, up to eight words, with + instead of spaces and no semicolons or tildes; BODY is light, medium or full; TANNIN is soft, medium or firm (empty for whites); SWEET is dry, off-dry or sweet; DRINK is the drinking window as 2024-2030; FRUIT is yes if it's fruit-forward, otherwise no. Leave any of these empty if you don't know.`;
 
 let scorePicks = [];
 
@@ -761,7 +884,8 @@ const hasClaudeRating = (w) => !!(ratingOf(w.id).claude || frOf(w.id).claude ||
   relatedRatings(w).some((r) => r.f.claude));
 
 function scoreLine(w, i) {
-  return `${i + 1}. ${w.name}${w.vintage ? `, ${w.vintage}` : ""} — ${sourceLabel(w.source)}, ${priceStr(w)} [${w.id}]`;
+  const price = w.currency ? `${w.currency} ${Number(w.price_local).toFixed(2)}` : money(w.price);
+  return `${i + 1}. ${w.name}${w.vintage ? `, ${w.vintage}` : ""} — ${sourceLabel(w.source)}, ${price} [${w.id}]`;
 }
 
 function scorePrompt() {
@@ -1357,7 +1481,7 @@ function renderMyWines() {
 function mwWhereCanIBuy(id) {
   const w = allMyWines().find((x) => x.id === id);
   if (!w) return;
-  showView("find");
+  showView("shortlist");
   const input = document.querySelector("#ew-top .ew-q");
   input.value = storeSearchWords(w);
   updateElsewhere(input.closest(".elsewhere"));
@@ -1433,12 +1557,13 @@ function ratingsHtml(w) {
   const same = (a, b) => b && JSON.stringify(a) === JSON.stringify(b);
   if (r.claude && !same(r.claude, f.claude)) {
     const c = r.claude;
-    parts.push(`<span class="rating rating-claude">${c.quick ? "CR" : "Claude's rating"} <strong>${c.points ?? "no reviews found"}</strong>` +
+    parts.push(`<span class="rating rating-claude">Claude <strong>${c.points ?? "found no reviews"}</strong>${c.quick ? " (quick score)" : ""}` +
       `${c.vintage ? ` (${esc(String(c.vintage))})` : ""}${c.note ? ` · ${esc(c.note)}` : ""}` +
-      ` <span class="rating-date">${esc(shortDate(c.date))}</span></span>`);
+      ` <span class="rating-date">${esc(shortDate(c.date))}</span></span>` +
+      (styleText(c) ? `<span class="rating rating-style">${esc(styleText(c))}</span>` : ""));
   }
   if (r.mine && !same(r.mine, f.family)) {
-    parts.push(`<span class="rating rating-mine">Your rating <strong>${r.mine.points}</strong>` +
+    parts.push(`<span class="rating rating-mine">My rating <strong>${r.mine.points}</strong>` +
       `${r.mine.note ? ` · ${esc(r.mine.note)}` : ""}</span>`);
   }
   return parts.length ? `<p class="wine-ratings">${parts.join("")}</p>` : "";
@@ -1474,6 +1599,7 @@ function toggleRatePanel(btn) {
 }
 
 function refreshRatedViews() {
+  ratingsVer++;
   if (!$("view-shortlist").hidden) renderShortlist();
   else if (!$("view-find").hidden) renderResults();
 }
@@ -1501,6 +1627,26 @@ function clearMyRating(id) {
   refreshRatedViews();
 }
 
+// The style Claude gives with a quick score: BODY~TANNIN~SWEET~DRINK, each checked
+// against its few allowed words (anything else is dropped rather than guessed).
+const CR_STYLE = { body: ["light", "medium", "full"], tannin: ["soft", "medium", "firm"], sweet: ["dry", "off-dry", "sweet"] };
+function readStyle([body = "", tannin = "", sweet = "", drink = "", fruit = ""]) {
+  const pick = (v, list) => (list.includes(v.toLowerCase()) ? v.toLowerCase() : null);
+  const out = { body: pick(body, CR_STYLE.body), tannin: pick(tannin, CR_STYLE.tannin), sweet: pick(sweet.replace(/\s+/g, "-"), CR_STYLE.sweet) };
+  const m = /^((?:19|20)\d\d)\s*[-–]\s*((?:19|20)\d\d)$/.exec(drink);
+  if (m && +m[1] <= +m[2]) { out.drinkFrom = +m[1]; out.drinkTo = +m[2]; }
+  if (/^(yes|no)$/i.test(fruit.trim())) out.fruity = /^yes$/i.test(fruit.trim());
+  return Object.fromEntries(Object.entries(out).filter(([, v]) => v != null));
+}
+
+// "full-bodied, soft tannins, dry · drink 2024–2030"
+function styleText(c) {
+  if (!c) return "";
+  const bits = [c.body && `${c.body}-bodied`, c.tannin && `${c.tannin} tannins`, c.sweet, c.fruity && "fruit-forward"].filter(Boolean).join(", ");
+  const drink = c.drinkFrom ? `drink ${c.drinkFrom}–${c.drinkTo}` : "";
+  return [bits, drink].filter(Boolean).join(" · ");
+}
+
 // Every wine code a link may carry: a store listing, a family cellar wine, or one added by hand or by name.
 const WINE_CODE = /^(bcl|bsw|zyn|luc|wsh|lcbo|cellar|manual|typed)-[\w.-]{1,80}$/;
 
@@ -1517,6 +1663,7 @@ function parseSaveHash(hash) {
   for (const part of raw.split(";")) {
     const [code = "", pts = "", vin = "", ...rest] = part.split("~").map((s) => s.trim());
     if (!WINE_CODE.test(code)) continue;
+    const style = quick ? readStyle(rest.slice(1)) : {};
     const n = parseInt(pts, 10);
     const points = /^\d{2,3}$/.test(pts) && n >= 50 && n <= 100 ? n : null;
     if (pts && points === null) continue; // a score we can't trust: skip rather than guess
@@ -1524,8 +1671,8 @@ function parseSaveHash(hash) {
       id: code,
       points,
       vintage: /^(19|20)\d\d$/.test(vin) ? +vin : /^nv$/i.test(vin) ? "NV" : null,
-      note: rest.join(" ").replace(/\s+/g, " ").slice(0, 80) || null,
-      ...(quick ? { quick: true } : {}),
+      note: (quick ? rest[0] || "" : rest.join(" ")).replace(/\s+/g, " ").slice(0, 80) || null,
+      ...(quick ? { quick: true, ...style } : {}),
     });
   }
   return items;
@@ -1575,7 +1722,8 @@ function offerSavedRatings() {
   $("save-q").textContent = !items.length ? "This link didn't contain any ratings that could be read."
     : shared ? `Ratings emailed from family for ${n}. Save them?` : quick ? `Save Claude's scores for ${n}?` : `Save Claude's ratings for ${n}?`;
   $("save-list").innerHTML = items.map((it) => `<li><strong>${esc(nameOf(it) || `Wine ${it.id} (not found on this computer)`)}</strong>` +
-    (it.claude === false ? "" : `<br>Claude's ${it.quick ? "score" : "rating"}: <strong>${it.points ?? "no reviews found"}</strong>${it.vintage ? ` (${esc(String(it.vintage))})` : ""}${it.note ? ` · ${esc(it.note)}` : ""}`) +
+    (it.claude === false ? "" : `<br>Claude's ${it.quick ? "score" : "rating"}: <strong>${it.points ?? "no reviews found"}</strong>${it.vintage ? ` (${esc(String(it.vintage))})` : ""}${it.note ? ` · ${esc(it.note)}` : ""}` +
+      (styleText(it) ? `<br><span class="hint">${esc(styleText(it))}</span>` : "")) +
     (it.mine ? `<br>Family member's own rating: <strong>${it.mine.points}</strong>${it.mine.note ? ` · ${esc(it.mine.note)}` : ""}` : "") +
     `</li>`).join("");
   $("save-help").hidden = items.length > 0;
@@ -1590,6 +1738,12 @@ function offerSavedRatings() {
   $("save-name-row").hidden = !!myName();
   $("save-dialog").showModal?.();
   if (!$("save-writeup").hidden) { showWriteupState(); checkWriteup(); }
+  // Quick scores from Claude save straight away: clicking Claude's save link was the
+  // confirmation. (The first time, the box still asks for a first name.)
+  if (quick && !shared && items.length && myName()) {
+    $("save-q").textContent = `Saving Claude's scores for ${n}…`;
+    confirmSavedRatings().then(() => { $("save-q").textContent = `Claude's scores for ${n}`; });
+  }
 }
 
 async function confirmSavedRatings() {
@@ -1613,7 +1767,8 @@ async function confirmSavedRatings() {
     const name = findWine(it.id)?.name || real(ratingOf(it.id).name) || it.name || real(frOf(it.id).name) ||
       (it.id.startsWith("typed-") ? it.id.slice(6).replace(/-/g, " ") : it.id); // a typed wine's code is its name
     const r = { ...ratingOf(it.id), name };
-    const claude = it.claude !== false ? { points: it.points, vintage: it.vintage, note: it.note, date: today, ...(it.quick ? { quick: true } : {}) } : null;
+    const style = Object.fromEntries(["body", "tannin", "sweet", "fruity", "drinkFrom", "drinkTo"].filter((k) => it[k] != null).map((k) => [k, it[k]]));
+    const claude = it.claude !== false ? { points: it.points, vintage: it.vintage, note: it.note, date: today, ...(it.quick ? { quick: true, ...style } : {}) } : null;
     const mine = it.mine ? { ...it.mine, date: today } : null;
     if (claude) r.claude = claude;
     if (mine) r.mine = mine;
@@ -1627,9 +1782,9 @@ async function confirmSavedRatings() {
   pendingSave = null;
   const nNotes = Object.keys(parts).length;
   const quick = items.some((it) => it.quick);
-  const gotText = quick ? "Your list is now sorted by Claude's score, then price." : nNotes ? `Claude's write-up kept for ${nNotes} ${nNotes === 1 ? "wine" : "wines"}.` : "No write-up was found, so only the ratings were saved.";
+  const gotText = quick ? "Your list is now sorted best rated first." : nNotes ? `Claude's write-up kept for ${nNotes} ${nNotes === 1 ? "wine" : "wines"}.` : "No write-up was found, so only the ratings were saved.";
   if (quick) { // show the scored list straight away: best scored first, then by price
-    state.sorts = ["claude-desc", "price-asc", ""];
+    state.sorts = ["best-desc", "", ""];
     state.shown = PAGE_SIZE;
     renderSorts();
   }
@@ -1737,14 +1892,47 @@ function emailRatings() {
 const PUBLISH = { owner: "mikemeddings", repo: "wine-finder", path: "data/ratings.json", branch: "main" };
 let familyRatings = {};
 const frOf = (id) => familyRatings[id] || (privateId(id) && familyRatings[sharedIdOf(id)]) || {};
-const frScore = (id) => frOf(id).family?.points ?? frOf(id).claude?.points ?? null;
 const claudeScore = (w) => ratingOf(w.id).claude?.points ?? frOf(w.id).claude?.points ?? null;
+
+// The same wine rated under another listing (another store, a cellar, a name typed in),
+// found by name once per wine. Only the few rated names are compared, each first by its
+// longest word, so this stays quick across every store.
+let ratingsVer = 0; // goes up whenever ratings change, so the answers below are worked out again
+let ratedNames = [], ratedNamesVer = "";
+function ratedTwin(w) {
+  const ver = `${Object.keys(familyRatings).length}:${ratingsVer}`;
+  if (ratedNamesVer !== ver) {
+    ratedNamesVer = ver;
+    ratedNames = Object.entries(familyRatings)
+      .filter(([, r]) => r.name && (r.claude?.points || r.family?.points || r.claude?.body || r.claude?.drinkFrom || r.claude?.fruity != null))
+      .map(([id, r]) => ({ id, r, key: [...storeTokens(r.name)].sort((a, b) => b.length - a.length)[0] || "" }))
+      .filter((x) => x.key.length > 2);
+  }
+  if (w._twinVer !== ver) {
+    const text = w._s ?? fold([w.name, w.producer, w.region_or_grape].filter(Boolean).join(" "));
+    w._twin = ratedNames.find((x) => x.id !== w.id && text.includes(x.key) && sameWineName(w.name, x.r.name))?.r || null;
+    w._twinVer = ver;
+  }
+  return w._twin;
+}
+
+// "Best rated first": Claude's score (for this listing, or the same wine elsewhere), then
+// CellarTracker, then the family's own. Wines on ZYN's 90+ list come after every scored
+// wine (as 1), and unscored wines last.
+function bestScore(w) {
+  const twin = ratedTwin(w);
+  return claudeScore(w) ?? twin?.claude?.points ?? w.my_score ?? w.ct_score ?? ratingOf(w.id).mine?.points ??
+    frOf(w.id).family?.points ?? twin?.family?.points ?? (w.retailer_scores ? 1 : null);
+}
+const familyScore = (w) => { const s = bestScore(w); return s != null && s > 1 ? s : null; };
+const wellRated = (w) => (familyScore(w) ?? 0) >= WELL_RATED || !!w.retailer_scores;
 
 function frHtml(w) {
   const f = frOf(w.id), parts = [];
-  if (f.claude) parts.push(`<span class="rating rating-fr">${f.claude.quick ? "CR" : "FR"} <strong>${f.claude.points ?? "no reviews"}</strong> (Claude)` +
-    `${f.claude.vintage ? ` · ${esc(String(f.claude.vintage))}` : ""}${f.claude.note ? ` · ${esc(f.claude.note)}` : ""}</span>`);
-  if (f.family) parts.push(`<span class="rating rating-fr">FR <strong>${f.family.points}</strong> (family)` +
+  if (f.claude) parts.push(`<span class="rating rating-fr">Claude <strong>${f.claude.points ?? "found no reviews"}</strong>${f.claude.quick ? " (quick score)" : ""}` +
+    `${f.claude.vintage ? ` · ${esc(String(f.claude.vintage))}` : ""}${f.claude.note ? ` · ${esc(f.claude.note)}` : ""}</span>` +
+    (styleText(f.claude) ? `<span class="rating rating-style">${esc(styleText(f.claude))}</span>` : ""));
+  if (f.family) parts.push(`<span class="rating rating-fr">Family <strong>${f.family.points}</strong>` +
     `${f.family.note ? ` · ${esc(f.family.note)}` : ""}</span>`);
   return parts.join("");
 }
@@ -1988,7 +2176,8 @@ function nameCellar(slot) {
 // neither a grape nor a place ("Cabernet Sauvignon - O-61" is not Jon's Don Melchor). When the
 // cellar wine has its own name (Oculus), the store's name must have it too.
 const MATCH_STOP = new Set(("red white rose wine wines blend vin vino the and del della des les las los " +
-  "chateau domaine bodega bodegas estate estates winery vineyard vineyards cellars reserve reserva sparkling dry brut").split(" "));
+  "chateau domaine bodega bodegas estate estates winery vineyard vineyards cellars reserve reserva sparkling dry brut " +
+  "vigna vigneto vigneti").split(" ")); // "Vigna Enrico VI Barolo" is Jon's "Barolo Enrico VI"
 const GRAPE_WORDS = new Set(("cabernet sauvignon merlot pinot noir grigio gris blanc franc chardonnay syrah shiraz " +
   "malbec carmenere tempranillo sangiovese nebbiolo zinfandel primitivo riesling gewurztraminer petit petite verdot " +
   "grenache garnacha mourvedre monastrell viognier semillon muscat moscato chenin gamay barbera touriga nacional " +
@@ -2026,6 +2215,14 @@ function buildCellarIndex() {
   return idx;
 }
 
+// Colours must agree, except that stores file sweet wines differently (the LCBO lists Huet's
+// Cuvée Constance as a red), so "Dessert" agrees with anything but Sparkling.
+function typesAgree(a, b) {
+  if (!a || !b || a === b || a === "Other" || b === "Other") return true;
+  if (a === "Dessert" || b === "Dessert") return a !== "Sparkling" && b !== "Sparkling";
+  return false;
+}
+
 // Store wine -> [{source: "Jon's cellar", vintages: [2016, 2018]}]. A cellar wine gets the
 // other cellars that have the same wine (any vintage), never its own cellar.
 function cellarMatches(w) {
@@ -2043,7 +2240,7 @@ function cellarMatches(w) {
       if (!S.every((x) => e.all.has(x)) || S.filter((x) => e.nameT.has(x)).length < 2) continue;
       if (!S.some((x) => e.nameT.has(x) && !e.generic.has(x) && !GRAPE_WORDS.has(x))) continue;
       if (e.specific.length && !S.some((x) => e.specific.includes(x))) continue; // same producer, different wine
-      if (w.type && e.w.type && w.type !== "Other" && e.w.type !== "Other" && w.type !== e.w.type) continue; // their rosé isn't Jon's red
+      if (!typesAgree(w.type, e.w.type)) continue; // their rosé isn't Jon's red
       if (styleOf(w.name) !== e.style) continue; // Amarone vs Valpolicella, Riserva vs regular
       ids.push(e.w.id);
       if (!bySource.has(e.w.source)) bySource.set(e.w.source, new Set());
@@ -2069,6 +2266,20 @@ function storeMatchesOf(cellarId) {
     }
   }
   return storeMatchIndex.get(cellarId) || [];
+}
+
+// A cellar keeps no prices. Shown with stores ticked, a cellar wine takes the price of its
+// match at those stores: a standard bottle first, then the cheapest.
+function priceOf(w, st = state) {
+  if (w.price != null || w.kind !== "cellar") return w.price ?? null;
+  const ticked = storesTicked(st);
+  let best = null;
+  for (const s of ticked.length ? storeMatchesOf(w.id) : []) {
+    if (!ticked.includes(s.source) || s.price == null) continue;
+    const std = STANDARD_ML.has(s.size_ml);
+    if (!best || std > best.std || (std === best.std && s.price < best.p)) best = { std, p: s.price };
+  }
+  return best ? best.p : null;
 }
 
 const cellarOn = (st = state) => [...st.sources].some((s) => !ALL_SOURCES.includes(s));
@@ -2150,13 +2361,183 @@ function relatedRatings(w) {
   return out;
 }
 
+// ---- Wine style: continent, body, tannin, sweetness, ready to drink -----------------
+// For "Find me a wine". Stores don't give body or tannin, so they're estimated from what
+// we do know: the grape and region in the name or the store's fields, alcohol, the
+// store's sweetness or sugar figure, and the words in LCBO's tasting notes. Claude's
+// quick score (body, tannin, sweetness, drinking window) replaces the estimate, and a
+// family cellar's own drinking window does too. Each answer says where it came from.
+
+const CONTINENTS = {
+  Europe: ["France", "Italy", "Spain", "Portugal", "Germany", "Austria", "Switzerland", "Greece", "Hungary", "Georgia",
+    "Croatia", "Moldova", "Armenia", "Romania", "Slovenia", "Bulgaria", "Ukraine", "Cyprus", "Montenegro", "Serbia",
+    "United Kingdom", "England", "Czech Republic", "Slovakia", "Luxembourg", "North Macedonia", "Turkey"],
+  "North America": ["Canada", "USA", "United States", "North America", "Mexico"],
+  "South America": ["Argentina", "Chile", "Uruguay", "Brazil", "Peru"],
+  "Australia & NZ": ["Australia", "New Zealand"],
+  Africa: ["South Africa", "Morocco"],
+  "Asia & Middle East": ["Israel", "Lebanon", "Japan", "China", "India", "South Korea"],
+};
+const CONTINENT_OF = Object.fromEntries(Object.entries(CONTINENTS).flatMap(([c, list]) => list.map((n) => [n, c])));
+const continentOf = (w) => CONTINENT_OF[w.country] || null;
+
+// Red wines: [words in the name, grape or region (folded, no accents), body, tannin]. Most
+// specific first: an appellation decides before a grape does (Amarone before Corvina).
+const RED_STYLE = [
+  [/\bamarone\b/, "full", "soft"], [/\bripasso\b/, "full", "soft"], [/\bvalpolicella\b/, "light", "soft"],
+  [/\bbarolo\b|\bbarbaresco\b|\bnebbiolo\b|\bgattinara\b|\bghemme\b/, "full", "firm"],
+  [/\bbrunello\b/, "full", "firm"], [/\brosso di montalcino\b|\bvino nobile\b/, "medium", "firm"],
+  [/\bchianti\b|\bsangiovese\b|\bmorellino\b/, "medium", "firm"],
+  [/\btaurasi\b|\baglianico\b|\bsagrantino\b|\btannat\b|\bmadiran\b|\bcahors\b/, "full", "firm"],
+  [/\bprimitivo\b|\bzinfandel\b|\bnegroamaro\b|\bnero d.?avola\b/, "full", "soft"],
+  [/\bmontepulciano d.?abruzzo\b|\bmontepulciano\b/, "medium", "medium"],
+  [/\bbarbera\b|\bdolcetto\b|\bfrappato\b|\bschiava\b|\blambrusco\b|\bgrignolino\b/, "light", "soft"],
+  [/\bchateauneuf\b|\bgigondas\b|\bvacqueyras\b|\brasteau\b|\blirac\b/, "full", "medium"],
+  [/\bcotes? du rhone\b|\bventoux\b|\bcostieres\b|\bgsm\b/, "medium", "soft"],
+  [/\bhermitage\b|\bcornas\b|\bcote.rotie\b|\bsaint.joseph\b|\bst.joseph\b|\bcrozes\b/, "full", "firm"],
+  [/\bbandol\b|\bmourvedre\b|\bmonastrell\b|\bmataro\b|\bjumilla\b/, "full", "firm"],
+  [/\bpauillac\b|\bmargaux\b|\bsaint.julien\b|\bst.julien\b|\bsaint.estephe\b|\bst.estephe\b|\bhaut.medoc\b|\bmedoc\b|\bpessac\b/, "full", "firm"],
+  [/\bpomerol\b|\bsaint.emilion\b|\bst.emilion\b|\bfronsac\b|\bcastillon\b/, "full", "medium"],
+  [/\bbordeaux\b/, "medium", "medium"],
+  [/\bbourgogne\b|\bburgundy\b|\bgevrey\b|\bvosne\b|\bnuits\b|\bbeaune\b|\bpommard\b|\bvolnay\b|\bchambolle\b|\bmorey\b|\bmercurey\b|\bgivry\b/, "light", "soft"],
+  [/\bbeaujolais\b|\bmorgon\b|\bfleurie\b|\bmoulin.a.vent\b|\bbrouilly\b|\bjulienas\b|\bchiroubles\b|\bgamay\b/, "light", "soft"],
+  [/\bpinot noir\b|\bspatburgunder\b|\bblauburgunder\b|\bpinot nero\b/, "light", "soft"],
+  [/\brioja\b|\btempranillo\b|\btinto fino\b|\btinta de toro\b|\bnavarra\b/, "medium", "medium"],
+  [/\bribera del duero\b|\btoro\b|\bpriorat\b/, "full", "firm"],
+  [/\bgarnacha\b|\bgrenache\b|\bcannonau\b/, "full", "soft"],
+  [/\bmencia\b|\bbierzo\b/, "medium", "soft"],
+  [/\btouriga\b|\bdouro\b|\bdao\b/, "full", "firm"], [/\balentej(o|ano)\b/, "full", "soft"],
+  [/\blisboa\b|\btejo\b|\bsetubal\b|\bpalmela\b|\bcastelao\b|\bperiquita\b/, "medium", "soft"],
+  [/\bmalbec\b/, "full", "soft"], [/\bcarmenere\b/, "medium", "soft"], [/\bpinotage\b/, "full", "medium"],
+  [/\bpetite? sirah\b|\bdurif\b|\bpetit verdot\b/, "full", "firm"],
+  [/\bshiraz\b/, "full", "soft"], [/\bsyrah\b/, "full", "medium"],
+  [/\bcabernet sauvignon\b|\bcab sauv\b/, "full", "firm"], [/\bcabernet franc\b|\bchinon\b|\bbourgueil\b/, "medium", "medium"],
+  [/\bmerlot\b/, "medium", "soft"], [/\bcabernet\b/, "full", "firm"],
+  [/\bxinomavro\b|\bnaoussa\b/, "medium", "firm"], [/\bagiorgitiko\b|\bnemea\b/, "medium", "soft"],
+  [/\bsaperavi\b/, "full", "firm"], [/\bblaufrankisch\b|\bkekfrankos\b/, "medium", "medium"],
+  [/\bzweigelt\b|\bst.? laurent\b/, "medium", "soft"], [/\bcarignan\b|\bcarinena\b|\bcorbieres\b|\bminervois\b/, "medium", "medium"],
+  [/\bcinsault\b|\bpoulsard\b|\btrousseau\b/, "light", "soft"],
+  [/\bred blend\b|\bbordeaux.style\b|\bmeritage\b/, "full", "medium"],
+];
+// White wines: body only.
+const WHITE_STYLE = [
+  [/\bsauternes\b|\bbarsac\b|\btokaji\b/, "full"],
+  [/\bchablis\b|\bmuscadet\b|\bvinho verde\b|\bpicpoul\b|\bgruner\b|\bchasselas\b|\balbarino\b|\balvarinho\b|\bsoave\b|\bfrascati\b|\bpinot grigio\b|\bsauvignon blanc\b|\bsancerre\b|\bpouilly.fume\b|\briesling\b|\bassyrtiko\b|\bvermentino\b|\bverdejo\b|\btxakoli\b/, "light"],
+  [/\bchenin\b|\bvouvray\b|\bsemillon\b|\bpinot blanc\b|\bgarganega\b|\bgavi\b|\bcortese\b|\bfiano\b|\bgreco\b|\bgodello\b|\bsylvaner\b|\bsilvaner\b/, "medium"],
+  [/\bmeursault\b|\bmontrachet\b|\bcorton.charlemagne\b|\bpouilly.fuisse\b/, "full"],
+  [/\bchardonnay\b|\bbourgogne blanc\b|\bmacon\b/, "medium"],
+  [/\bviognier\b|\bcondrieu\b|\bmarsanne\b|\broussanne\b|\bgewurz\b|\bpinot gris\b|\bwhite rhone\b/, "full"],
+];
+const SWEET_WORDS = /\bspatlese\b|\bauslese\b|\bbeerenauslese\b|\btrockenbeerenauslese\b|\btba\b|\beiswein\b|\bice.?wine\b|\blate harvest\b|\bvendanges tardives\b|\bsauternes\b|\bbarsac\b|\btokaji\b|\bmoscato d.?asti\b|\bdemi.sec\b|\bsemi.sweet\b|\bdoux\b|\bdolce\b|\bamabile\b|\bpassito\b|\brecioto\b|\bvin santo\b|\bpedro ximenez\b|\bcream sherry\b/;
+const OFFDRY_WORDS = /\bkabinett\b|\boff.dry\b|\bmedium.dry\b|\bsemi.dry\b|\bwhite zinfandel\b|\bmoscato\b|\bfeinherb\b/;
+const DRY_FORTIFIED = /\bfino\b|\bmanzanilla\b|\bamontillado\b|\bsercial\b|\bdry sherry\b/;
+
+// "Fruity & ripe": dry reds that taste ripe and fruity. Grapes and styles known for it,
+// any warm-country red at 14.5% or more, or LCBO's notes saying so.
+const FRUITY_RED = /\bmalbec\b|\bzinfandel\b|\bprimitivo\b|\bgrenache\b|\bgarnacha\b|\bcannonau\b|\bamarone\b|\bripasso\b|\bappassimento\b|\bpinotage\b|\bcarmenere\b|\bjam\b|\bjammy\b/;
+const NEW_WORLD = new Set(["Australia", "USA", "United States", "Argentina", "Chile", "South Africa", "New Zealand", "Canada", "Uruguay", "Mexico"]);
+const WARM = new Set([...NEW_WORLD, "Spain", "Portugal", "Italy", "Greece", "Israel", "Lebanon"]);
+WARM.delete("New Zealand"); WARM.delete("Canada");
+function fruityEstimate(w, t, note, tannin) {
+  if (w.type !== "Red") return null;
+  if (FRUITY_RED.test(t)) return true;
+  if (NEW_WORLD.has(w.country) && /\bshiraz\b|\bsyrah\b|\bmerlot\b/.test(t)) return true;
+  // strong alcohol: ripe anywhere warm, except firm Old World reds (Barolo, Brunello, Toro…)
+  if (WARM.has(w.country) && w.abv >= 14.5 && (NEW_WORLD.has(w.country) || tannin !== "firm")) return true;
+  if (/\bjammy\b|\bfruit.forward\b|\bplush\b|\bripe (dark |red |black )?fruits?\b|\bripe and\b/.test(note)) return true;
+  return false;
+}
+
+function styleText_(w) {
+  return fold([w.name, w.grape, w.region, w.region_or_grape, w.varietal].filter(Boolean).join(" "));
+}
+
+// The style a store listing implies, before any Claude answer: {body, tannin, sweet} with
+// each value or null. LCBO's tasting notes, where they say it outright, win over the rules.
+function estimatedStyle(w) {
+  if (w._est) return w._est;
+  const t = styleText_(w), note = fold(w.note || "");
+  const type = w.type;
+  let body = null, tannin = null, sweet = null;
+  if (type === "Red") {
+    const hit = RED_STYLE.find(([re]) => re.test(t));
+    if (hit) [, body, tannin] = hit;
+  } else if (type === "White") {
+    const hit = WHITE_STYLE.find(([re]) => re.test(t));
+    if (hit) body = hit[1];
+  } else if (type === "Rosé" || type === "Sparkling") body = "light";
+  else if (type === "Dessert") { body = "full"; sweet = "sweet"; }
+  else if (type === "Fortified") { body = "full"; sweet = DRY_FORTIFIED.test(t) ? "dry" : "sweet"; }
+  // the store's own words beat the grape rule
+  if (/\bfull.bodied\b|\bfull bodied\b/.test(note)) body = "full";
+  else if (/\blight.bodied\b|\blight bodied\b/.test(note)) body = "light";
+  else if (/\bmedium.bodied\b|\bmedium bodied\b/.test(note)) body = "medium";
+  if (type === "Red") {
+    if (/\b(soft|supple|silky|velvety|smooth|round|gentle) tannins?\b/.test(note)) tannin = "soft";
+    else if (/\b(firm|grippy|chewy|robust|bold|structured|muscular|powerful|dense) tannins?\b/.test(note)) tannin = "firm";
+  }
+  // alcohol nudges an unknown body
+  if (!body && w.abv) body = w.abv >= 14.5 ? "full" : w.abv <= 12 ? "light" : "medium";
+  // sweetness: the store's own figure first (BC's 0-10 code, LCBO's grams of sugar a litre)
+  if (!sweet) {
+    if (w.sweetness != null) sweet = w.sweetness <= 1 ? "dry" : w.sweetness <= 4 ? "off-dry" : "sweet";
+    else if (w.sugar != null) sweet = w.sugar <= 6 ? "dry" : w.sugar <= 25 ? "off-dry" : "sweet";
+    else if (SWEET_WORDS.test(t)) sweet = "sweet";
+    else if (OFFDRY_WORDS.test(t)) sweet = "off-dry";
+    else if (type === "Red" || type === "Rosé" || type === "Sparkling" || (type === "White" && body)) sweet = "dry";
+  }
+  const fruity = sweet === "sweet" ? false : fruityEstimate(w, t, note, tannin);
+  return (w._est = { body, tannin: type === "Red" ? tannin : null, sweet, fruity });
+}
+
+// Claude's own answer for this wine (its own listing, the same wine at another store, or
+// a family cellar), if it gave style or a drinking window.
+function claudeStyle(w) {
+  const has = (c) => c && (c.body || c.drinkFrom || c.fruity != null);
+  const own = ratingOf(w.id).claude || frOf(w.id).claude;
+  if (has(own)) return own;
+  const twin = ratedTwin(w)?.claude;
+  return has(twin) ? twin : null;
+}
+
+// Ready to drink this year? true / false / null (can't tell), with where the answer came from.
+function readiness(w, est, cl) {
+  const year = new Date().getFullYear();
+  if (cl?.drinkFrom) return { ready: year >= cl.drinkFrom && year <= cl.drinkTo + 2, from: "Claude" };
+  if (w.drink_from || w.drink_to) { // a family cellar's own window (CellarTracker)
+    return { ready: (!w.drink_from || year >= w.drink_from) && (!w.drink_to || year <= w.drink_to + 2), from: "cellar" };
+  }
+  const age = w.vintage ? year - w.vintage : null;
+  if (w.type !== "Red") return { ready: true, from: "estimate" };
+  if (age == null || w.price < 25) return { ready: true, from: "estimate" }; // everyday reds are made to drink now
+  if (est.body === "full" && est.tannin === "firm") return { ready: age >= 8, from: "estimate" };
+  if (est.body === "full") return { ready: age >= 4, from: "estimate" };
+  return { ready: true, from: "estimate" };
+}
+
+// Everything "Find me a wine" asks about, for one wine: Claude's answers where it gave them,
+// else the estimate. src says which: "Claude" or "estimate".
+function wineStyle(w) {
+  ratedTwin(w); // brings ratedNamesVer up to date
+  if (w._look && w._lookVer === ratedNamesVer) return w._look;
+  w._lookVer = ratedNamesVer;
+  return (w._look = wineStyleNow(w));
+}
+function wineStyleNow(w) {
+  const est = estimatedStyle(w), cl = claudeStyle(w);
+  const pick = (k) => (cl?.[k] != null ? { v: cl[k], src: "Claude" } : { v: est[k], src: est[k] != null ? "estimate" : null });
+  return { continent: continentOf(w), body: pick("body"), tannin: w.type === "Red" ? pick("tannin") : { v: null, src: null },
+    sweet: pick("sweet"), fruity: pick("fruity"), ready: readiness(w, est, cl) };
+}
+
 function familyLinksHtml(w) {
   const badges = cellarMatches(w).map((m) => `<span class="badge badge-cellar">${w.kind === "cellar" ? "Also in" : "In"} ${esc(m.source)}` +
     `${m.vintages.length ? ` (${esc(m.vintages.join(", "))})` : ""}</span>`);
   const rel = relatedRatings(w).map(({ f, label }) => {
     const c = f.claude, fam = f.family;
-    return `<span class="rating rating-fr rating-related">${!fam && c?.quick ? "CR" : "FR"} <strong>${fam ? fam.points : c?.points ?? "no reviews"}</strong> ` +
-      `(${fam ? "family" : "Claude"})${!fam && c?.vintage ? ` · ${esc(String(c.vintage))}` : ""} · ${esc(label)}</span>`;
+    return `<span class="rating rating-fr rating-related">${fam ? "Family" : "Claude"} <strong>${fam ? fam.points : c?.points ?? "found no reviews"}</strong>` +
+      `${!fam && c?.quick ? " (quick score)" : ""}${!fam && c?.vintage ? ` · ${esc(String(c.vintage))}` : ""}` +
+      `${!fam && styleText(c) ? ` · ${esc(styleText(c))}` : ""} · ${esc(label)}</span>`;
   });
   return badges.length || rel.length ? `<p class="wine-detail family-links">${[...badges, ...rel].join(" ")}</p>` : "";
 }
@@ -2221,11 +2602,13 @@ function normaliseSorts() {
     out.push(v);
     used.add(sortGroup(v));
   }
-  if (!out.length) out.push("price-asc");
+  if (!out.length) out.push("best-desc");
   state.sorts = [...out, "", ""].slice(0, 3);
   delete state.sort;
 }
 
+// Sort by, then by, then by: each box leaves out what's chosen above it. Price (low first)
+// settles any tie that's left.
 function renderSorts() {
   if (!$("sort")) return;
   normaliseSorts();
@@ -2944,7 +3327,7 @@ function chooseMail(id) {
 // ---- Views -------------------------------------------------------------------
 
 // ⓘ beside each section heading: jumps to that section's help.
-const HELP_LINKS = [["#quick-h", "help-find"], ["#filters-h", "help-find"], ["#ew-h", "help-where"],
+const HELP_LINKS = [["#finder-h", "help-find"], ["#filters-h", "help-find"], ["#ew-h", "help-where"],
   ["#cellar-filter legend", "help-cellars"], ["#view-shortlist .research-head h2", "help-research"], ["#sl-add-h", "help-research"],
   ["#view-dine .research-head h2", "help-dine"], ["#dine-recent-h", "help-dine"], ["#inbox-h", "help-keeper"],
   ["#fr-h", "help-ratings"], ["#mw-import-h", "help-mywines"], ["#mw-add-h", "help-mywines"], ["#mw-backup-h", "help-mywines"]];
@@ -2972,7 +3355,7 @@ function goBack() { if (navDepth > 0) history.back(); else showView("find"); }
 // Leaving the site (a link in a write-up, a store's page…) and coming back with Back reloads
 // the page, which would start over. So the page notes where you were when you leave (this tab
 // only) and picks it up again on the way back: page, filters, sort, scroll and an open write-up.
-const SET_KEYS = ["sources", "countries", "types", "sweet"];
+const SET_KEYS = ["sources", "countries", "types", "sweet", "body", "tannin", "sweetStyle"];
 let openNotesId = null;
 function savePlace() {
   try {
@@ -3058,53 +3441,253 @@ function emptyShortlist() {
   renderResults(); // card buttons back to "Add to Short List for Claude Research"
 }
 
-const ALL_PICKS = [...QUICK_PICKS, ...ICON_PICKS];
-const pickStores = (p) => (p.stores === "all" ? knownSources() : p.stores || ["BC Liquor"]);
+// ---- "Find me a wine" ----------------------------------------------------------
+// Rows of tap-buttons that set the same filters as the side panel, plus the style ones
+// (body, tannin, sweetness, ready now) that only exist here.
+// Each row: [title, key, [[value, label, examples]], a line saying what the row means].
+// Body, tannin and sweetness take more than one choice ("medium or full").
+const MULTI_ROWS = new Set(["body", "tannin", "sweetStyle"]);
+// Tannin and "Fruity & ripe" only mean something for reds: with only other colours chosen,
+// those rows are hidden (and their choices undone), and Body's examples follow the colour.
+const redRowsApply = (st = state) => !st.types.size || st.types.has("Red");
+const BODY_EXAMPLES = {
+  red: ["Pinot Noir, Beaujolais", "Merlot, Chianti", "Cabernet, Malbec, Shiraz"],
+  white: ["Pinot Grigio, Sauvignon Blanc, Riesling", "Chenin Blanc, unoaked Chardonnay", "oaked Chardonnay, Viognier"],
+  other: ["Provence rosé, Prosecco", "Champagne, Spanish rosado", "vintage Champagne, Tavel"],
+};
+const finderRows = () => {
+  const ex = BODY_EXAMPLES[redRowsApply() ? "red" : state.types.has("White") ? "white" : "other"];
+  return [
+  ["Colour", "colour", FINDER_COLOURS.map((t) => [t, t])],
+  ["Price", "price", FINDER_PRICES.map((p) => [p, `Under $${p}`])],
+  ["Body", "body", [["light", "Light", ex[0]], ["medium", "Medium", ex[1]], ["full", "Full-bodied", ex[2]]],
+    "How heavy the wine feels in your mouth, like skim milk compared with cream. Choose one or more."],
+  ["Tannin (reds)", "tannin", [["soft", "Soft & smooth", "Merlot, Malbec, Pinot Noir"], ["medium", "Medium grip", "Chianti, Rioja, Côtes du Rhône"],
+    ["firm", "Firm & grippy", "Cabernet, Barolo, Douro · best with food"]],
+    "The dry, grippy feel on your gums and tongue, like strong tea. Choose one or more."],
+  ["Taste (reds)", "fruity", [[1, "Fruity & ripe", "Malbec, Zinfandel, Australian Shiraz"]],
+    "Tastes ripe and fruity, even though it's dry."],
+  ["Sweetness", "sweetStyle", [["dry", "Dry", "most table wines"], ["off-dry", "Off-dry", "a touch of sugar, like Kabinett Riesling"],
+    ["sweet", "Sweet", "dessert wines, Port, icewine"]],
+    "Sugar actually left in the wine. Choose one or more."],
+  ["From", "continent", Object.keys(CONTINENTS).map((c) => [c, c])],
+  ].filter(([, key]) => redRowsApply() || (key !== "tannin" && key !== "fruity"));
+};
 
-function pickState(p) {
+function finderOn(key, v) {
+  if (key === "price") return state.priceFrom == null && state.priceTo === v;
+  if (key === "colour") return state.types.size === 1 && state.types.has(v);
+  if (key === "fruity") return state.fruity;
+  if (MULTI_ROWS.has(key)) return state[key].has(v);
+  return state[key] === v;
+}
+
+function setFinder(key, v) {
+  const on = finderOn(key, v);
+  if (key === "price") { state.priceFrom = null; state.priceTo = on ? null : v; }
+  else if (key === "colour") state.types = on ? new Set() : new Set([v]);
+  else if (key === "wellRated" || key === "readyNow" || key === "ratedOnly" || key === "fruity") state[key] = !state[key];
+  else if (MULTI_ROWS.has(key)) { const set = new Set(state[key]); on ? set.delete(v) : set.add(v); state[key] = set; }
+  else {
+    state[key] = on ? "" : v;
+    if (key === "continent") state.countries = new Set(); // a country from another continent would hide everything
+  }
+  state.pickLabel = "";
+  state.shown = PAGE_SIZE;
+  syncInputs();
+  refresh();
+}
+
+// Each button shows how many wines there would be with it chosen, given the other choices;
+// one that would give none is greyed (still tappable).
+const tap = (key, v, label, on, n, ex = "") =>
+  `<button type="button" class="tap${n === 0 ? " tap-zero" : ""}${ex ? " tap-ex" : ""}" data-finder="${esc(key)}" data-v="${esc(String(v))}" aria-pressed="${on}">` +
+  `<span>${esc(label)}${n == null ? "" : ` <span class="tap-n">${n.toLocaleString()}</span>`}</span>` +
+  (ex ? `<small>${esc(ex)}</small>` : "") + `</button>`;
+
+const cloneState = (st) => ({ ...st, ...Object.fromEntries(SET_KEYS.map((k) => [k, new Set(st[k])])) });
+
+// How to undo each row's choice (as tapping it again would), and what a wine counts as in that row.
+const FINDER_CLEAR = {
+  price: (st) => { st.priceFrom = null; st.priceTo = null; },
+  colour: (st) => { st.types = new Set(); },
+  body: (st) => { st.body = new Set(); },
+  tannin: (st) => { st.tannin = new Set(); },
+  sweetStyle: (st) => { st.sweetStyle = new Set(); },
+  continent: (st) => { st.continent = ""; st.countries = new Set(); },
+  wellRated: (st) => { st.wellRated = false; },
+  readyNow: (st) => { st.readyNow = false; },
+  fruity: (st) => { st.fruity = false; },
+  ratedOnly: (st) => { st.ratedOnly = false; },
+};
+function finderValues(key, w) {
+  if (key === "price") { const p = priceOf(w); return p == null ? [] : FINDER_PRICES.filter((x) => p <= x); }
+  if (key === "colour") return [w.type];
+  if (key === "body" || key === "tannin") return [wineStyle(w)[key].v];
+  if (key === "sweetStyle") return [wineStyle(w).sweet.v];
+  if (key === "continent") return [continentOf(w)];
+  if (key === "wellRated") return wellRated(w) ? [1] : [];
+  if (key === "readyNow") return wineStyle(w).ready.ready ? [1] : [];
+  if (key === "fruity") return wineStyle(w).fruity.v ? [1] : [];
+  return familyScore(w) != null ? [1] : []; // ratedOnly
+}
+// One pass over the wines per row: the other rows' choices stay, this row's is undone.
+function finderCounts() {
+  const pool = findPool(), out = {};
+  for (const [key, clear] of Object.entries(FINDER_CLEAR)) {
+    const st = cloneState(state);
+    clear(st);
+    const c = new Map();
+    for (const w of pool) {
+      if (!matches(w, null, st)) continue;
+      for (const v of finderValues(key, w)) c.set(String(v), (c.get(String(v)) || 0) + 1);
+    }
+    out[key] = c;
+  }
+  return out;
+}
+
+function renderFinder() {
+  if (!$("finder-rows")) return;
+  if (!redRowsApply() && (state.tannin.size || state.fruity)) { // a hidden row mustn't keep filtering
+    state.tannin = new Set();
+    state.fruity = false;
+    renderResults();
+  }
+  const counts = WINES.length ? finderCounts() : null;
+  const one = (key, v) => (counts ? counts[key].get(String(v)) || 0 : null);
+  // In a row that takes several choices, a lit button shows its own wines, and an unlit
+  // one the total you'd have by adding it.
+  const n = (key, v) => {
+    if (!counts || !MULTI_ROWS.has(key) || state[key].has(v)) return one(key, v);
+    return [...state[key]].reduce((k, x) => k + one(key, x), one(key, v));
+  };
+  const rows = finderRows().map(([title, key, opts, hint]) =>
+    `<div class="finder-row"><span class="finder-label">${esc(title)}</span>` +
+    opts.map(([v, label, ex]) => tap(key, v, label, finderOn(key, v), n(key, v), ex)).join("") +
+    (key === "continent" ? countrySelectHtml() : "") +
+    (key === "price" ? priceSliderHtml() : "") +
+    (hint ? `<span class="finder-hint">${esc(hint)}</span>` : "") + `</div>`);
+  rows.push(`<div class="finder-row"><span class="finder-label">Also</span>` +
+    tap("wellRated", 1, `Only well rated (${WELL_RATED}+)`, state.wellRated, n("wellRated", 1)) +
+    tap("readyNow", 1, "Ready to drink now", state.readyNow, n("readyNow", 1)) + `</div>`);
+  const stores = [...[...state.sources].filter((x) => !ALL_SOURCES.includes(x)), ...storesTicked().map(sourceLabel)].join(", ") || "nothing ticked yet";
+  rows.push(`<p class="finder-stores">Looking in: <strong>${esc(stores)}</strong>
+    <button type="button" class="btn btn-mini" data-action="finder-stores">Change stores</button></p>`);
+  $("finder-rows").innerHTML = rows.join("");
+  renderMyPicks();
+}
+
+// Price slider: lowest and highest, like the restaurant page; the top of the scale is "no
+// limit". While a handle moves, only the count beside it changes; the rest of the page
+// catches up when it's let go.
+const SLIDE = { max: 300, step: 5 };
+function priceSliderHtml() {
+  if (cellarOn() && !storesTicked().length)
+    return `<span class="finder-hint">A cellar keeps no prices: tick a store under Sold by to filter by that store's price.</span>`;
+  const lo = state.priceFrom ?? 0, hi = state.priceTo ?? SLIDE.max;
+  return `<div class="price-slider">
+    <label for="ps-lo">Lowest: <strong id="ps-lo-v">$${lo}</strong></label>
+    <input type="range" id="ps-lo" min="0" max="${SLIDE.max}" step="${SLIDE.step}" value="${Math.min(lo, SLIDE.max)}">
+    <label for="ps-hi">Highest: <strong id="ps-hi-v">${hi >= SLIDE.max ? "no limit" : `$${hi}`}</strong></label>
+    <input type="range" id="ps-hi" min="0" max="${SLIDE.max}" step="${SLIDE.step}" value="${Math.min(hi, SLIDE.max)}">
+    <p class="ps-count" id="ps-count" aria-live="polite">${priceCountText()}</p>
+  </div>`;
+}
+function priceCountText(st = state) {
+  const n = findPool().reduce((k, w) => k + matches(w, null, st), 0);
+  const lo = st.priceFrom ?? 0, hi = st.priceTo;
+  const range = hi == null ? (lo ? `from $${lo} up` : "at any price") : `from $${lo} to $${hi}`;
+  return `<strong>${n.toLocaleString()} ${n === 1 ? "wine" : "wines"}</strong> ${range}`;
+}
+let slideFrame = 0;
+function priceSlide(which, done) {
+  let lo = +$("ps-lo").value, hi = +$("ps-hi").value;
+  if (lo > hi) { if (which === "lo") hi = lo; else lo = hi; $("ps-lo").value = lo; $("ps-hi").value = hi; }
+  state.priceFrom = lo > 0 ? lo : null;
+  state.priceTo = hi < SLIDE.max ? hi : null;
+  $("ps-lo-v").textContent = `$${lo}`;
+  $("ps-hi-v").textContent = hi >= SLIDE.max ? "no limit" : `$${hi}`;
+  state.pickLabel = "";
+  state.shown = PAGE_SIZE;
+  if (done) { syncInputs(); refresh(); return; }
+  cancelAnimationFrame(slideFrame);
+  slideFrame = requestAnimationFrame(() => { $("ps-count").innerHTML = priceCountText(); });
+}
+
+// "Any country", or one country, from the continent chosen (or all), with how many wines each has.
+// Every country these stores sell from that continent is listed, so none seems to vanish:
+// those with wines for the other choices first, then the ones ruled out, as "(0)".
+function countrySelectHtml() {
+  const counts = countBy("country", "country");
+  const all = new Set(findPool().filter((w) => storesTicked().length === 0 || state.sources.has(w.source)).map((w) => w.country));
+  const n = (c) => counts.get(c) || 0;
+  const list = [...all].filter((c) => c && c !== "Country not stated" && (!state.continent || CONTINENT_OF[c] === state.continent))
+    .sort((a, b) => (n(b) > 0) - (n(a) > 0) || a.localeCompare(b));
+  const one = state.countries.size === 1 ? [...state.countries][0] : "";
+  if (one && !list.includes(one)) list.unshift(one);
+  return `<label class="finder-country"><span class="visually-hidden">Country</span><select id="finder-country">
+    <option value="">${state.countries.size > 1 ? `${state.countries.size} countries` : "Any country"}</option>` +
+    list.map((c) => `<option value="${esc(c)}"${c === one ? " selected" : ""}>${esc(c)} (${(counts.get(c) || 0).toLocaleString()})</option>`).join("") +
+    `</select></label>`;
+}
+
+// ---- Quick picks: "Scored by Claude or the family" and each person's own -----------------
+// Saved picks live on this computer only (localStorage), so Dad's are his and Jon's are his.
+const PICK_KEYS = ["countries", "types", "sweet", "priceFrom", "priceTo", "notRated", "bottleOnly", "q",
+  "body", "tannin", "sweetStyle", "continent", "wellRated", "ratedOnly", "readyNow", "fruity", "sorts", "sources"];
+const myPicks = () => { const p = storeGet(STORE.myPicks, []); return Array.isArray(p) ? p : []; };
+
+function snapshotState() {
+  const out = {};
+  for (const k of PICK_KEYS) out[k] = state[k] instanceof Set ? [...state[k]] : state[k];
+  return out;
+}
+
+function pickToState(p) {
   const st = defaultState();
-  st.sources = new Set(pickStores(p));
-  if (p.countries) st.countries = new Set(p.countries);
-  if (p.types) st.types = new Set(p.types);
-  if (p.sweet) st.sweet = new Set(p.sweet);
-  st.priceFrom = p.priceFrom ?? null;
-  st.priceTo = p.priceTo ?? null;
-  st.q = p.q ?? "";
-  st.topOnly = !!p.topOnly;
-  st.minAge = p.minAge ?? null;
-  st.names = p.names ? p.names.map(words) : null;
-  st.bottleOnly = !p.allSizes;
+  for (const k of PICK_KEYS) {
+    if (p.st?.[k] === undefined) continue;
+    const v = p.st[k]; // body, tannin and sweetness were single words in the first saved picks
+    st[k] = SET_KEYS.includes(k) ? new Set(Array.isArray(v) ? v : v ? [v] : []) : v;
+  }
+  // stores this browser can open (LCBO only once unlocked), and cellars it still has
+  const ok = new Set([...knownSources(), ...cellarSources()]);
+  st.sources = new Set([...st.sources].filter((x) => ok.has(x)));
+  if (!st.sources.size) st.sources = new Set(["BC Liquor"]);
   st.pickLabel = p.label;
   return st;
 }
 
-function pickButton(p, i) {
-  return `<button type="button" class="btn pick pick-${esc(p.colour || "wine")}" data-pick="${i}">
-    <span>${esc(p.label)} <span class="pick-count" data-count="${i}"></span></span>${p.detail ? `<small>${esc(p.detail)}</small>` : ""}</button>`;
+function pickButtonHtml(attr, label, n, extra = "") {
+  const count = n == null ? "…" : `${n.toLocaleString()} ${n === 1 ? "wine" : "wines"}`;
+  return `<span class="my-pick"><button type="button" class="btn pick-btn" ${attr}>${esc(label)} <span class="pick-count">· ${count}</span></button>${extra}</span>`;
 }
 
-function renderPicks() {
-  $("quick-list").innerHTML = QUICK_PICKS.map((p, i) => pickButton(p, i)).join("");
-  $("icon-list").innerHTML = ICON_PICKS.map((p, i) => pickButton(p, QUICK_PICKS.length + i)).join("");
-  updatePickCounts();
+function pickCount(st) {
+  if (![...st.sources].every((s) => LOADED.has(s) || !ALL_SOURCES.includes(s))) return null;
+  const pool = cellarOn(st) ? cellarFindWines() : WINES;
+  return pool.reduce((k, w) => k + matches(w, null, st), 0);
 }
 
-// "· 8 wines" on each button once its stores are loaded; a pick with none is hidden.
-function updatePickCounts() {
-  ALL_PICKS.forEach((p, i) => {
-    const el = document.querySelector(`[data-count="${i}"]`);
-    if (!el) return;
-    if (!pickStores(p).every((s) => LOADED.has(s))) { el.textContent = "· …"; return; }
-    const st = pickState(p);
-    const n = WINES.reduce((k, w) => k + matches(w, null, st), 0);
-    el.textContent = `· ${n.toLocaleString()} ${n === 1 ? "wine" : "wines"}`;
-    el.closest(".pick").hidden = n === 0;
-  });
+function renderMyPicks() {
+  const box = $("my-picks");
+  if (!box) return;
+  const picks = myPicks();
+  // "Scored by Claude or the family" filters on top of the other choices, like every other
+  // button here: tap to switch it on, tap again to switch it off.
+  const fav = pickCount({ ...cloneState(state), ratedOnly: true });
+  box.innerHTML = `<span class="my-pick"><button type="button" class="btn pick-btn" data-finder="ratedOnly" data-v="1" aria-pressed="${state.ratedOnly}">` +
+    `${state.ratedOnly ? "✓" : "⭐"} Scored by Claude or the family <span class="pick-count">· ${fav == null ? "…" : fav.toLocaleString()}</span></button></span>` +
+    picks.map((p, i) => pickButtonHtml(`data-mypick="${i}"`, p.label, pickCount(pickToState(p)),
+      `<button type="button" class="btn btn-mini pick-x" data-unpick="${i}" aria-label="Remove the quick pick ${esc(p.label)}">✕</button>`)).join("");
+  $("finder-save").hidden = picks.length >= MAX_MY_PICKS;
 }
+const updatePickCounts = () => renderMyPicks();
 
-async function applyQuickPick(p) {
-  state = pickState(p);
-  const need = pickStores(p).filter((s) => !LOADED.has(s));
+async function applyPickState(st) {
+  state = st;
+  const need = [...st.sources].filter((s) => ALL_SOURCES.includes(s) && !LOADED.has(s));
   if (need.length) {
     $("result-count").textContent = "Loading the store lists…";
     await Promise.all(need.map(loadSource));
@@ -3112,6 +3695,70 @@ async function applyQuickPick(p) {
   }
   renderAll();
   $("results-h").scrollIntoView({ block: "start" });
+}
+
+function openSavePick(open) {
+  $("finder-save-form").hidden = !open;
+  $("finder-save").hidden = open || myPicks().length >= MAX_MY_PICKS;
+  if (open) { $("finder-save-name").value = ""; $("finder-save-name").focus(); }
+}
+
+function saveMyPick() {
+  const label = $("finder-save-name").value.trim().slice(0, 40);
+  if (!label) { $("finder-save-name").focus(); return; }
+  const picks = myPicks().filter((p) => p.label !== label); // the same name again replaces it
+  picks.push({ label, st: snapshotState() });
+  storeSet(STORE.myPicks, picks.slice(-MAX_MY_PICKS));
+  state.pickLabel = label;
+  openSavePick(false);
+  renderMyPicks();
+  renderResults();
+}
+
+function removeMyPick(i) {
+  const p = myPicks()[i];
+  if (!p || !confirm(`Remove your quick pick “${p.label}”?`)) return;
+  storeSet(STORE.myPicks, myPicks().filter((_, k) => k !== i));
+  renderMyPicks();
+}
+
+// "Find me a wine" folds away to save room; each browser remembers how it was left. Folded, the finder still shows the quick picks and a one-line summary.
+const FOLDS = { finder: "finder-body" };
+function setFold(name, open, remember = true) {
+  const btn = document.querySelector(`[data-fold="${name}"]`), body = $(FOLDS[name]);
+  if (!btn || !body) return;
+  body.hidden = !open;
+  btn.setAttribute("aria-expanded", String(open));
+  btn.textContent = open ? "▴ Hide choices" : "▾ Show choices";
+  btn.closest(".fold").classList.toggle("folded", !open);
+  if (remember) storeSet(STORE.folds, { ...storeGet(STORE.folds, {}), [name]: open });
+  renderFinderSummary();
+}
+
+function renderFinderSummary() {
+  const box = $("finder-summary");
+  if (!box) return;
+  box.hidden = !$("finder-body").hidden;
+  if (box.hidden) return;
+  const made = choicesMade().map(([label]) => esc(label));
+  const n = lastResults.length;
+  const count = `${n.toLocaleString()} ${n === 1 ? "wine" : "wines"} ${esc(storesPhrase())}`;
+  box.innerHTML = made.length
+    ? `<strong>Your choices: ${made.join(" · ")}</strong> <span class="fold-count">— ${count}</span>`
+    : `<strong>No choices made yet:</strong> tap <strong>▾ Show choices</strong> to pick colour, price, style and more. <span class="fold-count">(${count})</span>`;
+}
+
+// "at BC Liquor - LDB", "at BC Liquor - LDB and ZYN", "at 4 stores", "in Cellar 1"
+function storesPhrase(st = state) {
+  if (!st.sources.size) return "(no store ticked)";
+  if (cellarOn(st)) return `in ${[...st.sources].filter((x) => !ALL_SOURCES.includes(x)).join(" and ")}`;
+  const list = storesTicked(st).map(sourceLabel);
+  return list.length <= 2 ? `at ${list.join(" and ")}` : `at ${list.length} stores`;
+}
+
+function openStoreChoices() {
+  if (!$("filter-body").classList.contains("open") && getComputedStyle($("filter-toggle")).display !== "none") $("filter-toggle").click();
+  $("fs-source").scrollIntoView({ block: "start" });
 }
 
 function stepPrice(id, dir) {
@@ -3134,13 +3781,25 @@ function debounce(fn, ms) {
 }
 
 function wireEvents() {
-  renderPicks();
+  renderFinder();
+  const folds = storeGet(STORE.folds, {});
+  for (const name of Object.keys(FOLDS)) setFold(name, folds?.[name] !== false, false);
   wireMyWines();
 
   document.addEventListener("click", (e) => {
     const t = e.target.closest("button, a");
     if (!t) return;
-    if (t.dataset.pick != null) applyQuickPick(ALL_PICKS[+t.dataset.pick]);
+    if (t.dataset.fold) setFold(t.dataset.fold, $(FOLDS[t.dataset.fold]).hidden);
+    else if (t.dataset.finder) setFinder(t.dataset.finder, t.dataset.finder === "price" ? +t.dataset.v : t.dataset.v);
+    else if (t.dataset.mypick) applyPickState(pickToState(myPicks()[+t.dataset.mypick] || {}));
+    else if (t.dataset.unpick) removeMyPick(+t.dataset.unpick);
+    else if (t.dataset.action === "finder-save") openSavePick(true);
+    else if (t.dataset.action === "finder-save-ok") saveMyPick();
+    else if (t.dataset.action === "finder-save-cancel") openSavePick(false);
+    else if (t.dataset.action === "finder-clear") startOver();
+    else if (t.dataset.action === "finder-show") $("results-h").scrollIntoView({ block: "start" });
+    else if (t.dataset.action === "finder-stores") openStoreChoices();
+    else if (t.dataset.action === "empty-fix") applyEmptyFix();
     else if (t.dataset.view) { showView(t.dataset.view); if (t.dataset.focus) $(t.dataset.focus)?.focus(); }
     else if (t.dataset.add) {
       const id = t.dataset.add;
@@ -3157,7 +3816,8 @@ function wireEvents() {
     else if (t.dataset.ew) toggleElsewhere(t);
     else if (t.dataset.target) stepPrice(t.dataset.target, +t.dataset.dir);
     else if (t.dataset.action === "start-over") startOver();
-    else if (t.dataset.action === "goto-ew") {
+    else if (t.dataset.action === "goto-ew") { // "Where can I buy…?" is on the Research a wine page
+      showView("shortlist");
       $("ew-h").scrollIntoView({ block: "start" });
       document.querySelector("#ew-top .ew-q").focus({ preventScroll: true });
     }
@@ -3335,6 +3995,21 @@ function wireEvents() {
       refresh();
     }, 300));
   }
+  document.addEventListener("input", (e) => {
+    if (e.target.id === "ps-lo" || e.target.id === "ps-hi") priceSlide(e.target.id === "ps-lo" ? "lo" : "hi", false);
+  });
+  document.addEventListener("change", (e) => {
+    if (e.target.id === "ps-lo" || e.target.id === "ps-hi") { priceSlide(e.target.id === "ps-lo" ? "lo" : "hi", true); return; }
+    if (e.target.id !== "finder-country") return;
+    state.countries = e.target.value ? new Set([e.target.value]) : new Set();
+    state.pickLabel = "";
+    state.shown = PAGE_SIZE;
+    refresh();
+  });
+  $("finder-save-name").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); saveMyPick(); }
+    else if (e.key === "Escape") openSavePick(false);
+  });
   ["sort", "sort2", "sort3"].forEach((id, i) => $(id).addEventListener("change", () => {
     state.sorts[i] = $(id).value;
     state.shown = PAGE_SIZE;
@@ -3448,7 +4123,7 @@ const numOrNull = (s) => { const n = parseFloat(s); return Number.isFinite(n) ? 
 
 // The trimmed LCBO file (ON-LB-26-trimmed-notes.csv) -> the site's wine records.
 function lcboWines(csv) {
-  return parseCsv(csv.replace(/^﻿/, "")).filter((r) => r.sku && numOrNull(r.price) != null).map((r) => {
+  return fillLcboCountries(parseCsv(csv.replace(/^﻿/, "")).filter((r) => r.sku && numOrNull(r.price) != null).map((r) => {
     const region = r.subregion || (r.region !== "Other" ? r.region : "");
     return {
       id: "lcbo-" + r.sku, source: "LCBO", sku: r.sku, name: r.name, name_raw: r.name,
@@ -3461,7 +4136,25 @@ function lcboWines(csv) {
       sweetness: null, sugar: numOrNull(r.sugar_g_per_l), upc: r.upc || null, url: r.url || null,
       note: r.tasting_note || null, available: true, retailer_scores: null, new_since_last: false,
     };
-  });
+  }));
+}
+
+// About 2,000 LCBO wines have no country but do have a region. Where the other LCBO wines
+// from that region all (nine in ten or more) say the same country, use it.
+function fillLcboCountries(wines) {
+  const seen = {};
+  for (const w of wines) if (w.country && w.region) {
+    const c = (seen[fold(w.region)] ??= {});
+    c[w.country] = (c[w.country] || 0) + 1;
+  }
+  const countryOf = {};
+  for (const [region, c] of Object.entries(seen)) {
+    const total = Object.values(c).reduce((a, b) => a + b, 0);
+    const [country, n] = Object.entries(c).sort((x, y) => y[1] - x[1])[0];
+    if (n / total >= 0.9) countryOf[region] = country;
+  }
+  for (const w of wines) if (!w.country && w.region) w.country = countryOf[fold(w.region)] || null;
+  return wines;
 }
 
 function addLcbo(wines) {
@@ -3472,7 +4165,7 @@ function addLcbo(wines) {
 
 function loadLcbo() {
   return idb("readonly", (s) => s.get("LCBO")).then((wines) => {
-    if (Array.isArray(wines) && wines.length) return addLcbo(wines);
+    if (Array.isArray(wines) && wines.length) return addLcbo(fillLcboCountries(wines)); // lists saved before the fill
     storeSet(STORE.lcbo, null); // the browser's storage was cleared: ask for the code again
     renderSources();
   }).catch(() => { delete loading.LCBO; });
