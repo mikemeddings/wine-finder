@@ -381,7 +381,7 @@ const SORT_KEYS = {
   vintage: { get: (w) => w.vintage, up: "Vintage: oldest first", down: "Vintage: newest first", first: "down" },
   abv: { get: (w) => w.abv, up: "Alcohol %: lowest first", down: "Alcohol %: highest first" },
   // the four steps, then the store's own figure within a step (grams of sugar, or BC's code)
-  sweet: { get: (w) => { const v = wineStyle(w).sweet.v; return v ? SWEET_LEVELS.indexOf(v) * 1000 + (w.sugar ?? (w.sweetness != null ? w.sweetness * 10 : 0)) : null; },
+  sweet: { get: (w) => { const v = wineStyle(w).sweet.v; return v ? SWEET_LEVELS.indexOf(v) * 1000 + estimatedStyle(w).sweetFine : null; },
     up: "Sweetness: driest first", down: "Sweetness: sweetest first", first: "down" },
   // Claude's score for this listing, or for the same wine at another store or in a cellar
   claude: { get: (w) => claudeScore(w) ?? ratedTwin(w)?.claude?.points, up: "Claude's score: lowest first", down: "Claude's score: highest first", first: "down" },
@@ -544,7 +544,7 @@ function cellarCard(w) {
     <h3 class="wine-name">${esc(w.name)}</h3>
     <div class="wine-price wine-price-cellar">In ${esc(w.source)}</div>
     <p class="wine-facts">${typePill(w.type)} ${facts}</p>
-    <p class="wine-detail"><span class="badge badge-cellar">${esc(w.source)}</span>${w.size_ml && w.size_ml !== 750 ? ` ${esc(sizeText(w))}` : ""}</p>
+    <p class="wine-detail"><span class="badge badge-cellar">${esc(w.source)}</span>${w.size_ml && w.size_ml !== 750 ? ` ${esc(sizeText(w))}` : ""} · ${esc(sweetText(w))}</p>
     ${scores ? `<p class="wine-detail mw-scores">${scores}</p>` : ""}${soldAtHtml(w)}${ratingsHtml(w)}${familyLinksHtml(w)}
     <div class="wine-actions">
       ${researchButton(w)}
@@ -2258,8 +2258,9 @@ function cellarMatches(w) {
 
 // The other way round: cellar wine -> the store listings that look like it.
 let storeMatchIndex = null, storeMatchKey = "";
+const storeListsKey = () => `${WINES.length}|${[...LOADED].join()}`; // changes as store lists load
 function storeMatchesOf(cellarId) {
-  const key = `${WINES.length}|${[...LOADED].join()}`;
+  const key = storeListsKey();
   if (!storeMatchIndex || storeMatchKey !== key) {
     storeMatchIndex = new Map();
     storeMatchKey = key;
@@ -2459,8 +2460,21 @@ function styleText_(w) {
 
 // The style a store listing implies, before any Claude answer: {body, tannin, sweet} with
 // each value or null. LCBO's tasting notes, where they say it outright, win over the rules.
+// The measured sugar a store gives for the same wine as this cellar wine: the LCBO's grams a
+// litre first (finer than BC's code), then BC's 0-10 code; a standard bottle first.
+function storeSugar(w) {
+  let best = null;
+  for (const s of storeMatchesOf(w.id)) {
+    const rank = s.sugar != null ? 2 : s.sweetness != null ? 1 : 0;
+    const std = STANDARD_ML.has(s.size_ml) ? 1 : 0;
+    if (rank && (!best || rank > best.rank || (rank === best.rank && std > best.std))) best = { s, rank, std };
+  }
+  return best?.s || null;
+}
+
 function estimatedStyle(w) {
-  if (w._est) return w._est;
+  // a cellar wine's answer can change as store lists load (it borrows their sugar figures)
+  if (w._est && (w.kind !== "cellar" || w._estKey === storeListsKey())) return w._est;
   const t = styleText_(w), note = fold(w.note || "");
   const type = w.type;
   let body = null, tannin = null, sweet = null;
@@ -2484,16 +2498,20 @@ function estimatedStyle(w) {
   if (!body && w.abv) body = w.abv >= 14.5 ? "full" : w.abv <= 12 ? "light" : "medium";
   // sweetness: the store's own figure first (BC's 0-10 sugar code, the LCBO's grams of sugar
   // a litre), measured; otherwise estimated from the type and the words in the name
-  let sweetHow = "estimated", sweetMeasured = false;
-  if (w.sweetness != null) { sweet = sweetFromCode(w.sweetness); sweetHow = `BC sugar code ${w.sweetness} of 10`; sweetMeasured = true; }
-  else if (w.sugar != null) { sweet = sweetFromSugar(w.sugar); sweetHow = `LCBO: ${+(+w.sugar).toFixed(1)} g/L sugar`; sweetMeasured = true; }
+  // A cellar wine has no figure of its own: it borrows the one a store gives for the same wine.
+  let sweetHow = "estimated", sweetMeasured = false, sweetFine = 0;
+  const fig = w.kind === "cellar" ? storeSugar(w) : w;
+  const of = fig && fig !== w ? `, ${fig.vintage ? `${fig.vintage} vintage` : "store's listing"}` : "";
+  if (fig?.sugar != null) { sweet = sweetFromSugar(fig.sugar); sweetHow = `LCBO: ${+(+fig.sugar).toFixed(1)} g/L sugar${of}`; sweetMeasured = true; sweetFine = +fig.sugar; }
+  else if (fig?.sweetness != null) { sweet = sweetFromCode(fig.sweetness); sweetHow = `BC sugar code ${fig.sweetness} of 10${of}`; sweetMeasured = true; sweetFine = fig.sweetness * 10; }
   else if (type === "Fortified") sweet = DRY_FORTIFIED.test(t) ? "dry" : "sweet";
   else if (type === "Dessert" || SWEET_WORDS.test(t)) sweet = "sweet";
   else if (MEDIUM_SWEET_WORDS.test(t)) sweet = "medium-sweet";
   else if (OFFDRY_WORDS.test(t)) sweet = "off-dry";
   else if (type === "Red" || type === "Rosé" || type === "Sparkling" || type === "White") sweet = "dry";
   const fruity = sweet === "sweet" || sweet === "medium-sweet" ? false : fruityEstimate(w, t, note, tannin);
-  return (w._est = { body, tannin: type === "Red" ? tannin : null, sweet, sweetHow, sweetMeasured, fruity });
+  if (w.kind === "cellar") w._estKey = storeListsKey();
+  return (w._est = { body, tannin: type === "Red" ? tannin : null, sweet, sweetHow, sweetMeasured, sweetFine, fruity });
 }
 
 // Claude's own answer for this wine (its own listing, the same wine at another store, or
@@ -2525,8 +2543,9 @@ function readiness(w, est, cl) {
 // else the estimate. src says which: "Claude" or "estimate".
 function wineStyle(w) {
   ratedTwin(w); // brings ratedNamesVer up to date
-  if (w._look && w._lookVer === ratedNamesVer) return w._look;
-  w._lookVer = ratedNamesVer;
+  const ver = `${ratedNamesVer}|${w.kind === "cellar" ? storeListsKey() : ""}`;
+  if (w._look && w._lookVer === ver) return w._look;
+  w._lookVer = ver;
   return (w._look = wineStyleNow(w));
 }
 function wineStyleNow(w) {
