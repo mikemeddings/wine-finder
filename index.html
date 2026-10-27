@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-27.25">
+<link rel="stylesheet" href="app.css?v=2026-10-27.26">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -539,10 +539,11 @@
       <p><strong>Go back to the Claude tab</strong>, click the <strong>copy icon</strong> (two folders on top of each other, on the far left of the grey row under Claude's answer), then come back to this tab. It's found by itself.</p>
       <img class="save-steps-img" src="images/save-steps.png?v=3" alt="To save Claude's research, 2 clicks: first click the copy icon (two folders on top of each other, on the far left) under Claude's answer, then click the 💾 Save these ratings to my Wine Finder link.">
       <button type="button" class="btn btn-primary" id="save-check">Check for Claude's write-up</button>
+      <!-- only while the write-up hasn't been found, so it never suggests a problem once it has -->
+      <details><summary>Copied it but it isn't found? Paste it here</summary>
+        <textarea id="save-writeup-text" placeholder="Click here and press Ctrl+V to paste Claude's answer."></textarea>
+      </details>
     </div>
-    <details><summary>Copied it but it isn't found? Paste it here</summary>
-      <textarea id="save-writeup-text" placeholder="Click here and press Ctrl+V to paste Claude's answer."></textarea>
-    </details>
   </div>
   <div id="save-name-row" class="save-name-row" hidden>
     <label for="save-name">Your first name <span class="hint">(asked once, so the family knows who did the research)</span></label>
@@ -615,6 +616,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-27.25"></script>
+<script src="app.js?v=2026-10-27.26"></script>
 </body>
 </html>
