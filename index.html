@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-27.21">
+<link rel="stylesheet" href="app.css?v=2026-10-27.22">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -93,8 +93,9 @@
           <div class="mini-row">
             <button type="button" class="btn btn-mini" id="country-all">Select all</button>
             <button type="button" class="btn btn-mini" id="country-none">Clear all</button>
+            <button type="button" class="btn btn-mini btn-out" id="country-out" aria-pressed="false">Leave out countries</button>
           </div>
-          <p class="hint">No country ticked means every country is shown.</p>
+          <p class="hint" id="country-hint">No country ticked means every country is shown.</p>
           <div id="country-list" class="country-list"></div>
         </fieldset>
 
@@ -298,7 +299,7 @@
     <ul>
       <li><strong>Search words</strong>: a name, producer, region or grape.</li>
       <li><strong>Sold by</strong>: BC Liquor – LDB, the Calgary stores BSW Liquor and ZYN (check shipping to BC), Lucullus and Weinshop365 in Switzerland (prices in Swiss francs as each shop shows them, Lucullus without VAT and Weinshop365 with it, plus an approximate Canadian-dollar price), and LCBO (Ontario). LCBO is a private family list: the first time you tick it, enter the unlock code from the family email (or click the link in that email). After that it stays on that browser.</li>
-      <li><strong>Country</strong>, <strong>Type of wine</strong>, <strong>Price</strong> (two sliders, lowest and highest, with a live count) and <strong>Sweetness</strong>: Dry, Off-dry, Medium-sweet or Sweet, the same four steps as in Find me a wine (choosing in one place chooses in both). BC Liquor's sugar code (0–10) and the LCBO's grams of sugar a litre decide it where the store gives them; each wine card says which, for example “Off-dry (LCBO: 8 g/L sugar)” or “Dry (estimated)”. Untick <strong>Include wines whose sweetness is estimated</strong> to see only wines with a measured figure.</li>
+      <li><strong>Country</strong> (tick the ones you want; or press <strong>Leave out countries</strong> and tick the ones you don't want, such as USA, which then show an ✕), <strong>Type of wine</strong>, <strong>Price</strong> (two sliders, lowest and highest, with a live count) and <strong>Sweetness</strong>: Dry, Off-dry, Medium-sweet or Sweet, the same four steps as in Find me a wine (choosing in one place chooses in both). BC Liquor's sugar code (0–10) and the LCBO's grams of sugar a litre decide it where the store gives them; each wine card says which, for example “Off-dry (LCBO: 8 g/L sugar)” or “Dry (estimated)”. Untick <strong>Include wines whose sweetness is estimated</strong> to see only wines with a measured figure.</li>
     </ul>
     <p>The <strong>Showing:</strong> line sums up what you've chosen. <strong>Sort by</strong> puts the list in order. <strong>Best rated first</strong> (the usual order; ratings come from Claude, CellarTracker and the family, never from the stores) puts wines Claude has scored first (including a score given to the same wine at another store), then CellarTracker scores, then the family's own, then ZYN's 90+ list, then everything else, cheapest first. Other choices include price, name, country, vintage, alcohol, sweetness, Claude's score, my rating (on this computer), family members' ratings (real people only), CellarTracker score and “In the family's cellars first”, each either way round. The two <strong>then by</strong> boxes break ties: for example Country, then Best rated first, then Price low to high. <strong>CellarTracker score</strong> is the cellar owner's own score on CellarTracker, or the CellarTracker community score when they haven't given one.</p>
     <p>Each <strong>wine card</strong> shows the price, the store, the alcohol and sweetness, and any family ratings. Its buttons:</p>
@@ -614,6 +615,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-27.21"></script>
+<script src="app.js?v=2026-10-27.22"></script>
 </body>
 </html>

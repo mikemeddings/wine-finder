@@ -308,6 +308,7 @@ function defaultState() {
   return {
     sources: new Set(["BC Liquor"]),
     countries: new Set(),
+    countryOut: false, // true: the ticked countries are left out ("all countries except USA")
     countryQ: "",
     types: new Set(),
     priceFrom: null,
@@ -343,7 +344,7 @@ function matches(w, skip, st = state) {
     const stores = storesTicked(st);
     if (stores.length && !storeMatchesOf(w.id).some((s) => stores.includes(s.source))) return false;
   }
-  if (skip !== "country" && st.countries.size && !st.countries.has(w.country)) return false;
+  if (skip !== "country" && st.countries.size && st.countries.has(w.country) === st.countryOut) return false;
   if (skip !== "type" && st.types.size && !st.types.has(w.type)) return false;
   if (st.priceFrom != null || st.priceTo != null) {
     const p = priceOf(w, st);
@@ -491,6 +492,14 @@ function renderCountries() {
         return checkbox("country", n, state.countries.has(n), esc(n), c, c ? "" : " zero");
       }).join("")
     : `<p class="hint">No country matches “${esc(state.countryQ)}”.</p>`;
+  // "Leave out countries": the same boxes, but a tick becomes an ✕ and means "not this one"
+  $("country-list").classList.toggle("leaving-out", state.countryOut);
+  $("country-out").setAttribute("aria-pressed", String(state.countryOut));
+  $("country-out").textContent = state.countryOut ? "✓ Leaving out countries" : "Leave out countries";
+  $("country-all").hidden = state.countryOut;
+  $("country-hint").textContent = state.countryOut
+    ? "Tick a country to leave it out (it shows an ✕); every other country is shown. Press the button again to go back to choosing."
+    : "No country ticked means every country is shown.";
 }
 
 // Every country the chosen sources carry (plus any ticked), even when other
@@ -619,7 +628,8 @@ function renderResults() {
   const parts = [];
   if (state.q) parts.push(`words “${esc(state.q)}”`);
   if (state.countries.size)
-    parts.push(state.countries.size > 6 ? `${state.countries.size} countries` : [...state.countries].map(esc).join(", "));
+    parts.push((state.countryOut ? "all countries except " : "") +
+      (state.countries.size > 6 ? `${state.countries.size} countries` : [...state.countries].map(esc).join(state.countryOut ? " and " : ", ")));
   if (state.types.size) parts.push([...state.types].map(esc).join(", "));
   if (state.priceFrom != null && state.priceTo != null) parts.push(`${money(state.priceFrom)} to ${money(state.priceTo)}`);
   else if (state.priceTo != null) parts.push(`up to ${money(state.priceTo)}`);
@@ -675,7 +685,7 @@ function choicesMade(st = state) {
   if (st.types.size) out.push([[...st.types].join(" or "), FINDER_CLEAR.colour]);
   for (const key of ["body", "tannin", "sweetStyle"]) if (st[key].size) out.push([[...st[key]].map((v) => label(key, v)).join(" or "), FINDER_CLEAR[key]]);
   if (st.continent) out.push([st.continent, FINDER_CLEAR.continent]);
-  if (st.countries.size) out.push([st.countries.size > 2 ? `${st.countries.size} countries` : [...st.countries].join(" or "), (x) => { x.countries = new Set(); }]);
+  if (st.countries.size) out.push([(st.countryOut ? "leaving out " : "") + (st.countries.size > 2 ? `${st.countries.size} countries` : [...st.countries].join(st.countryOut ? " and " : " or ")), (x) => { x.countries = new Set(); }]);
   if (st.wellRated) out.push(["Only well rated", FINDER_CLEAR.wellRated]);
   if (st.fruity) out.push(["Fruity & ripe", FINDER_CLEAR.fruity]);
   if (st.readyNow) out.push(["Ready to drink now", FINDER_CLEAR.readyNow]);
@@ -3634,17 +3644,17 @@ function countrySelectHtml() {
   const n = (c) => counts.get(c) || 0;
   const list = [...all].filter((c) => c && c !== "Country not stated" && (!state.continent || CONTINENT_OF[c] === state.continent))
     .sort((a, b) => (n(b) > 0) - (n(a) > 0) || a.localeCompare(b));
-  const one = state.countries.size === 1 ? [...state.countries][0] : "";
+  const one = state.countries.size === 1 && !state.countryOut ? [...state.countries][0] : "";
   if (one && !list.includes(one)) list.unshift(one);
   return `<label class="finder-country"><span class="visually-hidden">Country</span><select id="finder-country">
-    <option value="">${state.countries.size > 1 ? `${state.countries.size} countries` : "Any country"}</option>` +
+    <option value="">${state.countryOut && state.countries.size ? `All but ${state.countries.size} ${state.countries.size === 1 ? "country" : "countries"}` : state.countries.size > 1 ? `${state.countries.size} countries` : "Any country"}</option>` +
     list.map((c) => `<option value="${esc(c)}"${c === one ? " selected" : ""}>${esc(c)} (${(counts.get(c) || 0).toLocaleString()})</option>`).join("") +
     `</select></label>`;
 }
 
 // ---- Quick picks: "Scored by Claude or the family" and each person's own -----------------
 // Saved picks live on this computer only (localStorage), so Dad's are his and Jon's are his.
-const PICK_KEYS = ["countries", "types", "sweet", "priceFrom", "priceTo", "notRated", "bottleOnly", "q",
+const PICK_KEYS = ["countries", "countryOut", "types", "sweet", "priceFrom", "priceTo", "notRated", "bottleOnly", "q",
   "body", "tannin", "sweetStyle", "continent", "wellRated", "ratedOnly", "readyNow", "fruity", "sorts", "sources"];
 const myPicks = () => { const p = storeGet(STORE.myPicks, []); return Array.isArray(p) ? p : []; };
 
@@ -3906,6 +3916,12 @@ function wireEvents() {
     refresh();
   });
   $("country-none").addEventListener("click", () => { state.countries.clear(); state.shown = PAGE_SIZE; refresh(); });
+  $("country-out").addEventListener("click", () => { // switching what a tick means starts the list afresh
+    state.countryOut = !state.countryOut;
+    state.countries.clear();
+    state.shown = PAGE_SIZE;
+    refresh();
+  });
 
   $("show-more").addEventListener("click", () => { state.shown += PAGE_SIZE; renderResults(); });
   $("filter-toggle").addEventListener("click", () => {
@@ -3989,6 +4005,7 @@ function wireEvents() {
     if (m) { priceSlide(m[2], true, m[1]); return; }
     if (e.target.id !== "finder-country") return;
     state.countries = e.target.value ? new Set([e.target.value]) : new Set();
+    state.countryOut = false;
     state.pickLabel = "";
     state.shown = PAGE_SIZE;
     refresh();

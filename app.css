@@ -607,3 +607,10 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .no-price-note { font-weight: 700; color: var(--wine-dark); }
 .sweet-name { display: inline-flex; flex-direction: column; line-height: 1.25; }
 .sweet-name small { font-size: 0.9rem; color: var(--muted); }
+/* "Leave out countries": a ticked box shows a red ✕ and the name is struck through. */
+.btn-out[aria-pressed="true"] { background: var(--danger-tint); border-color: var(--danger); color: var(--danger); }
+.country-list.leaving-out input[type="checkbox"] { appearance: none; -webkit-appearance: none; width: 1.6rem; height: 1.6rem;
+  border: 2px solid var(--line); border-radius: 0.3rem; background: #fff; display: inline-grid; place-content: center; cursor: pointer; }
+.country-list.leaving-out input[type="checkbox"]:checked { border-color: var(--danger); background: var(--danger-tint); }
+.country-list.leaving-out input[type="checkbox"]:checked::before { content: "✕"; color: var(--danger); font-weight: 700; font-size: 1.1rem; line-height: 1; }
+.country-list.leaving-out .check:has(input:checked) { background: var(--danger-tint); border-color: var(--danger); text-decoration: line-through; }
