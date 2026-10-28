@@ -2291,9 +2291,19 @@
    "claude": {
     "points": 84,
     "vintage": "NV",
-    "note": "Wine Spectator 85 NV",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "Wine Spectator 85",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "short",
+    "pair": "grilled sausages burgers",
+    "grapes": "Moreto Castelao Trincadeira",
+    "drinkFrom": 2025,
+    "drinkTo": 2027,
+    "from": "Mike"
    }
   },
   "lcbo-48146": {
@@ -2302,8 +2312,17 @@
     "points": null,
     "vintage": 2024,
     "note": "No reviews found",
-    "date": "2026-10-26",
-    "quick": true
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "light",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "short",
+    "pair": "grilled sardines charcuterie",
+    "drinkFrom": 2025,
+    "drinkTo": 2026,
+    "from": "Mike"
    }
   },
   "lcbo-42826": {
@@ -2312,8 +2331,18 @@
     "points": null,
     "vintage": 2022,
     "note": "No reviews found",
-    "date": "2026-10-26",
-    "quick": true
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "lamb chops beef stew",
+    "grapes": "Tinta Roriz Touriga Franca",
+    "drinkFrom": 2024,
+    "drinkTo": 2028,
+    "from": "Mike"
    }
   },
   "lcbo-43763": {
@@ -2322,8 +2351,17 @@
     "points": null,
     "vintage": "NV",
     "note": "No reviews found",
-    "date": "2026-10-26",
-    "quick": true
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "off-dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled red meats mature cheese",
+    "drinkFrom": 2025,
+    "drinkTo": 2027,
+    "from": "Mike"
    }
   },
   "lcbo-32793": {
@@ -2346,11 +2384,21 @@
   "lcbo-89912": {
    "name": "Loios Red",
    "claude": {
-    "points": 85,
+    "points": 84,
     "vintage": 2020,
-    "note": "WineAlign 85 2020, community says sweeter",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "WineAlign 85 Szabo slightly sweet",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "off-dry",
+    "fruity": true,
+    "finish": "short",
+    "pair": "barbecue ribs pizza tomato pasta",
+    "grapes": "Aragonez Trincadeira Castelao",
+    "drinkFrom": 2025,
+    "drinkTo": 2027,
+    "from": "Mike"
    }
   },
   "lcbo-43981": {
@@ -2359,8 +2407,11 @@
     "points": null,
     "vintage": "NV",
     "note": "No reviews found",
-    "date": "2026-10-26",
-    "quick": true
+    "date": "2026-10-28",
+    "quick": true,
+    "pair": "grilled steak burgers",
+    "grapes": "Touriga Syrah Alicante Bouschet",
+    "from": "Mike"
    }
   },
   "lcbo-34812": {
@@ -2369,28 +2420,49 @@
     "points": null,
     "vintage": 2021,
     "note": "No reviews found",
-    "date": "2026-10-26",
-    "quick": true
+    "date": "2026-10-28",
+    "quick": true,
+    "from": "Mike"
    }
   },
   "lcbo-534586": {
    "name": "Lab Red Lisboa VR",
    "claude": {
-    "points": 85,
+    "points": 86,
     "vintage": 2015,
-    "note": "Community 85 2015, Waitrose shoppers 4.5 of 5",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "MacLean 85 Waitrose users 4.5 of 5",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "off-dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "burgers lamb kebabs",
+    "grapes": "Castelao Syrah Tinta Roriz",
+    "drinkFrom": 2025,
+    "drinkTo": 2027,
+    "from": "Mike"
    }
   },
   "lcbo-532358": {
    "name": "Julia Florista Red",
    "claude": {
-    "points": 83,
+    "points": 84,
     "vintage": 2016,
-    "note": "Two community scores, 88 and 78, 2016",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "Staples 88 Lafleur 78",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "off-dry",
+    "fruity": true,
+    "finish": "short",
+    "pair": "burgers meat casseroles",
+    "grapes": "Castelao Tinta Roriz Trincadeira",
+    "drinkFrom": 2025,
+    "drinkTo": 2027,
+    "from": "Mike"
    }
   },
   "lcbo-18998": {
@@ -2438,19 +2510,38 @@
    "claude": {
     "points": 85,
     "vintage": 2016,
-    "note": "WineAlign 85 2016 (Thurlow)",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "Thurlow 85 light to medium",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "light",
+    "tannin": "soft",
+    "sweet": "off-dry",
+    "fruity": true,
+    "finish": "short",
+    "pair": "lasagna pizza",
+    "grapes": "Tinta Roriz blend",
+    "drinkFrom": 2025,
+    "drinkTo": 2027,
+    "from": "Mike"
    }
   },
   "lcbo-146449": {
    "name": "Passion Of Portugal Red",
    "claude": {
     "points": 86,
-    "vintage": 2017,
-    "note": "WineAlign 87 2017, community 86-87",
-    "date": "2026-10-26",
-    "quick": true
+    "vintage": "NV",
+    "note": "Thurlow 87 community 86-87",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "short",
+    "pair": "pepperoni pizza grilled sausages",
+    "drinkFrom": 2025,
+    "drinkTo": 2027,
+    "from": "Mike"
    }
   },
   "lcbo-620658": {
@@ -2458,9 +2549,19 @@
    "claude": {
     "points": 85,
     "vintage": 2016,
-    "note": "MacLean 86 2016, 84 2013",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "MacLean 86 2016 84 2013",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "hamburgers prime rib",
+    "grapes": "Cabernet Sauvignon Tinta Roriz",
+    "drinkFrom": 2025,
+    "drinkTo": 2027,
+    "from": "Mike"
    }
   },
   "lcbo-26804": {
@@ -2478,39 +2579,79 @@
    "claude": {
     "points": 86,
     "vintage": 2022,
-    "note": "Gismondi 86 2022, WineAlign 87 2017",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "Gismondi 86 Thurlow 87 for 2017",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "light",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "short",
+    "pair": "roast chicken bacalhau mild cheeses",
+    "grapes": "Tinta Roriz Touriga Alfrocheiro",
+    "drinkFrom": 2024,
+    "drinkTo": 2026,
+    "from": "Mike"
    }
   },
   "lcbo-25257": {
    "name": "Guarda Rios Red 2022",
    "claude": {
-    "points": 87,
+    "points": 88,
     "vintage": 2022,
-    "note": "WineAlign 87 2022, MacLean 88 2021",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "JS 90 Lawrason 87 users 86",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled chorizo braised beef tomato pasta",
+    "grapes": "Aragonez Syrah Trincadeira",
+    "drinkFrom": 2024,
+    "drinkTo": 2027,
+    "from": "Mike"
    }
   },
   "lcbo-286195": {
    "name": "JP Azeitão Red",
    "claude": {
-    "points": 86,
-    "vintage": 2015,
-    "note": "WineAlign 87 2015, 86 2010",
-    "date": "2026-10-26",
-    "quick": true
+    "points": 84,
+    "vintage": "NV",
+    "note": "Parker 83 soft fruity consumer notes",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "pork kebabs pizza grilled sausages",
+    "grapes": "Castelao Aragonez Syrah",
+    "drinkFrom": 2025,
+    "drinkTo": 2027,
+    "from": "Mike"
    }
   },
   "lcbo-239046": {
    "name": "Quatro Ventos Douro",
    "claude": {
-    "points": 83,
+    "points": 84,
     "vintage": 2018,
-    "note": "Decanter WWA 83 2018 (Commended)",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "Decanter WWA 83 IWSC 16 of 20",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "roast beef grilled steak",
+    "grapes": "Tinta Roriz Touriga Franca",
+    "drinkFrom": 2025,
+    "drinkTo": 2028,
+    "from": "Mike"
    }
   },
   "lcbo-37997": {
@@ -2526,21 +2667,41 @@
   "lcbo-30868": {
    "name": "Esporão Monte Velho Red",
    "claude": {
-    "points": 86,
-    "vintage": 2019,
-    "note": "WE 86 2019, Falstaff 89 2014",
-    "date": "2026-10-26",
-    "quick": true
+    "points": 87,
+    "vintage": 2022,
+    "note": "Falstaff 89 2014 Joanna Simon pick 2022",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled pork chops charcuterie barbecue",
+    "grapes": "Aragonez Trincadeira Touriga Syrah",
+    "drinkFrom": 2024,
+    "drinkTo": 2027,
+    "from": "Mike"
    }
   },
   "lcbo-158741": {
    "name": "Alianca Bairrada Reserva",
    "claude": {
-    "points": 86,
+    "points": 87,
     "vintage": 2018,
-    "note": "WineAlign 87 2018, 85 2008",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "Thurlow 87 Haynes 88",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "roast suckling pig lamb stew",
+    "grapes": "Baga Tinta Roriz",
+    "drinkFrom": 2024,
+    "drinkTo": 2028,
+    "from": "Mike"
    }
   },
   "lcbo-522292": {
@@ -2570,6 +2731,136 @@
     "vintage": "NV",
     "note": "Juicy mountain Agiorgitiko great value check vintage",
     "date": "2026-10-27"
+   }
+  },
+  "lcbo-37229": {
+   "name": "lcbo-37229",
+   "claude": {
+    "points": null,
+    "vintage": "NV",
+    "note": "No reviews found",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled fish seafood white meats",
+    "grapes": "Fernao Pires Arinto Moscatel",
+    "drinkFrom": 2025,
+    "drinkTo": 2026,
+    "from": "Mike"
+   }
+  },
+  "lcbo-532341": {
+   "name": "lcbo-532341",
+   "claude": {
+    "points": 86,
+    "vintage": "NV",
+    "note": "MacLean 87",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "light",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "short",
+    "pair": "shrimp grilled white fish",
+    "grapes": "Fernao Pires blend",
+    "drinkFrom": 2025,
+    "drinkTo": 2026,
+    "from": "Mike"
+   }
+  },
+  "lcbo-42822": {
+   "name": "lcbo-42822",
+   "claude": {
+    "points": null,
+    "vintage": 2023,
+    "note": "No reviews found",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "short",
+    "pair": "grilled shrimp chicken salad",
+    "drinkFrom": 2024,
+    "drinkTo": 2026,
+    "from": "Mike"
+   }
+  },
+  "lcbo-42434": {
+   "name": "lcbo-42434",
+   "claude": {
+    "points": null,
+    "vintage": "NV",
+    "note": "No reviews found",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "light",
+    "sweet": "off-dry",
+    "fruity": true,
+    "finish": "short",
+    "pair": "salads grilled shrimp",
+    "drinkFrom": 2025,
+    "drinkTo": 2026,
+    "from": "Mike"
+   }
+  },
+  "lcbo-33320": {
+   "name": "lcbo-33320",
+   "claude": {
+    "points": 82,
+    "vintage": 2021,
+    "note": "London Wine Comp 75 bronze",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled white fish seafood",
+    "grapes": "Roupeiro Arinto blend",
+    "drinkFrom": 2025,
+    "drinkTo": 2026,
+    "from": "Mike"
+   }
+  },
+  "lcbo-92114": {
+   "name": "lcbo-92114",
+   "claude": {
+    "points": 85,
+    "vintage": "NV",
+    "note": "WE Best Buy Voss Sabor do Ano",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "light",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "short",
+    "pair": "antipasti grilled white fish",
+    "grapes": "Roupeiro Rabo de Ovelha",
+    "drinkFrom": 2025,
+    "drinkTo": 2026,
+    "from": "Mike"
+   }
+  },
+  "lcbo-33321": {
+   "name": "lcbo-33321",
+   "claude": {
+    "points": null,
+    "vintage": 2020,
+    "note": "No reviews found",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "light",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "short",
+    "pair": "grilled fish tapas",
+    "drinkFrom": 2021,
+    "drinkTo": 2023,
+    "from": "Mike"
    }
   }
  }
