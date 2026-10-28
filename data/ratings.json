@@ -8,7 +8,8 @@
     "vintage": 2021,
     "note": "Organic Pirque Cabernet cedar and bay leaf",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-313346": {
    "name": "Cabernet Sauvignon - Montgras Intriga Maipo",
@@ -17,7 +18,8 @@
     "vintage": 2021,
     "note": "Old vine Maipo Cab solid value",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-845321": {
    "name": "Chilean Red - Emiliana Coyam Colchagua",
@@ -26,7 +28,8 @@
     "vintage": 2022,
     "note": "Biodynamic Colchagua blend the standout",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-681971": {
    "name": "Pinot Noir - Ovorra Reserva Casablanca Valley",
@@ -35,7 +38,8 @@
     "vintage": "NV",
     "note": "No reviews found",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-708258": {
    "name": "Syrah - Mayu Don Mauro Vineyard Gran Reserva",
@@ -44,7 +48,8 @@
     "vintage": 2021,
     "note": "Peppery cool climate Elqui Syrah",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-322586": {
    "name": "Cabernet Sauvignon - Montes Alpha Colchagua Valley",
@@ -53,7 +58,8 @@
     "vintage": 2022,
     "note": "Classic Colchagua Cab reliable choice",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-337238": {
    "name": "Cabernet Sauvignon - Concha Y Toro Marques De Casa Concha 20",
@@ -62,7 +68,8 @@
     "vintage": 2022,
     "note": "Polished Puente Alto Cab",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-241362": {
    "name": "Red Blend - Santa Carolina 150 Anniversary",
@@ -71,7 +78,8 @@
     "vintage": 2022,
     "note": "Smooth anniversary blend crowd pleaser",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-274707": {
    "name": "Cabernet Sauvignon - Santa Rita Cabernario No. 3",
@@ -80,7 +88,8 @@
     "vintage": "NV",
     "note": "No critic reviews found",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-275824": {
    "name": "Cabernet Sauvignon - O-61",
@@ -89,7 +98,8 @@
     "vintage": "NV",
     "note": "No critic reviews found",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-62235": {
    "name": "Alentejano - Casa Santos Lima Quid Pro Quo",
@@ -98,7 +108,8 @@
     "vintage": 2021,
     "note": "Plush juicy everyday Alentejo red great value",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-364492": {
    "name": "Lisboa Red Blend - Casa Santos Lima Traditional",
@@ -107,7 +118,8 @@
     "vintage": 2023,
     "note": "Bright red fruit Lisboa blend strong value",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-192810": {
    "name": "Lisboa - Casa Santos Lima Coccinela Organic",
@@ -116,7 +128,8 @@
     "vintage": "NV",
     "note": "No critic reviews found",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-95610": {
    "name": "Douro - Quinta Dos Aciprestes",
@@ -125,7 +138,8 @@
     "vintage": 2022,
     "note": "Classic old-vine Douro red solid value",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-188646": {
    "name": "Beira Atlantico Baga Touriga Nacional - Luis Pato 2015",
@@ -134,7 +148,8 @@
     "vintage": 2015,
     "note": "Earthy mature Baga blend decant drink now",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-303675": {
    "name": "Douro - Iron Maiden Darkest Red",
@@ -143,7 +158,8 @@
     "vintage": 2021,
     "note": "Dark spicy Douro red port-barrel richness",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-466709": {
    "name": "Douro - Quinta Das Carvalhas",
@@ -152,7 +168,8 @@
     "vintage": 2021,
     "note": "Polished Douro estate red best of list",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-25262": {
    "name": "Setubal - Jose Maria Da Fonseca Periquita",
@@ -161,7 +178,8 @@
     "vintage": "NV",
     "note": "Classic Castelao reliable value for decades",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-14977": {
    "name": "Dao - Grao Vasco",
@@ -170,7 +188,8 @@
     "vintage": 2022,
     "note": "Light soft unoaked Dao for everyday",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-273662": {
    "name": "Tejo Reserva - Fiuza Escriba",
@@ -179,7 +198,8 @@
     "vintage": 2022,
     "note": "Best value here give it air",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-736165": {
    "name": "Lisboa - Casa Santos Lima Lab",
@@ -188,7 +208,8 @@
     "vintage": 2023,
     "note": "Soft juicy crowd pleaser drink young",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-114322": {
    "name": "Douro - Porca De Murca",
@@ -197,7 +218,8 @@
     "vintage": 2023,
     "note": "Authentic rustic Douro for grilled meat",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-167370": {
    "name": "Alentejano - Segredos De Sao Miguel",
@@ -206,7 +228,8 @@
     "vintage": "NV",
     "note": "Smooth easy Alentejo thin critic coverage",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-966986": {
    "name": "Douro - Vicente Faria Animus",
@@ -215,7 +238,8 @@
     "vintage": 2021,
     "note": "Solid Douro blend decant an hour",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-498978": {
    "name": "Lisboa - Mula Velha",
@@ -224,7 +248,8 @@
     "vintage": 2020,
     "note": "Juicy everyday Lisboa red nothing more",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-384651": {
    "name": "Douro - Quinta Do Vale Meao 2020",
@@ -233,7 +258,8 @@
     "vintage": 2020,
     "note": "Iconic Douro Superior built for decades",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-284032": {
    "name": "Dao Reserva - Vinha Paz Othon 2019",
@@ -242,7 +268,8 @@
     "vintage": 2019,
     "note": "Savoury old-vine Dao decant first",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-284024": {
    "name": "Dao Reserva - Vinha Paz 2021",
@@ -251,7 +278,8 @@
     "vintage": 2021,
     "note": "No 2021 reviews found",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-106674": {
    "name": "Douro - Quinta Do Vale Meao Meandro",
@@ -260,7 +288,8 @@
     "vintage": 2022,
     "note": "Great value second wine check vintage",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "bcl-284029": {
    "name": "Dao - Vinha Paz Red Blend 2022",
@@ -269,7 +298,8 @@
     "vintage": 2022,
     "note": "No reviews found",
     "date": "2026-10-24"
-   }
+   },
+   "type": "Red"
   },
   "cellar-c1-154": {
    "name": "Domaine Pierre Usseglio & Fils Châteauneuf-du-Pape Réserve des Deux Frères 2016",
@@ -1837,7 +1867,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2035,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-638213": {
    "name": "Carvalhas Vinhas Velhas 2015",
@@ -1857,7 +1888,8 @@
     "drinkFrom": 2020,
     "drinkTo": 2035,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-683128": {
    "name": "Casa Ferreirinha Quinta da Leda 2021",
@@ -1877,7 +1909,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2036,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-18383": {
    "name": "Ex Aequo 2021",
@@ -1897,7 +1930,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2033,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-47348": {
    "name": "Difinido Dao Carlos Raposo Vinhos 2021",
@@ -1917,7 +1951,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2031,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-371773": {
    "name": "Quinta do Vallado Reserva Field Blend 2021",
@@ -1937,7 +1972,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2034,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-26946": {
    "name": "Quadrus Grande Reserva 2017",
@@ -1947,7 +1983,8 @@
     "note": "Only unscored critic note found",
     "date": "2026-10-26",
     "quick": true
-   }
+   },
+   "type": "Red"
   },
   "lcbo-47337": {
    "name": "Touriga Nacional Letra A Douro Macanita 2022",
@@ -1967,7 +2004,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2033,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-46578": {
    "name": "Marques De Alvito Reserva Red Fiuza Bright 2017",
@@ -1987,7 +2025,8 @@
     "drinkFrom": 2023,
     "drinkTo": 2032,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-46837": {
    "name": "Savedra Grande Reserva 2020",
@@ -2007,7 +2046,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2032,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-632166": {
    "name": "Herdade da Farizoa Grande Reserva 2013",
@@ -2017,7 +2057,8 @@
     "note": "WA note found, score not shown",
     "date": "2026-10-26",
     "quick": true
-   }
+   },
+   "type": "Red"
   },
   "lcbo-25245": {
    "name": "Quinta da Falorca Touriga Nacional 2015",
@@ -2037,7 +2078,8 @@
     "drinkFrom": 2022,
     "drinkTo": 2035,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-47336": {
    "name": "Douro Os Caniveis Macanita Vinhos Lda 2022",
@@ -2057,7 +2099,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2033,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-18756": {
    "name": "Quinta do Vallado Sousão 2020",
@@ -2077,7 +2120,8 @@
     "drinkFrom": 2023,
     "drinkTo": 2032,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-31589": {
    "name": "Julia Kemper Red Reserva 2011",
@@ -2094,7 +2138,8 @@
     "pair": "roast beef",
     "grapes": "Touriga Roriz Alfrocheiro Jaen",
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-460790": {
    "name": "Monte da Ravasqueira Vinha das Romãs 2021",
@@ -2114,7 +2159,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2030,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-538546": {
    "name": "Herdade de São Miguel Reserva 2023",
@@ -2134,7 +2180,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2030,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-45794": {
    "name": "Madre de Agua Vinha Velhas Tinto 2017",
@@ -2154,7 +2201,8 @@
     "drinkFrom": 2021,
     "drinkTo": 2030,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-42453": {
    "name": "Quinta da Foz Reserva 2021",
@@ -2164,7 +2212,8 @@
     "note": "JS reviewed, score paywalled",
     "date": "2026-10-26",
     "quick": true
-   }
+   },
+   "type": "Red"
   },
   "lcbo-294116": {
    "name": "Quinta do Crasto Old Vines Reserva 2015",
@@ -2184,7 +2233,8 @@
     "drinkFrom": 2020,
     "drinkTo": 2030,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-46076": {
    "name": "Constantino Ramos Juca Tinto Vinho Verde 2023",
@@ -2194,7 +2244,8 @@
     "note": "JancisRobinson reviewed, score paywalled",
     "date": "2026-10-26",
     "quick": true
-   }
+   },
+   "type": "Red"
   },
   "lcbo-534271": {
    "name": "Quadrus Reserva 2017",
@@ -2214,7 +2265,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2030,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-47181": {
    "name": "Letra F Old Vines Field Blend Macanita Vinhos 2023",
@@ -2234,7 +2286,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2030,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-67538": {
    "name": "Prats & Symington Post Scriptum de Chryseia 2023",
@@ -2254,7 +2307,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2031,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-21430": {
    "name": "Quinta da Pedra Escrita 2017",
@@ -2274,7 +2328,8 @@
     "drinkFrom": 2021,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "bcl-464388": {
    "name": "Douro - Vila Regia",
@@ -2284,7 +2339,8 @@
     "note": "Falstaff 89 2021, Gismondi 86 older",
     "date": "2026-10-26",
     "quick": true
-   }
+   },
+   "type": "Red"
   },
   "lcbo-89961": {
    "name": "Esporão Alandra Red",
@@ -2304,7 +2360,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-48146": {
    "name": "Estreia Red 2024",
@@ -2323,7 +2380,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2026,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-42826": {
    "name": "Portal Muros De Vinha Red 2022",
@@ -2343,7 +2401,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2028,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-43763": {
    "name": "Rota N2 Red Blend",
@@ -2362,7 +2421,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-32793": {
    "name": "Red Blend Portugal",
@@ -2379,7 +2439,8 @@
     "finish": "short",
     "pair": "pizza burgers",
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-89912": {
    "name": "Loios Red",
@@ -2399,7 +2460,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-43981": {
    "name": "Agua Do Sol Vinho Regional Lisboa Red",
@@ -2412,7 +2474,8 @@
     "pair": "grilled steak burgers",
     "grapes": "Touriga Syrah Alicante Bouschet",
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-34812": {
    "name": "Herdade Grande Monte Das Talhas Alentejo Tinto 2021",
@@ -2423,7 +2486,8 @@
     "date": "2026-10-28",
     "quick": true,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-534586": {
    "name": "Lab Red Lisboa VR",
@@ -2443,7 +2507,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-532358": {
    "name": "Julia Florista Red",
@@ -2463,7 +2528,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-18998": {
    "name": "Lisbon By Night Red Blend",
@@ -2483,7 +2549,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2028,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-464388": {
    "name": "Sogrape Vila Regia",
@@ -2503,7 +2570,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-590364": {
    "name": "Alianca Terra Boa Vinho Tinto Old Vines",
@@ -2523,7 +2591,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-146449": {
    "name": "Passion Of Portugal Red",
@@ -2542,7 +2611,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-620658": {
    "name": "Pedras Do Monte Cabernet Sauvignon Tinta Roriz, Lisboa VR",
@@ -2562,7 +2632,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-26804": {
    "name": "Sanguinhal Cerejeiras Red 2022",
@@ -2582,7 +2653,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2026,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-14977": {
    "name": "Sogrape Grao Vasco Dao",
@@ -2602,7 +2674,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2026,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-25257": {
    "name": "Guarda Rios Red 2022",
@@ -2622,7 +2695,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-286195": {
    "name": "JP Azeitão Red",
@@ -2642,7 +2716,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-239046": {
    "name": "Quatro Ventos Douro",
@@ -2662,7 +2737,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2028,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-37997": {
    "name": "Valdeus Premium Red 2021",
@@ -2673,7 +2749,8 @@
     "date": "2026-10-28",
     "quick": true,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-30868": {
    "name": "Esporão Monte Velho Red",
@@ -2693,7 +2770,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-158741": {
    "name": "Alianca Bairrada Reserva",
@@ -2713,7 +2791,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2028,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-522292": {
    "name": "Altivo Red 2019",
@@ -2733,7 +2812,8 @@
     "drinkFrom": 2021,
     "drinkTo": 2025,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-392480": {
    "name": "Mountain Fish Red Peloponnese",
@@ -2742,7 +2822,8 @@
     "vintage": "NV",
     "note": "Juicy mountain Agiorgitiko great value check vintage",
     "date": "2026-10-27"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-37229": {
    "name": "lcbo-37229",
@@ -2761,7 +2842,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2026,
     "from": "Mike"
-   }
+   },
+   "type": "White"
   },
   "lcbo-532341": {
    "name": "lcbo-532341",
@@ -2780,7 +2862,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2026,
     "from": "Mike"
-   }
+   },
+   "type": "White"
   },
   "lcbo-42822": {
    "name": "lcbo-42822",
@@ -2798,7 +2881,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2026,
     "from": "Mike"
-   }
+   },
+   "type": "White"
   },
   "lcbo-42434": {
    "name": "lcbo-42434",
@@ -2816,7 +2900,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2026,
     "from": "Mike"
-   }
+   },
+   "type": "Rosé"
   },
   "lcbo-33320": {
    "name": "lcbo-33320",
@@ -2835,7 +2920,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2026,
     "from": "Mike"
-   }
+   },
+   "type": "White"
   },
   "lcbo-92114": {
    "name": "lcbo-92114",
@@ -2854,7 +2940,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2026,
     "from": "Mike"
-   }
+   },
+   "type": "White"
   },
   "lcbo-33321": {
    "name": "lcbo-33321",
@@ -2872,7 +2959,8 @@
     "drinkFrom": 2021,
     "drinkTo": 2023,
     "from": "Mike"
-   }
+   },
+   "type": "White"
   },
   "lcbo-30937": {
    "name": "Esporao Monte Velho Red Organic Alentejo 2021",
@@ -2892,7 +2980,8 @@
     "drinkFrom": 2023,
     "drinkTo": 2026,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-42927": {
    "name": "Ribafreixo Selecao Red 2021",
@@ -2912,7 +3001,8 @@
     "drinkFrom": 2023,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-37228": {
    "name": "Aveleda Lisboa Red",
@@ -2931,7 +3021,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2026,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-427377": {
    "name": "Porta 6 Lisboa VR",
@@ -2951,7 +3042,8 @@
     "drinkFrom": 2022,
     "drinkTo": 2025,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-37227": {
    "name": "Monte Das Anforas",
@@ -2971,7 +3063,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-19452": {
    "name": "Waterdog Red",
@@ -2991,7 +3084,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2026,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-26713": {
    "name": "Dona Vittoria Premium Red Alentejo 2020",
@@ -3002,7 +3096,8 @@
     "date": "2026-10-28",
     "quick": true,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-45909": {
    "name": "Casa Velha Douro Red 2022",
@@ -3022,7 +3117,8 @@
     "drinkFrom": 2023,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-535641": {
    "name": "Vicente Faria Animus",
@@ -3042,7 +3138,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-44949": {
    "name": "Anticiclone Red Jose Maria Da Fonseca Vinhos 2023",
@@ -3062,7 +3159,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2029,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-31600": {
    "name": "Casa De Cambres Colheita Red 2020",
@@ -3082,7 +3180,8 @@
     "drinkFrom": 2022,
     "drinkTo": 2025,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-44950": {
    "name": "Fiuza Ducado do Infante Reserva Red 2022",
@@ -3096,7 +3195,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-45409": {
    "name": "Perspectiva Reserva Red Douro 2020",
@@ -3115,7 +3215,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2028,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-50930": {
    "name": "Quinta das Setencostas Alenquer 2020",
@@ -3135,7 +3236,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2028,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-632869": {
    "name": "S. Sebastião Tinta Roriz Syrah 2022",
@@ -3155,7 +3257,8 @@
     "drinkFrom": 2025,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-533307": {
    "name": "Silk & Spice Red",
@@ -3175,7 +3278,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-34465": {
    "name": "Silk & Spice Spice Road",
@@ -3195,7 +3299,8 @@
     "drinkFrom": 2026,
     "drinkTo": 2029,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-26802": {
    "name": "Porta dos Cavaleiros Red 2019",
@@ -3215,7 +3320,8 @@
     "drinkFrom": 2022,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-219816": {
    "name": "Catedral Reserva Dao",
@@ -3233,7 +3339,8 @@
     "pair": "grilled chicken and roast pork",
     "grapes": "Touriga Roriz Alfrocheiro",
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-33318": {
    "name": "Porta Da Ravessa Reserva Tinto Reserva 2020",
@@ -3253,7 +3360,8 @@
     "drinkFrom": 2023,
     "drinkTo": 2026,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-35671": {
    "name": "Cabeca De Gaio Red 2021",
@@ -3273,7 +3381,8 @@
     "drinkFrom": 2023,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   },
   "lcbo-247973": {
    "name": "Cabriz Colheita Selecionada 2022",
@@ -3293,7 +3402,8 @@
     "drinkFrom": 2024,
     "drinkTo": 2027,
     "from": "Mike"
-   }
+   },
+   "type": "Red"
   }
  }
 }

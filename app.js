@@ -2882,7 +2882,10 @@ function ratedTwin(w) {
   }
   if (w._twinVer !== ver) {
     const text = w._s ?? fold([w.name, w.producer, w.region_or_grape].filter(Boolean).join(" "));
-    w._twin = ratedNames.find((x) => x.id !== w.id && text.includes(x.key) && sameWineName(w.name, x.r.name))?.r || null;
+    const code = codeTwinId(w), codeR = code && familyRatings[code];
+    w._twin = (codeR && ratedNames.some((x) => x.id === code) ? codeR : null) ||
+      ratedNames.find((x) => x.id !== w.id && text.includes(x.key) && sameWineName(w.name, x.r.name) &&
+        (!(findWine(x.id)?.type || x.r.type) || typesAgree(w.type, findWine(x.id)?.type || x.r.type)))?.r || null;
     w._twinVer = ver;
   }
   return w._twin;
@@ -3297,18 +3300,72 @@ function soldAtHtml(w) {
 // (at least two of them), and they agree on style words (Riserva, Amarone, Blanc…).
 // The longer name may only add place or grape words ("Coteaux du Languedoc", "Mencía"),
 // never words naming another bottling: plain Beaucastel is not the Hommage à Jacques Perrin.
+// Wine regions and the words stores put around them, so "Douro - Vila Regia" (BC) and "Sogrape
+// Vila Regia" (LCBO) are read as the same wine with a place added, not two different names.
+const REGION_WORDS = new Set(("douro dao lisboa alentejo alentejano tejo setubal bairrada minho beira beiras tavora varosa " +
+  "verde vinho regional doc docg igp igt aoc vdp tinto branco peninsula palmela algarve madeira porto " +
+  "rioja ribera duero priorat toro rueda navarra penedes cava jumilla bierzo montsant somontano la mancha valdepenas " +
+  "mendoza uco lujan maipo colchagua casablanca maule curico rapel aconcagua cachapoal leyda itata " +
+  "napa sonoma paso robles lodi central coast columbia willamette walla okanagan niagara similkameen " +
+  "barossa mclaren clare eden coonawarra margaret yarra hunter marlborough hawkes bay otago " +
+  "bordeaux medoc graves bourgogne burgundy rhone cotes languedoc roussillon provence loire alsace champagne beaujolais " +
+  "chianti classico toscana tuscany piemonte veneto sicilia puglia abruzzo langhe montalcino bolgheri maremma " +
+  "mosel rheingau pfalz nahe wachau kamptal stellenbosch swartland paarl").split(" "));
 let placeWords = null;
 const isPlaceWord = (t) => {
   placeWords ??= new Set(cellarFindWines().flatMap((w) => nameTokens(`${w.region_or_grape || ""} ${w.varietal || ""} ${w.country || ""}`)));
-  return placeWords.has(t) || GRAPE_WORDS.has(t);
+  return placeWords.has(t) || GRAPE_WORDS.has(t) || REGION_WORDS.has(t);
 };
+// The producers (and parent companies) the stores name, as word sets: a store may add one
+// to a wine's name (the LCBO's "Sogrape Grao Vasco Dao"), but only a whole producer name.
+let producerNames = null, producerNamesN = 0;
+function isProducerName(words) {
+  if (!producerNames || producerNamesN !== WINES.length) {
+    producerNamesN = WINES.length;
+    producerNames = new Set(WINES.map((w) => nameTokens(w.producer || "")).filter((t) => t.length && t.length <= 3)
+      .filter((t) => t.some((x) => !GRAPE_WORDS.has(x) && !REGION_WORDS.has(x))) // "Cabernet Sauvignon" is no producer
+      .map((t) => [...new Set(t)].sort().join(" ")));
+  }
+  return words.some((x) => !GRAPE_WORDS.has(x)) && producerNames.has([...new Set(words)].sort().join(" "));
+}
+// Two names for the same wine: leaving aside places, every word of the shorter name (grapes
+// included) is in the longer one, which may only add a producer's name at its start (the
+// LCBO's "Sogrape Grao Vasco Dao"); they agree on style words (Riserva, Amarone, Blanc…) and
+// on colour words; and if both name a place, it's the same place. So Montes Alpha Cabernet
+// is not Montes Alpha Chardonnay, plain Beaucastel is not the Hommage à Jacques Perrin, and
+// Torres Priorat is not Torres Penedès.
+const COLOUR_OF = { red: "red", tinto: "red", rosso: "red", rouge: "red", negre: "red", white: "white", branco: "white",
+  blanco: "white", bianco: "white", blanc: "white", weiss: "white", blanca: "white" };
+const colourWords = (s) => new Set(fold(s).split(/[^a-z]+/).map((t) => COLOUR_OF[t]).filter(Boolean));
 function sameWineName(a, b) {
+  if (styleOf(a) !== styleOf(b)) return false;
+  const ca = colourWords(a), cb = colourWords(b);
+  if (ca.size && cb.size && ![...ca].some((c) => cb.has(c))) return false;
+  const placeOnly = (t) => isPlaceWord(t) && !GRAPE_WORDS.has(t);
   const A = storeTokens(a), B = storeTokens(b);
-  const [small, big] = A.length <= B.length ? [A, B] : [B, A];
-  const smallSet = new Set(small), bigSet = new Set(big);
-  return small.length >= 2 && small.every((t) => bigSet.has(t)) && styleOf(a) === styleOf(b) &&
-    big.filter((t) => !smallSet.has(t)).every(isPlaceWord) &&
-    small.some((t) => !isPlaceWord(t)); // a name, not just "Cabernet Sauvignon" or a region
+  const cA = A.filter((t) => !placeOnly(t)), cB = B.filter((t) => !placeOnly(t));
+  const [small, big, smallAll] = cA.length <= cB.length ? [cA, cB, A] : [cB, cA, B];
+  if (smallAll.length < 2 || !small.some((t) => !GRAPE_WORDS.has(t))) return false; // a name, not just a grape or a region
+  const bigSet = new Set(big);
+  if (!small.every((t) => bigSet.has(t))) return false;
+  const pA = A.filter((t) => REGION_WORDS.has(t) && !GRAPE_WORDS.has(t)), pB = B.filter((t) => REGION_WORDS.has(t) && !GRAPE_WORDS.has(t));
+  if (pA.length && pB.length && !pA.some((t) => pB.includes(t))) return false;
+  const extra = big.filter((t) => !small.includes(t));
+  if (!extra.length) return true;
+  const lead = big.slice(0, extra.length); // the producer comes first in the longer name
+  return extra.every((t) => lead.includes(t)) && isProducerName(extra);
+}
+// BC Liquor and the LCBO often use the same product number for the same wine (Grao Vasco is
+// 14977 at both): the other store's listing, when the names share a word and the colour agrees.
+function codeTwinId(w) {
+  const m = /^(bcl|lcbo)-(\d+)$/.exec(w?.id || "");
+  if (!m) return null;
+  const other = `${m[1] === "bcl" ? "lcbo" : "bcl"}-${m[2]}`, r = familyRatings[other];
+  if (!r?.name) return null;
+  const ot = findWine(other)?.type || r.type;
+  if (ot && !typesAgree(w.type, ot)) return null;
+  const B = new Set(storeTokens(r.name).filter((t) => !isPlaceWord(t)));
+  return storeTokens(w.name).some((t) => !isPlaceWord(t) && B.has(t)) ? other : null;
 }
 
 // Ratings the family gave this wine under its other records (cellar entries, names typed).
@@ -3328,11 +3385,14 @@ function relatedRatings(w) {
   // ratings given to a store's listing of the same wine, at any store
   const STORE_OF = { bcl: "BC Liquor - LDB", bsw: "BSW Liquor", zyn: "ZYN", luc: "Lucullus (Switzerland)",
     wsh: "Weinshop365 (Switzerland)", lcbo: "LCBO" };
+  const twinId = codeTwinId(w);
   for (const [id, r] of Object.entries(familyRatings)) {
     const store = STORE_OF[id.split("-")[0]];
-    if (seen.has(id) || !store || !r.name || !sameWineName(w.name, r.name)) continue;
+    if (seen.has(id) || !store || !r.name || (id !== twinId && !sameWineName(w.name, r.name))) continue;
+    const ot = findWine(id)?.type || r.type; // the published rating knows its colour too
+    if (ot && !typesAgree(w.type, ot)) continue;
     seen.add(id);
-    out.push({ f: r, label: `rated as “${r.name}” at ${store}` });
+    out.push({ f: r, id, label: `rated as “${r.name}” at ${store}` });
   }
   return out;
 }
@@ -3549,8 +3609,12 @@ function familyLinksHtml(w) {
   const summary = w.kind !== "cellar";
   const badges = summary ? cellarSummaryHtml(w) : cellarMatches(w).map((m) => `<span class="badge badge-cellar">Also in ${esc(m.source)}` +
     `${m.vintages.length ? ` (${esc(m.vintages.join(", "))})` : ""}</span>`);
-  const rel = relatedRatings(w).filter((r) => !(summary && r.cellar)).map(({ f, label }) => {
+  const rel = relatedRatings(w).filter((r) => !(summary && r.cellar)).map(({ f, id, label }) => {
     const c = f.claude, fam = f.family;
+    if (!fam && c?.quick && id) // another store's quick score for this wine: the same badge, its details inside
+      return `<button type="button" class="rating rating-fr rating-related rating-quick quick-btn" data-quick="${esc(id)}" data-quick-src="fr">` +
+        `Claude <strong>${c.points ?? "found no reviews"}</strong> (Quick Score Only)${c.vintage ? ` · ${esc(String(c.vintage))}` : ""} · ${esc(label)}` +
+        `<span class="quick-more">ⓘ Details</span></button>`;
     return `<span class="rating rating-fr rating-related${!fam && c?.quick ? " rating-quick" : ""}">${fam ? "Family" : "Claude"} <strong>${fam ? fam.points : c?.points ?? "found no reviews"}</strong>` +
       `${!fam && c?.quick ? " (Quick Score Only)" : ""}${!fam && c?.vintage ? ` · ${esc(String(c.vintage))}` : ""}` +
       `${!fam && styleText(c) ? ` · ${esc(styleText(c))}` : ""} · ${esc(label)}</span>`;
@@ -4165,6 +4229,8 @@ async function publishResearch(items) {
     for (const it of pub) {
       const e = d.ratings[it.id] || {};
       if (it.name) e.name = it.name;
+      const t = findWine(it.id)?.type;
+      if (t) e.type = t;
       if (it.claude) e.claude = it.from ? { ...it.claude, from: it.from } : it.claude;
       if (it.mine) e.family = it.mine;
       if (e.claude || e.family) d.ratings[it.id] = e;
