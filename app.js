@@ -2516,7 +2516,7 @@ function ratingsHtml(w) {
   const same = (a, b) => b && JSON.stringify(a) === JSON.stringify(b);
   if (r.claude && !same(r.claude, f.claude)) {
     const c = r.claude;
-    parts.push(`<span class="rating rating-claude">Claude <strong>${c.points ?? "found no reviews"}</strong>${c.quick ? " (quick score)" : ""}` +
+    parts.push(`<span class="rating rating-claude${c.quick ? " rating-quick" : ""}">Claude <strong>${c.points ?? "found no reviews"}</strong>${c.quick ? " (Quick Score Only)" : ""}` +
       `${c.vintage ? ` (${esc(String(c.vintage))})` : ""}${c.note ? ` · ${esc(c.note)}` : ""}` +
       ` <span class="rating-date">${esc(shortDate(c.date))}</span></span>` +
       (styleText(c) ? `<span class="rating rating-style">${esc(styleText(c))}</span>` : ""));
@@ -2891,7 +2891,7 @@ const wellRated = (w) => (familyScore(w) ?? 0) >= WELL_RATED || !!w.retailer_sco
 
 function frHtml(w) {
   const f = frOf(w.id), parts = [];
-  if (f.claude) parts.push(`<span class="rating rating-fr">Claude <strong>${f.claude.points ?? "found no reviews"}</strong>${f.claude.quick ? " (quick score)" : ""}` +
+  if (f.claude) parts.push(`<span class="rating rating-fr${f.claude.quick ? " rating-quick" : ""}">Claude <strong>${f.claude.points ?? "found no reviews"}</strong>${f.claude.quick ? " (Quick Score Only)" : ""}` +
     `${f.claude.vintage ? ` · ${esc(String(f.claude.vintage))}` : ""}${f.claude.note ? ` · ${esc(f.claude.note)}` : ""}</span>` +
     (styleText(f.claude) ? `<span class="rating rating-style">${esc(styleText(f.claude))}</span>` : ""));
   if (f.family) parts.push(`<span class="rating rating-fr">Family <strong>${f.family.points}</strong>` +
@@ -3539,8 +3539,8 @@ function familyLinksHtml(w) {
     `${m.vintages.length ? ` (${esc(m.vintages.join(", "))})` : ""}</span>`);
   const rel = relatedRatings(w).filter((r) => !(summary && r.cellar)).map(({ f, label }) => {
     const c = f.claude, fam = f.family;
-    return `<span class="rating rating-fr rating-related">${fam ? "Family" : "Claude"} <strong>${fam ? fam.points : c?.points ?? "found no reviews"}</strong>` +
-      `${!fam && c?.quick ? " (quick score)" : ""}${!fam && c?.vintage ? ` · ${esc(String(c.vintage))}` : ""}` +
+    return `<span class="rating rating-fr rating-related${!fam && c?.quick ? " rating-quick" : ""}">${fam ? "Family" : "Claude"} <strong>${fam ? fam.points : c?.points ?? "found no reviews"}</strong>` +
+      `${!fam && c?.quick ? " (Quick Score Only)" : ""}${!fam && c?.vintage ? ` · ${esc(String(c.vintage))}` : ""}` +
       `${!fam && styleText(c) ? ` · ${esc(styleText(c))}` : ""} · ${esc(label)}</span>`;
   });
   return badges.length || rel.length ? `<p class="wine-detail family-links">${[...badges, ...rel].join(" ")}</p>` : "";

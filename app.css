@@ -666,3 +666,6 @@ details[open] > summary .pair-more::after { content: "▾ Hide"; }
 .food-star.tier-3 { opacity: 1; }
 .food-star.tier-2 { opacity: 0.85; }
 .food-star.tier-1 { opacity: 0.7; }
+
+/* A quick score (no write-up): turquoise, unlike any other badge */
+.rating.rating-quick { background: #d6f5f5; border: 2px solid #0e8f99; color: #075a61; }
