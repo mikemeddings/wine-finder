@@ -681,7 +681,7 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #bfeeee; }
 .quick-none { color: var(--muted); font-style: italic; }
 
 /* the quick score reader: olive, apart from the wine-red full write-ups */
-#notes-dialog.quick-reader { border-color: #626b06; }
+#notes-dialog.quick-reader { border: 10px solid #626b06; }
 .quick-reader .notes-title, .quick-reader .notes-body h4, .quick-reader .quick-table th { color: #3f4504; }
 .quick-reader .reader-bar { border-bottom-color: #626b06; }
 .quick-reader .note-meta { color: #4f5605; }
@@ -691,5 +691,5 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #bfeeee; }
 .quick-src { color: var(--muted); font-size: 0.85em; }
 .quick-food { margin: 0.3em 0 0.8em; padding-left: 1.2em; }
 .quick-food li { margin: 0 0 0.5em; }
-.quick-reader #notes-close { background: #626b06; border-color: #626b06; color: #fff; }
+#notes-dialog.quick-reader #notes-close { background: #626b06; border-color: #626b06; color: #fff; }
 .quick-reader #notes-close:hover, .quick-reader #notes-close:focus-visible { background: #4f5605; }
