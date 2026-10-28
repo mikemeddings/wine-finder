@@ -1503,6 +1503,7 @@ function wineCard(w) {
     <p class="wine-facts">${typePill(w.type)} ${facts}</p>
     <p class="wine-detail">${detail} ${badges}</p>${scores}${calgary}${lcbo}${ratingsHtml(w)}${familyLinksHtml(w)}
     <div class="wine-actions">
+      ${researchButton(w)}
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
       <a class="btn ext btn-we" href="${wineEnthusiastUrl(w)}" target="_blank" rel="noopener">Wine Enthusiast</a>
@@ -3305,7 +3306,7 @@ function relatedRatings(w) {
     if (seen.has(id)) continue;
     seen.add(id);
     const f = frOf(id), c = cellarFindWines().find((x) => x.id === id);
-    if (f.claude || f.family) out.push({ f, label: c ? `${c.source}${c.vintage ? `, ${c.vintage}` : ""}` : "a family cellar" });
+    if (f.claude || f.family) out.push({ f, cellar: true, label: c ? `${c.source}${c.vintage ? `, ${c.vintage}` : ""}` : "a family cellar" });
   }
   for (const [id, r] of Object.entries(familyRatings)) {
     if (seen.has(id) || !id.startsWith("typed-") || !r.name || !sameWineName(w.name, r.name)) continue;
@@ -3519,10 +3520,24 @@ function wineStyleNow(w) {
     fruity: pick("fruity"), finish: { v: cl?.finish || null, src: cl?.finish ? "Claude" : null }, ready: readiness(w, est, cl) };
 }
 
+// On a store's wine, each family cellar that has it is one short line, "In Jon's cellar ·
+// 7 vintages · Claude 94–98": what matters there is that Jon chose it and how Claude rated
+// it, not every vintage. A cellar's own card still lists them all.
+function cellarSummaryHtml(w) {
+  const ids = new Set(cellarMatches(w).ids || []), cw = cellarFindWines().filter((x) => ids.has(x.id));
+  return cellarMatches(w).map((m) => {
+    const pts = cw.filter((x) => x.source === m.source).map((x) => frOf(x.id).claude?.points).filter((n) => typeof n === "number");
+    const lo = Math.min(...pts), hi = Math.max(...pts), n = m.vintages.length;
+    const what = n > 1 ? ` · ${n} vintages` : n === 1 ? ` · the ${m.vintages[0]}` : "";
+    const claude = pts.length ? ` · Claude <strong>${lo === hi ? lo : `${lo}–${hi}`}</strong>` : "";
+    return `<span class="badge badge-cellar">In ${esc(m.source)}${esc(what)}${claude}</span>`;
+  });
+}
 function familyLinksHtml(w) {
-  const badges = cellarMatches(w).map((m) => `<span class="badge badge-cellar">${w.kind === "cellar" ? "Also in" : "In"} ${esc(m.source)}` +
+  const summary = w.kind !== "cellar";
+  const badges = summary ? cellarSummaryHtml(w) : cellarMatches(w).map((m) => `<span class="badge badge-cellar">Also in ${esc(m.source)}` +
     `${m.vintages.length ? ` (${esc(m.vintages.join(", "))})` : ""}</span>`);
-  const rel = relatedRatings(w).map(({ f, label }) => {
+  const rel = relatedRatings(w).filter((r) => !(summary && r.cellar)).map(({ f, label }) => {
     const c = f.claude, fam = f.family;
     return `<span class="rating rating-fr rating-related">${fam ? "Family" : "Claude"} <strong>${fam ? fam.points : c?.points ?? "found no reviews"}</strong>` +
       `${!fam && c?.quick ? " (quick score)" : ""}${!fam && c?.vintage ? ` · ${esc(String(c.vintage))}` : ""}` +
