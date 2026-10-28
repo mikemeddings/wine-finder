@@ -364,7 +364,7 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .wine-ratings { grid-column: 1 / -1; margin: 0.3rem 0 0; display: flex; flex-wrap: wrap; gap: 0.4rem 0.8rem; }
 .rating { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 0.5rem; border: 2px solid; }
 .rating strong { font-size: 1.15em; }
-.rating-claude { background: #fbe6d9; border-color: var(--claude); color: var(--claude-dark); }
+.rating-claude { background: #f0f2d2; border-color: #626b06; color: #3f4504; } /* Claude's scores: olive, apart from the green Short List button */
 .rating-mine { background: var(--gold-tint); border-color: #b38a1d; color: var(--gold); }
 .rating-date { font-size: 0.9em; }
 .btn-rate { background: var(--gold-tint); border-color: #b38a1d; color: var(--gold); }
@@ -379,7 +379,7 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .save-list li { margin-bottom: 0.5rem; }
 
 /* Family ratings (FR), published for everyone */
-.rating-fr { background: var(--green-tint); border-color: var(--green); color: #154015; }
+.rating-fr { background: #f0f2d2; border-color: #626b06; color: #3f4504; }
 .fr-box { border-color: var(--green); }
 .fr-count { font-weight: 600; }
 #fr-key { flex: 1 1 18rem; font: inherit; min-height: 3rem; border: 2px solid var(--line); border-radius: 0.5rem; padding: 0.3rem 0.6rem; background: #fff; }
