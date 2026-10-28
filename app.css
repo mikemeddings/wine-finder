@@ -667,12 +667,12 @@ details[open] > summary .pair-more::after { content: "▾ Hide"; }
 .food-star.tier-2 { opacity: 0.85; }
 .food-star.tier-1 { opacity: 0.7; }
 
-/* A quick score (no write-up): turquoise, unlike any other badge */
-.rating.rating-quick { background: #d6f5f5; border: 2px solid #0e8f99; color: #075a61; }
+/* A quick score (no write-up): dark olive, the same as the "+ Add Claude Quick Score" button */
+.rating.rating-quick { background: #4a5205; border: 2px solid #4a5205; color: #fff; }
 
 /* the quick score badge is also a button that opens its details */
 button.quick-btn { font: inherit; line-height: inherit; text-align: left; cursor: pointer; }
-button.quick-btn:hover, button.quick-btn:focus-visible { background: #bfeeee; }
+button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; border-color: #3a4004; }
 .quick-more { margin-left: 0.6rem; font-size: 0.9em; font-weight: 700; text-decoration: underline; white-space: nowrap; }
 .quick-table { border-collapse: collapse; width: 100%; margin: 0.5rem 0 1rem; }
 .quick-table th { text-align: left; vertical-align: top; padding: 0.45em 1em 0.45em 0; color: var(--wine); white-space: nowrap; width: 1%; }
