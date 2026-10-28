@@ -1813,21 +1813,24 @@ For each wine, please:
 - Give your own overall score out of 100, based on what the reviewers say (your judgement, not a copy of any one critic's score), and the vintage it applies to. If you only find reviews of another vintage, you may use them, but give that vintage.
 - In up to eight words, say what your score rests on, for example: WE 92, Decanter 90 for 2021.
 - Describe its style from the reviews and the tasting notes: body (light, medium or full), tannin (soft, medium or firm; for whites, leave it empty), sweetness (dry, off-dry, medium-sweet or sweet), whether it's fruit-forward (ripe and fruity-tasting even when dry, like many Malbecs or Australian Shiraz: yes or no), how long its flavour lasts after swallowing (the finish: short, medium or long), and when to drink it (from year to year).
-- Name the dishes it's best with, from the reviews, the producer's notes and its style, in up to eight words, as specific as you can (for example: lamb chops with rosemary, mushroom risotto).
+- Name its main grapes (up to four words) and the dishes it's best with (up to eight words, as specific as you can, for example: lamb chops with rosemary, mushroom risotto), from what you've already found and the wine's style. Don't search just for these.
 - If you can't find any reviews, say so plainly rather than estimating the score; give the style only if you know the wine.
 
-Keep the answer short: one line per wine, in my order, as: number. wine — score (vintage) — what it rests on — body, tannin, sweetness, fruit-forward or not, finish — drink from–to — best with.
+Keep the answer short: one line per wine, in my order, as: number. wine — score (vintage) — what it rests on — body, tannin, sweetness, fruit-forward or not, finish — drink from–to — grapes — best with.
 
 Last of all, after a horizontal line (---), give me a link to save the scores, as the largest heading (one #), itself the link, exactly in this form, one entry per wine joined by semicolons:
-# [💾 Save these scores to my Wine Finder]({BASE}#scores=CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT~FINISH~PAIR;CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT~FINISH~PAIR)
-CODE is the wine's code in square brackets in my list; POINTS is your score (leave it empty if you found no reviews); VINTAGE is the vintage your score is for, or NV; NOTE is what it rests on, up to eight words, with + instead of spaces and no semicolons or tildes; BODY is light, medium or full; TANNIN is soft, medium or firm (empty for whites); SWEET is dry, off-dry, medium-sweet or sweet; DRINK is the drinking window as 2024-2030; FRUIT is yes if it's fruit-forward, otherwise no; FINISH is short, medium or long; PAIR is the dishes it's best with, up to eight words, with + instead of spaces and no semicolons or tildes. Leave any of these empty if you don't know.`;
+# [💾 Save these scores to my Wine Finder]({BASE}#scores=CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT~FINISH~PAIR~GRAPES;CODE~POINTS~VINTAGE~NOTE~BODY~TANNIN~SWEET~DRINK~FRUIT~FINISH~PAIR~GRAPES)
+CODE is the wine's code in square brackets in my list; POINTS is your score (leave it empty if you found no reviews); VINTAGE is the vintage your score is for, or NV; NOTE is what it rests on, up to eight words, with + instead of spaces and no semicolons or tildes; BODY is light, medium or full; TANNIN is soft, medium or firm (empty for whites); SWEET is dry, off-dry, medium-sweet or sweet; DRINK is the drinking window as 2024-2030; FRUIT is yes if it's fruit-forward, otherwise no; FINISH is short, medium or long; PAIR is the dishes it's best with, up to eight words; GRAPES is its main grapes, up to four words (both with + instead of spaces and no semicolons or tildes). Leave any of these empty if you don't know.`;
 
 let scorePicks = [];
 
 // Already scored, in any vintage and at any store: Claude's research, an earlier quick
 // score, or "no reviews found" from an earlier search. These aren't looked up again.
-const hasClaudeRating = (w) => !!(ratingOf(w.id).claude || frOf(w.id).claude ||
-  relatedRatings(w).some((r) => r.f.claude));
+// A quick score from before quick scores gathered the style, food and grapes doesn't count:
+// the next quick-score run picks the wine again and fills them in.
+const olderQuick = (c) => !!c?.quick && !(c.body || c.sweet || c.pair || c.grapes || c.drinkFrom);
+const claudeRatingsOf = (w) => [ratingOf(w.id).claude, frOf(w.id).claude, ...relatedRatings(w).map((r) => r.f.claude)].filter(Boolean);
+const hasClaudeRating = (w) => claudeRatingsOf(w).some((c) => !olderQuick(c));
 
 function scoreLine(w, i) {
   const price = w.currency ? `${w.currency} ${Number(w.price_local).toFixed(2)}` : money(w.price);
@@ -1851,6 +1854,7 @@ function openScoreDialog() {
     if (scorePicks.length >= SCORE_BATCH) break;
     if (hasClaudeRating(w)) skipped++; else scorePicks.push(w);
   }
+  const refresh = scorePicks.filter((w) => claudeRatingsOf(w).length).length;
   $("score-result").hidden = true;
   $("score-go").textContent = "Open Claude with my question";
   if (!scorePicks.length) {
@@ -1860,8 +1864,9 @@ function openScoreDialog() {
     $("score-list").innerHTML = "";
     $("score-steps").hidden = $("score-go").hidden = true;
   } else {
-    $("score-intro").innerHTML = `Claude will look up reviews for the first <strong>${scorePicks.length}</strong> wines in your list that don't have a Claude score yet` +
+    $("score-intro").innerHTML = `Claude will look up reviews for the first <strong>${scorePicks.length}</strong> ${scorePicks.length === 1 ? "wine" : "wines"} in your list that don't have a Claude score yet` +
       (skipped ? ` (${skipped} already scored ${skipped === 1 ? "was" : "were"} skipped)` : "") +
+      (refresh ? `, including ${refresh} with an older quick score, to add their style, grapes and food` : "") +
       `, and give each a score out of 100. The scores are kept and shared with the family, so nobody looks them up twice.`;
     $("score-list").innerHTML = scorePicks.map((w) => `<li>${esc(w.name)}${w.vintage ? ` <span class="hint">${esc(String(w.vintage))}</span>` : ""}</li>`).join("");
     $("score-steps").hidden = $("score-go").hidden = false;
@@ -2516,9 +2521,10 @@ function ratingsHtml(w) {
   const same = (a, b) => b && JSON.stringify(a) === JSON.stringify(b);
   if (r.claude && !same(r.claude, f.claude)) {
     const c = r.claude;
-    parts.push(`<span class="rating rating-claude${c.quick ? " rating-quick" : ""}">Claude <strong>${c.points ?? "found no reviews"}</strong>${c.quick ? " (Quick Score Only)" : ""}` +
+    parts.push(`${c.quick ? `<button type="button" class="rating rating-claude rating-quick quick-btn" data-quick="${esc(w.id)}" data-quick-src="own" aria-label="Claude quick score ${c.points ?? ""}: show the details">` : `<span class="rating rating-claude">`}` +
+      `Claude <strong>${c.points ?? "found no reviews"}</strong>${c.quick ? " (Quick Score Only)" : ""}` +
       `${c.vintage ? ` (${esc(String(c.vintage))})` : ""}${c.note ? ` · ${esc(c.note)}` : ""}` +
-      ` <span class="rating-date">${esc(shortDate(c.date))}</span></span>` +
+      ` <span class="rating-date">${esc(shortDate(c.date))}</span>${c.quick ? `<span class="quick-more">ⓘ Details</span></button>` : "</span>"}` +
       (styleText(c) ? `<span class="rating rating-style">${esc(styleText(c))}</span>` : ""));
   }
   if (r.mine && !same(r.mine, f.family)) {
@@ -2589,7 +2595,7 @@ function clearMyRating(id) {
 // The style Claude gives with a quick score: BODY~TANNIN~SWEET~DRINK, each checked
 // against its few allowed words (anything else is dropped rather than guessed).
 const CR_STYLE = { body: ["light", "medium", "full"], tannin: ["soft", "medium", "firm"], sweet: SWEET_LEVELS };
-function readStyle([body = "", tannin = "", sweet = "", drink = "", fruit = "", finish = "", pair = ""]) {
+function readStyle([body = "", tannin = "", sweet = "", drink = "", fruit = "", finish = "", pair = "", grapes = ""]) {
   const pick = (v, list) => (list.includes(v.toLowerCase()) ? v.toLowerCase() : null);
   const out = { body: pick(body, CR_STYLE.body), tannin: pick(tannin, CR_STYLE.tannin), sweet: pick(sweet.replace(/\s+/g, "-"), CR_STYLE.sweet) };
   const m = /^((?:19|20)\d\d)\s*[-–]\s*((?:19|20)\d\d)$/.exec(drink);
@@ -2598,6 +2604,8 @@ function readStyle([body = "", tannin = "", sweet = "", drink = "", fruit = "", 
   if (/^(short|medium|long)$/i.test(finish.trim())) out.finish = finish.trim().toLowerCase();
   pair = pair.replace(/[<>]/g, "").replace(/\s+/g, " ").trim().replace(/[.;]+$/, "");
   if (pair.length > 2) out.pair = pair.slice(0, 90);
+  grapes = grapes.replace(/[<>]/g, "").replace(/\s+/g, " ").trim().replace(/[.;]+$/, "");
+  if (grapes.length > 2) out.grapes = grapes.slice(0, 60);
   return Object.fromEntries(Object.entries(out).filter(([, v]) => v != null));
 }
 
@@ -2729,7 +2737,7 @@ async function confirmSavedRatings() {
     const name = findWine(it.id)?.name || real(ratingOf(it.id).name) || it.name || real(frOf(it.id).name) ||
       (it.id.startsWith("typed-") ? it.id.slice(6).replace(/-/g, " ") : it.id); // a typed wine's code is its name
     const r = { ...ratingOf(it.id), name };
-    const style = Object.fromEntries(["body", "tannin", "sweet", "fruity", "finish", "pair", "drinkFrom", "drinkTo"].filter((k) => it[k] != null).map((k) => [k, it[k]]));
+    const style = Object.fromEntries(["body", "tannin", "sweet", "fruity", "finish", "pair", "grapes", "drinkFrom", "drinkTo"].filter((k) => it[k] != null).map((k) => [k, it[k]]));
     const claude = it.claude !== false ? { points: it.points, vintage: it.vintage, note: it.note, date: today, ...(it.quick ? { quick: true, ...style } : {}) } : null;
     const mine = it.mine ? { ...it.mine, date: today } : null;
     if (claude) r.claude = claude;
@@ -2891,8 +2899,10 @@ const wellRated = (w) => (familyScore(w) ?? 0) >= WELL_RATED || !!w.retailer_sco
 
 function frHtml(w) {
   const f = frOf(w.id), parts = [];
-  if (f.claude) parts.push(`<span class="rating rating-fr${f.claude.quick ? " rating-quick" : ""}">Claude <strong>${f.claude.points ?? "found no reviews"}</strong>${f.claude.quick ? " (Quick Score Only)" : ""}` +
-    `${f.claude.vintage ? ` · ${esc(String(f.claude.vintage))}` : ""}${f.claude.note ? ` · ${esc(f.claude.note)}` : ""}</span>` +
+  if (f.claude) parts.push(`${f.claude.quick ? `<button type="button" class="rating rating-fr rating-quick quick-btn" data-quick="${esc(w.id)}" data-quick-src="fr" aria-label="Claude quick score ${f.claude.points ?? ""}: show the details">` : `<span class="rating rating-fr">`}` +
+    `Claude <strong>${f.claude.points ?? "found no reviews"}</strong>${f.claude.quick ? " (Quick Score Only)" : ""}` +
+    `${f.claude.vintage ? ` · ${esc(String(f.claude.vintage))}` : ""}${f.claude.note ? ` · ${esc(f.claude.note)}` : ""}` +
+    `${f.claude.quick ? `<span class="quick-more">ⓘ Details</span></button>` : "</span>"}` +
     (styleText(f.claude) ? `<span class="rating rating-style">${esc(styleText(f.claude))}</span>` : ""));
   if (f.family) parts.push(`<span class="rating rating-fr">Family <strong>${f.family.points}</strong>` +
     `${f.family.note ? ` · ${esc(f.family.note)}` : ""}</span>`);
@@ -4153,7 +4163,7 @@ async function publishResearch(items) {
     for (const it of pub) {
       const e = d.ratings[it.id] || {};
       if (it.name) e.name = it.name;
-      if (it.claude) e.claude = it.claude;
+      if (it.claude) e.claude = it.from ? { ...it.claude, from: it.from } : it.claude;
       if (it.mine) e.family = it.mine;
       if (e.claude || e.family) d.ratings[it.id] = e;
     }
@@ -4183,6 +4193,7 @@ async function openNotes(id) {
   const list = notesFor(w);
   $("notes-title").textContent = `Claude Research Results: ${w.name}`;
   $("notes-body").innerHTML = `<p class="hint">Loading…</p>`;
+  $("notes-dialog").classList.remove("quick-reader");
   readerScale();
   readerStop();
   $("notes-dialog").showModal?.();
@@ -4272,9 +4283,80 @@ function readerPause() {
   else { speechSynthesis.pause(); readerButtons("paused"); }
 }
 
+// Everything a quick score saved, in its own olive reader, built out from what the site
+// already holds: the grape notes, the pairing books (Dornenburg & Page; Harrington), our
+// style estimate where Claude gave none, whether it's ready, where it's sold and the family's
+// cellars. Nothing is asked of Claude again.
+const grapesFromText = (t) => (t ? GRAPES.filter(([, re]) => re.test(fold(t))).map(([g]) => g) : []);
+function openQuick(id, src) {
+  const c = (src === "own" ? ratingOf(id).claude : frOf(id).claude) || {};
+  const w = findWine(id), name = w?.name || ratingOf(id).name || frOf(id).name || id;
+  const row = (label, value) => `<tr><th scope="row">${esc(label)}</th><td>${value}</td></tr>`;
+  const none = `<span class="quick-none">not given</span>`;
+  const ours = ` <span class="quick-est">(our estimate)</span>`;
+  const s = w ? wineStyle(w) : null;
+  const pick = (cv, key, fmt = esc) => (cv != null && cv !== "" ? fmt(cv) : s?.[key]?.v != null ? `${fmt(s[key].v)}${ours}` : none);
+  const grapes = [...new Set([...grapesFromText(c.grapes), ...(w ? grapesOf(w).filter((g) => grapeFits(w, g) || w.type === "Rosé") : [])])];
+  const sec = (title, body) => (body ? `<h4>${esc(title)}</h4>${body}` : "");
+
+  // The score and what Claude gave
+  const scoreRows = [
+    row("Score", c.points != null ? `<strong>${c.points}</strong> out of 100${c.vintage ? ` for the ${esc(String(c.vintage))} vintage` : ""}` : "Claude found no reviews"),
+    row("What it rests on", c.note ? esc(c.note) : none),
+    row("Grapes", c.grapes ? esc(c.grapes) : grapes.length ? `${esc(grapes.map(PLAIN_GRAPE).join(", "))}${ours}` : none),
+  ];
+  // How it tastes: Claude's words, else our estimate (labelled)
+  const tasteRows = [
+    row("Body", pick(c.body, "body")),
+    ...(w?.type === "Red" || c.tannin ? [row("Tannin", pick(c.tannin, "tannin"))] : []),
+    row("Sweetness", pick(c.sweet, "sweet")),
+    row("Fruit-forward", c.fruity != null ? (c.fruity ? "Yes: ripe and fruity-tasting" : "No") : s?.fruity?.v != null ? `${s.fruity.v ? "Yes" : "No"}${ours}` : none),
+    row("Finish", c.finish ? esc(c.finish) : none),
+    row("Drink", c.drinkFrom ? `${c.drinkFrom}–${c.drinkTo}${c.drinkFrom <= THIS_YEAR && THIS_YEAR <= c.drinkTo + 2 ? " (ready now)" : c.drinkFrom > THIS_YEAR ? " (best kept a while yet)" : " (past its best window)"}`
+      : s?.ready?.ready != null ? `${s.ready.ready ? "Ready now" : "Better kept a while"}${ours}` : none),
+  ];
+  // Food: Claude's pick, then the classic and adventurous matches with the books' dishes
+  let food = c.pair ? `<p><strong>Claude's pick:</strong> ${esc(c.pair)}.</p>` : "";
+  if (w) {
+    const classic = foodsOf(w).map((f) => ({ f, t: wineTier(w, f) })).sort((a, b) => b.t - a.t).slice(0, 5);
+    if (classic.length) food += `<ul class="quick-food">${classic.map(({ f, t }) => {
+      const dish = pairDish(w, f), b = bookDishes(w, f, dish);
+      const book = b ? ` Dornenburg & Page also list ${esc(b.list.map((x) => x.d).join(", "))}.` : "";
+      return `<li><span class="food-star tier-${t}">${STARS(t)}</span> <strong>${esc(f)}:</strong> ${esc(dish)}.${book}</li>`;
+    }).join("")}</ul>`;
+    const adv = boldFoodsOf(w).slice(0, 3);
+    if (adv.length) food += `<p><strong>Adventurous:</strong></p><ul class="quick-food">${adv.map((b) =>
+      `<li>🍷 <strong>${esc(b.food)}:</strong> ${esc(b.rule.dish(advContext(w)) || "")}. ${esc(b.rule.why)}${b.rule.warn ? `; ${esc(b.rule.warn)}` : ""}. <span class="quick-src">(${esc(b.rule.src)})</span></li>`).join("")}</ul>`;
+    if (food) food += `<p class="quick-src">★★★ the go-to · ★★ a common match · ★ pairs, but less often chosen (Dornenburg & Page's pairing guide).</p>`;
+  }
+  // The grapes, in plain words
+  const grapeInfo = grapes.filter((g) => GRAPE_INFO[g]).map((g) => `<li><strong>${esc(g)}:</strong> ${esc(GRAPE_INFO[g])}</li>`).join("");
+  // Where to find it
+  const where = w ? [
+    w.kind !== "cellar" && w.price != null ? `<li>${esc(sourceLabel(w.source))}: <strong>${priceHtml(w)}</strong></li>` : "",
+    ...(w.kind !== "cellar" ? cellarSummaryHtml(w).map((h) => `<li>${h}</li>`) : []),
+  ].filter(Boolean).join("") : "";
+  const older = olderQuick(c) ? `<p class="hint">This quick score is from before quick scores gathered the style, grapes and food, so much of this card is our own estimate. The next “Get quick Claude scores” run that includes this wine fills them in.</p>` : "";
+
+  $("notes-title").textContent = `Claude quick score: ${name}`;
+  $("notes-body").innerHTML = `<section class="note quick-card">` +
+    `<p class="note-meta">Scored ${c.date ? esc(shortDate(c.date)) : ""}${c.from ? ` by ${esc(c.from)}` : ""}</p>` +
+    `<table class="quick-table">${scoreRows.join("")}</table>${older}` +
+    sec("How it tastes", `<table class="quick-table">${tasteRows.join("")}</table>`) +
+    sec("Food", food) +
+    sec(grapes.length > 1 ? "The grapes" : "The grape", grapeInfo ? `<ul class="quick-food">${grapeInfo}</ul>` : "") +
+    sec("Where to find it", where ? `<ul class="quick-food">${where}</ul>` : "") +
+    `<p class="hint">A quick score is a short check of the reviews; the rest of this card comes from the Wine Finder's own data and pairing books. For the full story (the estate, the reviews, how it tastes), add the wine to the Short List and ask Claude to research it.</p></section>`;
+  readerScale();
+  readerStop();
+  $("notes-dialog").classList.add("quick-reader");
+  $("notes-dialog").showModal?.();
+}
+
 function showWriteup(title, meta, text) {
   $("notes-title").textContent = title;
   $("notes-body").innerHTML = `<section class="note"><p class="note-meta">${esc(meta)}</p>${mdToHtml(text)}</section>`;
+  $("notes-dialog").classList.remove("quick-reader");
   readerScale();
   readerStop();
   $("notes-dialog").showModal?.();
@@ -4981,6 +5063,7 @@ function wireEvents() {
     else if (t.id === "dine-close") $("dine-dialog").close();
     else if (t.id === "notes-close" || t.id === "notes-close-top") { $("notes-dialog").close(); openNotesId = null; }
     else if (t.id === "reader-smaller" || t.id === "reader-bigger") readerScale(t.id === "reader-bigger" ? 1 : -1);
+    else if (t.dataset.quick) openQuick(t.dataset.quick, t.dataset.quickSrc);
     else if (t.id === "reader-speak") readerSpeak();
     else if (t.id === "reader-pause") readerPause();
     else if (t.id === "reader-stop") readerStop();

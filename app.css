@@ -669,3 +669,27 @@ details[open] > summary .pair-more::after { content: "▾ Hide"; }
 
 /* A quick score (no write-up): turquoise, unlike any other badge */
 .rating.rating-quick { background: #d6f5f5; border: 2px solid #0e8f99; color: #075a61; }
+
+/* the quick score badge is also a button that opens its details */
+button.quick-btn { font: inherit; line-height: inherit; text-align: left; cursor: pointer; }
+button.quick-btn:hover, button.quick-btn:focus-visible { background: #bfeeee; }
+.quick-more { margin-left: 0.6rem; font-size: 0.9em; font-weight: 700; text-decoration: underline; white-space: nowrap; }
+.quick-table { border-collapse: collapse; width: 100%; margin: 0.5rem 0 1rem; }
+.quick-table th { text-align: left; vertical-align: top; padding: 0.45em 1em 0.45em 0; color: var(--wine); white-space: nowrap; width: 1%; }
+.quick-table td { padding: 0.45em 0; }
+.quick-table tr + tr th, .quick-table tr + tr td { border-top: 1px solid #e6ddd2; }
+.quick-none { color: var(--muted); font-style: italic; }
+
+/* the quick score reader: olive, apart from the wine-red full write-ups */
+#notes-dialog.quick-reader { border-color: #626b06; }
+.quick-reader .notes-title, .quick-reader .notes-body h4, .quick-reader .quick-table th { color: #3f4504; }
+.quick-reader .reader-bar { border-bottom-color: #626b06; }
+.quick-reader .note-meta { color: #4f5605; }
+.quick-reader .notes-body h4 { margin: 1.2em 0 0.3em; padding-bottom: 0.15em; border-bottom: 2px solid #d9dca6; }
+.quick-reader .quick-table tr + tr th, .quick-reader .quick-table tr + tr td { border-top-color: #e4e6c2; }
+.quick-est { color: var(--muted); font-size: 0.85em; font-style: italic; }
+.quick-src { color: var(--muted); font-size: 0.85em; }
+.quick-food { margin: 0.3em 0 0.8em; padding-left: 1.2em; }
+.quick-food li { margin: 0 0 0.5em; }
+.quick-reader #notes-close { background: #626b06; border-color: #626b06; color: #fff; }
+.quick-reader #notes-close:hover, .quick-reader #notes-close:focus-visible { background: #4f5605; }
