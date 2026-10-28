@@ -4204,18 +4204,44 @@ function readerButtons(state) { // "idle", "speaking" or "paused"
   $("reader-pause").textContent = state === "paused" ? "▶ Carry on" : "⏸ Pause";
   $("reader-stop").hidden = state === "idle";
 }
-function readerSpeak() {
+// The most natural English voice this browser already has, so nobody has to set anything:
+// Edge's "Natural" voices, then Chrome's Google voices, then Safari's Enhanced or Premium
+// voices and its good standard ones (Samantha, Daniel, Karen…). The old Windows voices
+// (David, Zira, Mark) only when there's nothing else.
+function voiceScore(v) {
+  const n = v.name;
+  if (!/^en([-_]|$)/i.test(v.lang)) return -1;
+  let sc = /Natural/i.test(n) ? 100 : /^Google UK English Female/i.test(n) ? 95 : /^Google US English/i.test(n) ? 93 : /^Google/i.test(n) ? 90
+    : /Premium/i.test(n) ? 88 : /Enhanced/i.test(n) ? 85 : /^(Samantha|Ava|Zoe|Daniel|Karen|Moira|Tessa|Serena|Allison|Susan|Kate|Oliver|Evan|Nathan)\b/i.test(n) ? 70
+    : /Microsoft (David|Zira|Mark|Hazel|George|Susan|Linda|Richard|Catherine|James)\b/i.test(n) && !/Online/i.test(n) ? 10 : 40;
+  if (/^en[-_](CA|GB)/i.test(v.lang)) sc += 2;
+  else if (/^en[-_](US|AU|IE)/i.test(v.lang)) sc += 1;
+  return sc;
+}
+function bestVoice() {
+  return speechSynthesis.getVoices().filter((v) => voiceScore(v) >= 0).sort((a, b) => voiceScore(b) - voiceScore(a))[0] || null;
+}
+// Chrome lists its voices a moment after the page loads.
+const voicesReady = () => new Promise((res) => {
+  if (speechSynthesis.getVoices().length) return res();
+  speechSynthesis.addEventListener("voiceschanged", () => res(), { once: true });
+  setTimeout(res, 1500);
+});
+async function readerSpeak() {
   if (!canSpeak()) return;
   speechSynthesis.cancel();
-  const blocks = [...$("notes-body").querySelectorAll("h1, h2, h3, h4, h5, p, li")]
-    .map((el) => el.innerText.replace(/\s+/g, " ").trim()).filter(Boolean);
-  if (!blocks.length) return;
-  const voice = speechSynthesis.getVoices().find((v) => /^en(-|_)(CA|GB|US)/i.test(v.lang)) || null;
-  blocks.forEach((t, i) => {
+  await voicesReady();
+  // a sentence at a time: Chrome's Google voices stop by themselves after about 15 seconds
+  const pieces = [...$("notes-body").querySelectorAll("h1, h2, h3, h4, h5, p, li")]
+    .map((el) => el.innerText.replace(/\s+/g, " ").trim()).filter(Boolean)
+    .flatMap((t) => t.match(/[^.!?]+[.!?]+["”’)]*\s*|[^.!?]+$/g) || [t]).map((t) => t.trim()).filter(Boolean);
+  if (!pieces.length) return;
+  const voice = bestVoice();
+  pieces.forEach((t, i) => {
     const u = new SpeechSynthesisUtterance(t);
-    if (voice) u.voice = voice;
+    if (voice) { u.voice = voice; u.lang = voice.lang; }
     u.rate = 0.95;
-    if (i === blocks.length - 1) u.onend = () => readerButtons("idle");
+    if (i === pieces.length - 1) u.onend = () => readerButtons("idle");
     speechSynthesis.speak(u);
   });
   readerButtons("speaking");
