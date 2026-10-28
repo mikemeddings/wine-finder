@@ -68,7 +68,7 @@ def test_wine_count_and_unique_skus(wines):
 
 def test_record_shape(wines):
     keys = {"id", "source", "name", "name_raw", "producer", "region_or_grape", "vintage", "country",
-            "type", "size_ml", "pack", "abv", "price", "sweetness", "sku", "url", "available",
+            "type", "size_ml", "pack", "abv", "price", "sweetness", "sku", "upc", "url", "available",
             "retailer_scores", "new_since_last"}
     for w in wines:
         assert set(w) == keys
@@ -204,3 +204,10 @@ def test_generated_files_match_parser():
     assert bc["status"] == "ok"
     assert bc["count"] == sum(w["source"] == "BC Liquor" for w in data)
     assert bc["edition"] and bc["refreshed"]
+
+
+def test_barcodes_keep_their_leading_zeros(wines):
+    # BC's file drops leading zeros; padded to 14 digits they match the LCBO's barcodes
+    w = by(wines, sku="14977")[0]
+    assert w["upc"] == "05601078005017"
+    assert all(w["upc"] is None or (len(w["upc"]) == 14 and w["upc"].isdigit()) for w in wines)

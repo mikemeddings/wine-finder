@@ -689,12 +689,13 @@ function noteFoodSentence(note) {
   return parts.find((p) => SERVE.test(p) && Object.values(FOOD_WORDS).some((re) => re.test(p.toLowerCase())))?.trim().slice(0, 220) || "";
 }
 // LCBO listings with a food sentence, found by name for the same wine at another store.
-let lcboFoodIndex = null, lcboFoodKey = "";
+let lcboFoodIndex = null, lcboFoodKey = "", lcboByUpc = null;
 function lcboFoodNote(w) {
   if (w.source === "LCBO") return noteFoodSentence(w.note);
   const key = storeListsKey();
   if (lcboFoodKey !== key) {
     lcboFoodKey = key;
+    lcboByUpc = null;
     lcboFoodIndex = new Map();
     for (const l of WINES) {
       if (l.source !== "LCBO") continue;
@@ -707,6 +708,12 @@ function lcboFoodNote(w) {
   }
   if (w._lcboFoodKey === key) return w._lcboFood;
   w._lcboFoodKey = key;
+  const u = gtin(w.upc);
+  if (u) {
+    lcboByUpc ??= new Map(WINES.filter((l) => l.source === "LCBO" && gtin(l.upc)).map((l) => [gtin(l.upc), l]));
+    const l = lcboByUpc.get(u), sentence = l && noteFoodSentence(l.note);
+    if (sentence) return (w._lcboFood = sentence);
+  }
   const toks = storeTokens(w.name);
   for (const t of toks) for (const { l, sentence } of lcboFoodIndex.get(t) || [])
     if (typesAgree(w.type, l.type) && sameWineName(w.name, l.name)) return (w._lcboFood = sentence);
@@ -2882,8 +2889,8 @@ function ratedTwin(w) {
   }
   if (w._twinVer !== ver) {
     const text = w._s ?? fold([w.name, w.producer, w.region_or_grape].filter(Boolean).join(" "));
-    const code = codeTwinId(w), codeR = code && familyRatings[code];
-    w._twin = (codeR && ratedNames.some((x) => x.id === code) ? codeR : null) ||
+    const twinR = [...twinIds(w)].map((id) => ratedNames.find((x) => x.id === id)).find(Boolean)?.r;
+    w._twin = twinR ||
       ratedNames.find((x) => x.id !== w.id && text.includes(x.key) && sameWineName(w.name, x.r.name) &&
         (!(findWine(x.id)?.type || x.r.type) || typesAgree(w.type, findWine(x.id)?.type || x.r.type)))?.r || null;
     w._twinVer = ver;
@@ -3355,17 +3362,36 @@ function sameWineName(a, b) {
   const lead = big.slice(0, extra.length); // the producer comes first in the longer name
   return extra.every((t) => lead.includes(t)) && isProducerName(extra);
 }
-// BC Liquor and the LCBO often use the same product number for the same wine (Grao Vasco is
-// 14977 at both): the other store's listing, when the names share a word and the colour agrees.
-function codeTwinId(w) {
-  const m = /^(bcl|lcbo)-(\d+)$/.exec(w?.id || "");
-  if (!m) return null;
-  const other = `${m[1] === "bcl" ? "lcbo" : "bcl"}-${m[2]}`, r = familyRatings[other];
-  if (!r?.name) return null;
-  const ot = findWine(other)?.type || r.type;
-  if (ot && !typesAgree(w.type, ot)) return null;
-  const B = new Set(storeTokens(r.name).filter((t) => !isPlaceWord(t)));
-  return storeTokens(w.name).some((t) => !isPlaceWord(t) && B.has(t)) ? other : null;
+// A barcode as 14 digits: BC's list drops leading zeros, so every store's is padded alike.
+const gtin = (s) => { const t = String(s ?? "").trim(); return /^\d{8,14}$/.test(t) ? t.padStart(14, "0") : null; };
+// Another store's rated listing of this very bottle: the same barcode (the surest link: 653
+// BC and LCBO wines share one), else the same product number, which BC and the LCBO often
+// share (Grao Vasco is 14977 at both) when the names share a word and the colour agrees.
+let upcRatings = null, upcRatingsVer = "";
+function twinIds(w) {
+  const out = new Set();
+  if (!w?.id) return out;
+  const ver = `${Object.keys(familyRatings).length}:${ratingsVer}`;
+  if (upcRatingsVer !== ver) {
+    upcRatingsVer = ver;
+    upcRatings = new Map();
+    for (const [id, r] of Object.entries(familyRatings)) {
+      const u = gtin(r.upc);
+      if (u) (upcRatings.get(u) || upcRatings.set(u, []).get(u)).push(id);
+    }
+  }
+  const u = gtin(w.upc);
+  for (const id of (u && upcRatings.get(u)) || []) if (id !== w.id) out.add(id);
+  const m = /^(bcl|lcbo)-(\d+)$/.exec(w.id);
+  if (m) {
+    const other = `${m[1] === "bcl" ? "lcbo" : "bcl"}-${m[2]}`, r = familyRatings[other];
+    const ot = r && (findWine(other)?.type || r.type);
+    if (r?.name && (!ot || typesAgree(w.type, ot))) {
+      const B = new Set(storeTokens(r.name).filter((t) => !isPlaceWord(t)));
+      if (storeTokens(w.name).some((t) => !isPlaceWord(t) && B.has(t))) out.add(other);
+    }
+  }
+  return out;
 }
 
 // Ratings the family gave this wine under its other records (cellar entries, names typed).
@@ -3385,10 +3411,10 @@ function relatedRatings(w) {
   // ratings given to a store's listing of the same wine, at any store
   const STORE_OF = { bcl: "BC Liquor - LDB", bsw: "BSW Liquor", zyn: "ZYN", luc: "Lucullus (Switzerland)",
     wsh: "Weinshop365 (Switzerland)", lcbo: "LCBO" };
-  const twinId = codeTwinId(w);
+  const twins = twinIds(w);
   for (const [id, r] of Object.entries(familyRatings)) {
     const store = STORE_OF[id.split("-")[0]];
-    if (seen.has(id) || !store || !r.name || (id !== twinId && !sameWineName(w.name, r.name))) continue;
+    if (seen.has(id) || !store || !r.name || (!twins.has(id) && !sameWineName(w.name, r.name))) continue;
     const ot = findWine(id)?.type || r.type; // the published rating knows its colour too
     if (ot && !typesAgree(w.type, ot)) continue;
     seen.add(id);
@@ -4229,8 +4255,9 @@ async function publishResearch(items) {
     for (const it of pub) {
       const e = d.ratings[it.id] || {};
       if (it.name) e.name = it.name;
-      const t = findWine(it.id)?.type;
+      const t = findWine(it.id)?.type, u = gtin(findWine(it.id)?.upc);
       if (t) e.type = t;
+      if (u) e.upc = u;
       if (it.claude) e.claude = it.from ? { ...it.claude, from: it.from } : it.claude;
       if (it.mine) e.family = it.mine;
       if (e.claude || e.family) d.ratings[it.id] = e;
@@ -5495,7 +5522,7 @@ function lcboWines(csv) {
       region: region || null, grape: r.grape || null,
       vintage: numOrNull(r.vintage), country: r.country || null, type: r.type || "Other",
       size_ml: numOrNull(r.volume_ml), pack: 1, abv: numOrNull(r.alcohol_percent), price: numOrNull(r.price),
-      sweetness: null, sugar: numOrNull(r.sugar_g_per_l), upc: r.upc || null, url: r.url || null,
+      sweetness: null, sugar: numOrNull(r.sugar_g_per_l), upc: gtin(r.upc), url: r.url || null,
       note: r.tasting_note || null, available: true, retailer_scores: null, new_since_last: false,
     };
   }));

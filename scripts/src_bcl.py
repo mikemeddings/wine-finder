@@ -146,6 +146,13 @@ def _num(s):
         return None
 
 
+def gtin(s):
+    """A barcode as 14 digits. BC's file drops leading zeros (606 wines), so every store's
+    barcode is padded the same way and BC's match the LCBO's for the same bottle."""
+    s = (s or "").strip()
+    return s.zfill(14) if s.isdigit() and 8 <= len(s.lstrip("0") or "0") and len(s) <= 14 else None
+
+
 def normalise(csv_bytes, previous_skus=None):
     """Parse raw CSV bytes into normalised wine records (wine category only)."""
     text = csv_bytes.decode("utf-8", errors="replace")
@@ -182,6 +189,7 @@ def normalise(csv_bytes, previous_skus=None):
             "price": _num(r["PRODUCT_PRICE"]),
             "sweetness": int(sweet) if sweet is not None else None,
             "sku": sku,
+            "upc": gtin(r.get("PRODUCT_BASE_UPC_NO")),
             "url": None,
             "available": True,
             "retailer_scores": None,
