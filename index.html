@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-28.21">
+<link rel="stylesheet" href="app.css?v=2026-10-28.25">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -184,7 +184,8 @@
   <div class="sl-bar" id="sl-bar">
     <span>Short List for Claude: <strong class="sl-count">0</strong> <span class="sl-summary" id="sl-summary"></span></span>
     <button type="button" class="btn btn-score" data-action="score-claude">Get quick Claude scores (next 25)</button>
-    <button type="button" class="btn btn-primary" data-view="shortlist">See the list and ask Claude</button>
+    <button type="button" class="btn btn-quickmark" id="score-marked" data-action="score-marked" hidden>Get Marked Quick Scores Now (0)</button>
+    <button type="button" class="btn btn-primary" data-view="shortlist">See the Short List (detailed listing) and Ask Claude</button>
   </div>
 </main>
 
@@ -668,6 +669,6 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-28.21"></script>
+<script src="app.js?v=2026-10-28.25"></script>
 </body>
 </html>

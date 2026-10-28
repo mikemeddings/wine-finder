@@ -79,7 +79,7 @@ const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 100;
 // A standard bottle: 750 ml, or 700 ml as Swiss wines (Vaud, Valais) often come.
 const STANDARD_ML = new Set([700, 750]);
-const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk", dineHistory: "wf.dineHistory", lcbo: "wf.lcbo", myPicks: "wf.myPicks", folds: "wf.folds", readerScale: "wf.readerScale" };
+const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk", dineHistory: "wf.dineHistory", lcbo: "wf.lcbo", myPicks: "wf.myPicks", folds: "wf.folds", readerScale: "wf.readerScale", quickMarks: "wf.quickMarks" };
 
 // ---- Helpers -----------------------------------------------------------------
 
@@ -1484,6 +1484,7 @@ function cellarCard(w) {
     <div class="wine-actions">
       ${researchButton(w)}
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
+      ${quickMarkButton(w)}
       <button type="button" class="btn btn-ew" data-action="mw-where" data-id="${esc(w.id)}">Where can I buy it?</button>
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
       <a class="btn ext btn-we" href="${wineEnthusiastUrl(w)}" target="_blank" rel="noopener">Wine Enthusiast</a>
@@ -1512,6 +1513,7 @@ function wineCard(w) {
     <div class="wine-actions">
       ${researchButton(w)}
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
+      ${quickMarkButton(w)}
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
       <a class="btn ext btn-we" href="${wineEnthusiastUrl(w)}" target="_blank" rel="noopener">Wine Enthusiast</a>
       <a class="btn ext btn-vivino" href="${vivinoUrl(w)}" target="_blank" rel="noopener">Vivino</a>
@@ -1833,11 +1835,14 @@ let scorePicks = [];
 
 // Already scored, in any vintage and at any store: Claude's research, an earlier quick
 // score, or "no reviews found" from an earlier search. These aren't looked up again.
-// A quick score from before quick scores gathered the style, food and grapes doesn't count:
-// the next quick-score run picks the wine again and fills them in.
+// A thin score doesn't count as scored: a quick score from before quick scores gathered the
+// style, food and grapes, or a score from the older "rank these wines" runs (a score and a
+// line, no write-up). The next quick-score run, or the olive button, fills the details in.
+// A wine with a full write-up always counts as scored.
 const olderQuick = (c) => !!c?.quick && !(c.body || c.sweet || c.pair || c.grapes || c.drinkFrom);
+const thinScore = (c) => !(c.body || c.sweet || c.pair || c.grapes || c.drinkFrom);
 const claudeRatingsOf = (w) => [ratingOf(w.id).claude, frOf(w.id).claude, ...relatedRatings(w).map((r) => r.f.claude)].filter(Boolean);
-const hasClaudeRating = (w) => claudeRatingsOf(w).some((c) => !olderQuick(c));
+const hasClaudeRating = (w) => notesFor(w).length > 0 || claudeRatingsOf(w).some((c) => !thinScore(c));
 
 function scoreLine(w, i) {
   const price = w.currency ? `${w.currency} ${Number(w.price_local).toFixed(2)}` : money(w.price);
@@ -1853,7 +1858,31 @@ function scorePrompt() {
 }
 
 // Step 1: pick the first 25 unscored wines of the list as it's sorted now, and explain.
-function openScoreDialog() {
+// Wines marked one by one for a quick score ("＋ Add Claude Quick Score" on a card), kept in
+// this browser until Claude's scores for them are saved.
+const quickMarks = new Set((() => { const v = storeGet(STORE.quickMarks, []); return Array.isArray(v) ? v : []; })());
+function quickMarkButton(w) {
+  if (w.kind === "typed" || (hasClaudeRating(w) && !quickMarks.has(w.id))) return ""; // already scored: nothing to mark
+  const on = quickMarks.has(w.id);
+  return `<button type="button" class="btn btn-quickmark" data-qmark="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ Marked for a Quick Score (tap to unmark)" : "＋ Add Claude Quick Score"}</button>`;
+}
+function saveQuickMarks() {
+  storeSet(STORE.quickMarks, [...quickMarks]);
+  const n = quickMarks.size, b = $("score-marked");
+  if (b) { b.hidden = !n; b.textContent = `Get Marked Quick Scores Now (${n})`; }
+}
+function toggleQuickMark(id) {
+  if (quickMarks.has(id)) quickMarks.delete(id); else quickMarks.add(id);
+  saveQuickMarks();
+  for (const b of document.querySelectorAll(`[data-qmark="${CSS.escape(id)}"]`)) {
+    const on = quickMarks.has(id);
+    b.setAttribute("aria-pressed", String(on));
+    b.textContent = on ? "✓ Marked for a Quick Score (tap to unmark)" : "＋ Add Claude Quick Score";
+  }
+}
+
+function openScoreDialog(marked = false) {
+  if (marked) return openMarkedScoreDialog();
   const list = lastResults.filter((w) => w.kind !== "typed");
   let skipped = 0;
   scorePicks = [];
@@ -1873,7 +1902,32 @@ function openScoreDialog() {
   } else {
     $("score-intro").innerHTML = `Claude will look up reviews for the first <strong>${scorePicks.length}</strong> ${scorePicks.length === 1 ? "wine" : "wines"} in your list that don't have a Claude score yet` +
       (skipped ? ` (${skipped} already scored ${skipped === 1 ? "was" : "were"} skipped)` : "") +
-      (refresh ? `, including ${refresh} with an older quick score, to add their style, grapes and food` : "") +
+      (refresh ? `, including ${refresh} with an older, shorter score, to add their style, grapes and food` : "") +
+      `, and give each a score out of 100. The scores are kept and shared with the family, so nobody looks them up twice.`;
+    $("score-list").innerHTML = scorePicks.map((w) => `<li>${esc(w.name)}${w.vintage ? ` <span class="hint">${esc(String(w.vintage))}</span>` : ""}</li>`).join("");
+    $("score-steps").hidden = $("score-go").hidden = false;
+  }
+  $("score-text").value = scorePicks.length ? scorePrompt() : "";
+  $("score-dialog").showModal?.();
+}
+
+// The wines marked on their cards, up to a batch of 25 (the rest stay marked for next time).
+function openMarkedScoreDialog() {
+  const marked = [...quickMarks].map((id) => findWine(id)).filter(Boolean);
+  scorePicks = marked.filter((w) => !hasClaudeRating(w)).slice(0, SCORE_BATCH);
+  const done = marked.filter((w) => hasClaudeRating(w));
+  for (const w of done) quickMarks.delete(w.id); // scored meanwhile (here or by the family)
+  saveQuickMarks();
+  $("score-result").hidden = true;
+  $("score-go").textContent = "Open Claude with my question";
+  if (!scorePicks.length) {
+    $("score-intro").textContent = "None of the wines you marked still needs a score" + (done.length ? `: ${done.length} already ${done.length === 1 ? "has" : "have"} one.` : ".");
+    $("score-list").innerHTML = "";
+    $("score-steps").hidden = $("score-go").hidden = true;
+  } else {
+    const left = marked.length - done.length - scorePicks.length;
+    $("score-intro").innerHTML = `Claude will look up reviews for the <strong>${scorePicks.length}</strong> ${scorePicks.length === 1 ? "wine" : "wines"} you marked` +
+      (left > 0 ? ` (the other ${left} stay marked for the next batch)` : "") +
       `, and give each a score out of 100. The scores are kept and shared with the family, so nobody looks them up twice.`;
     $("score-list").innerHTML = scorePicks.map((w) => `<li>${esc(w.name)}${w.vintage ? ` <span class="hint">${esc(String(w.vintage))}</span>` : ""}</li>`).join("");
     $("score-steps").hidden = $("score-go").hidden = false;
@@ -2758,6 +2812,7 @@ async function confirmSavedRatings() {
   }
   saveRatings();
   storeSet(STORE.notes, notes);
+  if (items.some((it) => quickMarks.delete(it.id))) saveQuickMarks(); // their quick scores are in
   pendingSave = null;
   const nNotes = Object.keys(parts).length;
   const quick = items.some((it) => it.quick);
@@ -5195,6 +5250,8 @@ function wireEvents() {
     else if (t.dataset.action === "hits-in-list") showHitsInList();
     else if (t.dataset.action === "lcbo-unlock") unlockLcbo($("lcbo-code").value);
     else if (t.dataset.action === "score-claude") openScoreDialog();
+    else if (t.dataset.action === "score-marked") openScoreDialog(true);
+    else if (t.dataset.qmark) toggleQuickMark(t.dataset.qmark);
     else if (t.dataset.action === "score-go") goScoreClaude();
     else if (t.dataset.action === "score-close") $("score-dialog").close();
     else if (t.dataset.typed != null) {
@@ -5689,6 +5746,7 @@ async function init() {
   window.addEventListener("hashchange", offerSavedRatings);
   window.addEventListener("hashchange", unlockFromLink);
   tabReady = true;
+  saveQuickMarks();
   setTimeout(() => loadAllSources().then(() => { updatePickCounts(); renderSources(); }), 800);
 }
 
