@@ -4753,7 +4753,7 @@ function removeMyPick(i) {
   renderMyPicks();
 }
 
-// "Find me a wine" folds away to save room; each browser remembers how it was left. Folded, the finder still shows the quick picks and a one-line summary.
+// "Find me a wine" folds away to save room, and starts folded; each browser remembers how it was left. Folded, the finder still shows the quick picks and a one-line summary.
 const FOLDS = { finder: "finder-body" };
 function setFold(name, open, remember = true) {
   const btn = document.querySelector(`[data-fold="${name}"]`), body = $(FOLDS[name]);
@@ -4803,7 +4803,7 @@ function wireEvents() {
   renderFinder();
   if ($("grape-guide")) $("grape-guide").innerHTML = Object.entries(GRAPE_INFO).map(([g, d]) => `<dt>${esc(g)}</dt><dd>${esc(d)}</dd>`).join("");
   const folds = storeGet(STORE.folds, {});
-  for (const name of Object.keys(FOLDS)) setFold(name, folds?.[name] !== false, false);
+  for (const name of Object.keys(FOLDS)) setFold(name, folds?.[name] === true, false); // folded on a first visit
   wireMyWines();
 
   document.addEventListener("click", (e) => {
