@@ -693,3 +693,5 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #bfeeee; }
 .quick-food li { margin: 0 0 0.5em; }
 #notes-dialog.quick-reader #notes-close { background: #626b06; border-color: #626b06; color: #fff; }
 .quick-reader #notes-close:hover, .quick-reader #notes-close:focus-visible { background: #4f5605; }
+
+.quick-plain { margin-top: 0.15em; font-size: 0.85em; line-height: 1.45; color: #4a4a3a; }

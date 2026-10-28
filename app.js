@@ -2518,14 +2518,16 @@ const shortDate = (iso) => {
 
 function ratingsHtml(w) {
   const r = ratingOf(w.id), f = frOf(w.id), parts = [frHtml(w)].filter(Boolean);
-  const same = (a, b) => b && JSON.stringify(a) === JSON.stringify(b);
+  // the same score saved here and published (the published copy also says who ran it)
+  const same = (a, b) => b && ["points", "vintage", "note", "quick", "date"].every((k) => (a[k] ?? null) === (b[k] ?? null)) &&
+    (a.family == null || JSON.stringify(a) === JSON.stringify(b));
   if (r.claude && !same(r.claude, f.claude)) {
     const c = r.claude;
     parts.push(`${c.quick ? `<button type="button" class="rating rating-claude rating-quick quick-btn" data-quick="${esc(w.id)}" data-quick-src="own" aria-label="Claude quick score ${c.points ?? ""}: show the details">` : `<span class="rating rating-claude">`}` +
       `Claude <strong>${c.points ?? "found no reviews"}</strong>${c.quick ? " (Quick Score Only)" : ""}` +
       `${c.vintage ? ` (${esc(String(c.vintage))})` : ""}${c.note ? ` · ${esc(c.note)}` : ""}` +
       ` <span class="rating-date">${esc(shortDate(c.date))}</span>${c.quick ? `<span class="quick-more">ⓘ Details</span></button>` : "</span>"}` +
-      (styleText(c) ? `<span class="rating rating-style">${esc(styleText(c))}</span>` : ""));
+      (!c.quick && styleText(c) ? `<span class="rating rating-style">${esc(styleText(c))}</span>` : ""));
   }
   if (r.mine && !same(r.mine, f.family)) {
     parts.push(`<span class="rating rating-mine">My rating <strong>${r.mine.points}</strong>` +
@@ -2903,7 +2905,7 @@ function frHtml(w) {
     `Claude <strong>${f.claude.points ?? "found no reviews"}</strong>${f.claude.quick ? " (Quick Score Only)" : ""}` +
     `${f.claude.vintage ? ` · ${esc(String(f.claude.vintage))}` : ""}${f.claude.note ? ` · ${esc(f.claude.note)}` : ""}` +
     `${f.claude.quick ? `<span class="quick-more">ⓘ Details</span></button>` : "</span>"}` +
-    (styleText(f.claude) ? `<span class="rating rating-style">${esc(styleText(f.claude))}</span>` : ""));
+    (!f.claude.quick && styleText(f.claude) ? `<span class="rating rating-style">${esc(styleText(f.claude))}</span>` : ""));
   if (f.family) parts.push(`<span class="rating rating-fr">Family <strong>${f.family.points}</strong>` +
     `${f.family.note ? ` · ${esc(f.family.note)}` : ""}</span>`);
   return parts.join("");
@@ -4288,32 +4290,55 @@ function readerPause() {
 // style estimate where Claude gave none, whether it's ready, where it's sold and the family's
 // cellars. Nothing is asked of Claude again.
 const grapesFromText = (t) => (t ? GRAPES.filter(([, re]) => re.test(fold(t))).map(([g]) => g) : []);
+const PLAIN = {
+  body: { light: "Feels light in the mouth, like skim milk: refreshing, and best with lighter food.",
+    medium: "A middle weight, like 2% milk: goes with most everyday dishes.",
+    full: "Rich and weighty in the mouth, like cream: stands up to hearty food." },
+  tannin: { soft: "Smooth, with hardly any drying grip on your gums.",
+    medium: "A gentle drying grip, like a cup of tea.",
+    firm: "A noticeable drying grip on gums and tongue, like strong tea. Food, fatty meat especially, softens it, and so does age." },
+  sweet: { dry: "No noticeable sweetness.", "off-dry": "A faint touch of sweetness.",
+    "medium-sweet": "Clearly sweet, but still fresh.", sweet: "A dessert wine." },
+  fruity: { yes: "Tastes ripe and fruity (jammy berries or plums) even though it's dry.",
+    no: "More savoury than fruity: earth, herbs, spice or oak rather than ripe fruit." },
+  finish: { short: "The taste fades soon after you swallow.", medium: "The taste lingers for a few seconds.",
+    long: "The flavour stays for a while after you swallow, usually a sign of a good wine." },
+};
+const scoreWords = (n) => (n >= 95 ? "classic, among the very best" : n >= 90 ? "outstanding" : n >= 85 ? "very good" : n >= 80 ? "good" : n >= 75 ? "plain but sound" : "not recommended");
 function openQuick(id, src) {
   const c = (src === "own" ? ratingOf(id).claude : frOf(id).claude) || {};
   const w = findWine(id), name = w?.name || ratingOf(id).name || frOf(id).name || id;
-  const row = (label, value) => `<tr><th scope="row">${esc(label)}</th><td>${value}</td></tr>`;
+  const row = (label, value, plain = "") => `<tr><th scope="row">${esc(label)}</th><td>${value}${plain ? `<div class="quick-plain">${esc(plain)}</div>` : ""}</td></tr>`;
   const none = `<span class="quick-none">not given</span>`;
   const ours = ` <span class="quick-est">(our estimate)</span>`;
   const s = w ? wineStyle(w) : null;
   const pick = (cv, key, fmt = esc) => (cv != null && cv !== "" ? fmt(cv) : s?.[key]?.v != null ? `${fmt(s[key].v)}${ours}` : none);
-  const grapes = [...new Set([...grapesFromText(c.grapes), ...(w ? grapesOf(w).filter((g) => grapeFits(w, g) || w.type === "Rosé") : [])])];
+  // Claude's grapes when it named any we know; otherwise our own reading of the name and region
+  const fromClaude = grapesFromText(c.grapes);
+  const grapes = fromClaude.length ? fromClaude : w ? grapesOf(w).filter((g) => grapeFits(w, g) || w.type === "Rosé") : [];
   const sec = (title, body) => (body ? `<h4>${esc(title)}</h4>${body}` : "");
 
   // The score and what Claude gave
   const scoreRows = [
-    row("Score", c.points != null ? `<strong>${c.points}</strong> out of 100${c.vintage ? ` for the ${esc(String(c.vintage))} vintage` : ""}` : "Claude found no reviews"),
+    row("Score", c.points != null ? `<strong>${c.points}</strong> out of 100${c.vintage ? ` for the ${esc(String(c.vintage))} vintage` : ""}` : "Claude found no reviews",
+      c.points != null ? `That's ${scoreWords(c.points)}. Reviewers' scale: 95 and up classic, 90–94 outstanding, 85–89 very good, 80–84 good.` : ""),
     row("What it rests on", c.note ? esc(c.note) : none),
-    row("Grapes", c.grapes ? esc(c.grapes) : grapes.length ? `${esc(grapes.map(PLAIN_GRAPE).join(", "))}${ours}` : none),
+    row("Grapes", c.grapes ? esc(c.grapes) : grapes.length ? `${esc(grapes.map(PLAIN_GRAPE).join(", "))}${ours}` : none,
+      /field blend/i.test(c.grapes || "") ? "A field blend: many grape varieties grown together in one (often old) vineyard and picked and fermented together." : ""),
   ];
   // How it tastes: Claude's words, else our estimate (labelled)
+  const val = (cv, key) => (cv != null && cv !== "" ? cv : s?.[key]?.v ?? null);
+  const fr = c.fruity != null ? c.fruity : s?.fruity?.v ?? null;
   const tasteRows = [
-    row("Body", pick(c.body, "body")),
-    ...(w?.type === "Red" || c.tannin ? [row("Tannin", pick(c.tannin, "tannin"))] : []),
-    row("Sweetness", pick(c.sweet, "sweet")),
-    row("Fruit-forward", c.fruity != null ? (c.fruity ? "Yes: ripe and fruity-tasting" : "No") : s?.fruity?.v != null ? `${s.fruity.v ? "Yes" : "No"}${ours}` : none),
-    row("Finish", c.finish ? esc(c.finish) : none),
+    row("Body", pick(c.body, "body"), PLAIN.body[val(c.body, "body")] || "How heavy the wine feels in your mouth."),
+    ...(w?.type === "Red" || c.tannin ? [row("Tannin", pick(c.tannin, "tannin"), PLAIN.tannin[val(c.tannin, "tannin")] || "The drying grip a red leaves on your gums, from the grape skins and oak.")] : []),
+    row("Sweetness", pick(c.sweet, "sweet"), PLAIN.sweet[val(c.sweet, "sweet")] || ""),
+    row("Fruit-forward", c.fruity != null ? (c.fruity ? "Yes" : "No") : s?.fruity?.v != null ? `${s.fruity.v ? "Yes" : "No"}${ours}` : none,
+      fr == null ? "" : PLAIN.fruity[fr ? "yes" : "no"]),
+    row("Finish", c.finish ? esc(c.finish) : none, PLAIN.finish[c.finish] || "How long the taste lasts after you swallow."),
     row("Drink", c.drinkFrom ? `${c.drinkFrom}–${c.drinkTo}${c.drinkFrom <= THIS_YEAR && THIS_YEAR <= c.drinkTo + 2 ? " (ready now)" : c.drinkFrom > THIS_YEAR ? " (best kept a while yet)" : " (past its best window)"}`
-      : s?.ready?.ready != null ? `${s.ready.ready ? "Ready now" : "Better kept a while"}${ours}` : none),
+      : s?.ready?.ready != null ? `${s.ready.ready ? "Ready now" : "Better kept a while"}${ours}` : none,
+      "The years it's expected to taste its best. “Ready now” means there's no need to keep it in a cellar first."),
   ];
   // Food: Claude's pick, then the classic and adventurous matches with the books' dishes
   let food = c.pair ? `<p><strong>Claude's pick:</strong> ${esc(c.pair)}.</p>` : "";
@@ -4444,7 +4469,46 @@ function saveInboxKey() {
 // Claude opens its save link in a new tab. That newest tab is the one in use, so older
 // Wine Finder tabs step aside: they close if the browser allows it, or say they can be closed.
 const tabChannel = "BroadcastChannel" in window ? new BroadcastChannel("wine-finder") : null;
-if (tabChannel) tabChannel.onmessage = (e) => { if (e.data?.type === "newer-tab") stepAside(); };
+// A save link from Claude opens a new tab. If a Wine Finder tab is already open (with the
+// person's place and filters), the new tab hands it the link and closes itself; the older
+// tab saves the scores. Only when no other tab answers does the new tab do the saving.
+const TAB_ID = Math.random().toString(36).slice(2);
+let tabReady = false; // set once this tab can take a save link
+if (tabChannel) tabChannel.onmessage = (e) => {
+  const d = e.data || {};
+  if (d.type === "newer-tab") stepAside();
+  else if (d.type === "anyone" && tabReady) tabChannel.postMessage({ type: "here", to: d.from, from: TAB_ID });
+  else if (d.type === "take" && d.to === TAB_ID && /^#(save|scores|share)=/.test(d.hash || "")) {
+    location.hash = d.hash; // the hashchange listener offers (or, for quick scores, makes) the save
+    tabChannel.postMessage({ type: "took", to: d.from, from: TAB_ID });
+    const title = document.title;
+    document.title = "✓ Scores arrived · " + title;
+    setTimeout(() => { document.title = title; }, 15000);
+  }
+};
+function handOffSave(hash) {
+  return new Promise((resolve) => {
+    if (!tabChannel) return resolve(false);
+    let target = null;
+    const done = (ok) => { tabChannel.removeEventListener("message", listen); resolve(ok); };
+    const listen = (e) => {
+      const d = e.data || {};
+      if (d.to !== TAB_ID) return;
+      if (d.type === "here" && !target) { target = d.from; tabChannel.postMessage({ type: "take", to: target, from: TAB_ID, hash }); }
+      else if (d.type === "took" && d.from === target) done(true);
+    };
+    tabChannel.addEventListener("message", listen);
+    tabChannel.postMessage({ type: "anyone", from: TAB_ID });
+    setTimeout(() => done(false), 1500);
+  });
+}
+function showHandedOff() {
+  const card = document.querySelector("#stale-tab .stale-card");
+  if (card) card.innerHTML = `<p class="big">Saved in your other Wine Finder tab.</p>
+    <p>Claude's scores went to the Wine Finder tab you already had open, so your place and choices are kept there. This tab can be closed with the ✕ on its tab.</p>`;
+  $("stale-tab").hidden = false;
+  try { window.close(); } catch { /* the browser may not allow it */ }
+}
 function announceNewerTab() { tabChannel?.postMessage({ type: "newer-tab" }); }
 function stepAside() {
   try { window.close(); } catch { /* not allowed */ }
@@ -5491,6 +5555,7 @@ function unlockFromLink() {
 }
 
 async function init() {
+  if (/^#(save|scores|share)=/.test(location.hash) && await handOffSave(location.hash)) { showHandedOff(); return; }
   loadMyWines();
   loadRatings();
   wireEvents();
@@ -5530,6 +5595,7 @@ async function init() {
   await restorePlace();
   window.addEventListener("hashchange", offerSavedRatings);
   window.addEventListener("hashchange", unlockFromLink);
+  tabReady = true;
   setTimeout(() => loadAllSources().then(() => { updatePickCounts(); renderSources(); }), 800);
 }
 
