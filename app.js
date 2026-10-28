@@ -3952,7 +3952,8 @@ const myName = () => String(storeGet(STORE.myName, "") || "").trim();
 // Every write-up the family has for this wine, under any of its records.
 function notesFor(w) {
   if (!w) return [];
-  const ids = new Set([w.id, sharedIdOf(w.id), ...(cellarMatches(w).ids || [])].filter(Boolean));
+  // a private cellar's wines have their own codes; the published write-ups use the shared ones
+  const ids = new Set([w.id, sharedIdOf(w.id), ...(cellarMatches(w).ids || []).flatMap((id) => [id, sharedIdOf(id)])].filter(Boolean));
   const local = localNotes(), out = new Map();
   for (const [id, n] of Object.entries(local)) {
     if (ids.has(id) || ids.has(sharedIdOf(id)) || (id.startsWith("typed-") && n.name && sameWineName(w.name, n.name))) out.set(sharedIdOf(id) || id, { id, ...n, local: true });
