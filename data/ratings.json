@@ -2570,8 +2570,18 @@
     "points": null,
     "vintage": 2022,
     "note": "No reviews found",
-    "date": "2026-10-26",
-    "quick": true
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "off-dry",
+    "fruity": true,
+    "finish": "short",
+    "pair": "grilled sausages and tomato pasta",
+    "grapes": "Castelao Aragonez Touriga Cabernet",
+    "drinkFrom": 2024,
+    "drinkTo": 2026,
+    "from": "Mike"
    }
   },
   "lcbo-14977": {
@@ -2659,9 +2669,10 @@
    "claude": {
     "points": null,
     "vintage": 2021,
-    "note": "No reviews, only a 2023 silver medal",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "No reviews found",
+    "date": "2026-10-28",
+    "quick": true,
+    "from": "Mike"
    }
   },
   "lcbo-30868": {
@@ -2860,6 +2871,427 @@
     "pair": "grilled fish tapas",
     "drinkFrom": 2021,
     "drinkTo": 2023,
+    "from": "Mike"
+   }
+  },
+  "lcbo-30937": {
+   "name": "Esporao Monte Velho Red Organic Alentejo 2021",
+   "claude": {
+    "points": 86,
+    "vintage": 2024,
+    "note": "WS 87 non-organic 2024 Decanter score hidden",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled pork and lamb kebabs",
+    "grapes": "Aragonez Syrah Touriga Nacional",
+    "drinkFrom": 2023,
+    "drinkTo": 2026,
+    "from": "Mike"
+   }
+  },
+  "lcbo-42927": {
+   "name": "Ribafreixo Selecao Red 2021",
+   "claude": {
+    "points": 88,
+    "vintage": 2019,
+    "note": "Gilbert Gaillard Double Gold for 2019",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "roast leg of lamb and grilled ribeye",
+    "grapes": "Aragonez Alfrocheiro Alicante Bouschet",
+    "drinkFrom": 2023,
+    "drinkTo": 2027,
+    "from": "Mike"
+   }
+  },
+  "lcbo-37228": {
+   "name": "Aveleda Lisboa Red",
+   "claude": {
+    "points": 84,
+    "vintage": 2022,
+    "note": "WS 83 for 2022 Globe pick 2021",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "short",
+    "pair": "pizza and burgers",
+    "drinkFrom": 2024,
+    "drinkTo": 2026,
+    "from": "Mike"
+   }
+  },
+  "lcbo-427377": {
+   "name": "Porta 6 Lisboa VR",
+   "claude": {
+    "points": 88,
+    "vintage": 2021,
+    "note": "Decanter 90 WineAlign 87 for 2021",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "roast chicken and pasta bolognese",
+    "grapes": "Tinta Roriz Castelao Touriga",
+    "drinkFrom": 2022,
+    "drinkTo": 2025,
+    "from": "Mike"
+   }
+  },
+  "lcbo-37227": {
+   "name": "Monte Das Anforas",
+   "claude": {
+    "points": 85,
+    "vintage": 2022,
+    "note": "Mundus Vini Silver 2022 no critic notes",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "off-dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled pork chops and beef stew",
+    "grapes": "Aragonez Alicante Trincadeira",
+    "drinkFrom": 2024,
+    "drinkTo": 2027,
+    "from": "Mike"
+   }
+  },
+  "lcbo-19452": {
+   "name": "Waterdog Red",
+   "claude": {
+    "points": 86,
+    "vintage": 2022,
+    "note": "WS 86 for 2022",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "short",
+    "pair": "BBQ ribs and pasta",
+    "grapes": "Castelao Trincadeira Touriga Nacional",
+    "drinkFrom": 2024,
+    "drinkTo": 2026,
+    "from": "Mike"
+   }
+  },
+  "lcbo-26713": {
+   "name": "Dona Vittoria Premium Red Alentejo 2020",
+   "claude": {
+    "points": null,
+    "vintage": 2020,
+    "note": "No reviews found",
+    "date": "2026-10-28",
+    "quick": true,
+    "from": "Mike"
+   }
+  },
+  "lcbo-45909": {
+   "name": "Casa Velha Douro Red 2022",
+   "claude": {
+    "points": 88,
+    "vintage": 2021,
+    "note": "JS 91 for 2021 community notes earthy",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "grilled lamb chops and tomato pasta",
+    "grapes": "Touriga Nacional Roriz Barroca",
+    "drinkFrom": 2023,
+    "drinkTo": 2027,
+    "from": "Mike"
+   }
+  },
+  "lcbo-535641": {
+   "name": "Vicente Faria Animus",
+   "claude": {
+    "points": 88,
+    "vintage": 2021,
+    "note": "NM 90 for 2021 WineAlign 87 2019",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled lamb chops and sausage pasta",
+    "grapes": "Touriga Franca Roriz Nacional",
+    "drinkFrom": 2025,
+    "drinkTo": 2027,
+    "from": "Mike"
+   }
+  },
+  "lcbo-44949": {
+   "name": "Anticiclone Red Jose Maria Da Fonseca Vinhos 2023",
+   "claude": {
+    "points": 90,
+    "vintage": 2022,
+    "note": "WS 90 Top 100 NM 90 2022",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled sirloin and BBQ ribs",
+    "grapes": "Castelao Aragonez",
+    "drinkFrom": 2025,
+    "drinkTo": 2029,
+    "from": "Mike"
+   }
+  },
+  "lcbo-31600": {
+   "name": "Casa De Cambres Colheita Red 2020",
+   "claude": {
+    "points": null,
+    "vintage": 2020,
+    "note": "No reviews found",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "roast beef and pepperoni pizza",
+    "grapes": "Touriga Franca Roriz Nacional",
+    "drinkFrom": 2022,
+    "drinkTo": 2025,
+    "from": "Mike"
+   }
+  },
+  "lcbo-44950": {
+   "name": "Fiuza Ducado do Infante Reserva Red 2022",
+   "claude": {
+    "points": 88,
+    "vintage": 2022,
+    "note": "NM 89 for 2022",
+    "date": "2026-10-28",
+    "quick": true,
+    "sweet": "dry",
+    "drinkFrom": 2025,
+    "drinkTo": 2027,
+    "from": "Mike"
+   }
+  },
+  "lcbo-45409": {
+   "name": "Perspectiva Reserva Red Douro 2020",
+   "claude": {
+    "points": 90,
+    "vintage": 2020,
+    "note": "WE 91 RKS 89 for 2020",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "braised short ribs and aged cheddar",
+    "drinkFrom": 2024,
+    "drinkTo": 2028,
+    "from": "Mike"
+   }
+  },
+  "lcbo-50930": {
+   "name": "Quinta das Setencostas Alenquer 2020",
+   "claude": {
+    "points": 88,
+    "vintage": 2020,
+    "note": "WineAlign 88 four critics for 2020",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb shoulder and mushroom stew",
+    "grapes": "Castelao Camarate Tinta Miuda",
+    "drinkFrom": 2025,
+    "drinkTo": 2028,
+    "from": "Mike"
+   }
+  },
+  "lcbo-632869": {
+   "name": "S. Sebastião Tinta Roriz Syrah 2022",
+   "claude": {
+    "points": 86,
+    "vintage": 2022,
+    "note": "WineAlign 86 for 2022",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "short",
+    "pair": "burgers and grilled sausages",
+    "grapes": "Tinta Roriz Syrah",
+    "drinkFrom": 2025,
+    "drinkTo": 2027,
+    "from": "Mike"
+   }
+  },
+  "lcbo-533307": {
+   "name": "Silk & Spice Red",
+   "claude": {
+    "points": 88,
+    "vintage": 2022,
+    "note": "WE 91 Falstaff 89 for 2022",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "BBQ ribs and beef burgers",
+    "grapes": "Touriga Alicante Baga",
+    "drinkFrom": 2024,
+    "drinkTo": 2027,
+    "from": "Mike"
+   }
+  },
+  "lcbo-34465": {
+   "name": "Silk & Spice Spice Road",
+   "claude": {
+    "points": 89,
+    "vintage": 2022,
+    "note": "WE 92 for 2022 WE 91 2021",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled lamb and venison burgers",
+    "grapes": "Alicante Syrah Touriga Nacional",
+    "drinkFrom": 2026,
+    "drinkTo": 2029,
+    "from": "Mike"
+   }
+  },
+  "lcbo-26802": {
+   "name": "Porta dos Cavaleiros Red 2019",
+   "claude": {
+    "points": 88,
+    "vintage": 2019,
+    "note": "World of Fine Wine 89 Reserva 2019",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "roast pork and duck rice",
+    "grapes": "Touriga Nacional",
+    "drinkFrom": 2022,
+    "drinkTo": 2027,
+    "from": "Mike"
+   }
+  },
+  "lcbo-219816": {
+   "name": "Catedral Reserva Dao",
+   "claude": {
+    "points": 87,
+    "vintage": 2013,
+    "note": "WE 90 2013 WineAlign 87 2010",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "grilled chicken and roast pork",
+    "grapes": "Touriga Roriz Alfrocheiro",
+    "from": "Mike"
+   }
+  },
+  "lcbo-33318": {
+   "name": "Porta Da Ravessa Reserva Tinto Reserva 2020",
+   "claude": {
+    "points": null,
+    "vintage": 2020,
+    "note": "No reviews found",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled ribeye steak",
+    "grapes": "Touriga Nacional Syrah Alicante",
+    "drinkFrom": 2023,
+    "drinkTo": 2026,
+    "from": "Mike"
+   }
+  },
+  "lcbo-35671": {
+   "name": "Cabeca De Gaio Red 2021",
+   "claude": {
+    "points": 87,
+    "vintage": 2015,
+    "note": "Vert de Vin 90-91 for 2015 only",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "venison stew and grilled steak",
+    "grapes": "Touriga Nacional Franca Barroca",
+    "drinkFrom": 2023,
+    "drinkTo": 2027,
+    "from": "Mike"
+   }
+  },
+  "lcbo-247973": {
+   "name": "Cabriz Colheita Selecionada 2022",
+   "claude": {
+    "points": 87,
+    "vintage": 2022,
+    "note": "WineAlign 86 WS 86 NM community 89",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "bison burgers and barbecued beef roast",
+    "grapes": "Touriga Aragonez Alfrocheiro",
+    "drinkFrom": 2024,
+    "drinkTo": 2027,
     "from": "Mike"
    }
   }
