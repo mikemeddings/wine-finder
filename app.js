@@ -4753,16 +4753,15 @@ function removeMyPick(i) {
   renderMyPicks();
 }
 
-// "Find me a wine" folds away to save room, and starts folded; each browser remembers how it was left. Folded, the finder still shows the quick picks and a one-line summary.
+// "Find me a wine" folds away to save room, and the page always opens with it folded. Folded, the finder still shows the quick picks and a one-line summary.
 const FOLDS = { finder: "finder-body" };
-function setFold(name, open, remember = true) {
+function setFold(name, open) {
   const btn = document.querySelector(`[data-fold="${name}"]`), body = $(FOLDS[name]);
   if (!btn || !body) return;
   body.hidden = !open;
   btn.setAttribute("aria-expanded", String(open));
   btn.textContent = open ? "▴ Hide choices" : "▾ Show choices";
   btn.closest(".fold").classList.toggle("folded", !open);
-  if (remember) storeSet(STORE.folds, { ...storeGet(STORE.folds, {}), [name]: open });
   renderFinderSummary();
 }
 
@@ -4802,8 +4801,7 @@ function debounce(fn, ms) {
 function wireEvents() {
   renderFinder();
   if ($("grape-guide")) $("grape-guide").innerHTML = Object.entries(GRAPE_INFO).map(([g, d]) => `<dt>${esc(g)}</dt><dd>${esc(d)}</dd>`).join("");
-  const folds = storeGet(STORE.folds, {});
-  for (const name of Object.keys(FOLDS)) setFold(name, folds?.[name] === true, false); // folded on a first visit
+  for (const name of Object.keys(FOLDS)) setFold(name, false);
   wireMyWines();
 
   document.addEventListener("click", (e) => {
