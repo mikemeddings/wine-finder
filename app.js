@@ -79,7 +79,7 @@ const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 100;
 // A standard bottle: 750 ml, or 700 ml as Swiss wines (Vaud, Valais) often come.
 const STANDARD_ML = new Set([700, 750]);
-const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk", dineHistory: "wf.dineHistory", lcbo: "wf.lcbo", myPicks: "wf.myPicks", folds: "wf.folds" };
+const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk", dineHistory: "wf.dineHistory", lcbo: "wf.lcbo", myPicks: "wf.myPicks", folds: "wf.folds", readerScale: "wf.readerScale" };
 
 // ---- Helpers -----------------------------------------------------------------
 
@@ -4167,6 +4167,8 @@ async function openNotes(id) {
   const list = notesFor(w);
   $("notes-title").textContent = `Claude Research Results: ${w.name}`;
   $("notes-body").innerHTML = `<p class="hint">Loading…</p>`;
+  readerScale();
+  readerStop();
   $("notes-dialog").showModal?.();
   const parts = [];
   for (const n of list) {
@@ -4181,9 +4183,58 @@ async function openNotes(id) {
   $("notes-body").innerHTML = parts.join("<hr class='note-sep'>") || "<p>No write-up found.</p>";
 }
 
+// Reading comfort for the write-ups: text size (A− / A+, remembered in this browser) and
+// reading aloud with the browser's own voice, a paragraph at a time (Chrome stops a single
+// long utterance part way through).
+const READER_SCALES = [0.85, 1, 1.15, 1.3, 1.5, 1.7];
+function readerScale(step = 0) {
+  let i = READER_SCALES.indexOf(storeGet(STORE.readerScale, 1));
+  if (i < 0) i = 1;
+  i = Math.max(0, Math.min(READER_SCALES.length - 1, i + step));
+  if (step) storeSet(STORE.readerScale, READER_SCALES[i]);
+  $("notes-body")?.style.setProperty("--reader-scale", READER_SCALES[i]);
+  if ($("reader-smaller")) $("reader-smaller").disabled = i === 0;
+  if ($("reader-bigger")) $("reader-bigger").disabled = i === READER_SCALES.length - 1;
+}
+const canSpeak = () => "speechSynthesis" in window && typeof SpeechSynthesisUtterance === "function";
+function readerButtons(state) { // "idle", "speaking" or "paused"
+  if (!$("reader-speak")) return;
+  $("reader-speak").hidden = !canSpeak() || state !== "idle";
+  $("reader-pause").hidden = state === "idle";
+  $("reader-pause").textContent = state === "paused" ? "▶ Carry on" : "⏸ Pause";
+  $("reader-stop").hidden = state === "idle";
+}
+function readerSpeak() {
+  if (!canSpeak()) return;
+  speechSynthesis.cancel();
+  const blocks = [...$("notes-body").querySelectorAll("h1, h2, h3, h4, h5, p, li")]
+    .map((el) => el.innerText.replace(/\s+/g, " ").trim()).filter(Boolean);
+  if (!blocks.length) return;
+  const voice = speechSynthesis.getVoices().find((v) => /^en(-|_)(CA|GB|US)/i.test(v.lang)) || null;
+  blocks.forEach((t, i) => {
+    const u = new SpeechSynthesisUtterance(t);
+    if (voice) u.voice = voice;
+    u.rate = 0.95;
+    if (i === blocks.length - 1) u.onend = () => readerButtons("idle");
+    speechSynthesis.speak(u);
+  });
+  readerButtons("speaking");
+}
+function readerStop() {
+  if (canSpeak()) speechSynthesis.cancel();
+  readerButtons("idle");
+}
+function readerPause() {
+  if (!canSpeak()) return;
+  if (speechSynthesis.paused) { speechSynthesis.resume(); readerButtons("speaking"); }
+  else { speechSynthesis.pause(); readerButtons("paused"); }
+}
+
 function showWriteup(title, meta, text) {
   $("notes-title").textContent = title;
   $("notes-body").innerHTML = `<section class="note"><p class="note-meta">${esc(meta)}</p>${mdToHtml(text)}</section>`;
+  readerScale();
+  readerStop();
   $("notes-dialog").showModal?.();
 }
 
@@ -4369,7 +4420,7 @@ function savePlace() {
   } catch { /* private window etc.: nothing to restore later */ }
 }
 window.addEventListener("pagehide", savePlace);
-$("notes-dialog")?.addEventListener("close", () => { if (document.visibilityState === "visible") openNotesId = null; });
+$("notes-dialog")?.addEventListener("close", () => { readerStop(); if (document.visibilityState === "visible") openNotesId = null; });
 document.addEventListener("visibilitychange", () => { if (document.hidden) savePlace(); });
 
 async function restorePlace() {
@@ -4886,7 +4937,11 @@ function wireEvents() {
     else if (t.id === "help-back") goBack();
     else if (t.dataset.dineHist != null) showDinePicks(dineHistory()[+t.dataset.dineHist]);
     else if (t.id === "dine-close") $("dine-dialog").close();
-    else if (t.id === "notes-close") { $("notes-dialog").close(); openNotesId = null; }
+    else if (t.id === "notes-close" || t.id === "notes-close-top") { $("notes-dialog").close(); openNotesId = null; }
+    else if (t.id === "reader-smaller" || t.id === "reader-bigger") readerScale(t.id === "reader-bigger" ? 1 : -1);
+    else if (t.id === "reader-speak") readerSpeak();
+    else if (t.id === "reader-pause") readerPause();
+    else if (t.id === "reader-stop") readerStop();
     else if (t.dataset.inboxRead) inboxAct(t.dataset.inboxRead, "read");
     else if (t.dataset.inboxPublish) inboxAct(t.dataset.inboxPublish, "publish");
     else if (t.dataset.inboxIgnore) inboxAct(t.dataset.inboxIgnore, "ignore");
