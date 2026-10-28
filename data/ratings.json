@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-27",
+ "updated": "2026-10-28",
  "ratings": {
   "bcl-220979": {
    "name": "Cabernet Sauvignon - Haras De Pirque Hussonet Reserva",
@@ -1824,9 +1824,19 @@
    "claude": {
     "points": 95,
     "vintage": 2020,
-    "note": "Atkin 96, WE 94, WA 94",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "WA 94 Atkin 96 WE 94",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "lamb chops with rosemary",
+    "grapes": "Touriga Nacional",
+    "drinkFrom": 2024,
+    "drinkTo": 2035,
+    "from": "Mike"
    }
   },
   "lcbo-638213": {
@@ -1834,9 +1844,19 @@
    "claude": {
     "points": 94,
     "vintage": 2015,
-    "note": "WA 94",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "WA 94 for 2015",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast beef venison",
+    "grapes": "old-vine field blend",
+    "drinkFrom": 2020,
+    "drinkTo": 2035,
+    "from": "Mike"
    }
   },
   "lcbo-683128": {
@@ -1844,29 +1864,59 @@
    "claude": {
     "points": 93,
     "vintage": 2021,
-    "note": "Falstaff 93, Grandes Escolhas 18/20",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "Falstaff 93 Grandes Escolhas 18",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "beef tenderloin roast lamb",
+    "grapes": "Touriga Franca Touriga Nacional",
+    "drinkFrom": 2024,
+    "drinkTo": 2036,
+    "from": "Mike"
    }
   },
   "lcbo-18383": {
    "name": "Ex Aequo 2021",
    "claude": {
     "points": 93,
-    "vintage": 2017,
-    "note": "JS 94 for 2017, 2021 unreviewed",
-    "date": "2026-10-26",
-    "quick": true
+    "vintage": 2021,
+    "note": "WE 94 for 2021",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "lamb shoulder peppered steak",
+    "grapes": "Syrah Touriga Nacional",
+    "drinkFrom": 2024,
+    "drinkTo": 2033,
+    "from": "Mike"
    }
   },
   "lcbo-47348": {
    "name": "Difinido Dao Carlos Raposo Vinhos 2021",
    "claude": {
-    "points": 95,
+    "points": 94,
     "vintage": 2021,
-    "note": "JS 95, Wine Anorak 94 for 2022",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "JS 95 for 2021",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast lamb mushroom risotto",
+    "grapes": "Dao old-vine field blend",
+    "drinkFrom": 2025,
+    "drinkTo": 2031,
+    "from": "Mike"
    }
   },
   "lcbo-371773": {
@@ -1874,9 +1924,19 @@
    "claude": {
     "points": 94,
     "vintage": 2021,
-    "note": "WA 94",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "WA 94 for 2021",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "grilled flank steak",
+    "grapes": "Tinta Roriz Touriga Franca",
+    "drinkFrom": 2024,
+    "drinkTo": 2034,
+    "from": "Mike"
    }
   },
   "lcbo-26946": {
@@ -1892,11 +1952,21 @@
   "lcbo-47337": {
    "name": "Touriga Nacional Letra A Douro Macanita 2022",
    "claude": {
-    "points": 93,
+    "points": 92,
     "vintage": 2022,
-    "note": "WA 93",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "WA 93 for 2022",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "venison spiced lamb",
+    "grapes": "Touriga Nacional",
+    "drinkFrom": 2025,
+    "drinkTo": 2033,
+    "from": "Mike"
    }
   },
   "lcbo-46578": {
@@ -1904,9 +1974,19 @@
    "claude": {
     "points": 93,
     "vintage": 2017,
-    "note": "WE 94, single review",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "WE 94 for 2017",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "beef brisket grilled steak",
+    "grapes": "Touriga Alicante Cabernet",
+    "drinkFrom": 2023,
+    "drinkTo": 2032,
+    "from": "Mike"
    }
   },
   "lcbo-46837": {
@@ -1914,9 +1994,19 @@
    "claude": {
     "points": 92,
     "vintage": 2020,
-    "note": "DWWA 95 competition medal only",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "DWWA 95 competition medal",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "braised beef cheeks",
+    "grapes": "old-vine field blend",
+    "drinkFrom": 2024,
+    "drinkTo": 2032,
+    "from": "Mike"
    }
   },
   "lcbo-632166": {
@@ -1932,21 +2022,41 @@
   "lcbo-25245": {
    "name": "Quinta da Falorca Touriga Nacional 2015",
    "claude": {
-    "points": 94,
+    "points": 93,
     "vintage": 2015,
-    "note": "WA 94",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "WA 94 for 2015",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast lamb game",
+    "grapes": "Touriga Nacional",
+    "drinkFrom": 2022,
+    "drinkTo": 2035,
+    "from": "Mike"
    }
   },
   "lcbo-47336": {
    "name": "Douro Os Caniveis Macanita Vinhos Lda 2022",
    "claude": {
-    "points": 94,
+    "points": 93,
     "vintage": 2022,
-    "note": "WA 94",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "WA 94 plus for 2022",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "duck breast wild mushroom dishes",
+    "grapes": "old-vine field blend",
+    "drinkFrom": 2025,
+    "drinkTo": 2033,
+    "from": "Mike"
    }
   },
   "lcbo-18756": {
@@ -1954,49 +2064,96 @@
    "claude": {
     "points": 93,
     "vintage": 2020,
-    "note": "WA 93",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "WA 93 for 2020",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast pork venison sausage",
+    "grapes": "Sousao",
+    "drinkFrom": 2023,
+    "drinkTo": 2032,
+    "from": "Mike"
    }
   },
   "lcbo-31589": {
    "name": "Julia Kemper Red Reserva 2011",
    "claude": {
-    "points": 92,
-    "vintage": 2010,
-    "note": "Wine Anorak 95 for 2010",
-    "date": "2026-10-26",
-    "quick": true
+    "points": null,
+    "vintage": 2011,
+    "note": null,
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "pair": "roast beef",
+    "grapes": "Touriga Roriz Alfrocheiro Jaen",
+    "from": "Mike"
    }
   },
   "lcbo-460790": {
    "name": "Monte da Ravasqueira Vinha das Romãs 2021",
    "claude": {
-    "points": 92,
+    "points": 91,
     "vintage": 2021,
     "note": "WE 92 Editors Choice",
-    "date": "2026-10-26",
-    "quick": true
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled lamb beef stew",
+    "grapes": "Syrah Touriga Franca",
+    "drinkFrom": 2024,
+    "drinkTo": 2030,
+    "from": "Mike"
    }
   },
   "lcbo-538546": {
    "name": "Herdade de São Miguel Reserva 2023",
    "claude": {
-    "points": 91,
+    "points": 90,
     "vintage": 2023,
-    "note": "WE 92, single review",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "LCBO-listed 92 gold medals",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "barbecue pork ribs",
+    "grapes": "Touriga Alicante Cabernet Trincadeira",
+    "drinkFrom": 2025,
+    "drinkTo": 2030,
+    "from": "Mike"
    }
   },
   "lcbo-45794": {
    "name": "Madre de Agua Vinha Velhas Tinto 2017",
    "claude": {
-    "points": 92,
+    "points": 91,
     "vintage": 2017,
-    "note": "LCBO cites 93, critic unnamed",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "LCBO-listed 93 critic unnamed",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "grilled beef mushroom dishes",
+    "grapes": "Dao old-vine field blend",
+    "drinkFrom": 2021,
+    "drinkTo": 2030,
+    "from": "Mike"
    }
   },
   "lcbo-42453": {
@@ -2014,9 +2171,19 @@
    "claude": {
     "points": 94,
     "vintage": 2015,
-    "note": "WA 94, WS 94",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "WA 94 WS 94 for 2015",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "ribeye steak braised short ribs",
+    "grapes": "old-vine field blend",
+    "drinkFrom": 2020,
+    "drinkTo": 2030,
+    "from": "Mike"
    }
   },
   "lcbo-46076": {
@@ -2032,31 +2199,61 @@
   "lcbo-534271": {
    "name": "Quadrus Reserva 2017",
    "claude": {
-    "points": 91,
+    "points": 90,
     "vintage": 2017,
-    "note": "WineAlign critics 91-92",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "WineAlign 91-92 MacLean 90",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "braised brisket prime rib",
+    "grapes": "Touriga Roriz Sousao",
+    "drinkFrom": 2025,
+    "drinkTo": 2030,
+    "from": "Mike"
    }
   },
   "lcbo-47181": {
    "name": "Letra F Old Vines Field Blend Macanita Vinhos 2023",
    "claude": {
-    "points": 93,
+    "points": 92,
     "vintage": 2023,
-    "note": "WA 93",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "WA 93 for 2023",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "grilled tuna charcuterie",
+    "grapes": "red white field blend",
+    "drinkFrom": 2025,
+    "drinkTo": 2030,
+    "from": "Mike"
    }
   },
   "lcbo-67538": {
    "name": "Prats & Symington Post Scriptum de Chryseia 2023",
    "claude": {
-    "points": 92,
-    "vintage": 2023,
-    "note": "JS 93, WA 93, WE 92, WS 91",
-    "date": "2026-10-26",
-    "quick": true
+    "points": 91,
+    "vintage": 2021,
+    "note": "WE 92 for 2021 vintage",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled pork chops roast chicken",
+    "grapes": "Touriga Nacional Touriga Franca",
+    "drinkFrom": 2025,
+    "drinkTo": 2031,
+    "from": "Mike"
    }
   },
   "lcbo-21430": {
@@ -2064,9 +2261,19 @@
    "claude": {
     "points": 91,
     "vintage": 2017,
-    "note": "DWWA 97, MacLean 90",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "DWWA 97 MacLean 90",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "spit-roasted pork",
+    "grapes": "Touriga Jaen Sousao",
+    "drinkFrom": 2021,
+    "drinkTo": 2027,
+    "from": "Mike"
    }
   },
   "bcl-464388": {
@@ -2122,11 +2329,18 @@
   "lcbo-32793": {
    "name": "Red Blend Portugal",
    "claude": {
-    "points": 88,
-    "vintage": 2023,
-    "note": "JS 88 2023, WE 90 2022 (likely match)",
-    "date": "2026-10-26",
-    "quick": true
+    "points": null,
+    "vintage": "NV",
+    "note": null,
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "off-dry",
+    "fruity": true,
+    "finish": "short",
+    "pair": "pizza burgers",
+    "from": "Mike"
    }
   },
   "lcbo-89912": {
@@ -2182,21 +2396,41 @@
   "lcbo-18998": {
    "name": "Lisbon By Night Red Blend",
    "claude": {
-    "points": 88,
+    "points": 86,
     "vintage": 2022,
-    "note": "MacLean 89 2022, community 87 2018",
-    "date": "2026-10-26",
-    "quick": true
+    "note": "MacLean 89 for 2022",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "off-dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled chorizo margherita pizza",
+    "grapes": "Tinta Roriz Castelao",
+    "drinkFrom": 2025,
+    "drinkTo": 2028,
+    "from": "Mike"
    }
   },
   "lcbo-464388": {
    "name": "Sogrape Vila Regia",
    "claude": {
-    "points": 87,
-    "vintage": 2021,
-    "note": "Falstaff 89 2021, Gismondi 86 older",
-    "date": "2026-10-26",
-    "quick": true
+    "points": 84,
+    "vintage": "NV",
+    "note": "MacLean 83 WineAlign 85-87",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "short",
+    "pair": "grilled piri-piri chicken",
+    "grapes": "Touriga Roriz Franca Barroca",
+    "drinkFrom": 2025,
+    "drinkTo": 2027,
+    "from": "Mike"
    }
   },
   "lcbo-590364": {
@@ -2312,11 +2546,21 @@
   "lcbo-522292": {
    "name": "Altivo Red 2019",
    "claude": {
-    "points": 88,
-    "vintage": 2016,
-    "note": "Sommelier Steeves 91 2016, 92 2015",
-    "date": "2026-10-26",
-    "quick": true
+    "points": 87,
+    "vintage": 2015,
+    "note": "sommelier community 92 for 2015",
+    "date": "2026-10-28",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "pork sausages lamb chops",
+    "grapes": "Touriga Jaen Trincadeira",
+    "drinkFrom": 2021,
+    "drinkTo": 2025,
+    "from": "Mike"
    }
   },
   "lcbo-392480": {
