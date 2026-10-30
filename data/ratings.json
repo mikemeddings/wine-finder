@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-28",
+ "updated": "2026-10-30",
  "ratings": {
   "bcl-220979": {
    "name": "Cabernet Sauvignon - Haras De Pirque Hussonet Reserva",
@@ -3514,6 +3514,18 @@
    },
    "type": "Red",
    "upc": "05604575110024"
+  },
+  "lcbo-39936": {
+   "name": "Iron Maiden Eddie's Blend Darkest Red Wine Art #2",
+   "type": "Red",
+   "upc": "05011932013940",
+   "claude": {
+    "points": 87,
+    "vintage": 2021,
+    "note": "Juicy Douro blend port-barrel spice fair value",
+    "date": "2026-10-28",
+    "from": "Mike"
+   }
   }
  }
 }
