@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-27",
+ "updated": "2026-10-30",
  "notes": {
   "typed-losada-vinos-de-finca-mencia-bierzo-altos-de-losada-la-bienquerida": {
    "name": "Losada Vinos de Finca Mencía Bierzo Altos de Losada La Bienquerida",
@@ -860,6 +860,11 @@
    "name": "Mountain Fish Red Peloponnese",
    "from": "Mike",
    "date": "2026-10-27"
+  },
+  "lcbo-39936": {
+   "name": "Iron Maiden Eddie's Blend Darkest Red Wine Art #2",
+   "from": "Mike",
+   "date": "2026-10-28"
   }
  }
 }
