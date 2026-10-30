@@ -706,3 +706,16 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 .sl-bar > span { margin-right: auto; }
 .sl-bar .btn { font-size: 1rem; padding: 0.35rem 0.85rem; min-height: 2.5rem; white-space: nowrap; }
 @media (min-width: 62.5em) { .sl-bar { flex-wrap: nowrap; } }
+
+/* the LCBO tasting note opens on a click, and says so */
+.lcbo-note > summary { cursor: pointer; font-weight: 700; color: var(--wine); }
+.lcbo-note > summary::-webkit-details-marker { display: none; }
+.lcbo-note { list-style: none; }
+.lcbo-note > summary { list-style: none; }
+
+/* Shopping List */
+.btn-shop { background: #eef1f5; border-color: #33475b; color: #24364a; }
+.btn-shop[aria-pressed="true"] { background: #33475b; border-color: #33475b; color: #fff; }
+.btn-shop-remove { background: #fff; border-color: var(--danger); color: var(--danger); }
+.shop-summary { font-size: 1.15rem; margin: 0.5rem 0 0.8rem; }
+#shop-clear { margin-bottom: 1rem; }

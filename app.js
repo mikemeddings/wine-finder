@@ -79,7 +79,7 @@ const CALGARY = new Set(["BSW Liquor", "ZYN"]);
 const PAGE_SIZE = 100;
 // A standard bottle: 750 ml, or 700 ml as Swiss wines (Vaud, Valais) often come.
 const STANDARD_ML = new Set([700, 750]);
-const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk", dineHistory: "wf.dineHistory", lcbo: "wf.lcbo", myPicks: "wf.myPicks", folds: "wf.folds", readerScale: "wf.readerScale", quickMarks: "wf.quickMarks" };
+const STORE = { shortlist: "wf.shortlist", aboutMe: "wf.aboutMe", myWines: "wf.myWines", ratings: "wf.ratings", ghKey: "wf.ghKey", mailApp: "wf.mailApp", cellarNames: "wf.cellarNames", notes: "wf.notes", myName: "wf.myName", inboxKey: "wf.inboxKey", dine: "wf.dine", dineAsk: "wf.dineAsk", dineHistory: "wf.dineHistory", lcbo: "wf.lcbo", myPicks: "wf.myPicks", folds: "wf.folds", readerScale: "wf.readerScale", quickMarks: "wf.quickMarks", shopping: "wf.shopping" };
 
 // ---- Helpers -----------------------------------------------------------------
 
@@ -1485,6 +1485,7 @@ function cellarCard(w) {
       ${researchButton(w)}
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
       ${quickMarkButton(w)}
+      ${shoppingButton(w)}
       <button type="button" class="btn btn-ew" data-action="mw-where" data-id="${esc(w.id)}">Where can I buy it?</button>
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
       <a class="btn ext btn-we" href="${wineEnthusiastUrl(w)}" target="_blank" rel="noopener">Wine Enthusiast</a>
@@ -1514,6 +1515,7 @@ function wineCard(w) {
       ${researchButton(w)}
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
       ${quickMarkButton(w)}
+      ${shoppingButton(w)}
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
       <a class="btn ext btn-we" href="${wineEnthusiastUrl(w)}" target="_blank" rel="noopener">Wine Enthusiast</a>
       <a class="btn ext btn-vivino" href="${vivinoUrl(w)}" target="_blank" rel="noopener">Vivino</a>
@@ -1757,6 +1759,53 @@ function toggleShortlist(id) {
     if (w) { const { _s, _w, ...copy } = w; shortlist.push(copy); }
   }
   saveShortlist();
+}
+
+// ---- Shopping List: wines to buy, kept in this browser -------------------------------
+// Separate from the Short List (which is for asking Claude). Each wine is kept as it was when
+// added, and shown with today's details when the store list still has it.
+let shopping = (() => { const v = storeGet(STORE.shopping, []); return Array.isArray(v) ? v : []; })();
+const onShopping = (id) => shopping.some((s) => s.id === id);
+function shoppingButton(w) {
+  if (w.kind === "typed") return "";
+  const on = onShopping(w.id);
+  return `<button type="button" class="btn btn-shop" data-shop="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Shopping List (tap to remove)" : "🛒 Click to add wine to Shopping List"}</button>`;
+}
+function saveShopping() {
+  storeSet(STORE.shopping, shopping);
+  for (const el of document.querySelectorAll(".shop-count")) el.textContent = shopping.length;
+}
+function toggleShopping(id) {
+  const i = shopping.findIndex((s) => s.id === id);
+  if (i >= 0) shopping.splice(i, 1);
+  else {
+    const w = findWine(id);
+    if (w) { const { _s, _w, ...copy } = w; shopping.push({ ...copy, added: todayIso() }); }
+  }
+  saveShopping();
+  const on = onShopping(id);
+  for (const b of document.querySelectorAll(`[data-shop="${CSS.escape(id)}"]`)) {
+    b.setAttribute("aria-pressed", String(on));
+    b.textContent = on ? "✓ On Shopping List (tap to remove)" : "🛒 Click to add wine to Shopping List";
+  }
+  if (!$("view-shopping").hidden) renderShopping();
+}
+function renderShopping() {
+  if (!$("shop-list")) return;
+  const items = shopping.map((s) => findWine(s.id) || s);
+  const byStore = new Map();
+  for (const w of items) if (w.kind !== "cellar" && w.price != null) {
+    const k = sourceLabel(w.source), v = byStore.get(k) || { n: 0, sum: 0 };
+    byStore.set(k, { n: v.n + 1, sum: v.sum + (+w.price || 0) });
+  }
+  const totals = [...byStore].map(([k, v]) => `${v.n} at ${esc(k)}: <strong>${money(v.sum)}</strong>`).join(" · ");
+  $("shop-summary").innerHTML = items.length
+    ? `<strong>${items.length} ${items.length === 1 ? "wine" : "wines"}</strong> on your Shopping List${totals ? `. ${totals} (one bottle of each)` : ""}.`
+    : `Your Shopping List is empty. Press <strong>🛒 Click to add wine to Shopping List</strong> on any wine in Find wines or My wines.`;
+  $("shop-clear").hidden = !items.length;
+  $("shop-list").innerHTML = items.map((w, i) => wineCard(w)
+    .replace('<h3 class="wine-name">', `<h3 class="wine-name"><span class="wine-seq">${i + 1} of ${items.length}</span>`)
+    .replace('<div class="wine-actions">', `${boldAdviceHtml(w)}<div class="wine-actions"><button type="button" class="btn btn-shop-remove" data-shop-remove="${esc(w.id)}">✕ Remove from Shopping List</button>`)).join("");
 }
 
 // "$25.99 at BC Liquor - LDB", or "from Alex's cellar" for a wine with no shop price.
@@ -4731,7 +4780,7 @@ function addHelpButtons() {
 }
 // Each page change is a step in the browser's history, so Back (or the phone's back
 // gesture) returns to the previous page at the same scroll position, and Forward works too.
-const VIEWS = ["find", "shortlist", "mywines", "dine", "help"];
+const VIEWS = ["find", "shortlist", "shopping", "mywines", "dine", "help"];
 const currentView = () => VIEWS.find((v) => !$(`view-${v}`).hidden) || "find";
 let navDepth = 0; // steps taken inside the Wine Finder, so "Back" never leaves the site by surprise
 
@@ -4796,12 +4845,14 @@ function showView(name, fromHistory = false) {
   }
   $("view-find").hidden = name !== "find";
   $("view-shortlist").hidden = name !== "shortlist";
+  $("view-shopping").hidden = name !== "shopping";
   $("view-mywines").hidden = name !== "mywines";
   $("view-dine").hidden = name !== "dine";
   $("view-help").hidden = name !== "help";
   for (const el of document.querySelectorAll(".help-keeper")) el.hidden = !isKeeper(); // the keeper's topic: keeper's computer only
   for (const b of document.querySelectorAll(".view-btn")) b.setAttribute("aria-pressed", String(b.dataset.view === name));
   if (name === "shortlist") renderShortlist();
+  else if (name === "shopping") renderShopping();
   else if (name === "mywines") { renderMyWines(); renderFamilyBox(); loadInbox(); }
   else if (name === "dine") renderDine();
   else renderResults();
@@ -5239,6 +5290,11 @@ function wireEvents() {
       }
       if (!$("view-shortlist").hidden) renderShortlist(); // added from the Short List page's own box
     } else if (t.dataset.remove) { toggleShortlist(t.dataset.remove); renderShortlist(); }
+    else if (t.dataset.shop) toggleShopping(t.dataset.shop);
+    else if (t.dataset.shopRemove) toggleShopping(t.dataset.shopRemove);
+    else if (t.dataset.action === "shop-clear") {
+      if (shopping.length && confirm(`Remove all ${shopping.length} wines from your Shopping List?`)) { shopping = []; saveShopping(); renderShopping(); refresh(); }
+    }
     else if (t.dataset.ew) toggleElsewhere(t);
     else if (t.dataset.action === "start-over") startOver();
     else if (t.dataset.action === "goto-ew") { // "Where can I buy…?" is on the Research a wine page
@@ -5645,7 +5701,7 @@ function lcboDetailHtml(w) {
   const facts = [w.region, w.grape, w.sugar != null ? `sugar ${w.sugar} g/L` : null].filter(Boolean).map(esc).join(" · ");
   return (facts ? `<p class="wine-detail">${facts}</p>` : "") +
     `<p class="wine-detail">Ontario price from the ${esc(lcboInfo()?.asOf || "LCBO")} list: check the LCBO page for today's price.</p>` +
-    (w.note ? `<details class="lcbo-note"><summary>LCBO tasting note</summary><p>${esc(w.note)}</p></details>` : "");
+    (w.note ? `<details class="lcbo-note"><summary>LCBO tasting note<span class="pair-more" aria-hidden="true"></span></summary><p>${esc(w.note)}</p></details>` : "");
 }
 
 function lcboMsg(msg, busy = false) {
@@ -5747,6 +5803,7 @@ async function init() {
   window.addEventListener("hashchange", unlockFromLink);
   tabReady = true;
   saveQuickMarks();
+  saveShopping();
   setTimeout(() => loadAllSources().then(() => { updatePickCounts(); renderSources(); }), 800);
 }
 
