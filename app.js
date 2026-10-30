@@ -1798,7 +1798,7 @@ document.addEventListener("toggle", (e) => { // fill a pairings fold the first t
   if (body && !body.dataset.done) { body.innerHTML = pairingsFoldBody(findWine(d.dataset.pairFold) || shopping.find((x) => x.id === d.dataset.pairFold) || {}); body.dataset.done = "1"; }
 }, true);
 
-// ---- Shopping List: wines to buy, kept in this browser -------------------------------
+// ---- Comparison List: wines to compare, kept in this browser -------------------------------
 // Separate from the Short List (which is for asking Claude). Each wine is kept as it was when
 // added, and shown with today's details when the store list still has it.
 let shopping = (() => { const v = storeGet(STORE.shopping, []); return Array.isArray(v) ? v : []; })();
@@ -1806,7 +1806,7 @@ const onShopping = (id) => shopping.some((s) => s.id === id);
 function shoppingButton(w) {
   if (w.kind === "typed") return "";
   const on = onShopping(w.id);
-  return `<button type="button" class="btn btn-shop" data-shop="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Shopping List (tap to remove)" : "🛒 Click to add wine to Shopping List"}</button>`;
+  return `<button type="button" class="btn btn-shop" data-shop="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Comparison List (tap to remove)" : "⚖️ Click to add wine to Comparison List"}</button>`;
 }
 function saveShopping() {
   storeSet(STORE.shopping, shopping);
@@ -1823,7 +1823,7 @@ function toggleShopping(id) {
   const on = onShopping(id);
   for (const b of document.querySelectorAll(`[data-shop="${CSS.escape(id)}"]`)) {
     b.setAttribute("aria-pressed", String(on));
-    b.textContent = on ? "✓ On Shopping List (tap to remove)" : "🛒 Click to add wine to Shopping List";
+    b.textContent = on ? "✓ On Comparison List (tap to remove)" : "⚖️ Click to add wine to Comparison List";
   }
   if (!$("view-shopping").hidden) renderShopping();
 }
@@ -1837,12 +1837,12 @@ function renderShopping() {
   }
   const totals = [...byStore].map(([k, v]) => `${v.n} at ${esc(k)}: <strong>${money(v.sum)}</strong>`).join(" · ");
   $("shop-summary").innerHTML = items.length
-    ? `<strong>${items.length} ${items.length === 1 ? "wine" : "wines"}</strong> on your Shopping List${totals ? `. ${totals} (one bottle of each)` : ""}.`
-    : `Your Shopping List is empty. Press <strong>🛒 Click to add wine to Shopping List</strong> on any wine in Find wines or My wines.`;
+    ? `<strong>${items.length} ${items.length === 1 ? "wine" : "wines"}</strong> on your Comparison List${totals ? `. ${totals} (one bottle of each)` : ""}.`
+    : `Your Comparison List is empty. Press <strong>⚖️ Click to add wine to Comparison List</strong> on any wine in Find wines or My wines.`;
   $("shop-clear").hidden = !items.length;
   $("shop-list").innerHTML = items.map((w, i) => wineCard(w)
     .replace('<h3 class="wine-name">', `<h3 class="wine-name"><span class="wine-seq">${i + 1} of ${items.length}</span>`)
-    .replace('<div class="wine-actions">', `${boldAdviceHtml(w)}<div class="wine-actions"><button type="button" class="btn btn-shop-remove" data-shop-remove="${esc(w.id)}">✕ Remove from Shopping List</button>`)).join("");
+    .replace('<div class="wine-actions">', `${boldAdviceHtml(w)}<div class="wine-actions"><button type="button" class="btn btn-shop-remove" data-shop-remove="${esc(w.id)}">✕ Remove from Comparison List</button>`)).join("");
 }
 
 // "$25.99 at BC Liquor - LDB", or "from Alex's cellar" for a wine with no shop price.
@@ -5332,7 +5332,7 @@ function wireEvents() {
     else if (t.dataset.shop) toggleShopping(t.dataset.shop);
     else if (t.dataset.shopRemove) toggleShopping(t.dataset.shopRemove);
     else if (t.dataset.action === "shop-clear") {
-      if (shopping.length && confirm(`Remove all ${shopping.length} wines from your Shopping List?`)) { shopping = []; saveShopping(); renderShopping(); refresh(); }
+      if (shopping.length && confirm(`Remove all ${shopping.length} wines from your Comparison List?`)) { shopping = []; saveShopping(); renderShopping(); refresh(); }
     }
     else if (t.dataset.ew) toggleElsewhere(t);
     else if (t.dataset.action === "start-over") startOver();

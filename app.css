@@ -731,3 +731,14 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 .pair-fold-book { color: var(--muted); }
 /* the tasting note and the pairings fold each take the card's full width, one above the other */
 .wine .lcbo-note, .wine .pair-fold { grid-column: 1 / -1; }
+/* "Your choices" stands out: bigger, a wine-red title tab, a stronger tint and border */
+.active-filters { padding: 0.85rem 1rem; gap: 0.55rem 0.6rem; font-size: 1.25rem; background: #f8e1e5;
+  border: 3px solid var(--wine); border-left-width: 0.9rem; box-shadow: 0 2px 6px rgba(122, 31, 43, 0.25); }
+.choices-head { background: var(--wine); color: #fff; font-size: 1.3rem; padding: 0.2rem 0.75rem; border-radius: 0.4rem; margin-right: 0.4rem; }
+.choices-where { color: var(--wine-dark); font-weight: 700; }
+.active-filters .chip { background: #fff; font-size: 1.15rem; padding: 0.25rem 0.35rem 0.25rem 0.8rem; }
+.active-filters .chip-x { width: 1.8rem; height: 1.8rem; font-size: 1.05rem; }
+/* Comparison List: a solid, high-contrast slate blue; once added, white with a bold border */
+.btn-shop { background: #1f4e79; border-color: #1f4e79; color: #fff; font-weight: 700; }
+.btn-shop:hover, .btn-shop:focus-visible { background: #163a5b; border-color: #163a5b; filter: none; }
+.btn-shop[aria-pressed="true"] { background: #fff; border: 3px solid #1f4e79; color: #1f4e79; }
