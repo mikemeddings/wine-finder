@@ -729,3 +729,5 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 .pair-fold-list { margin: 0.2rem 0 0.4rem; padding-left: 1.2rem; }
 .pair-fold-list li { margin: 0 0 0.45rem; }
 .pair-fold-book { color: var(--muted); }
+/* the tasting note and the pairings fold each take the card's full width, one above the other */
+.wine .lcbo-note, .wine .pair-fold { grid-column: 1 / -1; }
