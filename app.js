@@ -1806,7 +1806,7 @@ const onShopping = (id) => shopping.some((s) => s.id === id);
 function shoppingButton(w) {
   if (w.kind === "typed") return "";
   const on = onShopping(w.id);
-  return `<button type="button" class="btn btn-shop" data-shop="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Comparison List (tap to remove)" : "＋ Add wine to Comparison List"}</button>`;
+  return `<button type="button" class="btn btn-shop" data-shop="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Comparison List (tap to remove)" : "⚖️ ＋ Add wine to Comparison List"}</button>`;
 }
 function saveShopping() {
   storeSet(STORE.shopping, shopping);
@@ -1823,7 +1823,7 @@ function toggleShopping(id) {
   const on = onShopping(id);
   for (const b of document.querySelectorAll(`[data-shop="${CSS.escape(id)}"]`)) {
     b.setAttribute("aria-pressed", String(on));
-    b.textContent = on ? "✓ On Comparison List (tap to remove)" : "＋ Add wine to Comparison List";
+    b.textContent = on ? "✓ On Comparison List (tap to remove)" : "⚖️ ＋ Add wine to Comparison List";
   }
   if (!$("view-shopping").hidden) renderShopping();
 }
@@ -1838,7 +1838,7 @@ function renderShopping() {
   const totals = [...byStore].map(([k, v]) => `${v.n} at ${esc(k)}: <strong>${money(v.sum)}</strong>`).join(" · ");
   $("shop-summary").innerHTML = items.length
     ? `<strong>${items.length} ${items.length === 1 ? "wine" : "wines"}</strong> on your Comparison List${totals ? `. ${totals} (one bottle of each)` : ""}.`
-    : `Your Comparison List is empty. Press <strong>＋ Add wine to Comparison List</strong> on any wine in Find wines or My wines.`;
+    : `Your Comparison List is empty. Press <strong>⚖️ ＋ Add wine to Comparison List</strong> on any wine in Find wines or My wines.`;
   $("shop-clear").hidden = !items.length;
   $("shop-list").innerHTML = items.map((w, i) => wineCard(w)
     .replace('<h3 class="wine-name">', `<h3 class="wine-name"><span class="wine-seq">${i + 1} of ${items.length}</span>`)
