@@ -753,7 +753,8 @@ function foodsOf(w) {
   if (w._foods && w._foodsKey === k) return w._foods;
   const s = wineStyle(w), body = s.body.v, tannin = s.tannin.v, sweet = s.sweet.v, t = w.type, out = [];
   const sweetish = sweet === "sweet" || sweet === "medium-sweet";
-  if (t === "Red") {
+  if (t === "Red" && sweetish) out.push("Cheese", "Spicy food", "Dessert"); // a semi-sweet red (Kindzmarauli) is no steak wine
+  else if (t === "Red") {
     if (body === "full" || tannin === "firm") out.push("Red meat");
     if (body !== "light") out.push("Lamb");
     if (body !== "full" || tannin === "soft") out.push("Pork");
@@ -1481,6 +1482,7 @@ function cellarCard(w) {
     <p class="wine-facts">${typePill(w.type)} ${facts}</p>
     <p class="wine-detail"><span class="badge badge-cellar">${esc(w.source)}</span>${w.size_ml && w.size_ml !== 750 ? ` ${esc(sizeText(w))}` : ""} · ${esc(sweetText(w))}</p>
     ${scores ? `<p class="wine-detail mw-scores">${scores}</p>` : ""}${soldAtHtml(w)}${ratingsHtml(w)}${familyLinksHtml(w)}
+    ${pairingsFold(w)}
     <div class="wine-actions">
       ${researchButton(w)}
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
@@ -1511,6 +1513,7 @@ function wineCard(w) {
     <div class="wine-price">${priceHtml(w)}</div>
     <p class="wine-facts">${typePill(w.type)} ${facts}</p>
     <p class="wine-detail">${detail} ${badges}</p>${scores}${calgary}${lcbo}${ratingsHtml(w)}${familyLinksHtml(w)}
+    ${pairingsFold(w)}
     <div class="wine-actions">
       ${researchButton(w)}
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
@@ -1760,6 +1763,40 @@ function toggleShortlist(id) {
   }
   saveShortlist();
 }
+
+// ---- Food pairings fold: every food this wine suits, classic and adventurous ----------
+// On each card, closed until tapped (its contents are built then, so long lists stay quick).
+// Built only from what the site holds: the style, the grape lines, the pairing books
+// (Dornenburg & Page; Harrington and the other sources of the adventurous rules), the LCBO's
+// food note and Claude's own pick. Nothing is asked of Claude.
+function pairingsFold(w) {
+  if (!w || w.kind === "typed") return "";
+  return `<details class="pair-fold" data-pair-fold="${esc(w.id)}"><summary>🍽 Food pairings<span class="pair-more" aria-hidden="true"></span></summary><div class="pair-fold-body"></div></details>`;
+}
+function pairingsFoldBody(w) {
+  const parts = [];
+  const pick = claudePair(w), note = lcboFoodNote(w);
+  if (pick) parts.push(`<p><strong>Claude's pick for this wine:</strong> ${esc(pick)}.</p>`);
+  if (note) parts.push(`<p><strong>The LCBO's note${w.source === "LCBO" ? "" : " for this wine"}:</strong> “${esc(note)}”</p>`);
+  const order = (f) => FOODS.indexOf(f);
+  const classic = foodsOf(w).map((f) => ({ f, t: wineTier(w, f) })).sort((a, b) => b.t - a.t || order(a.f) - order(b.f));
+  if (classic.length) parts.push(`<h4>Classic pairings</h4><ul class="pair-fold-list">${classic.map(({ f, t }) => {
+    const dish = pairDish(w, f), fact = wineFacts(w, f), b = bookDishes(w, f, dish);
+    return `<li><span class="food-star tier-${t}">${STARS(t)}</span> <strong>${esc(f)}:</strong> ${esc(capFirst(dish))}${fact ? `; ${esc(fact)}` : ""}.` +
+      (b ? ` <span class="pair-fold-book">Dornenburg & Page also list ${esc(b.list.map((x) => x.d).join(", "))}.</span>` : "") + `</li>`;
+  }).join("")}</ul><p class="quick-src">★★★ the go-to · ★★ a common match · ★ pairs, but less often chosen (Dornenburg & Page's pairing guide).</p>`);
+  const adv = boldFoodsOf(w);
+  if (adv.length) parts.push(`<h4>Adventurous pairings</h4><ul class="pair-fold-list">${adv.map((x) =>
+    `<li>🍷 <strong>${esc(x.food)}:</strong> ${esc(capFirst(x.rule.dish(advContext(w)) || ""))}. ${esc(x.rule.why)}${x.rule.warn ? `; ${esc(x.rule.warn)}` : ""}. <span class="quick-src">(${esc(x.rule.src)})</span></li>`).join("")}</ul>`);
+  if (!classic.length && !adv.length && !pick && !note) parts.push(`<p>Not enough is known about this wine's style to suggest food. Claude's quick score or research would add it.</p>`);
+  return parts.join("");
+}
+document.addEventListener("toggle", (e) => { // fill a pairings fold the first time it opens
+  const d = e.target;
+  if (!d.matches?.("details.pair-fold") || !d.open) return;
+  const body = d.querySelector(".pair-fold-body");
+  if (body && !body.dataset.done) { body.innerHTML = pairingsFoldBody(findWine(d.dataset.pairFold) || shopping.find((x) => x.id === d.dataset.pairFold) || {}); body.dataset.done = "1"; }
+}, true);
 
 // ---- Shopping List: wines to buy, kept in this browser -------------------------------
 // Separate from the Short List (which is for asking Claude). Each wine is kept as it was when
@@ -2503,8 +2540,10 @@ function mwRow(w) {
     ${facts ? `<div>${facts}</div>` : ""}
     ${scores || drink ? `<div class="mw-scores">${[scores, esc(drink)].filter(Boolean).join(" · ")}</div>` : ""}
     ${w.notes ? `<div class="hint">${esc(w.notes)}</div>` : ""}
+    ${pairingsFold(w)}
     <div class="wine-actions">
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
+      ${shoppingButton(w)}
       <button type="button" class="btn btn-ew" data-action="mw-where" data-id="${esc(w.id)}">Where can I buy it?</button>
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
       ${manualButtons}

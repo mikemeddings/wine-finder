@@ -719,3 +719,13 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 .btn-shop-remove { background: #fff; border-color: var(--danger); color: var(--danger); }
 .shop-summary { font-size: 1.15rem; margin: 0.5rem 0 0.8rem; }
 #shop-clear { margin-bottom: 1rem; }
+
+/* Food pairings fold on every wine card */
+.pair-fold { margin: 0.4rem 0 0.2rem; border: 2px solid #cdb9a3; border-radius: 0.6rem; background: #fdf8f1; padding: 0.35rem 0.75rem; }
+.pair-fold > summary { cursor: pointer; list-style: none; font-weight: 700; color: var(--wine); }
+.pair-fold > summary::-webkit-details-marker { display: none; }
+.pair-fold[open] > summary { margin-bottom: 0.3rem; }
+.pair-fold h4 { margin: 0.7rem 0 0.3rem; color: var(--wine); }
+.pair-fold-list { margin: 0.2rem 0 0.4rem; padding-left: 1.2rem; }
+.pair-fold-list li { margin: 0 0 0.45rem; }
+.pair-fold-book { color: var(--muted); }
