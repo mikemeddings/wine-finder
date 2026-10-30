@@ -3526,6 +3526,94 @@
     "date": "2026-10-28",
     "from": "Mike"
    }
+  },
+  "bcl-674333": {
+   "name": "Pirosmani - Godori Semi Dry",
+   "type": "Red",
+   "upc": "04860005646636",
+   "claude": {
+    "points": 85,
+    "vintage": "NV",
+    "note": "Vivino 3.8 community only no critic reviews",
+    "date": "2026-10-30",
+    "quick": true,
+    "body": "full",
+    "tannin": "soft",
+    "sweet": "off-dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled sausages, roast chicken, nut desserts",
+    "grapes": "Saperavi",
+    "drinkFrom": 2026,
+    "drinkTo": 2027,
+    "from": "Basil"
+   }
+  },
+  "bcl-688747": {
+   "name": "Saperavi - Godori",
+   "type": "Red",
+   "upc": "04860009760536",
+   "claude": {
+    "points": 82,
+    "vintage": "NV",
+    "note": "Vivino 3.3 community only no critic reviews",
+    "date": "2026-10-30",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "lamb shashlik, beef burgers, mushroom khinkali",
+    "grapes": "Saperavi",
+    "drinkFrom": 2026,
+    "drinkTo": 2027,
+    "from": "Basil"
+   }
+  },
+  "bcl-851691": {
+   "name": "Kindzmarauli - Tetri",
+   "type": "Red",
+   "upc": "04860009760055",
+   "claude": {
+    "points": 87,
+    "vintage": 2014,
+    "note": "Gismondi 89 for 2014",
+    "date": "2026-10-30",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "medium-sweet",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "chocolate desserts, walnut cake, blue cheese",
+    "grapes": "Saperavi",
+    "drinkFrom": 2026,
+    "drinkTo": 2028,
+    "from": "Basil"
+   }
+  },
+  "bcl-362059": {
+   "name": "Kisi Khihvi Qvevri Amber Dry Wine - Chateau Nekresi 2016",
+   "type": "White",
+   "upc": "04860113700213",
+   "claude": {
+    "points": 86,
+    "vintage": null,
+    "note": "Delectable 8.8 from two community ratings",
+    "date": "2026-10-30",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "chicken satsivi, aged cheeses, mushroom ragout",
+    "grapes": "Kisi Khikhvi",
+    "drinkFrom": 2026,
+    "drinkTo": 2029,
+    "from": "Basil"
+   }
   }
  }
 }
