@@ -306,7 +306,9 @@ function printRecipe(r) {
     <h2>Ingredients</h2><ul class="pa-ing">${x.i.map((l) => /:\s*$/.test(l) ? `<li class="pa-ing-h">${esc(l)}</li>` : `<li>${esc(l)}</li>`).join("")}</ul>
     <h2>Method</h2><ol>${x.m.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>
     <p class="pa-foot">Ingredients as printed in ${esc(ref(r[1], r[2]))}; the method is in our own words. Printed from Basil's Wine Finder, ${new Date().toLocaleDateString()}.</p>`;
+  $("print-area").dataset.custom = "recipe"; // so the Short List doesn't overwrite it when the print dialog opens
   window.print();
+  setTimeout(() => { delete $("print-area").dataset.custom; }, 2000); // in case afterprint never fires
 }
 document.addEventListener("click", (e) => {
   const b = e.target.closest?.("[data-somm-print]");
@@ -380,7 +382,7 @@ function winePairingHtml(w, typed = false) {
     bold = boldFoodsOf(w).map((x) => `<li>🍷 <strong>${esc(x.food)}:</strong> ${esc(capFirst(x.rule.dish(advContext(w)) || ""))}. ${esc(x.rule.why)}. <span class="somm-src">(${esc(x.rule.src)})</span></li>`).join("");
   } catch { bold = ""; }
   const ch = cheeseFor(grapes), de = dessertFor(grapes), br = bridgesFor(grapes), tips = tipsFor(grapes);
-  return `<div class="somm-card">${head}${localHtml}
+  return `<div class="somm-card${w.type ? ` wine-${esc(w.type)}` : ""}">${head}${localHtml}
     <h4>🍖 Main dishes, by what's on the plate</h4><ul class="somm-foods">${rows}</ul>
     <p class="somm-src">★★★ the go-to · ★★ a common match · ★ pairs, but less often chosen.</p>
     ${br.length ? `<p><strong>🔗 Flavour bridges</strong> (ingredients that tie a dish to ${esc(br[0].k)}): ${esc(br[0].ing.join(", "))}.${srcSpan(br[0].b, br[0].p)}</p>` : ""}
@@ -555,7 +557,7 @@ function courseHtml(p, country) {
   const br = p.c === "main" || p.c === "starter" ? bridgesFor(grapes) : [];
   const avoid = avoidsFor(grapes).filter((d) => p.c === "main" || p.c === "starter" ? d[0] === p.food || !["Cheese", "Dessert"].includes(d[0]) : d[0] === (p.c === "cheese" ? "Cheese" : "Dessert")).slice(0, 2);
   const tips = tipsFor(grapes, 2);
-  return `<div class="somm-card somm-course-card"><h4>${COURSES[p.c]}${p.food && p.c !== "cheese" && p.c !== "dessert" ? `: ${esc(p.food.toLowerCase())}` : ""} <span class="food-star tier-${t}">${STARS(t)}</span></h4>
+  return `<div class="somm-card somm-course-card${p.w.type ? ` wine-${esc(p.w.type)}` : ""}"><h4>${COURSES[p.c]}${p.food && p.c !== "cheese" && p.c !== "dessert" ? `: ${esc(p.food.toLowerCase())}` : ""} <span class="food-star tier-${t}">${STARS(t)}</span></h4>
     <ul class="somm-bottles">${sommRow(p.w, keys.length ? `<div>${esc(keys.join(", "))}</div>` : "")}</ul>
     ${p.note ? `<p class="somm-note">${esc(p.note)}</p>` : ""}${borrowedNote(keys, sweet)}
     ${parts.join("")}

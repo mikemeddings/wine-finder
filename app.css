@@ -809,6 +809,10 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 .somm-hit { text-align: left; }
 .somm-out:not(:empty) { margin-top: 1rem; border-top: 3px solid #b8902a; padding-top: 0.8rem; scroll-margin-top: 1rem; }
 .somm-card { background: #fff; border: 2px solid #d8c28d; border-left: 0.6rem solid #b8902a; border-radius: 0.6rem; padding: 0.7rem 1rem; margin: 0 0 0.9rem; }
+/* a card about one bottle takes the wine's colour on its left edge, as the Find wines cards do */
+.somm-card.wine-Red { border-left-color: #7a1f2b; } .somm-card.wine-White { border-left-color: #c9ad3e; }
+.somm-card.wine-Rosé { border-left-color: #e58aa0; } .somm-card.wine-Sparkling { border-left-color: #6f9fcf; }
+.somm-card.wine-Fortified { border-left-color: #6b3a12; } .somm-card.wine-Dessert { border-left-color: #d9a33b; }
 .somm-wine-h { margin: 0 0 0.3rem; color: var(--wine-dark); font-size: 1.3rem; }
 .somm-card h4 { margin: 0.8rem 0 0.3rem; color: #5a3d00; font-size: 1.1rem; }
 .somm-foods { padding-left: 1.1rem; margin: 0.2rem 0; }

@@ -5442,7 +5442,9 @@ function wireEvents() {
     closeClaudeSteps();
     renderShortlist();
   });
-  window.addEventListener("beforeprint", renderPrintArea);
+  // Ctrl+P prints the Short List, unless something else (a recipe) has just filled the print area
+  window.addEventListener("beforeprint", () => { if (!$("print-area").dataset.custom) renderPrintArea(); });
+  window.addEventListener("afterprint", () => { delete $("print-area").dataset.custom; });
 
   $("country-all").addEventListener("click", () => {
     const all = findPool().filter((w) => state.sources.has(w.source)).map((w) => w.country);
