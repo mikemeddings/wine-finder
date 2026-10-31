@@ -80,14 +80,21 @@ const COUSIN_STYLE = {
   "Fetească Albă / Regală": "floral, fresh and aromatic", "Furmint": "high in acid, apple and smoke", "Fiano": "rich, nutty and waxy",
   "Godello": "rich but fresh, mineral", "Chasselas": "light, soft and delicate", "Cortese (Gavi)": "light, crisp and citrusy",
 };
+// The same grapes made semi-sweet (Kindzmarauli, Khvanchkara): the dry stand-ins' advice (steak,
+// tannin) would be wrong, so these go by the books' sweet red, Port, instead.
+const SWEET_COUSINS = { "Saperavi": ["Port"] };
+const SWEET_COUSIN_STYLE = { "Saperavi": "here made semi-sweet, as Kindzmarauli or Khvanchkara: dark berries, soft tannin and a little sugar" };
+const cousinsOf = (g, sweet) => (sweet && SWEET_COUSINS[g]) || COUSINS[g];
 const borrowedOf = (keys) => keys.filter((g) => !inBooks(g) && COUSINS[g]);
-// the books' names for a wine, with stand-ins for the grapes the books don't cover
-function bookKeys(w) {
+// the books' names for a wine, with stand-ins for the grapes the books don't cover (sweet
+// stand-ins for a sweet wine; a bare list of grapes counts as dry)
+function bookKeys(w, sweet = null) {
   const k = Array.isArray(w) ? w : sommKeys(w);
-  return [...new Set([...k, ...borrowedOf(k).flatMap((g) => COUSINS[g])])].filter(inBooks);
+  const sw = sweet ?? (Array.isArray(w) ? false : isSweetWine(w));
+  return [...new Set([...k, ...borrowedOf(k).flatMap((g) => cousinsOf(g, sw))])].filter(inBooks);
 }
-const borrowedNote = (keys) => borrowedOf(keys).map((g) => `<p class="somm-note">None of the books covers <strong>${esc(g)}</strong> (${esc(COUSIN_STYLE[g] || "")}). ` +
-  `What follows comes from grapes of the same style: <strong>${esc(COUSINS[g].join(", "))}</strong>. That likeness is Claude's judgement, not the books'.</p>`).join("");
+const borrowedNote = (keys, sweet = false) => borrowedOf(keys).map((g) => `<p class="somm-note">None of the books covers <strong>${esc(g)}</strong> (${esc((sweet && SWEET_COUSIN_STYLE[g]) || COUSIN_STYLE[g] || "")}). ` +
+  `What follows comes from ${cousinsOf(g, sweet).length === 1 ? "the nearest style the books do cover" : "grapes of the same style"}: <strong>${esc(cousinsOf(g, sweet).join(", "))}</strong>. That likeness is Claude's judgement, not the books'.</p>`).join("");
 
 // The local food of countries the books leave out, from Claude's own knowledge (marked so).
 // Each row: the grapes or style it suits, a label, and the dishes.
@@ -231,7 +238,7 @@ const wineWord = (w) => `${w.name}${sommKeys(w).length ? ` (${sommKeys(w).join("
 
 // ---- Route 1: I have the wine ----------------------------------------------------------
 function winePairingHtml(w, typed = false) {
-  const keys = sommKeys(w), grapes = bookKeys(keys);
+  const keys = sommKeys(w), sweet = !typed && isSweetWine(w), grapes = bookKeys(keys, sweet);
   let foods;
   if (typed || !w.type) {
     const t = {};
@@ -243,7 +250,7 @@ function winePairingHtml(w, typed = false) {
   const styles = grapes.filter((g) => keys.includes(g) && SOMM?.grapes?.[g]?.style).map((g) => ` ${esc(g)}: ${esc(SOMM.grapes[g].style)}.`).join("");
   const head = `<h3 class="somm-wine-h">${esc(w.name)}</h3>` + (typed ? "" :
     `<p>${typePill(w.type)} ${esc([w.country, w.vintage].filter(Boolean).join(" · "))} · <strong>${priceHtml(w)}</strong> at ${sourceBadge(w.source)}</p>`) +
-    `<p class="somm-keys">${keys.length ? `Grape or style: <strong>${esc(keys.join(", "))}</strong>.` : "The grape isn't clear from the name."}${styles}</p>` + borrowedNote(keys);
+    `<p class="somm-keys">${keys.length ? `Grape or style: <strong>${esc(keys.join(", "))}</strong>.` : "The grape isn't clear from the name."}${styles}</p>` + borrowedNote(keys, sweet);
   const local = !typed && LOCAL_NOTES[w.country] ? localRows(w.country, w) : [];
   const localHtml = local.length ? `<div class="somm-local-inline"><h4>🍽 From ${esc(w.country)}'s own table ${CLAUDE_TAG}</h4><ul>${local.map((r) => `<li>${esc(capFirst(r.dishes))}.</li>`).join("")}</ul></div>` : "";
   if (!foods.length) return `<div class="somm-card">${head}${localHtml}<p>${keys.length ? `The pairing books don't cover ${esc(keys.join(" or "))}` : "The grape or style can't be told from the name"}, so there's little to go on.${keys.length ? "" : " Try adding the grape (for example “Saperavi”)."} Claude can help: add the wine to the Short List and ask.</p></div>`;
@@ -396,7 +403,7 @@ function buildMenu({ country, nWines, courses, protein, stores, maxPrice }) {
 // reasons, a recipe, flavour bridges, warnings and the books' serving advice.
 function courseHtml(p, country) {
   if (!p.w) return `<div class="somm-card somm-course-card"><h4>${COURSES[p.c]}</h4><p>${esc(p.note || `No ${country} wine suits this course in the stores ticked.`)}</p></div>`;
-  const keys = sommKeys(p.w), grapes = bookKeys(keys);
+  const keys = sommKeys(p.w), sweet = isSweetWine(p.w), grapes = bookKeys(keys, sweet);
   const t = foodsOf(p.w).includes(p.food) ? Math.max(wineTier(p.w, p.food), ...grapes.map((k) => grapeFoodTier(k, p.food))) : 1;
   const n = LOCAL_NOTES[p.w.country];
   const parts = [];
@@ -428,7 +435,7 @@ function courseHtml(p, country) {
   const tips = tipsFor(grapes, 2);
   return `<div class="somm-card somm-course-card"><h4>${COURSES[p.c]}${p.food && p.c !== "cheese" && p.c !== "dessert" ? `: ${esc(p.food.toLowerCase())}` : ""} <span class="food-star tier-${t}">${STARS(t)}</span></h4>
     <ul class="somm-bottles">${sommRow(p.w, keys.length ? `<div>${esc(keys.join(", "))}</div>` : "")}</ul>
-    ${p.note ? `<p class="somm-note">${esc(p.note)}</p>` : ""}${borrowedNote(keys)}
+    ${p.note ? `<p class="somm-note">${esc(p.note)}</p>` : ""}${borrowedNote(keys, sweet)}
     ${parts.join("")}
     ${recs.length ? `<h5>📖 Recipes from the books</h5>${recs.map(recipeHtml).join("")}` : ""}
     ${br.length ? `<p><strong>🔗 Flavour bridges</strong> for ${esc(br[0].k)} (ingredients that tie a dish to it): ${esc(br[0].ing.join(", "))}.${srcSpan(br[0].b, br[0].p)}</p>` : ""}

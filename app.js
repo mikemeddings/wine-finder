@@ -3645,7 +3645,8 @@ const WHITE_STYLE = [
   [/\bchardonnay\b|\bbourgogne blanc\b|\bmacon\b/, "medium"],
   [/\bviognier\b|\bcondrieu\b|\bmarsanne\b|\broussanne\b|\bgewurz\b|\bpinot gris\b|\bwhite rhone\b/, "full"],
 ];
-const MEDIUM_SWEET_WORDS = /\bspatlese\b|\bdemi.sec\b|\bsemi.sweet\b|\bmedium.sweet\b|\bamabile\b|\bmoelleux\b|\babboccato\b/;
+// Georgia's semi-sweet appellations (Kindzmarauli, Khvanchkara, Akhasheni, Tvishi) are semi-sweet by law, so the name is enough
+const MEDIUM_SWEET_WORDS = /\bspatlese\b|\bdemi.sec\b|\bsemi.sweet\b|\bmedium.sweet\b|\bamabile\b|\bmoelleux\b|\babboccato\b|\bkindzmarauli\b|\bkhvanchkara\b|\bakhasheni\b|\btvishi\b/;
 const SWEET_WORDS = /\bauslese\b|\bbeerenauslese\b|\btrockenbeerenauslese\b|\btba\b|\beiswein\b|\bice.?wine\b|\blate harvest\b|\bvendanges tardives\b|\bsauternes\b|\bbarsac\b|\btokaji\b|\bmoscato d.?asti\b|\bdoux\b|\bdolce\b|\bpassito\b|\brecioto\b|\bvin santo\b|\bpedro ximenez\b|\bcream sherry\b/;
 const OFFDRY_WORDS = /\bkabinett\b|\boff.dry\b|\bmedium.dry\b|\bsemi.dry\b|\bwhite zinfandel\b|\bmoscato\b|\bfeinherb\b/;
 const DRY_FORTIFIED = /\bfino\b|\bmanzanilla\b|\bamontillado\b|\bsercial\b|\bdry sherry\b/;
