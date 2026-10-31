@@ -230,7 +230,8 @@ function recipeHtml(r) {
       ${r[7] ? `<p><strong>Why it suits the wine:</strong> ${esc(r[7])}</p>` : ""}
       <h5>Ingredients</h5><ul class="somm-ing">${x.i.map((l) => /:\s*$/.test(l) ? `<li class="somm-ing-h">${esc(l)}</li>` : `<li>${esc(l)}</li>`).join("")}</ul>
       <h5>Method</h5><ol class="somm-method">${x.m.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>
-      <p class="somm-src">Ingredients as printed in ${esc(ref(r[1], r[2]))}; the method is in our own words.</p></div></details>`;
+      <p class="somm-src">Ingredients as printed in ${esc(ref(r[1], r[2]))}; the method is in our own words.</p>
+      <p><button type="button" class="btn" data-somm-print="${esc(recipeKey(r))}">🖨 Print the recipe</button></p></div></details>`;
 }
 // ---- Other wines for this dish -------------------------------------------------------------
 // Bottles in the stores ticked that carry the grape the book pours with a recipe, then bottles
@@ -281,13 +282,38 @@ function refreshRecipeBottles(box) {
 const refreshRecipeBottlesSoon = debounce(refreshRecipeBottles, 300);
 document.addEventListener("change", (e) => { const box = e.target.closest?.(".somm-rb"); if (box && e.target.matches("[data-rb-country]")) refreshRecipeBottles(box); });
 document.addEventListener("input", (e) => { const box = e.target.closest?.(".somm-rb"); if (box && e.target.matches("[data-rb-price]")) refreshRecipeBottlesSoon(box); });
-// the bottles are worked out only when a recipe is opened
+// the bottles are worked out only when a recipe is opened, and the choices (country, price)
+// are thrown away when it's closed, so the next recipe starts clean
 document.addEventListener("toggle", (e) => {
   const d = e.target;
-  if (!d.matches?.("details.somm-recipe") || !d.open || d.querySelector(".somm-rb")) return;
+  if (!d.matches?.("details.somm-recipe")) return;
+  if (!d.open) { d.querySelector(".somm-rb")?.remove(); return; }
+  if (d.querySelector(".somm-rb")) return;
   const r = recipeByKey(d.dataset.recipe);
-  if (r) d.querySelector(".somm-recipe-body")?.insertAdjacentHTML("beforeend", recipeBottlesBox(r));
+  if (!r) return;
+  d.querySelector(".somm-recipe-body")?.insertAdjacentHTML("beforeend", recipeBottlesBox(r));
+  const sel = d.querySelector("[data-rb-country]"); if (sel) sel.value = "";
 }, true);
+
+// Print one recipe: the page's print area (the same one the Short List prints through)
+// gets the recipe alone, then the browser's print dialog opens.
+function printRecipe(r) {
+  const x = RECIPES[recipeKey(r)];
+  if (!x) return;
+  $("print-area").innerHTML = `<h1>${esc(r[0])}</h1>
+    <p>${esc(ref(r[1], r[2]))}${r[6]?.length ? ` · with ${esc(r[6].join(", "))}` : ""}${x.s || x.t ? ` · ${esc([x.s, x.t].filter(Boolean).join(" · "))}` : ""}</p>
+    ${r[7] ? `<p><strong>Why it suits the wine:</strong> ${esc(r[7])}</p>` : ""}
+    <h2>Ingredients</h2><ul class="pa-ing">${x.i.map((l) => /:\s*$/.test(l) ? `<li class="pa-ing-h">${esc(l)}</li>` : `<li>${esc(l)}</li>`).join("")}</ul>
+    <h2>Method</h2><ol>${x.m.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>
+    <p class="pa-foot">Ingredients as printed in ${esc(ref(r[1], r[2]))}; the method is in our own words. Printed from Basil's Wine Finder, ${new Date().toLocaleDateString()}.</p>`;
+  window.print();
+}
+document.addEventListener("click", (e) => {
+  const b = e.target.closest?.("[data-somm-print]");
+  if (!b) return;
+  const r = recipeByKey(b.dataset.sommPrint);
+  if (r) printRecipe(r);
+});
 
 function recipeButton(dish, wine = "") {
   return `<button type="button" class="btn btn-recipe" data-somm-recipe="${esc(dish)}" data-somm-recipe-wine="${esc(wine)}">🍳 Get a recipe</button>`;

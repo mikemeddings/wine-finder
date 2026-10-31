@@ -260,6 +260,10 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
   .print-area li { margin-bottom: 8pt; break-inside: avoid; }
   .print-area .pa-name { font-weight: 700; }
   .print-area .pa-foot { margin-top: 12pt; font-size: 10pt; }
+  .print-area h2 { font-size: 14pt; margin: 10pt 0 4pt; }
+  .print-area ul.pa-ing { padding-left: 18pt; columns: 2; column-gap: 24pt; }
+  .print-area ul.pa-ing li { margin-bottom: 2pt; break-inside: avoid; }
+  .print-area .pa-ing-h { list-style: none; margin-left: -18pt; font-weight: 700; margin-top: 6pt; }
 }
 
 /* "See the question" inside the Ask Claude message */
