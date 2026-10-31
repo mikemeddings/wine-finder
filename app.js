@@ -2606,7 +2606,7 @@ function renderMyWines() {
 function mwWhereCanIBuy(id) {
   const w = allMyWines().find((x) => x.id === id);
   if (!w) return;
-  showView("shortlist");
+  showView("research");
   const input = document.querySelector("#ew-top .ew-q");
   input.value = storeSearchWords(w);
   updateElsewhere(input.closest(".elsewhere"));
@@ -4820,7 +4820,7 @@ function chooseMail(id) {
 
 // ⓘ beside each section heading: jumps to that section's help.
 const HELP_LINKS = [["#finder-h", "help-find"], ["#filters-h", "help-find"], ["#ew-h", "help-where"],
-  ["#cellar-filter legend", "help-cellars"], ["#view-shortlist .research-head h2", "help-research"], ["#sl-add-h", "help-research"],
+  ["#cellar-filter legend", "help-cellars"], ["#view-shortlist .research-head h2", "help-research"], ["#view-research .research-head h2", "help-research"], ["#sl-add-h", "help-research"], ["#somm-h", "help-somm"],
   ["#view-dine .research-head h2", "help-dine"], ["#dine-recent-h", "help-dine"], ["#inbox-h", "help-keeper"],
   ["#fr-h", "help-ratings"], ["#mw-import-h", "help-mywines"], ["#mw-add-h", "help-mywines"], ["#mw-backup-h", "help-mywines"]];
 function addHelpButtons() {
@@ -4832,7 +4832,7 @@ function addHelpButtons() {
 }
 // Each page change is a step in the browser's history, so Back (or the phone's back
 // gesture) returns to the previous page at the same scroll position, and Forward works too.
-const VIEWS = ["find", "shortlist", "shopping", "mywines", "dine", "help"];
+const VIEWS = ["find", "research", "shortlist", "somm", "shopping", "mywines", "dine", "help"];
 const currentView = () => VIEWS.find((v) => !$(`view-${v}`).hidden) || "find";
 let navDepth = 0; // steps taken inside the Wine Finder, so "Back" never leaves the site by surprise
 
@@ -4896,7 +4896,9 @@ function showView(name, fromHistory = false) {
     navDepth++;
   }
   $("view-find").hidden = name !== "find";
+  $("view-research").hidden = name !== "research";
   $("view-shortlist").hidden = name !== "shortlist";
+  $("view-somm").hidden = name !== "somm";
   $("view-shopping").hidden = name !== "shopping";
   $("view-mywines").hidden = name !== "mywines";
   $("view-dine").hidden = name !== "dine";
@@ -4904,6 +4906,7 @@ function showView(name, fromHistory = false) {
   for (const el of document.querySelectorAll(".help-keeper")) el.hidden = !isKeeper(); // the keeper's topic: keeper's computer only
   for (const b of document.querySelectorAll(".view-btn")) b.setAttribute("aria-pressed", String(b.dataset.view === name));
   if (name === "shortlist") renderShortlist();
+  else if (name === "research" || name === "somm") { /* static boxes; the Sommelier page fills itself when shown */ }
   else if (name === "shopping") renderShopping();
   else if (name === "mywines") { renderMyWines(); renderFamilyBox(); loadInbox(); }
   else if (name === "dine") renderDine();
@@ -5329,7 +5332,7 @@ function wireEvents() {
       refresh();
     }
     else if (t.dataset.chip) removeChip(+t.dataset.chip);
-    else if (t.dataset.view) { showView(t.dataset.view); if (t.dataset.focus) $(t.dataset.focus)?.focus(); }
+    else if (t.dataset.view) { showView(t.dataset.view); if (t.dataset.focus) $(t.dataset.focus)?.focus({ preventScroll: true }); }
     else if (t.dataset.add) {
       const id = t.dataset.add;
       toggleShortlist(id);
@@ -5349,8 +5352,8 @@ function wireEvents() {
     }
     else if (t.dataset.ew) toggleElsewhere(t);
     else if (t.dataset.action === "start-over") startOver();
-    else if (t.dataset.action === "goto-ew") { // "Where can I buy…?" is on the Research a wine page
-      showView("shortlist");
+    else if (t.dataset.action === "goto-ew") { // "Where can I buy…?" is on the Research page
+      showView("research");
       $("ew-h").scrollIntoView({ block: "start" });
       document.querySelector("#ew-top .ew-q").focus({ preventScroll: true });
     }

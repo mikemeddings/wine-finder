@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-31.6">
+<link rel="stylesheet" href="app.css?v=2026-10-31.7">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -31,8 +31,9 @@
     <button type="button" class="nav-btn view-btn" data-view="mywines" aria-pressed="false"><svg><use href="#i-rack"/></svg><span>My wines</span></button>
     <button type="button" class="nav-btn view-btn" data-view="shortlist" aria-pressed="false" aria-label="Short List for Claude"><svg><use href="#i-list"/></svg><span>Short List</span><span class="nav-badge sl-count">0</span></button>
     <button type="button" class="nav-btn view-btn" data-view="shopping" aria-pressed="false" aria-label="Comparison List"><svg><use href="#i-cart"/></svg><span>Comparison List</span><span class="nav-badge shop-count">0</span></button>
-    <button type="button" class="nav-btn btn-research" data-view="shortlist" data-focus="sl-add-q"><svg><use href="#i-search"/></svg><span>Research</span></button>
-    <button type="button" class="nav-btn btn-research btn-dine" data-view="dine"><svg><use href="#i-dine"/></svg><span>Restaurant</span></button>
+    <button type="button" class="nav-btn view-btn" data-view="research" aria-pressed="false" data-focus="sl-add-q"><svg><use href="#i-search"/></svg><span>Research</span></button>
+    <button type="button" class="nav-btn view-btn btn-somm" data-view="somm" aria-pressed="false" aria-label="Master Sommelier"><svg><use href="#i-somm"/></svg><span>Sommelier</span></button>
+    <button type="button" class="nav-btn view-btn btn-research btn-dine" data-view="dine" aria-pressed="false"><svg><use href="#i-dine"/></svg><span>Restaurant</span></button>
     <button type="button" class="nav-btn btn-research btn-tonight" id="btn-tonight" hidden><svg><use href="#i-star"/></svg><span>Tonight's picks</span></button>
     <button type="button" class="nav-btn btn-research btn-help" data-help="help-top"><svg><use href="#i-help"/></svg><span>Help</span></button>
     <button type="button" class="nav-btn btn-reset" id="start-over"><svg><use href="#i-reset"/></svg><span>Start over</span></button>
@@ -409,9 +410,10 @@
 
   <section id="help-somm" class="help-topic">
     <h3>Master Sommelier: wine and food</h3>
-    <p>On the <strong>Research</strong> page, the black and gold box. It matches wine and food from six pairing books: Evan Goldstein's <em>Perfect Pairings</em> and <em>Daring Pairings</em>, Sid Goldstein's <em>The Wine Lover's Cookbook</em>, Dornenburg &amp; Page's <em>What to Drink with What You Eat</em>, Robert Harrington's <em>Food and Wine Pairing</em> and <em>The Food &amp; Wine Guide to Perfect Pairings</em>. Every suggestion says which book it's from, with the page. Recipes are given by title and page: the recipes themselves are in the books. First tick where you're buying under <strong>Buying from</strong> (the LCBO shows there once it's unlocked). Then choose one of three ways in:</p>
+    <p>Press <strong>Sommelier</strong> (black and gold) at the top. It matches wine and food from six pairing books: Evan Goldstein's <em>Perfect Pairings</em> and <em>Daring Pairings</em>, Sid Goldstein's <em>The Wine Lover's Cookbook</em>, Dornenburg &amp; Page's <em>What to Drink with What You Eat</em>, Robert Harrington's <em>Food and Wine Pairing</em> and <em>The Food &amp; Wine Guide to Perfect Pairings</em>. Every suggestion says which book it's from, with the page. Recipes are given by title and page: the recipes themselves are in the books. First tick where you're buying under <strong>Buying from</strong> (the LCBO shows there once it's unlocked). Then choose one of three ways in:</p>
     <ul>
-      <li><strong>🍷 I have the wine.</strong> Type or paste a wine's name (or just its grape, such as Saperavi) and tap the wine when it's found, or tap <strong>Pair “…” as typed</strong>. Or tick wines on your <strong>Comparison List</strong> and tap <strong>Pair the ticked wines</strong>. Or choose a <strong>country</strong> (for example Georgia, or Portugal up to $25) to see its wines grouped by grape, each with its dishes and its bottles. You get the main dishes by what's on the plate (beef, lamb, pork, chicken, fish…), what the books warn against, cheeses, desserts and recipes.</li>
+      <li><strong>🍷 I have the wine.</strong> Type or paste a wine's name (or just its grape, such as Saperavi) and tap the wine when it's found, or tap <strong>Pair “…” as typed</strong>. Or choose a <strong>country</strong> (for example Georgia, or Portugal up to $25) to see its wines grouped by grape, each with its dishes and its bottles. You get the main dishes by what's on the plate (beef, lamb, pork, chicken, fish…), what the books warn against, cheeses, desserts and recipes.</li>
+      <li><strong>⚖️ Wines on my Comparison List.</strong> The wines on your Comparison List, with country, price, store and grape. Tick some and press <strong>Pair the ticked wines</strong>, or <strong>Build the menu</strong> to send each bottle to the course it suits best.</li>
       <li><strong>🍖 I'm cooking…</strong> Tap what's on the plate (pork, lamb, fish…), and if you like type the dish (“pork tenderloin with apples”). Narrow by country, colour and price if you want. You get the grapes the books pour with it, the recipes, and real bottles you can buy, best match first. <strong>See all in Find wines</strong> opens the full list there.</li>
       <li><strong>🧀 Build me a menu.</strong> Choose a country (for example Moldova), how many wines, the courses (starter, main, cheese, dessert) and, if you like, the main course. It picks a bottle from that country for each course, says what to serve, and lists recipes. If the country has no dessert wine in the stores, it suggests one from elsewhere and says so. <strong>Ask Claude to polish this menu</strong> sends the menu to Claude for dishes and serving tips; <strong>Add all to the Comparison List</strong> keeps the bottles.</li>
     </ul>
@@ -421,7 +423,7 @@
 
   <section id="help-research" class="help-topic">
     <h3>Research a wine with Claude</h3>
-    <p>Claude looks up each wine's reviews, background and history, suggests food to go with it, and gives its own score out of 100. Open it with <strong>Research</strong> or <strong>Short List</strong> at the top (the number on Short List is how many wines are on it).</p>
+    <p>Claude looks up each wine's reviews, background and history, suggests food to go with it, and gives its own score out of 100. Open it with <strong>Research</strong> at the top (add a wine by name, and “Where can I buy…?”) or <strong>Short List</strong> (the list itself and the Ask Claude buttons; the number is how many wines are on it).</p>
     <ol>
       <li><strong>Add wines</strong>: type a name in the box, or press “＋ Add to Short List for Claude Research” on any wine.</li>
       <li><strong>Ask Claude</strong>: press <strong>② Ask Claude about these</strong> (or “rank these by reviews”). Claude opens in a new tab with the question already written; press Enter to send it. Claude's note “Use caution before running this prompt” appears for every question that arrives this way; this one is fine to send.</li>
@@ -583,7 +585,7 @@
   <div id="shop-list" class="result-list"></div>
 </main>
 
-<main id="view-shortlist" hidden>
+<main id="view-research" hidden>
   <header class="research-head">
     <h2>Research wines with Claude</h2>
     <p>Claude looks up each wine's reviews, background and history, suggests food to go with it, and gives its own score out of 100.</p>
@@ -611,12 +613,45 @@
     </div>
     <div id="sl-add-hits" aria-live="polite"></div>
   </section>
+</main>
 
+<main id="view-shortlist" hidden>
+  <header class="research-head">
+    <h2>Research wines with Claude</h2>
+    <p>Claude looks up each wine's reviews, background and history, suggests food to go with it, and gives its own score out of 100.</p>
+    <ol class="research-steps">
+      <li><strong>Add wines.</strong> Press “＋ Add to Short List for Claude Research” on any wine in Find wines or My wines, or type a name on the <button type="button" class="linklike" data-view="research">Research</button> page.</li>
+      <li><strong>Ask Claude.</strong> Claude opens with the question already written.</li>
+      <li><strong>Save the research.</strong> When Claude finishes, press Claude's copy button under its answer (two folders on top of each other, on the far left), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom. The ratings and Claude's write-up are kept, and shared with the family.</li>
+    </ol>
+    <img class="save-steps-img" src="images/save-steps.png?v=3" alt="To save Claude's research, 2 clicks: first click the copy icon (two folders on top of each other, on the far left) under Claude's answer, then click the 💾 Save these ratings to my Wine Finder link.">
+  </header>
+
+  <h3 class="sl-list-h">Your Short List for Claude</h3>
+  <p class="sl-keep" id="sl-keep" hidden></p>
+  <div id="ask-notice" class="notice" role="status" hidden></div>
+  <div id="sl-warning" class="warning" hidden></div>
+  <div class="sl-actions" id="sl-actions">
+    <button type="button" class="btn btn-primary btn-big" id="ask-claude">② Ask Claude about these</button>
+    <button type="button" class="btn btn-big btn-rank" id="ask-claude-rank">Ask Claude to rank these by reviews</button>
+    <button type="button" class="btn" id="sl-copy">Copy as text</button>
+    <button type="button" class="btn" id="sl-email">Email</button>
+    <button type="button" class="btn" id="sl-print">Print</button>
+    <button type="button" class="btn btn-danger" id="sl-clear">Clear the list</button>
+  </div>
+  <p id="sl-status" class="status" role="status"></p>
+  <ol id="sl-list" class="sl-list"></ol>
+  <p id="sl-empty" class="empty" hidden>Your Short List for Claude is empty. Type a wine's name on the <button type="button" class="linklike" data-view="research">Research</button> page, or go to <button type="button" class="linklike" data-view="find">Find wines</button> and press “＋ Add to Short List for Claude Research” on any wine.</p>
+
+</main>
+
+<main id="view-somm" hidden>
   <section class="somm-box" id="somm" aria-labelledby="somm-h">
     <h3 id="somm-h"><svg class="somm-icon" aria-hidden="true"><use href="#i-somm"/></svg> Master Sommelier</h3>
     <p class="somm-intro">Wine and food matched from six pairing books: what to cook with a wine, which wine to pour with a dish, or a whole menu, with the books' recipes by page. Choose how you'd like to start:</p>
     <div class="somm-tabs" role="tablist">
       <button type="button" role="tab" class="somm-tab" data-somm-tab="wine" aria-selected="true">🍷 I have the wine</button>
+      <button type="button" role="tab" class="somm-tab" data-somm-tab="cmp" aria-selected="false">⚖️ Wines on my Comparison List</button>
       <button type="button" role="tab" class="somm-tab" data-somm-tab="cook" aria-selected="false">🍖 I'm cooking…</button>
       <button type="button" role="tab" class="somm-tab" data-somm-tab="menu" aria-selected="false">🧀 Build me a menu</button>
     </div>
@@ -626,12 +661,26 @@
       <div class="somm-way"><h4>Type or paste a wine</h4>
         <input type="text" id="somm-q" autocomplete="off" spellcheck="false" placeholder="for example Teliani Valley Saperavi, or just Saperavi">
         <div id="somm-hits" aria-live="polite"></div></div>
-      <div class="somm-way"><h4>Wines on your Comparison List</h4><div id="somm-cmp"></div></div>
       <div class="somm-way"><h4>All the wines of a country</h4>
         <div class="somm-row"><select id="somm-country" data-somm-country="pick" aria-label="Country"></select>
           <select id="somm-colour" aria-label="Colour"><option value="">Any colour</option><option>Red</option><option>White</option><option>Rosé</option><option>Sparkling</option></select>
           <label class="somm-price">Up to $<input type="number" id="somm-price" min="0" step="1" inputmode="numeric" placeholder="any"></label>
           <button type="button" class="btn btn-somm" data-somm="pair-country">Show the pairings</button></div></div>
+    </div>
+
+    <div class="somm-pane" id="somm-cmp" hidden>
+      <div class="somm-way"><h4>Your Comparison List</h4>
+        <p class="hint">The wines you've put on the ⚖️ Comparison List, with their details. Tick the ones to use.</p>
+        <div id="somm-cmp-list"></div></div>
+      <div class="somm-way"><h4>Build a menu from the ticked wines</h4>
+        <div class="somm-row"><span class="somm-label">Courses:</span>
+          <label class="somm-check"><input type="checkbox" data-somm-cmp-course value="starter"> Starter</label>
+          <label class="somm-check"><input type="checkbox" data-somm-cmp-course value="main" checked> Main</label>
+          <label class="somm-check"><input type="checkbox" data-somm-cmp-course value="cheese" checked> Cheese</label>
+          <label class="somm-check"><input type="checkbox" data-somm-cmp-course value="dessert" checked> Dessert</label>
+          <label>Main course <select id="somm-cmp-protein"><option value="">Let the wine decide</option><option value="Red meat">Red meat</option><option value="Lamb">Lamb</option><option value="Pork">Pork</option><option value="Chicken">Chicken</option><option value="Fish">Fish</option><option value="Seafood">Seafood</option><option value="Pasta and pizza">Pasta and pizza</option><option value="Spicy food">Spicy food</option></select></label>
+          <button type="button" class="btn btn-somm" data-somm="menu-cmp">Build the menu</button></div>
+        <p class="hint">Each ticked wine goes to the course it suits best. With more courses than wines, a bottle serves two courses; a dessert course needs a sweet wine among them.</p></div>
     </div>
 
     <div class="somm-pane" id="somm-cook" hidden>
@@ -661,23 +710,6 @@
     </div>
     <div id="somm-out" class="somm-out" aria-live="polite"></div>
   </section>
-
-  <h3 class="sl-list-h">Your Short List for Claude</h3>
-  <p class="sl-keep" id="sl-keep" hidden></p>
-  <div id="ask-notice" class="notice" role="status" hidden></div>
-  <div id="sl-warning" class="warning" hidden></div>
-  <div class="sl-actions" id="sl-actions">
-    <button type="button" class="btn btn-primary btn-big" id="ask-claude">② Ask Claude about these</button>
-    <button type="button" class="btn btn-big btn-rank" id="ask-claude-rank">Ask Claude to rank these by reviews</button>
-    <button type="button" class="btn" id="sl-copy">Copy as text</button>
-    <button type="button" class="btn" id="sl-email">Email</button>
-    <button type="button" class="btn" id="sl-print">Print</button>
-    <button type="button" class="btn btn-danger" id="sl-clear">Clear the list</button>
-  </div>
-  <p id="sl-status" class="status" role="status"></p>
-  <ol id="sl-list" class="sl-list"></ol>
-  <p id="sl-empty" class="empty" hidden>Your Short List for Claude is empty. Type a wine's name in the box above, or go to <button type="button" class="linklike" data-view="find">Find wines</button> and press “＋ Add to Short List for Claude Research” on any wine.</p>
-
 </main>
 
 <footer class="foot">
@@ -790,7 +822,7 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-31.6"></script>
-<script src="somm.js?v=2026-10-31.6"></script>
+<script src="app.js?v=2026-10-31.7"></script>
+<script src="somm.js?v=2026-10-31.7"></script>
 </body>
 </html>

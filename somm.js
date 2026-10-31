@@ -1,5 +1,5 @@
 "use strict";
-// ---- Master Sommelier (on the Research page) -------------------------------------------
+// ---- Master Sommelier (its own page, the Sommelier button at the top) -------------------------------------------
 // Wine and food matched from the pairing books, three ways in: "I have the wine" (typed, from
 // the Comparison List, or every wine of a country), "I'm cooking…" (a food, then real bottles
 // from the stores) and "Build me a menu" (a country's wines across the courses). Everything is
@@ -349,8 +349,11 @@ function cookHtml({ food, dish, stores, country, colour, maxPrice }) {
 
 // ---- Route 3: Build me a menu --------------------------------------------------------------
 let lastMenu = null;
-function buildMenu({ country, nWines, courses, protein, stores, maxPrice }) {
-  const pool = sommPool({ stores, country, maxPrice });
+// A country's wines in the stores, or (own) the bottles handed in from the Comparison List.
+function buildMenu({ country, nWines, courses, protein, stores, maxPrice, pool: given = null }) {
+  const own = !!given;
+  const pool = given || sommPool({ stores, country, maxPrice });
+  if (own) nWines = Math.max(1, pool.length);
   const used = new Set(), plan = [];
   const pick = (cands, score) => cands.filter((w) => !used.has(w.id)).map((w) => ({ w, s: score(w) })).filter((x) => x.s > 0)
     .sort((a, b) => b.s - a.s || byBest(a.w, b.w))[0]?.w || null;
@@ -362,7 +365,8 @@ function buildMenu({ country, nWines, courses, protein, stores, maxPrice }) {
     let w = null, note = "";
     if (c === "dessert") {
       w = pick(pool.filter(isSweetWine), (x) => 1 + (bestScore(x) ?? 0) / 100);
-      if (!w) {
+      if (!w && own) note = "None of the ticked wines is a dessert wine.";
+      else if (!w) {
         const away = sommPool({ stores, maxPrice }).filter((x) => realDessert(x) && x.country !== country);
         const classic = (x) => sommKeys(x).some((k) => ["Port", "Tokaji", "Ice wine", "Sauternes", "Late-harvest white", "Muscat / Moscato", "Madeira"].includes(k));
         w = pick(away, (x) => 1 + (classic(x) ? 3 : 0) + (x.type === "Dessert" ? 1 : 0) + (bestScore(x) ?? 0) / 100);
@@ -396,8 +400,13 @@ function buildMenu({ country, nWines, courses, protein, stores, maxPrice }) {
       if (share) { p.w = share; p.note = (p.note ? p.note + " " : "") + "Same bottle as another course, to keep to " + nWines + " wines."; }
     }
   }
+  // own bottles, more courses than wines: a course left without one shares the bottle that suits it best
+  if (own) for (const p of plan) if (!p.w && p.c !== "dessert") {
+    const share = pool.filter((x) => !isSweetWine(x) || p.c === "cheese").sort((a, b) => (tierFor(b, p.food) || 0) - (tierFor(a, p.food) || 0))[0];
+    if (share) { p.w = share; p.note = "Same bottle as another course."; }
+  }
   plan.sort((a, b) => Object.keys(COURSES).indexOf(a.c) - Object.keys(COURSES).indexOf(b.c));
-  return { country, plan, pool: pool.length };
+  return { country, own, plan, pool: pool.length };
 }
 // One course: the local dish (for countries the books miss), the books' dishes with their
 // reasons, a recipe, flavour bridges, warnings and the books' serving advice.
@@ -451,7 +460,9 @@ function menuHtml(m) {
     .sort((a, b) => b.n - a.n).slice(0, 3).map(({ x }) => `<li><strong>${esc(x[0])}</strong>${srcSpan(x[1], x[2])}: ` +
       x[3].map((c) => `${esc(c[0])}${c[1].length ? ` <span class="hint-inline">with ${esc(c[1].join(" / "))}</span>` : ""}`).join(" · ") + `</li>`).join("");
   const n = LOCAL_NOTES[m.country];
-  return `<p class="somm-summary"><strong>A ${esc(m.country)} menu</strong>, ${wines.length} ${wines.length === 1 ? "wine" : "wines"}, chosen from ${m.pool} ${esc(m.country)} bottles in the stores ticked.</p>
+  const head = m.own ? `<strong>A menu from your Comparison List</strong>: ${wines.length} of the ${m.pool} ${m.pool === 1 ? "wine" : "wines"} ticked, each on the course it suits best.`
+    : `<strong>A ${esc(m.country)} menu</strong>, ${wines.length} ${wines.length === 1 ? "wine" : "wines"}, chosen from ${m.pool} ${esc(m.country)} bottles in the stores ticked.`;
+  return `<p class="somm-summary">${head}</p>
     ${n ? `<p>${esc(n.intro)} ${CLAUDE_TAG}</p>` : ""}
     ${reg?.foods?.length ? `<p><strong>Local food the books tie to these wines:</strong> ${esc(reg.foods.join(", "))}.</p>` : ""}
     ${m.plan.map((p) => courseHtml(p, m.country)).join("")}
@@ -462,7 +473,7 @@ function menuHtml(m) {
 }
 function menuPrompt(m) {
   const lines = m.plan.map((p) => `- ${COURSES[p.c]}${p.food && p.c === "main" ? ` (${p.food.toLowerCase()})` : ""}: ${p.w ? `${p.w.name}${p.w.vintage ? " " + p.w.vintage : ""}, ${money(priceOf(p.w) ?? p.w.price)} at ${sourceLabel(p.w.source)}` : "no wine found"}${p.note ? ` (${p.note})` : ""}`);
-  return `I'm planning a dinner to show off wines from ${m.country}. My wine finder suggested these bottles for each course:\n\n${lines.join("\n")}\n\n` +
+  return `I'm planning a dinner to show off ${m.own ? "some wines I've picked" : `wines from ${m.country}`}. My wine finder suggested these bottles for each course:\n\n${lines.join("\n")}\n\n` +
     `Please act as a Master Sommelier: for each course, suggest one specific dish that suits that wine (with a short reason), say whether you'd change any of the wines and why, and give serving tips (temperature, decanting, order of pouring). Keep it practical for a home cook.`;
 }
 
@@ -487,15 +498,20 @@ function renderSommStores() {
   box.innerHTML = `<span class="somm-label">Buying from:</span> ` + known.map((s) => `<label class="somm-check"><input type="checkbox" data-somm-store value="${esc(s)}"${on.has(s) ? " checked" : ""}> ${esc(sourceLabel(s))}</label>`).join("") +
     (known.includes("LCBO") ? "" : ` <span class="hint-inline">The LCBO (Ontario) appears here once it's unlocked: tick LCBO under <strong>Sold by</strong> in Find wines and enter the family code.</span>`);
 }
+// The Comparison List as its own way in: each wine with its details, a tick box each.
 function renderSommComparison() {
-  const box = $("somm-cmp");
+  const box = $("somm-cmp-list");
   if (!box) return;
   const items = shopping.map((s) => findWine(s.id) || s);
+  const row = (w) => `<li class="somm-bottle"><label class="somm-cmp-row"><input type="checkbox" data-somm-cmp value="${esc(w.id)}" checked>
+    <span class="somm-bottle-main"><span class="sl-name">${esc(w.name)}</span><br>
+      ${w.type ? typePill(w.type) + " " : ""}${esc([w.country, w.vintage, w.size_ml ? sizeText(w) : ""].filter(Boolean).join(" · "))}<br>
+      ${priceOf(w) != null ? `<strong>${priceHtml(w)}</strong> at ${sourceBadge(w.source)}` : esc(sourceLabel(w.source) || "added by name")}${familyScore(w) ? ` · <strong>${familyScore(w)}</strong> points` : ""}${sommKeys(w).length ? ` · ${esc(sommKeys(w).join(", "))}` : ""}</span></label></li>`;
   box.innerHTML = items.length
-    ? `<p><strong>Your Comparison List (${items.length}):</strong> <button type="button" class="linklike" data-somm="cmp-all">tick all</button> · <button type="button" class="linklike" data-somm="cmp-none">untick all</button></p>
-       <ul class="somm-cmp-list">${items.map((w) => `<li><label><input type="checkbox" data-somm-cmp value="${esc(w.id)}" checked> ${esc(w.name)} <span class="hint-inline">${esc([w.vintage, sourceLabel(w.source)].filter(Boolean).join(" · "))}</span></label></li>`).join("")}</ul>
-       <button type="button" class="btn btn-somm" data-somm="pair-cmp">Pair the ticked wines</button>`
-    : `<p class="hint">Your Comparison List is empty. Press <strong>⚖️ ＋ Add wine to Comparison List</strong> on any wine, then come back here to pair them all at once.</p>`;
+    ? `<p><strong>${items.length} ${items.length === 1 ? "wine" : "wines"}</strong> on your Comparison List: <button type="button" class="linklike" data-somm="cmp-all">tick all</button> · <button type="button" class="linklike" data-somm="cmp-none">untick all</button></p>
+       <ul class="somm-bottles somm-cmp-list">${items.map(row).join("")}</ul>
+       <button type="button" class="btn btn-somm btn-big" data-somm="pair-cmp">Pair the ticked wines</button>`
+    : `<p class="hint">Your Comparison List is empty. Press <strong>⚖️ ＋ Add wine to Comparison List</strong> on any wine in Find wines or My wines, then come back here.</p>`;
 }
 function sommTab(name) {
   for (const b of document.querySelectorAll("#somm [data-somm-tab]")) b.setAttribute("aria-selected", String(b.dataset.sommTab === name));
@@ -556,6 +572,14 @@ document.addEventListener("click", async (e) => {
     const ids = [...document.querySelectorAll("#somm [data-somm-cmp]:checked")].map((b) => b.value);
     const ws = ids.map((id) => findWine(id) || shopping.find((s) => s.id === id)).filter(Boolean);
     showOut(ws.length ? ws.map((w) => winePairingHtml(w, w.kind === "typed")).join("") : `<p>Tick at least one wine.</p>`);
+  } else if (a === "menu-cmp") { // the ticked Comparison List wines, each sent to the course it suits best
+    const ids = [...document.querySelectorAll("#somm [data-somm-cmp]:checked")].map((b) => b.value);
+    const ws = ids.map((id) => findWine(id) || shopping.find((s) => s.id === id)).filter((w) => w && w.type);
+    if (!ws.length) { showOut(`<p>Tick at least one wine first.</p>`); return; }
+    const courses = [...document.querySelectorAll("#somm [data-somm-cmp-course]:checked")].map((b) => b.value);
+    if (!courses.length) { showOut(`<p>Tick at least one course.</p>`); return; }
+    lastMenu = buildMenu({ country: "", courses, protein: $("somm-cmp-protein").value, stores: sommStores(), pool: ws });
+    showOut(menuHtml(lastMenu));
   } else if (a === "pair-country") {
     const country = $("somm-country").value;
     if (!country) { $("somm-country").focus(); return; }
@@ -588,7 +612,7 @@ document.addEventListener("input", (e) => { if (e.target.id === "somm-q") render
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && e.target.id === "somm-q") { e.preventDefault(); document.querySelector('#somm [data-somm="pair-typed"]')?.click(); }
 });
-// open the panel's lists whenever the Research page is shown
-new MutationObserver(() => { if (!$("view-shortlist").hidden) openSomm(); })
-  .observe($("view-shortlist"), { attributes: true, attributeFilter: ["hidden"] });
+// fill the panel's lists whenever the Sommelier page is shown
+new MutationObserver(() => { if (!$("view-somm").hidden) openSomm(); })
+  .observe($("view-somm"), { attributes: true, attributeFilter: ["hidden"] });
 sommTab(storeGet("wf.sommTab", "wine"));
