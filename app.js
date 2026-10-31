@@ -4919,13 +4919,17 @@ function startOver() {
   closeClaudeSteps();
   renderAll();
   showView("find");
-  if (shortlist.length) askToEmptyShortlist();
+  if (shortlist.length || shopping.length) askToEmptyLists();
 }
 
-// Yes/No box after Start over. "No" is the default, so Enter or Esc keeps the list.
-function askToEmptyShortlist() {
-  const n = shortlist.length;
-  $("reset-q").textContent = `Your Short List for Claude has ${n} ${n === 1 ? "wine" : "wines"} (${shortlistCountries()}).`;
+// Yes/No box after Start over: the Short List and the Comparison List survive Start over
+// unless the keeper says so here. "No" is the default, so Enter or Esc keeps them.
+function askToEmptyLists() {
+  const n = shortlist.length, k = shopping.length, wines = (x) => `${x} ${x === 1 ? "wine" : "wines"}`;
+  const parts = [];
+  if (n) parts.push(`your Short List for Claude has ${wines(n)} (${shortlistCountries()})`);
+  if (k) parts.push(`your Comparison List has ${wines(k)}`);
+  $("reset-q").textContent = capFirst(parts.join(" and ")) + ". Do you also want to empty " + (parts.length > 1 ? "both lists" : "it") + "?";
   const dlg = $("reset-dialog");
   if (typeof dlg.showModal !== "function") return; // very old browser: just keep the list
   dlg.showModal();
@@ -5427,7 +5431,7 @@ function wireEvents() {
   });
 
   $("start-over").addEventListener("click", startOver);
-  $("reset-yes").addEventListener("click", () => { emptyShortlist(); $("reset-dialog").close(); });
+  $("reset-yes").addEventListener("click", () => { emptyShortlist(); shopping = []; saveShopping(); renderShopping(); refresh(); $("reset-dialog").close(); });
   $("reset-no").addEventListener("click", () => $("reset-dialog").close());
   $("ask-claude").addEventListener("click", () => askClaude("about"));
   $("ask-claude-rank").addEventListener("click", () => askClaude("rank"));
