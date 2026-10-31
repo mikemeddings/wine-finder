@@ -776,6 +776,9 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 .somm-tab { font: inherit; font-size: 1.15rem; font-weight: 700; padding: 0.6rem 1.1rem; border: 3px solid #1b1712; border-radius: 0.6rem;
   background: #fff; color: #1b1712; cursor: pointer; }
 .somm-tab[aria-selected="true"] { background: #1b1712; color: #e8c766; }
+.somm-rb { margin-top: 0.9rem; padding-top: 0.6rem; border-top: 2px dashed #d9c48a; }
+.somm-rb h5 { margin: 0 0 0.3rem; }
+.somm-rb-why { font-size: 0.95em; }
 .somm-cmp-row { display: flex; gap: 0.6rem; align-items: flex-start; cursor: pointer; }
 .somm-cmp-row input { margin-top: 0.35rem; width: 1.2rem; height: 1.2rem; flex: none; }
 .somm-cmp-row .somm-bottle-main { line-height: 1.5; }

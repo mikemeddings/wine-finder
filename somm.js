@@ -86,6 +86,36 @@ const SWEET_COUSINS = { "Saperavi": ["Port"] };
 const SWEET_COUSIN_STYLE = { "Saperavi": "here made semi-sweet, as Kindzmarauli or Khvanchkara: dark berries, soft tannin and a little sugar" };
 const cousinsOf = (g, sweet) => (sweet && SWEET_COUSINS[g]) || COUSINS[g];
 const borrowedOf = (keys) => keys.filter((g) => !inBooks(g) && COUSINS[g]);
+
+// Grapes of the same style, for "other wines for this dish": when the book pours Xinomavro
+// with a recipe, bottles of these grapes are offered as stand-ins, marked as Claude's
+// judgement. A grape can sit in two families (Aglianico is both high-acid and big).
+const STYLE_FAMILIES = [
+  ["light, bright reds with soft tannin", ["Pinot Noir", "Gamay", "Zweigelt", "Rară Neagră", "Dolcetto", "Barbera", "Cinsaut", "Mencía", "Blaufränkisch"]],
+  ["high-acid, firmly tannic reds", ["Nebbiolo", "Xinomavro", "Baga", "Aglianico", "Saperavi", "Sangiovese", "Tannat"]],
+  ["medium-bodied, savoury reds", ["Sangiovese", "Tempranillo", "Montepulciano", "Corvina (Amarone, Valpolicella)", "Cabernet Franc", "Mencía", "Blaufränkisch", "Agiorgitiko", "Carignan", "Pinotage", "Barbera"]],
+  ["plush, dark-fruited reds", ["Merlot", "Malbec", "Carmenère", "Zinfandel / Primitivo", "Grenache / Garnacha", "Nero d'Avola", "Pinotage", "Fetească Neagră", "Agiorgitiko", "Petite Sirah"]],
+  ["big, tannic, long-lived reds", ["Cabernet Sauvignon", "Syrah / Shiraz", "Petit Verdot", "Tannat", "Petite Sirah", "Touriga Nacional", "Mourvèdre / Monastrell", "Aglianico", "Saperavi", "Malbec", "Carignan", "Nebbiolo"]],
+  ["sharp, citrus, mineral whites", ["Sauvignon Blanc", "Verdejo", "Albariño", "Txakoli", "Assyrtiko", "Grüner Veltliner", "Riesling", "Rkatsiteli", "Furmint", "Chenin Blanc", "Vermentino", "Godello"]],
+  ["light, soft, gentle whites", ["Pinot Grigio / Gris", "Trebbiano", "Garganega (Soave)", "Cortese (Gavi)", "Pinot Blanc", "Chasselas", "Arneis", "Vermentino", "Fetească Albă / Regală", "Godello", "Albariño"]],
+  ["rich, full-bodied whites", ["Chardonnay", "Marsanne / Roussanne", "Viognier", "Sémillon", "Fiano", "Godello", "Kisi", "Chenin Blanc", "Grüner Veltliner"]],
+  ["aromatic, perfumed whites", ["Gewürztraminer", "Muscat / Moscato", "Torrontés", "Viognier", "Riesling", "Mtsvane", "Fetească Albă / Regală", "Kisi", "Pinot Gris"]],
+  ["sparkling wines", ["Sparkling", "Champagne", "Glera (Prosecco)"]],
+  ["dry rosés", ["Rosé"]],
+  ["sweet whites", ["Sauternes", "Late-harvest white", "Tokaji", "Ice wine", "Vinsanto", "Muscat / Moscato"]],
+  ["sweet fortified wines", ["Port", "Madeira", "Sherry (oloroso)", "Late-harvest white"]],
+];
+// the books' blend names, as the grapes they mean
+const KEY_ALIASES = { "Bordeaux": ["Cabernet Sauvignon", "Merlot"], "Rhône blends": ["Syrah / Shiraz", "Grenache / Garnacha"],
+  "Super Tuscan": ["Sangiovese", "Cabernet Sauvignon"], "Central Coast white": ["Chardonnay"], "White Burgundy": ["Chardonnay"], "Red Burgundy": ["Pinot Noir"] };
+const expandKeys = (keys) => [...new Set(keys.flatMap((k) => KEY_ALIASES[k] || [k]))];
+// the grapes of the same style as any of these, with the family name and the grape it stands in for
+function sameStyleAs(keys) {
+  const out = new Map();
+  for (const [name, grapes] of STYLE_FAMILIES) for (const k of keys) if (grapes.includes(k))
+    for (const g of grapes) if (!keys.includes(g) && !out.has(g)) out.set(g, { family: name, like: k });
+  return out;
+}
 // the books' names for a wine, with stand-ins for the grapes the books don't cover (sweet
 // stand-ins for a sweet wine; a bare list of grapes counts as dry)
 function bookKeys(w, sweet = null) {
@@ -195,13 +225,70 @@ function recipeHtml(r) {
   const x = RECIPES[recipeKey(r)];
   const head = `<strong>${esc(r[0])}</strong>${srcSpan(r[1], r[2])}${r[6]?.length ? ` <span class="hint-inline">with ${esc(r[6].slice(0, 3).join(", "))}</span>` : ""}`;
   if (!x) return `<div class="somm-recipe-line">${head} ${recipeButton(r[0], r[6]?.join(", "))}</div>`;
-  return `<details class="somm-recipe"><summary>📖 ${head} <span class="somm-open">Show the recipe</span></summary>
+  return `<details class="somm-recipe" data-recipe="${esc(recipeKey(r))}"><summary>📖 ${head} <span class="somm-open">Show the recipe</span></summary>
     <div class="somm-recipe-body">${x.s || x.t ? `<p class="hint">${esc([x.s, x.t].filter(Boolean).join(" · "))}</p>` : ""}
       ${r[7] ? `<p><strong>Why it suits the wine:</strong> ${esc(r[7])}</p>` : ""}
       <h5>Ingredients</h5><ul class="somm-ing">${x.i.map((l) => /:\s*$/.test(l) ? `<li class="somm-ing-h">${esc(l)}</li>` : `<li>${esc(l)}</li>`).join("")}</ul>
       <h5>Method</h5><ol class="somm-method">${x.m.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>
       <p class="somm-src">Ingredients as printed in ${esc(ref(r[1], r[2]))}; the method is in our own words.</p></div></details>`;
 }
+// ---- Other wines for this dish -------------------------------------------------------------
+// Bottles in the stores ticked that carry the grape the book pours with a recipe, then bottles
+// of grapes of the same style (marked), by country and price. Filled when the recipe is opened.
+let RECIPE_BY_KEY = null;
+function recipeByKey(key) {
+  if (!RECIPE_BY_KEY) { RECIPE_BY_KEY = new Map(); for (const r of SOMM?.recipes || []) RECIPE_BY_KEY.set(recipeKey(r), r); }
+  return RECIPE_BY_KEY.get(key);
+}
+function recipeBottles(r, { country = "", maxPrice = null } = {}) {
+  const want = expandKeys(r[6] || []), alike = sameStyleAs(want);
+  const sweetOk = r[4] === "dessert" || want.some((k) => ["Sauternes", "Late-harvest white", "Tokaji", "Ice wine", "Vinsanto", "Port", "Madeira", "Sherry (oloroso)"].includes(k));
+  const pool = sommPool({ stores: sommStores(), country, maxPrice }).filter((w) => sweetOk || !isSweetWine(w));
+  const rows = [];
+  for (const w of pool) {
+    const ks = sommKeys(w);
+    const hit = ks.find((k) => want.includes(k));
+    if (hit) { rows.push({ w, exact: true, grape: hit }); continue; }
+    const near = ks.find((k) => alike.has(k));
+    if (near) rows.push({ w, exact: false, grape: near, ...alike.get(near) });
+  }
+  return rows.sort((a, b) => (b.exact ? 1 : 0) - (a.exact ? 1 : 0) || byBest(a.w, b.w));
+}
+function recipeBottlesHtml(r, opts, max = 8) {
+  const rows = recipeBottles(r, opts), named = expandKeys(r[6] || []).join(", ");
+  const where = `${opts.country ? `from ${esc(opts.country)}` : "in the stores ticked"}${opts.maxPrice != null ? ` up to ${money(opts.maxPrice)}` : ""}`;
+  if (!rows.length) return `<p class="hint">No bottle ${where} carries ${esc(named)} or a grape of the same style. Try another country, a higher price, or tick more stores at the top.</p>`;
+  const exact = rows.filter((x) => x.exact).length;
+  const line = (x) => x.exact ? `<div class="somm-rb-why">✓ <strong>${esc(x.grape)}</strong>, the grape the book pours with this dish</div>`
+    : `<div class="somm-rb-why"><strong>${esc(x.grape)}</strong>: same style as ${esc(x.like)} (${esc(x.family)}). ${CLAUDE_TAG}</div>`;
+  return `<p class="hint">${rows.length} ${rows.length === 1 ? "bottle" : "bottles"} ${where}: ${exact ? `${exact} of ${esc(named)}` : `none of ${esc(named)}`}${rows.length > exact ? `, ${rows.length - exact} of the same style` : ""}. Best rated first.</p>
+    <ul class="somm-bottles">${rows.slice(0, max).map((x) => sommRow(x.w, line(x))).join("")}</ul>${rows.length > max ? `<p class="hint">Showing ${max}; narrow by country or price to see others.</p>` : ""}`;
+}
+function recipeBottlesBox(r) {
+  const opts = sommCountries().map(([c, k]) => `<option value="${esc(c)}">${esc(c)} (${k})</option>`).join("");
+  return `<div class="somm-rb" data-somm-rb="${esc(recipeKey(r))}"><h5>🍾 Other wines for this dish</h5>
+    <p class="hint">The book pours <strong>${esc(expandKeys(r[6] || []).join(", "))}</strong> with it. Other countries make that grape, and grapes of the same style suit the dish too. Choose a country or a price:</p>
+    <div class="somm-row"><select data-rb-country aria-label="Country"><option value="">Any country</option>${opts}</select>
+      <label class="somm-price">Up to $<input type="number" data-rb-price min="0" step="1" inputmode="numeric" placeholder="any"></label></div>
+    <div class="somm-rb-out">${recipeBottlesHtml(r, {})}</div></div>`;
+}
+function refreshRecipeBottles(box) {
+  const r = recipeByKey(box.dataset.sommRb);
+  if (!r) return;
+  const v = parseFloat(box.querySelector("[data-rb-price]").value);
+  box.querySelector(".somm-rb-out").innerHTML = recipeBottlesHtml(r, { country: box.querySelector("[data-rb-country]").value, maxPrice: Number.isFinite(v) && v > 0 ? v : null });
+}
+const refreshRecipeBottlesSoon = debounce(refreshRecipeBottles, 300);
+document.addEventListener("change", (e) => { const box = e.target.closest?.(".somm-rb"); if (box && e.target.matches("[data-rb-country]")) refreshRecipeBottles(box); });
+document.addEventListener("input", (e) => { const box = e.target.closest?.(".somm-rb"); if (box && e.target.matches("[data-rb-price]")) refreshRecipeBottlesSoon(box); });
+// the bottles are worked out only when a recipe is opened
+document.addEventListener("toggle", (e) => {
+  const d = e.target;
+  if (!d.matches?.("details.somm-recipe") || !d.open || d.querySelector(".somm-rb")) return;
+  const r = recipeByKey(d.dataset.recipe);
+  if (r) d.querySelector(".somm-recipe-body")?.insertAdjacentHTML("beforeend", recipeBottlesBox(r));
+}, true);
+
 function recipeButton(dish, wine = "") {
   return `<button type="button" class="btn btn-recipe" data-somm-recipe="${esc(dish)}" data-somm-recipe-wine="${esc(wine)}">🍳 Get a recipe</button>`;
 }
