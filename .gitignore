@@ -9,3 +9,10 @@ Jons Cellar/
 LCBO google drive/
 Wine Finder inbox setup/
 RESEARCH_PIPELINE.md
+# The pairing books, and the page text taken from them, stay on the PC. Only our own notes
+# (notes_*.json) and the recipes (recipes_*.json: ingredients by book and page, method in our words) are committed.
+food pairings/*.pdf
+food pairings/*.epub
+food pairings/*.mobi
+food pairings/_text_*/
+food pairings/_tmp_rec_*/
