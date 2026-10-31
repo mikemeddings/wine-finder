@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-30",
+ "updated": "2026-10-31",
  "notes": {
   "typed-losada-vinos-de-finca-mencia-bierzo-altos-de-losada-la-bienquerida": {
    "name": "Losada Vinos de Finca Mencía Bierzo Altos de Losada La Bienquerida",
@@ -865,6 +865,11 @@
    "name": "Iron Maiden Eddie's Blend Darkest Red Wine Art #2",
    "from": "Mike",
    "date": "2026-10-28"
+  },
+  "typed-chateau-la-tour-du-pin-figeac": {
+   "name": "Château La Tour du Pin Figeac",
+   "from": "Mike",
+   "date": "2026-10-31"
   }
  }
 }
