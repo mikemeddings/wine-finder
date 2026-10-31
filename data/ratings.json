@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-30",
+ "updated": "2026-10-31",
  "ratings": {
   "bcl-220979": {
    "name": "Cabernet Sauvignon - Haras De Pirque Hussonet Reserva",
@@ -3613,6 +3613,17 @@
     "drinkFrom": 2026,
     "drinkTo": 2029,
     "from": "Basil"
+   }
+  },
+  "typed-chateau-la-tour-du-pin-figeac": {
+   "name": "Château La Tour du Pin Figeac",
+   "type": "Other",
+   "claude": {
+    "points": 89,
+    "vintage": 2018,
+    "note": "Traditional Merlot-led Saint-Emilion beside Pomerol",
+    "date": "2026-10-31",
+    "from": "Mike"
    }
   }
  }
