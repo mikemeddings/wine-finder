@@ -763,3 +763,102 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 .choices-head { font-size: 1.6rem; padding: 0.3rem 1rem; }
 .active-filters .chip { font-size: 1.35rem; padding: 0.35rem 0.4rem 0.35rem 0.95rem; }
 .active-filters .chip-x { width: 2.1rem; height: 2.1rem; font-size: 1.2rem; }
+
+/* Master Sommelier (Research page): black and gold, its own look; light inside so it reads easily */
+.somm-box { margin: 1.2rem 0; border: 4px solid #b8902a; border-radius: 0.8rem; background: #fffaf0; padding: 0 1rem 1rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18); }
+.somm-box > h3 { display: flex; align-items: center; gap: 0.6rem; margin: 0 -1rem 0.8rem; padding: 0.7rem 1rem; background: #1b1712; color: #e8c766;
+  border-radius: 0.4rem 0.4rem 0 0; font-size: 1.6rem; letter-spacing: 0.02em; }
+.somm-icon { width: 2.2rem; height: 2.2rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.somm-intro { font-size: 1.1rem; }
+.somm-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.6rem 0 0.8rem; }
+.somm-tab { font: inherit; font-size: 1.15rem; font-weight: 700; padding: 0.6rem 1.1rem; border: 3px solid #1b1712; border-radius: 0.6rem;
+  background: #fff; color: #1b1712; cursor: pointer; }
+.somm-tab[aria-selected="true"] { background: #1b1712; color: #e8c766; }
+.somm-tab:hover { background: #f3e6c2; }
+.somm-tab[aria-selected="true"]:hover { background: #2e271d; }
+.somm-stores { margin: 0 0 0.8rem; padding: 0.5rem 0.7rem; background: #f6ecd2; border-radius: 0.5rem; }
+.somm-label { font-weight: 700; margin-right: 0.4rem; }
+.somm-check, .somm-food { display: inline-flex; align-items: center; gap: 0.3rem; margin: 0.2rem 0.8rem 0.2rem 0; font-size: 1.05rem; cursor: pointer; }
+.somm-check input, .somm-food input { width: 1.25rem; height: 1.25rem; }
+.somm-foods-pick { display: flex; flex-wrap: wrap; gap: 0.3rem 0.4rem; margin-bottom: 0.6rem; }
+.somm-food { padding: 0.35rem 0.7rem; border: 2px solid #cdb27a; border-radius: 0.5rem; background: #fff; margin: 0; }
+.somm-food:has(input:checked) { background: #1b1712; color: #e8c766; border-color: #1b1712; }
+.somm-way { border-top: 2px dashed #d8c28d; padding: 0.6rem 0 0.8rem; }
+.somm-way:first-child { border-top: 0; }
+.somm-way h4 { margin: 0 0 0.4rem; font-size: 1.2rem; color: #5a3d00; }
+.somm-way input[type="text"] { width: 100%; max-width: 40rem; font: inherit; font-size: 1.1rem; padding: 0.5rem 0.7rem; border: 2px solid #b8902a; border-radius: 0.5rem; }
+.somm-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.8rem; margin: 0.5rem 0; }
+.somm-row select, .somm-price input, #somm-nwines, #somm-protein { font: inherit; font-size: 1.05rem; padding: 0.35rem 0.5rem; border: 2px solid #b8902a; border-radius: 0.4rem; background: #fff; }
+.somm-price input { width: 5.5rem; }
+.btn-somm { background: #1b1712; border-color: #1b1712; color: #e8c766; font-weight: 700; }
+.btn-somm:hover, .btn-somm:focus-visible { background: #3a3022; border-color: #3a3022; filter: none; }
+.somm-hit-list, .somm-cmp-list { list-style: none; padding: 0; margin: 0.3rem 0 0.6rem; }
+.somm-hit-list li, .somm-cmp-list li { margin: 0.25rem 0; }
+.somm-hit { text-align: left; }
+.somm-out:not(:empty) { margin-top: 1rem; border-top: 3px solid #b8902a; padding-top: 0.8rem; scroll-margin-top: 1rem; }
+.somm-card { background: #fff; border: 2px solid #d8c28d; border-left: 0.6rem solid #b8902a; border-radius: 0.6rem; padding: 0.7rem 1rem; margin: 0 0 0.9rem; }
+.somm-wine-h { margin: 0 0 0.3rem; color: var(--wine-dark); font-size: 1.3rem; }
+.somm-card h4 { margin: 0.8rem 0 0.3rem; color: #5a3d00; font-size: 1.1rem; }
+.somm-foods { padding-left: 1.1rem; margin: 0.2rem 0; }
+.somm-foods li { margin: 0 0 0.4rem; }
+.somm-src { color: var(--muted); font-size: 0.92em; }
+.somm-recipes { list-style: none; padding: 0; margin: 0.2rem 0; }
+.somm-course > span { font-weight: 700; color: #5a3d00; }
+.somm-course ul { padding-left: 1.2rem; margin: 0.2rem 0 0.5rem; }
+.somm-bottles { list-style: none; padding: 0; margin: 0.4rem 0 0; }
+.somm-bottle { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; padding: 0.5rem 0; border-top: 1px solid #eadfc4; }
+.somm-bottle-main { flex: 1 1 22rem; }
+.somm-summary { font-size: 1.15rem; }
+.somm-dish { font-size: 1.1rem; }
+.somm-note { background: #fff3c4; padding: 0.3rem 0.6rem; border-radius: 0.4rem; }
+.somm-course-card h4 { margin-top: 0; font-size: 1.25rem; }
+.somm-ask { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.somm-more > summary { cursor: pointer; font-weight: 700; color: var(--wine); list-style: none; margin-top: 0.4rem; }
+.somm-more > summary::-webkit-details-marker { display: none; }
+
+/* Find wines in three numbered areas: 1 Choose (quick choices, then more filters), 2 Sort, 3 Your choices */
+@media (min-width: 60rem) { .layout { grid-template-columns: 25rem 1fr; } }
+.zone-title { display: flex; align-items: center; gap: 0.55rem; margin: 0; padding: 0.55rem 1rem; font-size: 1.35rem; font-weight: 800; color: #fff; }
+.zone-num { display: inline-grid; place-items: center; flex: 0 0 auto; width: 2rem; height: 2rem; border-radius: 50%; background: #fff; color: var(--wine); font-weight: 800; font-size: 1.15rem; line-height: 1; }
+.zone-1 > .zone-title { background: var(--wine); }
+.filters .finder { margin: 0.7rem; padding: 0.6rem 0.7rem; border: 2px solid #e2c6cb; }
+.filters .finder .fold-head h2 { font-size: 1.3rem; }
+.filters .finder-row { gap: 0.35rem; }
+.filters .finder-label { flex-basis: 100%; }
+.filters .finder-hint { padding-left: 0; }
+.filters .finder-save-form input { min-width: 0; flex: 1 1 100%; }
+.filters .fold-head .fold-summary { flex-basis: 100%; }
+.filters .filters-title { margin: 0.4rem 0.7rem 0.8rem; padding: 0.45rem 0.8rem; background: #f3e3e6; color: var(--wine-dark); border-radius: 0.5rem; font-size: 1.3rem; }
+.filters .filters-title::after { content: " · every other way to narrow the list"; font-size: 1rem; }
+.filters .filters-title .help-i { color: var(--wine); border-color: var(--wine); }
+.sorts.zone-2 { border: 3px solid #1f4e79; border-radius: 0.7rem; background: #eef3f9; padding: 0 0.8rem 0.6rem; overflow: hidden; }
+.sorts.zone-2 > .zone-title { grid-column: 1 / -1; margin: 0 -0.8rem 0.3rem; background: #1f4e79; }
+.sorts.zone-2 .zone-num { color: #1f4e79; }
+.sorts.zone-2 .sort-note { grid-column: 1 / -1; }
+.choices-head { display: inline-flex; align-items: center; gap: 0.45rem; }
+.choices-head .zone-num { width: 1.8rem; height: 1.8rem; font-size: 1.05rem; }
+/* in the left column the quick choices' price slider stacks too: label above each slider, full width */
+.filters .price-slider { grid-template-columns: minmax(0, 1fr); padding-left: 0; }
+.filters .price-slider label { margin-top: 0.2rem; }
+/* Master Sommelier: recipes open on the card; Claude's own notes marked apart from the books */
+.somm-recipe { margin: 0.35rem 0; border: 2px solid #e2d3a8; border-radius: 0.5rem; background: #fffdf6; }
+.somm-recipe > summary { cursor: pointer; list-style: none; padding: 0.4rem 0.7rem; }
+.somm-recipe > summary::-webkit-details-marker { display: none; }
+.somm-open { display: inline-block; margin-left: 0.3rem; padding: 0.05rem 0.55rem; border-radius: 0.4rem; background: #1b1712; color: #e8c766; font-size: 0.9rem; font-weight: 700; white-space: nowrap; }
+.somm-recipe[open] .somm-open { background: #fff; color: #1b1712; border: 2px solid #1b1712; }
+.somm-recipe[open] .somm-open::after { content: " ▾"; }
+.somm-recipe-body { padding: 0 0.9rem 0.6rem; }
+.somm-recipe-body h5, .somm-course-card h5 { margin: 0.7rem 0 0.25rem; font-size: 1.05rem; color: #5a3d00; }
+.somm-ing { columns: 2 18rem; padding-left: 1.1rem; margin: 0; }
+.somm-ing li { break-inside: avoid; margin-bottom: 0.15rem; }
+.somm-ing .somm-ing-h { list-style: none; margin-left: -1.1rem; font-weight: 700; color: var(--wine-dark); }
+.somm-method { padding-left: 1.4rem; margin: 0; }
+.somm-method li { margin-bottom: 0.35rem; }
+.somm-recipe-line { margin: 0.35rem 0; }
+.btn-recipe { background: #fff; border: 2px solid #b8902a; color: #5a3d00; font-weight: 700; padding: 0.2rem 0.7rem; min-height: 2.2rem; }
+.btn-recipe:hover { background: #f6ecd2; filter: none; }
+.somm-claude { display: inline-block; margin-left: 0.3rem; padding: 0.05rem 0.5rem; border-radius: 0.4rem; background: #e7eef8; color: #1f3d6b; border: 1px solid #9fb6d6; font-size: 0.85rem; font-weight: 600; white-space: nowrap; }
+.somm-local, .somm-local-inline { border-left-color: #1f3d6b; }
+.somm-local-inline { margin: 0.5rem 0; padding: 0.4rem 0.8rem; background: #f3f7fc; border-radius: 0.5rem; }
+.somm-local-inline h4 { margin-top: 0; }
+.somm-course > span { display: block; margin-top: 0.4rem; }

@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-10-30.11">
+<link rel="stylesheet" href="app.css?v=2026-10-31.5">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -19,6 +19,7 @@
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2l5.3 5.3"/></symbol>
   <symbol id="i-dine" viewBox="0 0 24 24"><path d="M6 3v6a2.5 2.5 0 0 0 5 0V3"/><path d="M8.5 3v18"/><path d="M17 21V3c2.2 1.6 3 4.2 3 7.2 0 2.6-1 3.8-3 3.8"/></symbol>
   <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></symbol>
+  <symbol id="i-somm" viewBox="0 0 24 24"><path d="M4 10h13c0 3.6-2.9 5.5-6.5 5.5S4 13.6 4 10z"/><path d="M17 11.5h1.8a2 2 0 0 1 0 4H16"/><circle cx="8" cy="12.2" r=".6"/><circle cx="11" cy="12.6" r=".6"/><circle cx="13.6" cy="12.1" r=".6"/><path d="M10.5 5c-.8 1-.8 2 0 3M13 4.5c-.8 1-.8 2 0 3"/></symbol>
   <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.4c-.7.3-1 .9-1 1.6v.6"/><path d="M12 17.3v.2"/></symbol>
   <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 3.8v4.4h4.4"/></symbol>
 </svg>
@@ -39,36 +40,36 @@
 </header>
 
 <main id="view-find">
-  <section class="finder fold" aria-labelledby="finder-h">
-    <div class="fold-head">
-      <h2 id="finder-h">Find me a wine</h2>
-      <p class="fold-summary" id="finder-summary" hidden></p>
-      <button type="button" class="btn fold-btn" data-fold="finder" aria-expanded="true" aria-controls="finder-body">▴ Hide choices</button>
-    </div>
-    <div class="my-picks" id="my-picks" aria-label="Quick picks"></div>
-    <div id="finder-body">
-    <div id="finder-rows"></div>
-    <div class="finder-foot">
-      <button type="button" class="btn btn-primary" data-action="finder-show">Show the wines ↓</button>
-      <button type="button" class="btn" id="finder-save" data-action="finder-save">💾 Save as my quick pick</button>
-      <span id="finder-save-form" class="finder-save-form" hidden>
-        <label for="finder-save-name">Name it:</label>
-        <input type="text" id="finder-save-name" maxlength="40" placeholder="for example Chilean reds, ready now" autocomplete="off">
-        <button type="button" class="btn btn-primary" data-action="finder-save-ok">Save</button>
-        <button type="button" class="btn" data-action="finder-save-cancel">Cancel</button>
-      </span>
-      <button type="button" class="btn" data-action="finder-clear">Clear choices</button>
-    </div>
-    <p class="hint">Body, tannin, sweetness and “ready now” come from Claude's answer where it has scored the wine; otherwise they're estimated from the grape, region and alcohol. Your saved quick picks stay on this computer.</p>
-    </div>
-  </section>
-
   <div class="layout">
-    <aside class="filters" aria-labelledby="filters-h">
+    <aside class="filters zone zone-1" aria-label="Choose your wines">
+      <p class="zone-title"><span class="zone-num">1</span> Choose your wines</p>
+      <section class="finder fold" aria-labelledby="finder-h">
+        <div class="fold-head">
+          <h2 id="finder-h">Find me a wine</h2>
+          <p class="fold-summary" id="finder-summary" hidden></p>
+          <button type="button" class="btn fold-btn" data-fold="finder" aria-expanded="true" aria-controls="finder-body">▴ Hide choices</button>
+        </div>
+        <div class="my-picks" id="my-picks" aria-label="Quick picks"></div>
+        <div id="finder-body">
+        <div id="finder-rows"></div>
+        <div class="finder-foot">
+          <button type="button" class="btn btn-primary" data-action="finder-show">Show the wines ↓</button>
+          <button type="button" class="btn" id="finder-save" data-action="finder-save">💾 Save as my quick pick</button>
+          <span id="finder-save-form" class="finder-save-form" hidden>
+            <label for="finder-save-name">Name it:</label>
+            <input type="text" id="finder-save-name" maxlength="40" placeholder="for example Chilean reds, ready now" autocomplete="off">
+            <button type="button" class="btn btn-primary" data-action="finder-save-ok">Save</button>
+            <button type="button" class="btn" data-action="finder-save-cancel">Cancel</button>
+          </span>
+          <button type="button" class="btn" data-action="finder-clear">Clear choices</button>
+        </div>
+        <p class="hint">Body, tannin, sweetness and “ready now” come from Claude's answer where it has scored the wine; otherwise they're estimated from the grape, region and alcohol. Your saved quick picks stay on this computer.</p>
+        </div>
+      </section>
       <button type="button" class="btn filter-toggle" id="filter-toggle" aria-expanded="false" aria-controls="filter-body">
         Show filters
       </button>
-      <h2 id="filters-h" class="filters-title">Filters</h2>
+      <h2 id="filters-h" class="filters-title">More filters</h2>
       <div id="filter-body" class="filter-body">
 
         <fieldset id="cellar-filter" class="cellar-filter" hidden>
@@ -169,7 +170,8 @@
     <section class="results" aria-labelledby="results-h">
       <div class="results-head">
         <h2 id="results-h"><span id="result-count">Loading wines…</span></h2>
-        <div class="sorts" role="group" aria-label="Sort the wines">
+        <div class="sorts zone zone-2" role="group" aria-label="Sort the wines">
+          <p class="zone-title"><span class="zone-num">2</span> Sort the list</p>
           <label class="sort"><span>Sort by</span><select id="sort"></select></label>
           <label class="sort"><span>then by</span><select id="sort2"></select></label>
           <label class="sort"><span>then by</span><select id="sort3"></select></label>
@@ -319,9 +321,14 @@
 
   <nav class="help-contents" aria-label="Help topics">
     <ol>
+      <li><a href="#help-menu">The buttons along the top</a></li>
       <li><a href="#help-find">Finding wines</a></li>
+      <li><a href="#help-pairings">Food pairings on each wine</a></li>
+      <li><a href="#help-compare">The Comparison List</a></li>
+      <li><a href="#help-somm">Master Sommelier: wine and food</a></li>
       <li><a href="#help-where">Where can I buy…?</a></li>
       <li><a href="#help-research">Research a wine with Claude</a></li>
+      <li><a href="#help-quick">Claude Quick Scores</a></li>
       <li><a href="#help-dine">At a restaurant</a></li>
       <li><a href="#help-cellars">Family cellars</a></li>
       <li><a href="#help-grapes">Grapes explained</a></li>
@@ -332,9 +339,30 @@
     </ol>
   </nav>
 
+  <section id="help-menu" class="help-topic">
+    <h3>The buttons along the top</h3>
+    <p>Each button has its own colour, and the page you're on has a white ring around its button.</p>
+    <ul>
+      <li><strong>Find wines</strong> (gold): every wine in the stores and the family cellars, to narrow down and sort.</li>
+      <li><strong>My wines</strong> (orange): your own cellar and ratings.</li>
+      <li><strong>Short List</strong> (green): wines you've picked for Claude to research. The number is how many are on it.</li>
+      <li><strong>Comparison List</strong> (blue, with the scales): wines you're weighing up to buy, side by side.</li>
+      <li><strong>Research</strong> (purple): look a wine up, add one by name, and the <strong>Master Sommelier</strong> for food and wine.</li>
+      <li><strong>Restaurant</strong> (teal): help choosing from a wine list when you're out.</li>
+      <li><strong>Help</strong> (pale blue): this page. <strong>Start over</strong> (white) clears every choice.</li>
+    </ul>
+    <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+
   <section id="help-find" class="help-topic">
     <h3>Finding wines</h3>
-    <p><strong>Find me a wine</strong>, at the top, has big buttons: colour, price, body, tannin, “Fruity & ripe”, sweetness, where it's from, “Only well rated” and “Ready to drink now”. Tap <strong>▴ Hide choices</strong> to fold the panel away (your choices stay, summed up in one line; your quick picks stay visible), and <strong>▾ Show choices</strong> to open it again; each computer remembers how you left it. Tap one to choose it, tap it again to undo it; the list below changes as you go. In <strong>Body</strong>, <strong>Tannin</strong> and <strong>Sweetness</strong> you can choose more than one, for example Medium and Full-bodied for wines that are either. Tannin and “Fruity & ripe” are for reds, so they're hidden when you choose only White, Rosé or Sparkling. The number on each button is how many wines you'd get by tapping it, with your other choices; a dashed button would give none. If nothing matches, the page says which choices rule everything out and offers to show the wines without them. <strong>Fruity & ripe</strong> is for reds that taste ripe and fruity even though they're dry, like many Malbecs, Zinfandels and Australian Shiraz; <strong>Sweetness</strong> has four steps, Dry, Off-dry, Medium-sweet and Sweet, for sugar actually left in the wine; each button shows what it means in BC's sugar code and the LCBO's grams per litre. Body, tannin, fruitiness, sweetness and “ready now” are Claude's answer where Claude has scored the wine (“Get quick Claude scores (next 25)”), and otherwise an estimate from the grape, region and alcohol. <strong>“Only well rated”</strong> means 90 points or more from Claude, CellarTracker or the family, or on ZYN's own 90+ list.</p>
+    <p>The Find wines page has three numbered areas, worked through in order:</p>
+    <ol>
+      <li><strong>① Choose your wines</strong>, the column on the left: first <strong>Find me a wine</strong>, the big quick buttons (colour, price, style…), then <strong>More filters</strong> below it for everything else (stores, country, grape, food, vintage…).</li>
+      <li><strong>② Sort the list</strong>, the blue box at the top right: which wines come first, for example best rated or cheapest.</li>
+      <li><strong>③ Your choices</strong>, the pink box above the wines: everything that's narrowing the list right now. Tap ✕ on any choice to drop it.</li>
+    </ol>
+    <p><strong>Find me a wine</strong>, at the top of the left column, has big buttons: colour, price, body, tannin, “Fruity & ripe”, sweetness, where it's from, “Only well rated” and “Ready to drink now”. Tap <strong>▴ Hide choices</strong> to fold the panel away (your choices stay, summed up in one line; your quick picks stay visible), and <strong>▾ Show choices</strong> to open it again; each computer remembers how you left it. Tap one to choose it, tap it again to undo it; the list below changes as you go. In <strong>Body</strong>, <strong>Tannin</strong> and <strong>Sweetness</strong> you can choose more than one, for example Medium and Full-bodied for wines that are either. Tannin and “Fruity & ripe” are for reds, so they're hidden when you choose only White, Rosé or Sparkling. The number on each button is how many wines you'd get by tapping it, with your other choices; a dashed button would give none. If nothing matches, the page says which choices rule everything out and offers to show the wines without them. <strong>Fruity & ripe</strong> is for reds that taste ripe and fruity even though they're dry, like many Malbecs, Zinfandels and Australian Shiraz; <strong>Sweetness</strong> has four steps, Dry, Off-dry, Medium-sweet and Sweet, for sugar actually left in the wine; each button shows what it means in BC's sugar code and the LCBO's grams per litre. Body, tannin, fruitiness, sweetness and “ready now” are Claude's answer where Claude has scored the wine (“Get quick Claude scores (next 25)”), and otherwise an estimate from the grape, region and alcohol. <strong>“Only well rated”</strong> means 90 points or more from Claude, CellarTracker or the family, or on ZYN's own 90+ list.</p>
     <p><strong>Quick picks:</strong> <strong>⭐ Scored by Claude or the family</strong> keeps only wines that Claude, CellarTracker or a family member has scored, on top of your other choices; the number says how many that leaves. Tap it again to switch it off. Under the price buttons, a <strong>slider</strong> sets the lowest and highest price, and the count beside it changes as you move it. With a family cellar and a store both ticked, a cellar wine takes that store's price, so “Under $100” means wines the store sells for under $100; the heading says how many of the cellar's wines the store sells, and each store under Sold by shows that number too. Once you've chosen what you like, tap <strong>💾 Save as my quick pick</strong> and give it a name: it becomes a button of your own, on this computer only. Tap ✕ beside it to remove it.</p>
     <p><strong>Filters</strong> (on the left; on a phone, tap “Show filters”) narrow the list:</p>
     <ul>
@@ -367,6 +395,30 @@
     <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
   </section>
 
+  <section id="help-pairings" class="help-topic">
+    <h3>Food pairings on each wine</h3>
+    <p>Every wine card has a <strong>🍽 Food pairings</strong> fold: tap <strong>▸ Show</strong> to open it. It lists the <strong>classic pairings</strong>, with stars (★★★ the go-to, ★★ a common match, ★ pairs but less often chosen) and the dishes the pairing books name, then the <strong>adventurous pairings</strong>, the rule-breakers that sommeliers back, each with why it works and what to watch for. Where the LCBO's tasting note or Claude's research names a dish, that's shown first. The LCBO's own <strong>tasting note</strong> opens the same way.</p>
+    <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+
+  <section id="help-compare" class="help-topic">
+    <h3>The Comparison List</h3>
+    <p>Press <strong>⚖️ ＋ Add wine to Comparison List</strong> on any wine to put it on the list (press it again to take it off). The blue <strong>Comparison List</strong> button at the top shows them all as full cards, with what they'd cost at each store. Remove one with <strong>✕ Remove</strong>, or all of them with <strong>Remove all</strong>. The list stays on your computer. It's separate from the Short List, which is for asking Claude. The Master Sommelier can pair every wine on it at once.</p>
+    <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+
+  <section id="help-somm" class="help-topic">
+    <h3>Master Sommelier: wine and food</h3>
+    <p>On the <strong>Research</strong> page, the black and gold box. It matches wine and food from six pairing books: Evan Goldstein's <em>Perfect Pairings</em> and <em>Daring Pairings</em>, Sid Goldstein's <em>The Wine Lover's Cookbook</em>, Dornenburg &amp; Page's <em>What to Drink with What You Eat</em>, Robert Harrington's <em>Food and Wine Pairing</em> and <em>The Food &amp; Wine Guide to Perfect Pairings</em>. Every suggestion says which book it's from, with the page. Recipes are given by title and page: the recipes themselves are in the books. First tick where you're buying under <strong>Buying from</strong> (the LCBO shows there once it's unlocked). Then choose one of three ways in:</p>
+    <ul>
+      <li><strong>🍷 I have the wine.</strong> Type or paste a wine's name (or just its grape, such as Saperavi) and tap the wine when it's found, or tap <strong>Pair “…” as typed</strong>. Or tick wines on your <strong>Comparison List</strong> and tap <strong>Pair the ticked wines</strong>. Or choose a <strong>country</strong> (for example Georgia, or Portugal up to $25) to see its wines grouped by grape, each with its dishes and its bottles. You get the main dishes by what's on the plate (beef, lamb, pork, chicken, fish…), what the books warn against, cheeses, desserts and recipes.</li>
+      <li><strong>🍖 I'm cooking…</strong> Tap what's on the plate (pork, lamb, fish…), and if you like type the dish (“pork tenderloin with apples”). Narrow by country, colour and price if you want. You get the grapes the books pour with it, the recipes, and real bottles you can buy, best match first. <strong>See all in Find wines</strong> opens the full list there.</li>
+      <li><strong>🧀 Build me a menu.</strong> Choose a country (for example Moldova), how many wines, the courses (starter, main, cheese, dessert) and, if you like, the main course. It picks a bottle from that country for each course, says what to serve, and lists recipes. If the country has no dessert wine in the stores, it suggests one from elsewhere and says so. <strong>Ask Claude to polish this menu</strong> sends the menu to Claude for dishes and serving tips; <strong>Add all to the Comparison List</strong> keeps the bottles.</li>
+    </ul>
+    <p>The matches are a guide from the books, not a tasting: a wine's grape decides most of it. Blends and local grapes the books don't name are matched by the wine's style (body, tannin, sweetness).</p>
+    <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+
   <section id="help-research" class="help-topic">
     <h3>Research a wine with Claude</h3>
     <p>Claude looks up each wine's reviews, background and history, suggests food to go with it, and gives its own score out of 100. Open it with <strong>Research</strong> or <strong>Short List</strong> at the top (the number on Short List is how many wines are on it).</p>
@@ -379,6 +431,13 @@
     <p>The Wine Finder opens a box. When it shows <strong>✅ Claude's write-up found</strong>, press <strong>Save</strong> (it asks your first name the first time). If it shows ❌, go back to Claude and click the copy icon: the box notices by itself.</p>
     <p>After saving, the ratings and Claude's whole write-up are kept on your computer and sent to the website keeper. Once published, everyone sees Claude's score and a <strong>📖 Claude Research Results</strong> button on that wine.</p>
     <p>The Short List also has <strong>Copy as text</strong>, <strong>Email</strong> (you choose your email: Gmail, Outlook, the computer's own email program…), <strong>Print</strong> and <strong>Clear the list</strong>.</p>
+    <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
+  </section>
+
+  <section id="help-quick" class="help-topic">
+    <h3>Claude Quick Scores</h3>
+    <p>A quick, cheap way to get Claude's score for many wines at once, without the full research. Two ways: <strong>Get quick Claude scores (next 25)</strong> in the bar at the bottom scores the next 25 unscored wines in the list; or press <strong>＋ Add Claude Quick Score</strong> (dark olive) on the wines you want, then <strong>Get Marked Quick Scores Now</strong> at the bottom. Claude opens with the question written; when it's done, click the save link at the end of its answer.</p>
+    <p>The wine then shows a dark olive badge, <strong>Claude NN (Quick Score Only) ⓘ Details</strong>. Tap it for what Claude found, in plain words: body, tannin, sweetness, when to drink, fruit, finish, food and grapes. For reviews, background and history, use the full research on the Short List instead.</p>
     <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
   </section>
 
@@ -553,6 +612,56 @@
     <div id="sl-add-hits" aria-live="polite"></div>
   </section>
 
+  <section class="somm-box" id="somm" aria-labelledby="somm-h">
+    <h3 id="somm-h"><svg class="somm-icon" aria-hidden="true"><use href="#i-somm"/></svg> Master Sommelier</h3>
+    <p class="somm-intro">Wine and food matched from six pairing books: what to cook with a wine, which wine to pour with a dish, or a whole menu, with the books' recipes by page. Choose how you'd like to start:</p>
+    <div class="somm-tabs" role="tablist">
+      <button type="button" role="tab" class="somm-tab" data-somm-tab="wine" aria-selected="true">🍷 I have the wine</button>
+      <button type="button" role="tab" class="somm-tab" data-somm-tab="cook" aria-selected="false">🍖 I'm cooking…</button>
+      <button type="button" role="tab" class="somm-tab" data-somm-tab="menu" aria-selected="false">🧀 Build me a menu</button>
+    </div>
+    <div class="somm-stores" id="somm-stores"></div>
+
+    <div class="somm-pane" id="somm-wine">
+      <div class="somm-way"><h4>Type or paste a wine</h4>
+        <input type="text" id="somm-q" autocomplete="off" spellcheck="false" placeholder="for example Teliani Valley Saperavi, or just Saperavi">
+        <div id="somm-hits" aria-live="polite"></div></div>
+      <div class="somm-way"><h4>Wines on your Comparison List</h4><div id="somm-cmp"></div></div>
+      <div class="somm-way"><h4>All the wines of a country</h4>
+        <div class="somm-row"><select id="somm-country" data-somm-country="pick" aria-label="Country"></select>
+          <select id="somm-colour" aria-label="Colour"><option value="">Any colour</option><option>Red</option><option>White</option><option>Rosé</option><option>Sparkling</option></select>
+          <label class="somm-price">Up to $<input type="number" id="somm-price" min="0" step="1" inputmode="numeric" placeholder="any"></label>
+          <button type="button" class="btn btn-somm" data-somm="pair-country">Show the pairings</button></div></div>
+    </div>
+
+    <div class="somm-pane" id="somm-cook" hidden>
+      <div class="somm-way"><h4>What's on the plate?</h4><div class="somm-foods-pick"><label class="somm-food"><input type="radio" name="somm-food" value="Red meat"> 🥩 Red meat</label><label class="somm-food"><input type="radio" name="somm-food" value="Lamb"> 🐑 Lamb</label><label class="somm-food"><input type="radio" name="somm-food" value="Pork"> 🐖 Pork</label><label class="somm-food"><input type="radio" name="somm-food" value="Chicken"> 🍗 Chicken</label><label class="somm-food"><input type="radio" name="somm-food" value="Fish"> 🐟 Fish</label><label class="somm-food"><input type="radio" name="somm-food" value="Seafood"> 🦐 Seafood</label><label class="somm-food"><input type="radio" name="somm-food" value="Pasta and pizza"> 🍝 Pasta and pizza</label><label class="somm-food"><input type="radio" name="somm-food" value="Cheese"> 🧀 Cheese</label><label class="somm-food"><input type="radio" name="somm-food" value="Spicy food"> 🌶️ Spicy food</label><label class="somm-food"><input type="radio" name="somm-food" value="Dessert"> 🍰 Dessert</label></div>
+        <label class="somm-label" for="somm-dish">The dish, if you know it <span class="hint-inline">(optional, for example “pork tenderloin with apples”)</span></label>
+        <input type="text" id="somm-dish" autocomplete="off" placeholder="optional">
+        <div class="somm-row"><select id="somm-cook-country" data-somm-country="any" aria-label="Country"></select>
+          <select id="somm-cook-colour" aria-label="Colour"><option value="">Any colour</option><option>Red</option><option>White</option><option>Rosé</option><option>Sparkling</option></select>
+          <label class="somm-price">Up to $<input type="number" id="somm-cook-price" min="0" step="1" inputmode="numeric" placeholder="any"></label>
+          <button type="button" class="btn btn-somm" data-somm="cook">Find the wine</button></div>
+        <p id="somm-cook-msg" class="status" role="status"></p></div>
+    </div>
+
+    <div class="somm-pane" id="somm-menu" hidden>
+      <div class="somm-way"><h4>Show off the wines of…</h4>
+        <div class="somm-row"><select id="somm-menu-country" data-somm-country="pick" aria-label="Country"></select>
+          <label>Wines <select id="somm-nwines"><option>2</option><option selected>3</option><option>4</option></select></label>
+          <label class="somm-price">Up to $<input type="number" id="somm-menu-price" min="0" step="1" inputmode="numeric" placeholder="any"> a bottle</label></div>
+        <div class="somm-row"><span class="somm-label">Courses:</span>
+          <label class="somm-check"><input type="checkbox" data-somm-course value="starter"> Starter</label>
+          <label class="somm-check"><input type="checkbox" data-somm-course value="main" checked> Main</label>
+          <label class="somm-check"><input type="checkbox" data-somm-course value="cheese" checked> Cheese</label>
+          <label class="somm-check"><input type="checkbox" data-somm-course value="dessert" checked> Dessert</label>
+          <label>Main course <select id="somm-protein"><option value="">Let the wine decide</option><option value="Red meat">Red meat</option><option value="Lamb">Lamb</option><option value="Pork">Pork</option><option value="Chicken">Chicken</option><option value="Fish">Fish</option><option value="Seafood">Seafood</option><option value="Pasta and pizza">Pasta and pizza</option><option value="Spicy food">Spicy food</option></select></label></div>
+        <button type="button" class="btn btn-somm btn-big" data-somm="menu">Build my menu</button>
+        <p class="hint">If the country has no dessert wine in the stores ticked, one from elsewhere is suggested and marked.</p></div>
+    </div>
+    <div id="somm-out" class="somm-out" aria-live="polite"></div>
+  </section>
+
   <h3 class="sl-list-h">Your Short List for Claude</h3>
   <p class="sl-keep" id="sl-keep" hidden></p>
   <div id="ask-notice" class="notice" role="status" hidden></div>
@@ -681,6 +790,7 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-10-30.11"></script>
+<script src="app.js?v=2026-10-31.5"></script>
+<script src="somm.js?v=2026-10-31.5"></script>
 </body>
 </html>

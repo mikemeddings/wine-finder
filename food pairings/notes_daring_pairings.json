@@ -1,0 +1,5705 @@
+{
+ "book": "Daring Pairings: A Master Sommelier Matches Distinctive Wines with Recipes from His Favorite Chefs",
+ "author": "Evan Goldstein (photographs by Joyce Oudkerk Pool)",
+ "year": 2010,
+ "id": "DP",
+ "page_note": "All page numbers are the book's PRINTED page numbers (body runs printed 1-353). PDF page index = printed page + 47 (e.g. printed 33 = PDF 80). Text was extracted from the PDF's font-encoded layer and decoded; every text page (PDF 1-400) was read.",
+ "grapes": [
+  {
+   "grape": "Albariño",
+   "aka": [
+    "Alvarinho"
+   ],
+   "colour": "white",
+   "places": [
+    "Spain (Galicia, Rías Baixas)",
+    "Portugal (Vinho Verde, Minho, Monção)",
+    "Australia (Victoria)",
+    "U.S.A. (California, Oregon)"
+   ],
+   "style": "Crisp, citrusy, mineral medium-bodied white; best young and unoaked; Vinho Verde versions spritzy and sharper.",
+   "page": 33
+  },
+  {
+   "grape": "Arneis",
+   "aka": [
+    "Arneis di Roeri",
+    "Barolo Bianco"
+   ],
+   "colour": "white",
+   "places": [
+    "Italy (Piedmont, Roero)",
+    "Australia (Victoria)",
+    "U.S.A. (California, Oregon)"
+   ],
+   "style": "Dry, perfumed, medium-bodied white with pear, almond, herbs and chalk; naturally low acid; drink young.",
+   "page": 39
+  },
+  {
+   "grape": "Assyrtiko",
+   "aka": [],
+   "colour": "white",
+   "places": [
+    "Greece (Santorini, Cyclades)",
+    "Greece (Peloponnese, Nemea)",
+    "Greece (Drama, Kavala, Attica)"
+   ],
+   "style": "Bone-dry, sharp, lemony, volcanic-mineral white; also richer, oaked and Vinsanto dessert styles.",
+   "page": 45
+  },
+  {
+   "grape": "Vinsanto (Santorini)",
+   "aka": [
+    "Assyrtiko dessert wine"
+   ],
+   "colour": "sweet",
+   "places": [
+    "Greece (Santorini)"
+   ],
+   "style": "Barrel-aged sweet wine, at least half Assyrtiko; like tawny port crossed with late-harvest Riesling.",
+   "page": 46
+  },
+  {
+   "grape": "Chenin Blanc",
+   "aka": [
+    "Steen",
+    "Pineau de la Loire",
+    "Pinot Blanco (South America)"
+   ],
+   "colour": "white",
+   "places": [
+    "France (Loire: Vouvray, Savennières, Anjou, Saumur, Montlouis; Limoux)",
+    "South Africa (Stellenbosch, Paarl, Swartland)",
+    "U.S.A. (California, Washington)",
+    "Australia (Western Australia)",
+    "New Zealand",
+    "Argentina",
+    "Chile",
+    "Mexico",
+    "Uruguay"
+   ],
+   "style": "High-acid apple-quince-chalk white made bone-dry, off-dry, sparkling or botrytized sweet.",
+   "page": 51
+  },
+  {
+   "grape": "Garganega (Soave)",
+   "aka": [
+    "Gargana",
+    "Soave",
+    "Recioto di Soave (sweet)"
+   ],
+   "colour": "white",
+   "places": [
+    "Italy (Veneto: Soave Classico, Bianco di Custoza)",
+    "Italy (Friuli, Lombardy, Umbria)"
+   ],
+   "style": "Citrus, white peach, ginger and almond white with racy acidity; sweet Recioto version tastes of honey and marmalade.",
+   "page": 58
+  },
+  {
+   "grape": "Grüner Veltliner",
+   "aka": [
+    "Grüner",
+    "GV",
+    "Weissgipfler",
+    "Veltlin Zelene (Czech Republic)",
+    "Veltini (Hungary)"
+   ],
+   "colour": "white",
+   "places": [
+    "Austria (Wachau, Kamptal, Kremstal, Weinviertel, Donauland)",
+    "Czech Republic",
+    "Hungary",
+    "New Zealand (Central Otago)",
+    "U.S.A. (California)"
+   ],
+   "style": "Peppery, citrus, green-bean and lentil-scented dry white; also off-dry and sweet Prädikat styles.",
+   "page": 64
+  },
+  {
+   "grape": "Marsanne / Roussanne",
+   "aka": [
+    "Marsanne",
+    "Ermitage (Switzerland)",
+    "Grosse Roussette"
+   ],
+   "colour": "white",
+   "places": [
+    "France (northern Rhône: Hermitage, St.-Joseph, Crozes-Hermitage, St.-Péray)",
+    "France (Languedoc-Roussillon)",
+    "Switzerland (Valais)",
+    "Australia (Victoria, Goulburn Valley)",
+    "U.S.A. (California)"
+   ],
+   "style": "Full, waxy, low-acid white with melon, citrus, honey and almond; prone to high alcohol.",
+   "page": 71
+  },
+  {
+   "grape": "Muscat / Moscato",
+   "aka": [
+    "Muscat Blanc à Petits Grains",
+    "Moscato Bianco",
+    "Muscat of Alexandria",
+    "Zibibbo",
+    "Moscatel",
+    "Moscatel de Setúbal",
+    "Hanepoot",
+    "Muscat Ottonel",
+    "Muskotály (Hungary)",
+    "Brown Muscat",
+    "Muscat Canelli"
+   ],
+   "colour": "sweet",
+   "places": [
+    "Greece (Samos, Patras, Cephalonia, Limnos)",
+    "France (Beaumes de Venise, Rivesaltes, Banyuls, Lunel, St.-Jean-de-Minervois, Alsace)",
+    "Italy (Asti, Alto Adige, Pantelleria)",
+    "Spain (Málaga, Jerez, Alicante, Valencia)",
+    "Portugal (Setúbal)",
+    "Australia (Rutherglen, Barossa)",
+    "Austria (Burgenland)",
+    "Hungary",
+    "Romania (Transylvania)",
+    "South Africa",
+    "Chile",
+    "U.S.A. (California)"
+   ],
+   "style": "Grapey, floral family: dry Alsace/Austria whites, fizzy Moscato d'Asti, late-harvest, and fortified raisiny liqueur Muscats.",
+   "page": 78
+  },
+  {
+   "grape": "Pinot Blanc",
+   "aka": [
+    "Pinot Bianco",
+    "Weissburgunder",
+    "Klevner / Clevner",
+    "Féherburgundi (Hungary)",
+    "Rulandské Bílé (Czech Republic, Slovakia)"
+   ],
+   "colour": "white",
+   "places": [
+    "France (Alsace, Burgundy)",
+    "Italy (Friuli, Alto Adige, Veneto)",
+    "Germany (Baden, Pfalz, Nahe, Mosel)",
+    "Austria (Styria)",
+    "Canada (Okanagan Valley, Vancouver Island)",
+    "Czech Republic",
+    "Slovenia",
+    "Hungary",
+    "U.S.A. (Oregon, California)"
+   ],
+   "style": "Clean, crisp apple-pear-almond white, mostly unoaked; one of the most flexible food wines.",
+   "page": 89
+  },
+  {
+   "grape": "Prosecco",
+   "aka": [
+    "Glera",
+    "Balbi",
+    "Serprina"
+   ],
+   "colour": "sparkling",
+   "places": [
+    "Italy (Veneto: Conegliano-Valdobbiadene, Cartizze, Colli Asolani)",
+    "Italy (Friuli)",
+    "Argentina"
+   ],
+   "style": "Fruity, floral, lightly sweet tank-method sparkler (brut, extra dry, dry); drink young.",
+   "page": 97
+  },
+  {
+   "grape": "Marsanne / Roussanne",
+   "aka": [
+    "Roussanne",
+    "Bergeron (Savoie)",
+    "Rosana (Italy)"
+   ],
+   "colour": "white",
+   "places": [
+    "France (northern Rhône: Hermitage, St.-Joseph, Crozes-Hermitage; Châteauneuf-du-Pape; Savoie; Provence; Languedoc)",
+    "Italy (Liguria, Tuscany)",
+    "Australia (Victoria)",
+    "U.S.A. (California: Paso Robles, Santa Barbara, Sierra Foothills; Washington)"
+   ],
+   "style": "Roussanne: rich, honeyed, perfumed white of white cherry, herbal tea and pear; silky and age-worthy.",
+   "page": 105
+  },
+  {
+   "grape": "Sémillon",
+   "aka": [
+    "Hunter Valley Riesling",
+    "SSB (Sémillon-Sauvignon Blanc)",
+    "SemChard",
+    "Sauternes (main grape)"
+   ],
+   "colour": "white",
+   "places": [
+    "France (Bordeaux: Sauternes, Barsac, Graves, Entre-Deux-Mers; Southwest)",
+    "Australia (Hunter Valley, Barossa, Adelaide Hills, Margaret River)",
+    "U.S.A. (Washington, California)",
+    "South Africa (Franschhoek, Paarl)",
+    "Hungary (Lake Balaton)",
+    "Romania (Dealul Mare)",
+    "New Zealand",
+    "Canada (Okanagan)",
+    "Chile",
+    "Argentina"
+   ],
+   "style": "Waxy, fig-citrus dry white (toasty with bottle age) and the honeyed heart of Sauternes.",
+   "page": 112
+  },
+  {
+   "grape": "Torrontés",
+   "aka": [
+    "Torrontés Riojano",
+    "Torrontés Sanjuanino",
+    "Torrontés Mendocino",
+    "Torontel (Chile)"
+   ],
+   "colour": "white",
+   "places": [
+    "Argentina (Salta, La Rioja, Mendoza, Catamarca, San Juan, Rio Negro)",
+    "Chile",
+    "Spain (Galicia: Ribeiro, Rías Baixas)"
+   ],
+   "style": "Explosively perfumed, tropical, oily-textured dry white; drink within a year.",
+   "page": 121
+  },
+  {
+   "grape": "Trebbiano",
+   "aka": [
+    "Ugni Blanc",
+    "Procanico",
+    "St.-Émilion",
+    "Thalia (Portugal, Bulgaria)",
+    "White Hermitage (Australia)"
+   ],
+   "colour": "white",
+   "places": [
+    "Italy (Abruzzo, Umbria: Orvieto, Lazio: Frascati, Tuscany: Vin Santo)",
+    "France (Cognac, Armagnac, Provence, Rhône, Corsica)",
+    "Bulgaria",
+    "Portugal",
+    "Greece",
+    "Russia",
+    "Argentina",
+    "Mexico",
+    "Brazil",
+    "Uruguay",
+    "Australia",
+    "U.S.A. (California)"
+   ],
+   "style": "Clean, neutral, lemony light white; also the base of Tuscan Vin Santo and of Cognac.",
+   "page": 128
+  },
+  {
+   "grape": "Vin Santo",
+   "aka": [
+    "Trebbiano-Malvasia dessert wine"
+   ],
+   "colour": "sweet",
+   "places": [
+    "Italy (Tuscany)"
+   ],
+   "style": "Barrel-aged dried-grape dessert wine, nutty and only moderately sweet.",
+   "page": 129
+  },
+  {
+   "grape": "Txakoli (Hondarribi Zuri)",
+   "aka": [
+    "Hondarribi Zuri",
+    "Chacolí",
+    "Txakolina"
+   ],
+   "colour": "white",
+   "places": [
+    "Spain (Basque Country: Getariako, Bizkaiko, Arabako Txakolina)"
+   ],
+   "style": "Light, low-alcohol, lemony, mineral white with a slight spritz; drink very young.",
+   "page": 136
+  },
+  {
+   "grape": "Verdejo",
+   "aka": [
+    "Planta Fina",
+    "Verdejo Palido"
+   ],
+   "colour": "white",
+   "places": [
+    "Spain (Castilla-León: Rueda, Toro, Cigales)",
+    "Spain (La Mancha: Valdepeñas)"
+   ],
+   "style": "Crisp, herbal, grapefruit-and-pear white like a fruitier Sauvignon Blanc; some oaked or sherry-style versions.",
+   "page": 142
+  },
+  {
+   "grape": "Vermentino",
+   "aka": [
+    "Rolle (Provence)",
+    "Pigato (Liguria)",
+    "Favorita (Piedmont)",
+    "Malvoisie de Corse"
+   ],
+   "colour": "white",
+   "places": [
+    "Italy (Sardinia: Gallura; Liguria; Tuscany: Bolgheri; Piedmont)",
+    "France (Corsica: Patrimonio; Provence: Bellet; Languedoc-Roussillon)",
+    "Australia (Murray Darling, McLaren Vale)",
+    "U.S.A. (California)"
+   ],
+   "style": "Aromatic, citrus-blossom, green-tea and bitter-almond white; balanced acidity; drink young.",
+   "page": 148
+  },
+  {
+   "grape": "Aglianico",
+   "aka": [
+    "Taurasi",
+    "Aglianico del Vulture"
+   ],
+   "colour": "red",
+   "places": [
+    "Italy (Campania: Taurasi, Avellino)",
+    "Italy (Basilicata: Aglianico del Vulture)",
+    "Italy (Molise, Apulia)",
+    "Australia (Victoria, South Australia)",
+    "U.S.A. (California: Paso Robles, Amador County)"
+   ],
+   "style": "Dense, black-cherry, smoky, tarry red with big tannins and sharp acidity; ages for decades.",
+   "page": 159
+  },
+  {
+   "grape": "Barbera",
+   "aka": [
+    "Barbera d'Asti",
+    "Barbera d'Alba",
+    "Barbera del Monferrato"
+   ],
+   "colour": "red",
+   "places": [
+    "Italy (Piedmont: Asti, Alba, Monferrato)",
+    "Italy (Lombardy: Oltrepò Pavese; Emilia-Romagna)",
+    "Argentina (San Juan)",
+    "Uruguay (Canelones)",
+    "Brazil",
+    "Australia (Hunter Valley, Mudgee, McLaren Vale, Mornington)",
+    "U.S.A. (California: Lodi, Amador, Paso Robles)"
+   ],
+   "style": "Juicy, high-acid, low-tannin cherry-plum red; light frizzante to oaky modern styles.",
+   "page": 166
+  },
+  {
+   "grape": "Cabernet Franc",
+   "aka": [
+    "Breton",
+    "Bouchet",
+    "Bordo (Italy)",
+    "Cabernet Frank"
+   ],
+   "colour": "red",
+   "places": [
+    "France (Loire: Chinon, Bourgueil, Saumur, Anjou)",
+    "France (Bordeaux: St.-Émilion, Pomerol, Fronsac)",
+    "France (Southwest: Bergerac, Madiran)",
+    "Italy (Friuli, Veneto)",
+    "Hungary",
+    "Slovenia",
+    "Canada (Okanagan, Ontario)",
+    "U.S.A. (Long Island, Virginia, Michigan, Washington, California)",
+    "Argentina",
+    "Chile",
+    "Australia",
+    "New Zealand",
+    "South Africa",
+    "Spain (Penedès)"
+   ],
+   "style": "Herbal, leafy, raspberry-and-violet red with balanced acid; also rosé and ice wine.",
+   "page": 173
+  },
+  {
+   "grape": "Carignan",
+   "aka": [
+    "Carignane",
+    "Carignano (Sardinia)",
+    "Cariñena",
+    "Mazuelo (Rioja)"
+   ],
+   "colour": "red",
+   "places": [
+    "France (Languedoc-Roussillon: Corbières, Minervois, Fitou, Collioure, Banyuls)",
+    "Spain (Priorat, Rioja, Catalonia)",
+    "Italy (Sardinia)",
+    "Algeria",
+    "Morocco",
+    "Tunisia",
+    "Israel",
+    "U.S.A. (California: Lodi, Sonoma, Mendocino; Texas)",
+    "Mexico",
+    "Chile",
+    "Argentina",
+    "Uruguay",
+    "Australia (Barossa)"
+   ],
+   "style": "High-acid, tannic, peppery black-fruit red best in blends; also fortified Banyuls-style sweet reds.",
+   "page": 180
+  },
+  {
+   "grape": "Carmenère",
+   "aka": [
+    "Grande Vidure",
+    "Carmenelle"
+   ],
+   "colour": "red",
+   "places": [
+    "Chile (Colchagua, Cachapoal, Rapel, Maipo, Aconcagua)",
+    "France (Bordeaux)",
+    "Italy (Friuli, Veneto)",
+    "Australia (Victoria)",
+    "U.S.A. (California)",
+    "Argentina (Mendoza)"
+   ],
+   "style": "Smoky, herbal, plum-and-blackberry red with soft tannins; Chile's signature grape.",
+   "page": 188
+  },
+  {
+   "grape": "Cinsaut",
+   "aka": [
+    "Cinsault",
+    "Oeillade (Australia)",
+    "Ottavianello (Italy)",
+    "Hermitage (South Africa)"
+   ],
+   "colour": "rosé",
+   "places": [
+    "France (Tavel, Châteauneuf-du-Pape, Provence, Languedoc, Corsica)",
+    "Lebanon (Bekaa Valley)",
+    "Morocco",
+    "Algeria",
+    "South Africa",
+    "Italy",
+    "Australia (Barossa, McLaren Vale)",
+    "U.S.A. (California, Washington)"
+   ],
+   "style": "Best as dry, strawberry-watermelon rosé (Tavel); soft, meaty, peppery red in Lebanon, Morocco, South Africa.",
+   "page": 194
+  },
+  {
+   "grape": "Dolcetto",
+   "aka": [
+    "Ormeasco (Liguria)"
+   ],
+   "colour": "red",
+   "places": [
+    "Italy (Piedmont: Alba, Dogliani, Ovada)",
+    "Italy (Liguria)",
+    "Australia (Victoria)",
+    "U.S.A. (California, Oregon: Umpqua; Washington)"
+   ],
+   "style": "Juicy, grapey, soft, low-acid red with cherry and blueberry; drink young, lightly chilled.",
+   "page": 203
+  },
+  {
+   "grape": "Gamay",
+   "aka": [
+    "Gamay Noir au Jus Blanc",
+    "Beaujolais"
+   ],
+   "colour": "red",
+   "places": [
+    "France (Beaujolais crus: Morgon, Moulin-à-Vent, Fleurie; Loire: Anjou, Touraine)",
+    "Switzerland (Dôle)",
+    "Canada (Okanagan, Niagara)",
+    "U.S.A. (Oregon)",
+    "Australia (Tasmania, Victoria, Hunter Valley)",
+    "Croatia",
+    "Serbia"
+   ],
+   "style": "Light, low-tannin, bright red-berry red from Nouveau to richer, age-worthy Beaujolais crus.",
+   "page": 211
+  },
+  {
+   "grape": "Grenache / Garnacha",
+   "aka": [
+    "Garnacha",
+    "Garnatxa",
+    "Cannonau (Sardinia)",
+    "GSM blends"
+   ],
+   "colour": "red",
+   "places": [
+    "Spain (Priorat, Montsant, Navarra, Rioja, Calatayud, Campo de Borja, Utiel-Requena)",
+    "France (Châteauneuf-du-Pape, Gigondas, Vacqueyras, Tavel, Rasteau, Banyuls, Maury, Côtes du Rhône)",
+    "Italy (Sardinia, Sicily, Calabria)",
+    "Australia (Barossa, McLaren Vale)",
+    "Algeria",
+    "Morocco",
+    "U.S.A. (California, Washington)"
+   ],
+   "style": "Velvety, jammy, low-tannin red-berry red; also great dry rosado and fortified Banyuls.",
+   "page": 219
+  },
+  {
+   "grape": "Malbec",
+   "aka": [
+    "Cot",
+    "Auxerrois (Cahors)"
+   ],
+   "colour": "red",
+   "places": [
+    "Argentina (Mendoza: Luján de Cuyo, Uco Valley; Salta; San Juan; Patagonia)",
+    "France (Cahors, Southwest; Bordeaux; Loire)",
+    "Chile (Colchagua, Curicó, Maipo)",
+    "U.S.A. (California, Washington, Oregon, Long Island)",
+    "Australia",
+    "New Zealand",
+    "South Africa",
+    "Italy (northeast)"
+   ],
+   "style": "Inky, plush plum-blackberry red with soft tannins (Argentina) or firm, austere 'black wine' (Cahors).",
+   "page": 229
+  },
+  {
+   "grape": "Mencía",
+   "aka": [
+    "Jaen (Portugal)"
+   ],
+   "colour": "red",
+   "places": [
+    "Spain (Castilla-León: Bierzo)",
+    "Spain (Galicia: Ribeira Sacra, Valdeorras, Monterrei)",
+    "Portugal (Dão)"
+   ],
+   "style": "Fresh, mineral, raspberry-and-bay-leaf red with moderate alcohol and good acidity.",
+   "page": 236
+  },
+  {
+   "grape": "Mourvèdre / Monastrell",
+   "aka": [
+    "Monastrell",
+    "Mataro"
+   ],
+   "colour": "red",
+   "places": [
+    "Spain (Murcia: Jumilla, Yecla; Valencia: Alicante)",
+    "France (Provence: Bandol; Rhône: Châteauneuf-du-Pape; Languedoc-Roussillon)",
+    "Australia (Barossa, McLaren Vale, Clare)",
+    "U.S.A. (California, Washington, Oregon)",
+    "South Africa (Swartland)",
+    "Portugal"
+   ],
+   "style": "Dark, peppery, meaty, gamy red with herbs and black fruit; also savory Bandol rosé.",
+   "page": 243
+  },
+  {
+   "grape": "Nebbiolo",
+   "aka": [
+    "Barolo",
+    "Barbaresco",
+    "Spanna",
+    "Chiavennasca (Valtellina)",
+    "Picutener"
+   ],
+   "colour": "red",
+   "places": [
+    "Italy (Piedmont: Barolo, Barbaresco, Gattinara, Ghemme, Carema, Langhe)",
+    "Italy (Lombardy: Valtellina Inferno, Sassella, Sforzato)",
+    "Italy (Valle d'Aosta: Donnas)",
+    "Australia (Victoria, Adelaide Hills, McLaren Vale)",
+    "U.S.A. (California: Paso Robles, Santa Ynez; Washington; Oregon)",
+    "Argentina",
+    "Chile",
+    "Uruguay",
+    "New Zealand"
+   ],
+   "style": "Pale but powerful, tannic red of rose, tar, cherry and truffle; age-worthy.",
+   "page": 251
+  },
+  {
+   "grape": "Petite Sirah",
+   "aka": [
+    "Durif"
+   ],
+   "colour": "red",
+   "places": [
+    "U.S.A. (California: Dry Creek, Russian River, Mendocino, Napa, Lodi, Livermore, Amador, Paso Robles)",
+    "Australia (Rutherglen, Granite Belt, Riverina)",
+    "Mexico (Baja California)",
+    "Israel",
+    "Argentina",
+    "Brazil"
+   ],
+   "style": "Inky, peppery, blackberry-and-mocha powerhouse red with big tannin.",
+   "page": 260
+  },
+  {
+   "grape": "Pinotage",
+   "aka": [
+    "Cape blend (with Pinotage)"
+   ],
+   "colour": "red",
+   "places": [
+    "South Africa (Stellenbosch, Paarl, Robertson)",
+    "New Zealand (Kumeu, Gisborne, Hawke's Bay)",
+    "Zimbabwe",
+    "U.S.A. (California)"
+   ],
+   "style": "Dark-fruited, earthy, smoky, gamy red (Pinot Noir x Cinsaut); modern versions riper and cleaner.",
+   "page": 268
+  },
+  {
+   "grape": "Tannat",
+   "aka": [
+    "Harriague (Uruguay)",
+    "Madiran"
+   ],
+   "colour": "red",
+   "places": [
+    "France (Southwest: Madiran, Irouléguy, Côtes de St.-Mont, Béarn, Tursan)",
+    "Uruguay (Canelones, Cerro Chapeu, San José)",
+    "Argentina (Cafayate, Salta)",
+    "Australia (Barossa, Hunter, Granite Belt)",
+    "U.S.A. (California: Lodi, Paso Robles; Virginia)"
+   ],
+   "style": "Massive, very tannic, blackberry and licorice red; softened by blending and micro-oxygenation; also rosé.",
+   "page": 276
+  },
+  {
+   "grape": "Tempranillo",
+   "aka": [
+    "Tinto Fino",
+    "Tinta del País",
+    "Tinta de Toro",
+    "Cencibel",
+    "Ull de Llebre",
+    "Tinta Roriz (Portugal)",
+    "Aragonez (Portugal)"
+   ],
+   "colour": "red",
+   "places": [
+    "Spain (Rioja, Ribera del Duero, Toro, Navarra, Valdepeñas, Penedès, La Mancha, Utiel-Requena)",
+    "Portugal (Douro, Dão, Alentejo)",
+    "Argentina (Mendoza)",
+    "Uruguay",
+    "Chile",
+    "Mexico",
+    "Australia (McLaren Vale, Adelaide Hills)",
+    "U.S.A. (California, Oregon: Umpqua; New Mexico)"
+   ],
+   "style": "Cherry, dried-herb (balsamico), tobacco red from elegant Rioja to powerful Toro; aged joven to gran reserva; also rosado.",
+   "page": 284
+  },
+  {
+   "grape": "Touriga Nacional",
+   "aka": [
+    "Touriga"
+   ],
+   "colour": "red",
+   "places": [
+    "Portugal (Douro, Dão, Alentejo, Tejo, Estremadura, Bairrada)",
+    "Australia (Barossa)",
+    "South Africa",
+    "U.S.A. (California, Texas, Georgia)"
+   ],
+   "style": "Inky, floral (violet), black-fruit red with spice; the top grape of port and of Douro and Dão dry reds.",
+   "page": 292
+  },
+  {
+   "grape": "Port",
+   "aka": [
+    "Tawny port",
+    "Vintage port",
+    "Ruby port",
+    "LBV"
+   ],
+   "colour": "sweet",
+   "places": [
+    "Portugal (Douro)",
+    "Australia (port-style)",
+    "U.S.A. (port-style)"
+   ],
+   "style": "Fortified sweet red; tawny nutty and toffee-like, ruby/vintage plummy and chocolaty.",
+   "page": 293
+  },
+  {
+   "grape": "Xinomavro",
+   "aka": [
+    "Naoussa",
+    "Mavro Naoussis",
+    "Kozanis",
+    "Niaoustiano"
+   ],
+   "colour": "red",
+   "places": [
+    "Greece (Macedonia: Naoussa, Goumenissa, Amyndeo, Imathia)",
+    "Greece (Thessaly: Rapsani)"
+   ],
+   "style": "Pale, high-acid, tannic red of cherry, tomato, olive and spice, like Nebbiolo or Pinot; also rosé and sparkling.",
+   "page": 300
+  }
+ ],
+ "grape_foods": [
+  {
+   "grape": "Albariño",
+   "food": "Seafood",
+   "dish": "Crab, clams, scallops, shrimp, octopus with pimentón, seafood tapas",
+   "strength": 3,
+   "page": 35,
+   "why": "Lemony acidity lifts the natural sweetness of shellfish; anything from the sea suits it."
+  },
+  {
+   "grape": "Albariño",
+   "food": "Fish",
+   "dish": "Simply cooked fish, crudo, ceviche, sushi, tuna or salmon carpaccio",
+   "strength": 3,
+   "page": 36,
+   "why": "Pure, clean wine matches raw and lightly cooked fish."
+  },
+  {
+   "grape": "Albariño",
+   "food": "Pork",
+   "dish": "Pork, sausage and chicken braises with garlic, olives, greens and potatoes; dry chorizo; country ham",
+   "strength": 2,
+   "page": 35,
+   "why": "Sharp acidity cuts rich stews like caldo gallego; superb with chorizo."
+  },
+  {
+   "grape": "Albariño",
+   "food": "Chicken",
+   "dish": "Stir-fried lemon chicken, mild kung pao, duck with ginger, veal braises",
+   "strength": 2,
+   "page": 36,
+   "why": "Clean North Asian flavors and rich white-meat stews suit it."
+  },
+  {
+   "grape": "Albariño",
+   "food": "Seafood",
+   "dish": "Fried oysters, fritto of shrimp and calamari, salt cod croquettes, empanadas",
+   "strength": 2,
+   "page": 36,
+   "why": "Zippy, prickly wine refreshes fried and pastry dishes."
+  },
+  {
+   "grape": "Albariño",
+   "food": "Pasta and pizza",
+   "dish": "Paella, pasta with clams",
+   "strength": 2,
+   "page": 35,
+   "why": "Starchy seafood dishes and lemony herbs flatter it."
+  },
+  {
+   "grape": "Arneis",
+   "food": "Fish",
+   "dish": "Poached or pan-roasted mild white fish, fish and chips, fish with salsa verde",
+   "strength": 3,
+   "page": 40,
+   "why": "Low-impact cooking and green herbs respect its gentle structure."
+  },
+  {
+   "grape": "Arneis",
+   "food": "Pasta and pizza",
+   "dish": "Pasta with peas and lemon zest; spaghetti puttanesca",
+   "strength": 2,
+   "page": 40,
+   "why": "Low alcohol handles piquant olive-anchovy sauces; light pasta suits it."
+  },
+  {
+   "grape": "Arneis",
+   "food": "Chicken",
+   "dish": "Roast chicken with Dijon, quail, Cornish hen",
+   "strength": 2,
+   "page": 41,
+   "why": "Light poultry and mustard show the wine well."
+  },
+  {
+   "grape": "Arneis",
+   "food": "Pork",
+   "dish": "Pork loin with mustard-breadcrumb crust; veal scaloppine with mustard; prosciutto with melon",
+   "strength": 2,
+   "page": 41,
+   "why": "Mustard and mild charcuterie flatter it."
+  },
+  {
+   "grape": "Arneis",
+   "food": "Seafood",
+   "dish": "Salt-and-pepper shrimp, simple shellfish, scallop salads",
+   "strength": 2,
+   "page": 40,
+   "why": "Simple shellfish are happy with it."
+  },
+  {
+   "grape": "Arneis",
+   "food": "Fish",
+   "dish": "Antipasti, tapas, mezes (tabbouleh, dolmas, falafel) - vegetarian",
+   "strength": 2,
+   "page": 41,
+   "why": "Versatile with mixed small plates and eastern Mediterranean food."
+  },
+  {
+   "grape": "Assyrtiko",
+   "food": "Seafood",
+   "dish": "Oysters, shrimp cocktail, steamed clams, simple seafood with citrus, capers, olives",
+   "strength": 3,
+   "page": 47,
+   "why": "Sharp acidity suits the freshest seafood as in Greek tavernas."
+  },
+  {
+   "grape": "Assyrtiko",
+   "food": "Fish",
+   "dish": "Grilled trout, fish tacos, fish curry, tandoori",
+   "strength": 2,
+   "page": 47,
+   "why": "Bright acid and low alcohol refresh moderately spicy food."
+  },
+  {
+   "grape": "Assyrtiko",
+   "food": "Lamb",
+   "dish": "Greek roast lamb with avgolemono",
+   "strength": 2,
+   "page": 48,
+   "why": "Lemony egg sauce makes this classic Greek lamb work with the white."
+  },
+  {
+   "grape": "Assyrtiko",
+   "food": "Pork",
+   "dish": "Simple roast pork or chicken with a green salad",
+   "strength": 2,
+   "page": 47,
+   "why": "White meat served with salad suits its sharpness."
+  },
+  {
+   "grape": "Assyrtiko",
+   "food": "Seafood",
+   "dish": "Lobster, scallops, prawns in cream or butter sauce (oaked style)",
+   "strength": 2,
+   "page": 47,
+   "why": "Oak-aged styles behave like Chardonnay."
+  },
+  {
+   "grape": "Assyrtiko",
+   "food": "Fish",
+   "dish": "Dolmas, tzatziki, vegetable pakoras, yogurt-dressed salads - vegetarian",
+   "strength": 2,
+   "page": 47,
+   "why": "Yogurt, dill and tart ingredients match its acidity."
+  },
+  {
+   "grape": "Chenin Blanc",
+   "food": "Fish",
+   "dish": "Monkfish, halibut, snapper, poached salmon",
+   "strength": 2,
+   "page": 54,
+   "why": "Dry Chenin works wherever a squeeze of lemon helps."
+  },
+  {
+   "grape": "Chenin Blanc",
+   "food": "Seafood",
+   "dish": "Oysters, scallops, lobster, coconut shrimp; caviar on corn blinis with sparkling",
+   "strength": 2,
+   "page": 54,
+   "why": "Electric acidity refreshes; sparkling Chenin stands in for Champagne."
+  },
+  {
+   "grape": "Chenin Blanc",
+   "food": "Pork",
+   "dish": "Pork or veal scaloppine, ham, smoked pork, sausages, charcuterie; Easter ham",
+   "strength": 3,
+   "page": 54,
+   "why": "Off-dry styles mirror sweetness and balance salt and smoke."
+  },
+  {
+   "grape": "Chenin Blanc",
+   "food": "Chicken",
+   "dish": "Chicken with Calvados, cream and apples; turkey, quail, duck, goose; barbecue chicken",
+   "strength": 2,
+   "page": 54,
+   "why": "Implied sweetness matches fruit, cream and mild barbecue sauces."
+  },
+  {
+   "grape": "Chenin Blanc",
+   "food": "Spicy food",
+   "dish": "Vindaloo, kimchi, Thai and Kerala coconut curries",
+   "strength": 2,
+   "page": 54,
+   "why": "Off-dry Chenin tames heat and mirrors coconut sweetness."
+  },
+  {
+   "grape": "Chenin Blanc",
+   "food": "Chicken",
+   "dish": "Terrine of foie gras (sweet Chenin)",
+   "strength": 3,
+   "page": 54,
+   "why": "Sweet Chenin with foie gras is a sublime match."
+  },
+  {
+   "grape": "Chenin Blanc",
+   "food": "Dessert",
+   "dish": "Apple or pear tart, peach desserts, crème brûlée, honey mousse with pear-quince compote",
+   "strength": 3,
+   "page": 55,
+   "why": "Late-harvest Chenin excels with fruit and custard desserts."
+  },
+  {
+   "grape": "Garganega (Soave)",
+   "food": "Seafood",
+   "dish": "Crab cakes, steamed Dungeness crab with basil aioli, prawns with garlic butter, shrimp",
+   "strength": 3,
+   "page": 60,
+   "why": "Moderately rich texture makes crab an especially good match."
+  },
+  {
+   "grape": "Garganega (Soave)",
+   "food": "Fish",
+   "dish": "Fish grilled in grape leaves with lemon, swordfish",
+   "strength": 2,
+   "page": 60,
+   "why": "Unoaked Soave suits simple fish with citrus."
+  },
+  {
+   "grape": "Garganega (Soave)",
+   "food": "Chicken",
+   "dish": "Lemon-and-onion roast chicken; poached chicken; chicken with rosemary cream (oaked)",
+   "strength": 2,
+   "page": 60,
+   "why": "Simple poultry suits it; oaked versions take light cream sauces."
+  },
+  {
+   "grape": "Garganega (Soave)",
+   "food": "Pork",
+   "dish": "Roast loin of pork with lemon-scented risotto",
+   "strength": 2,
+   "page": 60,
+   "why": "Simple white meat with citrus starch is lovely."
+  },
+  {
+   "grape": "Garganega (Soave)",
+   "food": "Pasta and pizza",
+   "dish": "Pasta or risotto with pesto or crab; caprese with pesto",
+   "strength": 3,
+   "page": 61,
+   "why": "Pine nut, basil and olive oil have a natural affinity with Soave."
+  },
+  {
+   "grape": "Garganega (Soave)",
+   "food": "Cheese",
+   "dish": "Frittata, leek and goat cheese quiche, eggs - vegetarian",
+   "strength": 2,
+   "page": 61,
+   "why": "One of few wines that handles egg dishes."
+  },
+  {
+   "grape": "Grüner Veltliner",
+   "food": "Pork",
+   "dish": "Wiener schnitzel with potatoes; ham, sausages, salumi, bratwurst, boudin blanc",
+   "strength": 3,
+   "page": 66,
+   "why": "Classic Austrian partner; acidity balances rich salty meats."
+  },
+  {
+   "grape": "Grüner Veltliner",
+   "food": "Spicy food",
+   "dish": "Vietnamese spring rolls, Indian, Thai, Indonesian dishes, noodle stir-fries, tofu",
+   "strength": 3,
+   "page": 66,
+   "why": "Its spicy aromatics mirror Asian herbs and spices; spring rolls are a modern classic."
+  },
+  {
+   "grape": "Grüner Veltliner",
+   "food": "Pork",
+   "dish": "Sweet-and-sour pork (off-dry GV)",
+   "strength": 2,
+   "page": 66,
+   "why": "Off-dry style handles sweet-sour and sweet-spicy sauces."
+  },
+  {
+   "grape": "Grüner Veltliner",
+   "food": "Pork",
+   "dish": "Lentil stew with pork and sausage; lima beans and ham; white bean chili",
+   "strength": 2,
+   "page": 66,
+   "why": "Shares the earthy legume character."
+  },
+  {
+   "grape": "Grüner Veltliner",
+   "food": "Chicken",
+   "dish": "Chicken grilled with caraway-cumin North African spices; rabbit with fava and bacon",
+   "strength": 2,
+   "page": 66,
+   "why": "Spice and herb notes link to the wine's pepper."
+  },
+  {
+   "grape": "Grüner Veltliner",
+   "food": "Fish",
+   "dish": "Asparagus, artichokes, bitter greens, composed salads, strong fish - vegetarian too",
+   "strength": 3,
+   "page": 66,
+   "why": "Handles notoriously wine-hostile vegetables."
+  },
+  {
+   "grape": "Grüner Veltliner",
+   "food": "Seafood",
+   "dish": "Briny oysters (sharp dry GV)",
+   "strength": 2,
+   "page": 67,
+   "why": "Lean, puckery examples love oysters."
+  },
+  {
+   "grape": "Marsanne / Roussanne",
+   "food": "Seafood",
+   "dish": "Broiled lobster, crayfish étouffée, scallops in brown butter, fish en croûte",
+   "strength": 3,
+   "page": 74,
+   "why": "Rich seafood and butter sauces match its texture."
+  },
+  {
+   "grape": "Marsanne / Roussanne",
+   "food": "Fish",
+   "dish": "Brandade of salt cod; hamachi sashimi; macadamia-crusted fish",
+   "strength": 3,
+   "page": 73,
+   "why": "Rich but mild dishes suit it; brandade is a local classic."
+  },
+  {
+   "grape": "Marsanne / Roussanne",
+   "food": "Chicken",
+   "dish": "Duck; chicken with hazelnuts, cream and sweet spices",
+   "strength": 2,
+   "page": 73,
+   "why": "Nutty notes and richness mirror aged Marsanne."
+  },
+  {
+   "grape": "Marsanne / Roussanne",
+   "food": "Pasta and pizza",
+   "dish": "Shrimp and pea risotto, seafood lasagna, butternut-squash ravioli, pumpkin soup",
+   "strength": 2,
+   "page": 74,
+   "why": "Creamy starches and squash are perfect backdrops."
+  },
+  {
+   "grape": "Marsanne / Roussanne",
+   "food": "Red meat",
+   "dish": "Veal chops with aligot (veal = Red meat per vocabulary; pork chops also)",
+   "strength": 3,
+   "page": 77,
+   "why": "Rich cheesy potatoes and veal match the wine's texture without overwhelming."
+  },
+  {
+   "grape": "Muscat / Moscato",
+   "food": "Chicken",
+   "dish": "Chicken and cashew stir-fry, roast duck (dry Muscat)",
+   "strength": 2,
+   "page": 83,
+   "why": "Dry Muscat's sharp acidity suits Asian-edged poultry and rich white meat."
+  },
+  {
+   "grape": "Muscat / Moscato",
+   "food": "Red meat",
+   "dish": "Blanquette de veau (dry Alsace Muscat)",
+   "strength": 3,
+   "page": 83,
+   "why": "A favorite pairing of dry Alsace Muscat with creamy veal."
+  },
+  {
+   "grape": "Muscat / Moscato",
+   "food": "Seafood",
+   "dish": "Deep-fried prawns with ginger and garlic; tandoori shrimp (sparkling)",
+   "strength": 2,
+   "page": 83,
+   "why": "Dry Muscat handles mildly sweet Asian sauces; fizz offsets aromatic heat."
+  },
+  {
+   "grape": "Muscat / Moscato",
+   "food": "Pork",
+   "dish": "Prosciutto and melon; grilled peaches (sparkling Moscato)",
+   "strength": 2,
+   "page": 83,
+   "why": "Salt-sweet picnic food suits fizzy Muscat."
+  },
+  {
+   "grape": "Muscat / Moscato",
+   "food": "Dessert",
+   "dish": "Fresh peaches, nectarines, berries, poached pears, panna cotta, honeyed Greek yogurt (Moscato d'Asti)",
+   "strength": 3,
+   "page": 82,
+   "why": "Light sweet fizz mirrors fresh fruit."
+  },
+  {
+   "grape": "Muscat / Moscato",
+   "food": "Dessert",
+   "dish": "Strawberries and cream, cheesecake, fruit crisps and cobblers (late-harvest)",
+   "strength": 3,
+   "page": 84,
+   "why": "Fresh lively sweetness and cream make strong synergy."
+  },
+  {
+   "grape": "Muscat / Moscato",
+   "food": "Dessert",
+   "dish": "Nut tortes, caramel, butterscotch pudding, bananas with caramel, a little dark chocolate (fortified)",
+   "strength": 3,
+   "page": 84,
+   "why": "Toffee and nut flavors of aged fortified Muscat match."
+  },
+  {
+   "grape": "Pinot Blanc",
+   "food": "Seafood",
+   "dish": "Oysters, crawfish boil, popcorn shrimp, fried calamari, soft-shell crab salad, crab cakes with aioli",
+   "strength": 3,
+   "page": 91,
+   "why": "Clean, simple flavors and bright acidity suit shellfish and fried food."
+  },
+  {
+   "grape": "Pinot Blanc",
+   "food": "Fish",
+   "dish": "Grilled trout with lemon butter, sole amandine, sashimi, steamed fish with ginger, smoked salmon, sardines",
+   "strength": 3,
+   "page": 91,
+   "why": "Hard to find a fish it doesn't suit; works raw to grilled."
+  },
+  {
+   "grape": "Pinot Blanc",
+   "food": "Chicken",
+   "dish": "Chicken burger, fried chicken, cold roast chicken, chicken brochettes, chicken-pork pâté",
+   "strength": 2,
+   "page": 92,
+   "why": "Loves sandwiches, picnics and homey dishes with a twist."
+  },
+  {
+   "grape": "Pinot Blanc",
+   "food": "Pasta and pizza",
+   "dish": "Cream-based pasta or risotto; macaroni and cheese",
+   "strength": 2,
+   "page": 92,
+   "why": "Rich styles match creamy texture; light ones cut through."
+  },
+  {
+   "grape": "Pinot Blanc",
+   "food": "Pork",
+   "dish": "Cold roast pork, picnic sandwiches",
+   "strength": 2,
+   "page": 92,
+   "why": "Classic alfresco wine."
+  },
+  {
+   "grape": "Prosecco",
+   "food": "Chicken",
+   "dish": "Fried chicken; roast chicken with chutney; Veneto game birds with polenta",
+   "strength": 3,
+   "page": 100,
+   "why": "Salty fried food and lightly sweet sauces love its fruit and bubbles."
+  },
+  {
+   "grape": "Prosecco",
+   "food": "Seafood",
+   "dish": "Crab and shrimp salads, Hawaiian poke, ceviche, sushi, Thai fish cakes",
+   "strength": 2,
+   "page": 100,
+   "why": "Sweet crab and gentle spice echo its off-dry fruit."
+  },
+  {
+   "grape": "Prosecco",
+   "food": "Pork",
+   "dish": "Slow-cooked cured pork belly; salumi; prosciutto-wrapped persimmons",
+   "strength": 2,
+   "page": 100,
+   "why": "Picks up sweetness and cuts salt and fat."
+  },
+  {
+   "grape": "Prosecco",
+   "food": "Spicy food",
+   "dish": "Indian curries, biryani, samosas; Thai coconut curries; mole; empanadas",
+   "strength": 2,
+   "page": 100,
+   "why": "Off-dry fruit handles moderate spice; good beer substitute."
+  },
+  {
+   "grape": "Prosecco",
+   "food": "Pasta and pizza",
+   "dish": "Polenta, pesto, hummus, baba ghanoush, butternut squash stew (vegetarian)",
+   "strength": 2,
+   "page": 100,
+   "why": "Rustic textures and Middle Eastern dips pair nicely."
+  },
+  {
+   "grape": "Prosecco",
+   "food": "Dessert",
+   "dish": "Fruit and nut desserts, apple galette",
+   "strength": 2,
+   "page": 100,
+   "why": "Works if dessert is no sweeter than the wine."
+  },
+  {
+   "grape": "Marsanne / Roussanne",
+   "food": "Seafood",
+   "dish": "Lobster, crab cakes, scallops, butter-rich shellfish (Roussanne)",
+   "strength": 3,
+   "page": 107,
+   "why": "Few wines beat Roussanne with crab cakes; texture matches lobster richness."
+  },
+  {
+   "grape": "Marsanne / Roussanne",
+   "food": "Chicken",
+   "dish": "North African tagines, chicken with apricots and almonds, mild jerk chicken, Thai curry, satay (Roussanne)",
+   "strength": 2,
+   "page": 107,
+   "why": "Silky exotic wine suits aromatic spiced dishes."
+  },
+  {
+   "grape": "Marsanne / Roussanne",
+   "food": "Pork",
+   "dish": "Pork marinated in cumin and ginger; honey-glazed ham with cloves (Roussanne)",
+   "strength": 2,
+   "page": 107,
+   "why": "Exotic spices and holiday ham flatter Roussanne."
+  },
+  {
+   "grape": "Marsanne / Roussanne",
+   "food": "Chicken",
+   "dish": "Holiday goose and turkey (Roussanne)",
+   "strength": 2,
+   "page": 107,
+   "why": "Rich textures of holiday birds suit it."
+  },
+  {
+   "grape": "Marsanne / Roussanne",
+   "food": "Pasta and pizza",
+   "dish": "Butternut squash ravioli with sage and hazelnuts, risotto, polenta, fennel gratin, creamy purées (Roussanne)",
+   "strength": 2,
+   "page": 107,
+   "why": "Rich, buttery starches match its texture."
+  },
+  {
+   "grape": "Marsanne / Roussanne",
+   "food": "Red meat",
+   "dish": "Veal in rich preparations (Roussanne)",
+   "strength": 2,
+   "page": 107,
+   "why": "Rich white meats suit silky Roussanne."
+  },
+  {
+   "grape": "Sémillon",
+   "food": "Seafood",
+   "dish": "Shrimp pasta with lemon and cream, scallops with parsnip purée, scallop and pea risotto, fish bisque",
+   "strength": 2,
+   "page": 115,
+   "why": "Waxy texture backs buttery, creamy seafood dishes."
+  },
+  {
+   "grape": "Sémillon",
+   "food": "Chicken",
+   "dish": "Roast chicken with fig jam; chicken fricassee; honey-mustard or honey-soy glazed poultry (aged Hunter)",
+   "strength": 2,
+   "page": 115,
+   "why": "Plays off the wine's fruit; toasty aged styles like sweet-salt glazes."
+  },
+  {
+   "grape": "Sémillon",
+   "food": "Pork",
+   "dish": "Roast pork loin with sautéed apples",
+   "strength": 2,
+   "page": 115,
+   "why": "Fruit in the dish mirrors the wine's fruit."
+  },
+  {
+   "grape": "Sémillon",
+   "food": "Red meat",
+   "dish": "Veal stew with spring vegetables; veal with mustard cream; sweetbreads",
+   "strength": 2,
+   "page": 116,
+   "why": "White meats and sweetbreads are fabulous with it."
+  },
+  {
+   "grape": "Sémillon",
+   "food": "Seafood",
+   "dish": "Raw oysters, spring rolls, goat cheese crostini (SSB blends)",
+   "strength": 2,
+   "page": 115,
+   "why": "Zippy SSB acidity highlights fresh seafood and salads."
+  },
+  {
+   "grape": "Sémillon",
+   "food": "Fish",
+   "dish": "Spanakopita, pakoras, grilled asparagus, leek-potato soup, vegetable tagine (SSB) - vegetarian",
+   "strength": 2,
+   "page": 116,
+   "why": "Australian SSBs handle green vegetables well."
+  },
+  {
+   "grape": "Sémillon",
+   "food": "Chicken",
+   "dish": "Foie gras (late-harvest Sémillon/Sauternes)",
+   "strength": 2,
+   "page": 115,
+   "why": "Works if the wine isn't over-sweet; prefer late-harvest to botrytized."
+  },
+  {
+   "grape": "Sémillon",
+   "food": "Dessert",
+   "dish": "Pear, peach, fig desserts; streusel tarts; crème brûlée, toffee, caramel (Sauternes-style)",
+   "strength": 3,
+   "page": 116,
+   "why": "Stone and tree fruit and caramel echo the honeyed wine."
+  },
+  {
+   "grape": "Torrontés",
+   "food": "Seafood",
+   "dish": "Scallops, crab, butter-poached lobster, shrimp in lemon-chive cream",
+   "strength": 3,
+   "page": 123,
+   "why": "Oily texture and ripe fruit draw out shellfish sweetness."
+  },
+  {
+   "grape": "Torrontés",
+   "food": "Red meat",
+   "dish": "Argentine beef-and-raisin empanadas",
+   "strength": 3,
+   "page": 123,
+   "why": "Classic national pairing; sweet-savory filling sings with it."
+  },
+  {
+   "grape": "Torrontés",
+   "food": "Pork",
+   "dish": "Sweet-and-sour pork; slow-roasted pork belly",
+   "strength": 2,
+   "page": 123,
+   "why": "Acid-fruit play and caramelized sweetness suit it."
+  },
+  {
+   "grape": "Torrontés",
+   "food": "Red meat",
+   "dish": "Sauerbraten; short ribs glazed with pomegranate molasses",
+   "strength": 1,
+   "page": 123,
+   "why": "Sweet-sour glazes harmonize with its fruit."
+  },
+  {
+   "grape": "Torrontés",
+   "food": "Fish",
+   "dish": "Brazilian moqueca, nut-crusted Caribbean fish, ikan bakar",
+   "strength": 2,
+   "page": 123,
+   "why": "Coconut and tropical flavors match its exuberant fruit."
+  },
+  {
+   "grape": "Torrontés",
+   "food": "Chicken",
+   "dish": "Hainanese chicken rice, satay, smoked Cornish hen",
+   "strength": 2,
+   "page": 124,
+   "why": "Southeast Asian dishes and gentle smoke-sweetness suit it."
+  },
+  {
+   "grape": "Torrontés",
+   "food": "Spicy food",
+   "dish": "Mild Indian or Southeast Asian curries, mango chutney, plum sauce",
+   "strength": 2,
+   "page": 123,
+   "why": "Fruit and sweet spice echo the wine."
+  },
+  {
+   "grape": "Trebbiano",
+   "food": "Chicken",
+   "dish": "Roast chicken with herbes de Provence and wild rice pilaf",
+   "strength": 2,
+   "page": 130,
+   "why": "Neutral, clean wine won't fight simple weeknight food."
+  },
+  {
+   "grape": "Trebbiano",
+   "food": "Fish",
+   "dish": "Broiled fish with stir-fried vegetables; trout stuffed with raisins, lemon and pine nuts",
+   "strength": 2,
+   "page": 131,
+   "why": "Brings good simple ingredients into focus; nutty-fruity notes suit it."
+  },
+  {
+   "grape": "Trebbiano",
+   "food": "Pasta and pizza",
+   "dish": "Pasta primavera; risotto with cheese and prosciutto (Orvieto or Frascati)",
+   "strength": 2,
+   "page": 131,
+   "why": "Italian rice and pasta dishes pair excellently."
+  },
+  {
+   "grape": "Trebbiano",
+   "food": "Seafood",
+   "dish": "Crab and rice pilaf with lemon and almonds",
+   "strength": 3,
+   "page": 133,
+   "why": "Toasty, nutty, lemony dish lifts the straightforward wine."
+  },
+  {
+   "grape": "Txakoli (Hondarribi Zuri)",
+   "food": "Seafood",
+   "dish": "Squid, fried calamari, crab, oysters, steamed clams and mussels",
+   "strength": 3,
+   "page": 138,
+   "why": "Acidity and spritz lift seafood and tame saltiness."
+  },
+  {
+   "grape": "Txakoli (Hondarribi Zuri)",
+   "food": "Fish",
+   "dish": "Salt cod (bacalao), crunchy fried fish",
+   "strength": 3,
+   "page": 138,
+   "why": "Salt cod and Txakoli are the classic Basque match."
+  },
+  {
+   "grape": "Txakoli (Hondarribi Zuri)",
+   "food": "Pork",
+   "dish": "Dry chorizo, pintxos/tapas, bocadillos",
+   "strength": 3,
+   "page": 137,
+   "why": "Tapas and Txakoli are a match made in heaven."
+  },
+  {
+   "grape": "Txakoli (Hondarribi Zuri)",
+   "food": "Chicken",
+   "dish": "Chicken wings, grilled chicken, satays, pizza (anything you'd drink with pilsner)",
+   "strength": 2,
+   "page": 138,
+   "why": "Light, bubbly, refreshing like lager."
+  },
+  {
+   "grape": "Txakoli (Hondarribi Zuri)",
+   "food": "Spicy food",
+   "dish": "Gyoza, ginger-steamed fish, spring rolls, pad Thai, Chinese takeout",
+   "strength": 2,
+   "page": 138,
+   "why": "Low alcohol and spritz suit Asian dishes."
+  },
+  {
+   "grape": "Verdejo",
+   "food": "Fish",
+   "dish": "Ceviche, smoked trout salad with grapefruit, grilled swordfish with caper butter, seared tuna with lemon pesto",
+   "strength": 2,
+   "page": 143,
+   "why": "Vivid acidity highlights clean fish without masking it."
+  },
+  {
+   "grape": "Verdejo",
+   "food": "Seafood",
+   "dish": "Shrimp tartine with pesto, tuna poke, crawfish boil",
+   "strength": 3,
+   "page": 146,
+   "why": "Shrimp bring out its natural sweetness; nuts and herbs echo the wine."
+  },
+  {
+   "grape": "Verdejo",
+   "food": "Pork",
+   "dish": "Pork or veal with citrus, capers, garlic, olives, ginger",
+   "strength": 2,
+   "page": 143,
+   "why": "Sharp seasonings spike its flavors."
+  },
+  {
+   "grape": "Verdejo",
+   "food": "Chicken",
+   "dish": "Chicken grilled with rosemary or lemon thyme; chicken pasta with sun-dried tomato and cream",
+   "strength": 2,
+   "page": 144,
+   "why": "Fresh herbs and pesto match its herbal side."
+  },
+  {
+   "grape": "Verdejo",
+   "food": "Lamb",
+   "dish": "Lamb brochette in herb marinade",
+   "strength": 1,
+   "page": 144,
+   "why": "Herbs downplay meatiness so the white works."
+  },
+  {
+   "grape": "Verdejo",
+   "food": "Fish",
+   "dish": "Green vegetable soups, minestrone, watercress, sorrel, spinach, Greek salad, guacamole - vegetarian",
+   "strength": 2,
+   "page": 144,
+   "why": "Handles bitter greens and vinaigrettes others can't."
+  },
+  {
+   "grape": "Verdejo",
+   "food": "Spicy food",
+   "dish": "Spicy-hot dishes (fruity, slightly sweet examples best)",
+   "strength": 1,
+   "page": 144,
+   "why": "Bright acid and low alcohol refresh the palate."
+  },
+  {
+   "grape": "Vermentino",
+   "food": "Fish",
+   "dish": "Salmon carpaccio, sashimi, tuna tartare, grilled whole fish with potatoes, pan-roasted halibut",
+   "strength": 3,
+   "page": 151,
+   "why": "One of the best wines for raw and simply cooked fish."
+  },
+  {
+   "grape": "Vermentino",
+   "food": "Seafood",
+   "dish": "Scallop brochettes, shrimp risotto, fried anchovies, panko shrimp, fritto misto",
+   "strength": 3,
+   "page": 150,
+   "why": "Moderate alcohol and zest handle a pop of salt and fried batter."
+  },
+  {
+   "grape": "Vermentino",
+   "food": "Pasta and pizza",
+   "dish": "Fettuccine with shrimp and garlic, penne with squid or clams and peas",
+   "strength": 2,
+   "page": 151,
+   "why": "Pasta is a blank canvas that lets it star."
+  },
+  {
+   "grape": "Vermentino",
+   "food": "Pork",
+   "dish": "Mild salumi with green olives; pork and veal (richer Sardinian/Corsican styles)",
+   "strength": 2,
+   "page": 150,
+   "why": "Simple charcuterie and white meats work with richer versions."
+  },
+  {
+   "grape": "Vermentino",
+   "food": "Chicken",
+   "dish": "Chicken with coconut rice, mild coconut curry, Asian chicken salad, shrimp Caesar",
+   "strength": 2,
+   "page": 151,
+   "why": "Gentle coconut and main-course salads suit it."
+  },
+  {
+   "grape": "Aglianico",
+   "food": "Red meat",
+   "dish": "Osso buco, oxtails, braised short ribs, daubes, large steaks, offal",
+   "strength": 3,
+   "page": 161,
+   "why": "Gelatin-rich braises and fat tame its massive tannins."
+  },
+  {
+   "grape": "Aglianico",
+   "food": "Lamb",
+   "dish": "Braised lamb shanks, grilled chops",
+   "strength": 3,
+   "page": 161,
+   "why": "Classic rustic match for almost any Aglianico."
+  },
+  {
+   "grape": "Aglianico",
+   "food": "Pork",
+   "dish": "Sausage and bean stews, feijoada, sausages with lentils; pork and veal with older wines",
+   "strength": 2,
+   "page": 161,
+   "why": "Hearty meat-and-bean dishes call for young Aglianico."
+  },
+  {
+   "grape": "Aglianico",
+   "food": "Pasta and pizza",
+   "dish": "Lasagna, baked ziti, pasta with meat ragù, mushroom and Parma ham risotto",
+   "strength": 3,
+   "page": 162,
+   "why": "Thick rich pastas match its weight; tomato in a meaty sauce brings out fruit."
+  },
+  {
+   "grape": "Aglianico",
+   "food": "Chicken",
+   "dish": "Rich duck, goose, squab",
+   "strength": 1,
+   "page": 162,
+   "why": "Only robust birds stand up to it."
+  },
+  {
+   "grape": "Barbera",
+   "food": "Pasta and pizza",
+   "dish": "Pizza, pasta with tomato sauce, mushroom risotto",
+   "strength": 3,
+   "page": 169,
+   "why": "High acidity is the quintessential match for red sauces; few wines better with pizza."
+  },
+  {
+   "grape": "Barbera",
+   "food": "Pork",
+   "dish": "Salumi, prosciutto, mortadella, pâté, terrines; char siu",
+   "strength": 3,
+   "page": 169,
+   "why": "Acidity cuts rich cured pork, a northern Italian tradition."
+  },
+  {
+   "grape": "Barbera",
+   "food": "Red meat",
+   "dish": "Burgers, meat loaf, burritos, veal chops with mushrooms, steak au poivre, osso buco, shaking beef",
+   "strength": 2,
+   "page": 169,
+   "why": "Comfort food magnet; oaky modern styles handle rich meats."
+  },
+  {
+   "grape": "Barbera",
+   "food": "Lamb",
+   "dish": "Simple roast lamb, lamb stew",
+   "strength": 2,
+   "page": 169,
+   "why": "Full Barbera holds its own with lamb."
+  },
+  {
+   "grape": "Barbera",
+   "food": "Fish",
+   "dish": "Grilled tuna, swordfish, halibut with tomato vinaigrette or puttanesca",
+   "strength": 2,
+   "page": 169,
+   "why": "Great red for meaty fish thanks to acid and low tannin."
+  },
+  {
+   "grape": "Barbera",
+   "food": "Chicken",
+   "dish": "Chicken liver pâté crostini, tandoori chicken",
+   "strength": 3,
+   "page": 172,
+   "why": "Acid cuts liver richness; red fruit suits meatiness."
+  },
+  {
+   "grape": "Cabernet Franc",
+   "food": "Red meat",
+   "dish": "Veal saltimbocca, herbed meat stews",
+   "strength": 3,
+   "page": 176,
+   "why": "Sage, rosemary and thyme echo its herbal character."
+  },
+  {
+   "grape": "Cabernet Franc",
+   "food": "Pork",
+   "dish": "Rosemary-marinated pork brochettes; pasta with pancetta, sausage or prosciutto",
+   "strength": 2,
+   "page": 176,
+   "why": "Herbs and cured pork bridge to the wine."
+  },
+  {
+   "grape": "Cabernet Franc",
+   "food": "Fish",
+   "dish": "Seared tuna with sautéed spinach (Loire style)",
+   "strength": 2,
+   "page": 176,
+   "why": "Cooked meaty tuna and greens suit leaner Cab Franc."
+  },
+  {
+   "grape": "Cabernet Franc",
+   "food": "Cheese",
+   "dish": "Pasta with goat cheese, greens and walnuts; spinach-goat cheese phyllo pie",
+   "strength": 2,
+   "page": 176,
+   "why": "Tangy goat cheese matches its acidity."
+  },
+  {
+   "grape": "Cabernet Franc",
+   "food": "Spicy food",
+   "dish": "Red-chile enchiladas, enchiladas suizas, chicken mole (oaky style)",
+   "strength": 2,
+   "page": 176,
+   "why": "Chile-tomato sauces pulled it together surprisingly well."
+  },
+  {
+   "grape": "Cabernet Franc",
+   "food": "Dessert",
+   "dish": "Chocolate desserts with red berries, Linzertorte, jam cake (sweet/ice wine)",
+   "strength": 2,
+   "page": 176,
+   "why": "Sweet Cab Franc handles chocolate and berry jam."
+  },
+  {
+   "grape": "Carignan",
+   "food": "Pork",
+   "dish": "Cassoulet; double-cut grilled pork chop with cheesy grits or polenta",
+   "strength": 3,
+   "page": 183,
+   "why": "Rustic fatty dishes tame its tannin and acidity."
+  },
+  {
+   "grape": "Carignan",
+   "food": "Red meat",
+   "dish": "Peppercorn-crusted steak; veal stew with prunes; thick stews",
+   "strength": 2,
+   "page": 183,
+   "why": "Peppery spice and dried fruit echo the wine."
+  },
+  {
+   "grape": "Carignan",
+   "food": "Lamb",
+   "dish": "Sausage and lamb with apricots and North African spices",
+   "strength": 2,
+   "page": 183,
+   "why": "Meat with dried fruit adds richness and sweetness."
+  },
+  {
+   "grape": "Carignan",
+   "food": "Pasta and pizza",
+   "dish": "Ribollita with Asiago, vegetarian lasagna, moussaka, truffled mac and cheese",
+   "strength": 2,
+   "page": 183,
+   "why": "Hearty cheese-enriched vegetarian dishes suit it."
+  },
+  {
+   "grape": "Carignan",
+   "food": "Cheese",
+   "dish": "Composed salads with cheese or smoked poultry and arugula",
+   "strength": 1,
+   "page": 184,
+   "why": "Medium-weight versions suit peppery greens and protein salads."
+  },
+  {
+   "grape": "Carignan",
+   "food": "Dessert",
+   "dish": "Flourless chocolate cake, plum tart with chocolate sauce, chocolate with chile (Banyuls)",
+   "strength": 3,
+   "page": 183,
+   "why": "Fortified Grenache-Carignan with bittersweet chocolate is heaven."
+  },
+  {
+   "grape": "Carmenère",
+   "food": "Pork",
+   "dish": "Lentil soup with fennel sausage; smoked pork shoulder",
+   "strength": 3,
+   "page": 190,
+   "why": "Anything with lentils is a slam dunk; smoke echoes the wine."
+  },
+  {
+   "grape": "Carmenère",
+   "food": "Lamb",
+   "dish": "Provençal lamb stew with black olives and thyme; rosemary lamb loin",
+   "strength": 3,
+   "page": 190,
+   "why": "Herbs and black olives match its herbal side."
+  },
+  {
+   "grape": "Carmenère",
+   "food": "Red meat",
+   "dish": "Smoked brisket; grilled meat with salsa verde or gremolata; venison; calves' liver",
+   "strength": 2,
+   "page": 190,
+   "why": "Stands up to gamy and herbal treatments."
+  },
+  {
+   "grape": "Carmenère",
+   "food": "Chicken",
+   "dish": "Smoked chicken; squab",
+   "strength": 2,
+   "page": 190,
+   "why": "Smokiness and gamy birds suit it."
+  },
+  {
+   "grape": "Carmenère",
+   "food": "Pasta and pizza",
+   "dish": "Penne with meat sauce, puttanesca, amatriciana; eggplant lasagna, moussaka, baba ghanoush",
+   "strength": 3,
+   "page": 190,
+   "why": "Top choice for eggplant; handles bitter greens too."
+  },
+  {
+   "grape": "Carmenère",
+   "food": "Seafood",
+   "dish": "Bacon- or prosciutto-wrapped prawns or scallops; tuna or swordfish (lighter styles)",
+   "strength": 1,
+   "page": 190,
+   "why": "Cured pork or meaty fish make shellfish work."
+  },
+  {
+   "grape": "Cinsaut",
+   "food": "Fish",
+   "dish": "Salade niçoise, seared tuna on white beans, grilled tilapia, sardines, sashimi (rosé)",
+   "strength": 3,
+   "page": 197,
+   "why": "Dry rosé goes with almost anything with fins or shells."
+  },
+  {
+   "grape": "Cinsaut",
+   "food": "Seafood",
+   "dish": "Steamed mussels and clams, paella, gumbo, mussel and fennel risotto (rosé)",
+   "strength": 3,
+   "page": 197,
+   "why": "Spicy dry rosé suits seafood rice dishes."
+  },
+  {
+   "grape": "Cinsaut",
+   "food": "Chicken",
+   "dish": "Jerk chicken, yakitori, Singapore chicken rice, duck basteeya (rosé)",
+   "strength": 2,
+   "page": 196,
+   "why": "Dry rosé unifies Asian and Caribbean flavors."
+  },
+  {
+   "grape": "Cinsaut",
+   "food": "Pork",
+   "dish": "Cuban pressed-pork sandwich; dim sum; family-style Chinese dinner (rosé)",
+   "strength": 2,
+   "page": 197,
+   "why": "Rosé is the go-to for shared mixed-flavor meals."
+  },
+  {
+   "grape": "Cinsaut",
+   "food": "Lamb",
+   "dish": "Couscous, tagines, braised lamb shanks (red)",
+   "strength": 2,
+   "page": 196,
+   "why": "Meaty spicy red suits North African and rustic dishes."
+  },
+  {
+   "grape": "Cinsaut",
+   "food": "Red meat",
+   "dish": "Daubes, Texas chili, red beans and rice (red)",
+   "strength": 1,
+   "page": 196,
+   "why": "Rib-sticking stews match red blends."
+  },
+  {
+   "grape": "Cinsaut",
+   "food": "Pasta and pizza",
+   "dish": "Ratatouille (rosé or red) - vegetarian",
+   "strength": 2,
+   "page": 197,
+   "why": "Provençal vegetables meld with local Cinsaut wines."
+  },
+  {
+   "grape": "Dolcetto",
+   "food": "Fish",
+   "dish": "Salmon or Arctic char with red wine sauce and mushrooms; halibut, trout, black cod with tomato, olives, pancetta",
+   "strength": 3,
+   "page": 205,
+   "why": "Mild sweet fish cooked in a red-wine vein suit its soft fruit."
+  },
+  {
+   "grape": "Dolcetto",
+   "food": "Seafood",
+   "dish": "Shrimp and scallops, simply prepared with tomato or ham",
+   "strength": 2,
+   "page": 205,
+   "why": "Low tannin lets it partner mild shellfish."
+  },
+  {
+   "grape": "Dolcetto",
+   "food": "Pork",
+   "dish": "Country pâté, mortadella, prosciutto, serrano ham, coppa, chorizo, grilled sausages",
+   "strength": 3,
+   "page": 206,
+   "why": "Softness flatters milder cured meats."
+  },
+  {
+   "grape": "Dolcetto",
+   "food": "Red meat",
+   "dish": "Burgers, roast beef sandwiches",
+   "strength": 2,
+   "page": 205,
+   "why": "Everyday rustic food is its home."
+  },
+  {
+   "grape": "Dolcetto",
+   "food": "Chicken",
+   "dish": "Roast chicken, simple quiche",
+   "strength": 2,
+   "page": 205,
+   "why": "Simple wholesome fare pairs well."
+  },
+  {
+   "grape": "Dolcetto",
+   "food": "Pasta and pizza",
+   "dish": "Pizza Margherita; gnocchi with light creamy tomato sauce",
+   "strength": 2,
+   "page": 205,
+   "why": "Simple tomato dishes without sharp acidity."
+  },
+  {
+   "grape": "Gamay",
+   "food": "Fish",
+   "dish": "Swordfish, shark, cod, snapper, Baja fish tacos, tuna salad sandwich",
+   "strength": 3,
+   "page": 214,
+   "why": "The classic red wine for fish thanks to low tannin."
+  },
+  {
+   "grape": "Gamay",
+   "food": "Seafood",
+   "dish": "Steamed clams with sausage, mussel and potato salad",
+   "strength": 2,
+   "page": 214,
+   "why": "Low-tannin crus or rosé handle stronger seafood."
+  },
+  {
+   "grape": "Gamay",
+   "food": "Pork",
+   "dish": "Pâté, charcuterie, duck-liver mousse, BLT, ham and Swiss, hot dogs, cold roast pork with honey mustard",
+   "strength": 3,
+   "page": 214,
+   "why": "Acid cuts rich pâté; soft tannin suits meatiness; time-honored."
+  },
+  {
+   "grape": "Gamay",
+   "food": "Red meat",
+   "dish": "Steak and steak tartare (Morgon or Moulin-à-Vent); burgers; flank steak salad",
+   "strength": 2,
+   "page": 214,
+   "why": "Gutsy crus suit Charolais beef from the same region."
+  },
+  {
+   "grape": "Gamay",
+   "food": "Chicken",
+   "dish": "Thanksgiving turkey with cranberry; cold roast chicken; Cornish hen salad",
+   "strength": 3,
+   "page": 214,
+   "why": "Bright fruit matches cranberry and light poultry."
+  },
+  {
+   "grape": "Gamay",
+   "food": "Spicy food",
+   "dish": "Chilled Nouveau with Thai or Malaysian curry; nachos, Buffalo wings",
+   "strength": 2,
+   "page": 214,
+   "why": "Chilled low-tannin fruit soothes moderate heat."
+  },
+  {
+   "grape": "Grenache / Garnacha",
+   "food": "Chicken",
+   "dish": "Roast chicken, poussin, game hen, turkey, quail; blends with squab, duck, pheasant",
+   "strength": 3,
+   "page": 222,
+   "why": "Pure Grenache is magnificent with milder poultry."
+  },
+  {
+   "grape": "Grenache / Garnacha",
+   "food": "Lamb",
+   "dish": "Lamb stew, chops, roast rack (Châteauneuf or Priorat blends)",
+   "strength": 3,
+   "page": 223,
+   "why": "Syrah or Carignan in the blend adds structure for lamb."
+  },
+  {
+   "grape": "Grenache / Garnacha",
+   "food": "Seafood",
+   "dish": "Gambas a la plancha, crab with rouille, grilled lobster, scallops with chorizo; paella, cioppino, bouillabaisse (rosado)",
+   "strength": 3,
+   "page": 222,
+   "why": "Navarra rosado is a first choice with Spanish seafood."
+  },
+  {
+   "grape": "Grenache / Garnacha",
+   "food": "Fish",
+   "dish": "Pepper-crusted tuna, jamón-wrapped snapper (rosé)",
+   "strength": 2,
+   "page": 222,
+   "why": "Rosé and light reds handle meaty fish."
+  },
+  {
+   "grape": "Grenache / Garnacha",
+   "food": "Pork",
+   "dish": "Roast pork, char siu, spareribs, saucisson, chorizo-stuffed dates, hot dogs (rosé)",
+   "strength": 2,
+   "page": 222,
+   "why": "Dry rosé is picnic and charcuterie magic."
+  },
+  {
+   "grape": "Grenache / Garnacha",
+   "food": "Dessert",
+   "dish": "Dark chocolate mousse, chocolate bread pudding with dried cherries, orange chocolate crème brûlée, baked figs (Banyuls, Maury, Rasteau)",
+   "strength": 3,
+   "page": 223,
+   "why": "Fortified Grenache is chocolate's best friend."
+  },
+  {
+   "grape": "Malbec",
+   "food": "Red meat",
+   "dish": "Asado (grilled grass-fed beef) with chimichurri; rib-eye, hanger, flank steak",
+   "strength": 3,
+   "page": 232,
+   "why": "Inky fruit suits savory grass-fed beef; the Argentine classic."
+  },
+  {
+   "grape": "Malbec",
+   "food": "Red meat",
+   "dish": "Braised beef shank, mixed grills with offal, venison",
+   "strength": 3,
+   "page": 232,
+   "why": "Slow-braised unctuous meat shows its velvety side."
+  },
+  {
+   "grape": "Malbec",
+   "food": "Pork",
+   "dish": "Cassoulet with Cahors; sausages, marinated pork chops; fennel sausage and white beans; Portuguese bean soup with ham",
+   "strength": 3,
+   "page": 232,
+   "why": "Cassoulet with Cahors is as classic as asado with Argentine Malbec."
+  },
+  {
+   "grape": "Malbec",
+   "food": "Lamb",
+   "dish": "Lamb, rich rabbit",
+   "strength": 2,
+   "page": 232,
+   "why": "Gamy flavors suit it."
+  },
+  {
+   "grape": "Malbec",
+   "food": "Chicken",
+   "dish": "Squab, pheasant, partridge, woodcock; Chinese lacquered duck",
+   "strength": 2,
+   "page": 232,
+   "why": "Rich game birds stand up to it."
+  },
+  {
+   "grape": "Malbec",
+   "food": "Red meat",
+   "dish": "Korean short ribs, beef teriyaki; stews with prunes and root vegetables",
+   "strength": 2,
+   "page": 233,
+   "why": "Meaty Asian dishes and dried fruit accentuate ripe fruit."
+  },
+  {
+   "grape": "Mencía",
+   "food": "Chicken",
+   "dish": "Squab any way, roast duck, dark turkey meat, coq au vin",
+   "strength": 3,
+   "page": 238,
+   "why": "Squab with Mencía is on the author's top-twenty list."
+  },
+  {
+   "grape": "Mencía",
+   "food": "Lamb",
+   "dish": "Lamb with red-wine jus, lamb shanks, lamb with black olive tapenade",
+   "strength": 3,
+   "page": 238,
+   "why": "Stronger meats and herbs suit its acid and earthy herbal notes."
+  },
+  {
+   "grape": "Mencía",
+   "food": "Red meat",
+   "dish": "Boeuf bourguignon, beef stew, oxtails, cocido",
+   "strength": 2,
+   "page": 238,
+   "why": "Great with dishes cooked in wine and rich braises."
+  },
+  {
+   "grape": "Mencía",
+   "food": "Pork",
+   "dish": "Spanish chorizo, morcilla (blood sausage)",
+   "strength": 3,
+   "page": 238,
+   "why": "With piquant Spanish sausages it is perfection."
+  },
+  {
+   "grape": "Mencía",
+   "food": "Fish",
+   "dish": "Seared tuna with braised cabbage and mushrooms",
+   "strength": 2,
+   "page": 241,
+   "why": "Meaty tuna carries red; earthy cabbage and mushrooms link to the wine."
+  },
+  {
+   "grape": "Mencía",
+   "food": "Pasta and pizza",
+   "dish": "Eggplant parmigiana, stuffed peppers, ratatouille, pasta primavera, dolmas, borscht - vegetarian",
+   "strength": 2,
+   "page": 238,
+   "why": "Green bay-leaf character suits vegetable dishes."
+  },
+  {
+   "grape": "Mourvèdre / Monastrell",
+   "food": "Chicken",
+   "dish": "Duck with olives, duck with sausage, squab, pheasant; Peking or tea-smoked duck (fruity styles)",
+   "strength": 3,
+   "page": 246,
+   "why": "Rich, flavorful birds are at home with it."
+  },
+  {
+   "grape": "Mourvèdre / Monastrell",
+   "food": "Red meat",
+   "dish": "Steak au poivre, peppered beef carpaccio, filet with green peppercorn sauce",
+   "strength": 3,
+   "page": 246,
+   "why": "Pepper plus meat mirrors the grape's signature."
+  },
+  {
+   "grape": "Mourvèdre / Monastrell",
+   "food": "Lamb",
+   "dish": "Herb-marinated meat brochettes with grilled vegetables; rustic stews, sausages",
+   "strength": 2,
+   "page": 245,
+   "why": "Strong herbs and grilling suit it."
+  },
+  {
+   "grape": "Mourvèdre / Monastrell",
+   "food": "Chicken",
+   "dish": "Barbecued turkey skewers with pomegranate glaze",
+   "strength": 3,
+   "page": 250,
+   "why": "Brined turkey and tangy pomegranate worked with all three styles."
+  },
+  {
+   "grape": "Mourvèdre / Monastrell",
+   "food": "Fish",
+   "dish": "Brandade, tuna crostini, marinated sardines, salmon, swordfish with olives and capers (rosé)",
+   "strength": 2,
+   "page": 246,
+   "why": "Bandol-style rosé suits flavorful fish."
+  },
+  {
+   "grape": "Mourvèdre / Monastrell",
+   "food": "Seafood",
+   "dish": "Fritto of fish and shellfish with romesco or rouille (rosé)",
+   "strength": 2,
+   "page": 246,
+   "why": "Rosé refreshes fried seafood."
+  },
+  {
+   "grape": "Mourvèdre / Monastrell",
+   "food": "Pasta and pizza",
+   "dish": "Dishes with morels, porcini, dried black mushrooms; grilled eggplant",
+   "strength": 2,
+   "page": 246,
+   "why": "Dark mushrooms bring out spice and minerality."
+  },
+  {
+   "grape": "Nebbiolo",
+   "food": "Red meat",
+   "dish": "Brasato al Barolo (braised beef), osso buco, hanger steak, rare meat",
+   "strength": 3,
+   "page": 254,
+   "why": "Rich braises tame tannin; brasato is the local classic."
+  },
+  {
+   "grape": "Nebbiolo",
+   "food": "Lamb",
+   "dish": "Roast leg of lamb, grilled lamb chops, braised lamb shanks",
+   "strength": 3,
+   "page": 255,
+   "why": "Simple quality meat suits young Nebbiolo."
+  },
+  {
+   "grape": "Nebbiolo",
+   "food": "Pasta and pizza",
+   "dish": "Truffle or porcini risotto/pasta, pasta Bolognese, lasagna, polenta with meat sugo, fonduta",
+   "strength": 3,
+   "page": 255,
+   "why": "Barolo and Barbaresco are the quintessential truffle wines."
+  },
+  {
+   "grape": "Nebbiolo",
+   "food": "Chicken",
+   "dish": "Braised duck leg; duck in ragù",
+   "strength": 3,
+   "page": 256,
+   "why": "Duck yes, chicken and quail no."
+  },
+  {
+   "grape": "Nebbiolo",
+   "food": "Red meat",
+   "dish": "Milk-fed veal (with lighter Ghemme, Gattinara, Valtellina)",
+   "strength": 2,
+   "page": 255,
+   "why": "Easy-drinking Nebbiolos suit veal."
+  },
+  {
+   "grape": "Petite Sirah",
+   "food": "Red meat",
+   "dish": "Brisket, grilled steak, short ribs, burgers, pot roast, meat loaf, Mongolian barbecue",
+   "strength": 3,
+   "page": 262,
+   "why": "Craves meat; big flavors suit its weight."
+  },
+  {
+   "grape": "Petite Sirah",
+   "food": "Lamb",
+   "dish": "Tandoori lamb kebabs, lamb méchoui, shish kebab; mixed grill",
+   "strength": 3,
+   "page": 262,
+   "why": "Boldly flavored grilled meats match it."
+  },
+  {
+   "grape": "Petite Sirah",
+   "food": "Pork",
+   "dish": "Slow-smoked pork shoulder, smoked sausages, mustard or molasses barbecue",
+   "strength": 3,
+   "page": 263,
+   "why": "Peppery fruit loves barbecue."
+  },
+  {
+   "grape": "Petite Sirah",
+   "food": "Red meat",
+   "dish": "Cassoulet, bean and beef chili, chili verde, feijoada",
+   "strength": 2,
+   "page": 263,
+   "why": "Hearty meals in a bowl match its body."
+  },
+  {
+   "grape": "Petite Sirah",
+   "food": "Chicken",
+   "dish": "Mole",
+   "strength": 2,
+   "page": 263,
+   "why": "Round modern styles suit bitter chocolate in mole."
+  },
+  {
+   "grape": "Petite Sirah",
+   "food": "Dessert",
+   "dish": "Not-too-sweet dark chocolate desserts (modern ripe style)",
+   "strength": 1,
+   "page": 263,
+   "why": "Ripe round styles can handle bitter chocolate."
+  },
+  {
+   "grape": "Pinotage",
+   "food": "Red meat",
+   "dish": "Braai (South African grill): beef, venison, sausages; dry-aged beef; biltong or beef jerky; calves' liver",
+   "strength": 3,
+   "page": 271,
+   "why": "Wood-grilled and gamy meats suit its smoky earthiness."
+  },
+  {
+   "grape": "Pinotage",
+   "food": "Lamb",
+   "dish": "Grilled lamb, lamb stews",
+   "strength": 2,
+   "page": 270,
+   "why": "Strongly flavored meat matches it."
+  },
+  {
+   "grape": "Pinotage",
+   "food": "Pork",
+   "dish": "Roasted pork shoulder in spiced red-wine marinade; grilled pork chops with grainy mustard",
+   "strength": 3,
+   "page": 273,
+   "why": "Slow-cooked pork softens tannins; warm spices echo the wine."
+  },
+  {
+   "grape": "Pinotage",
+   "food": "Fish",
+   "dish": "Snoek, herring, sardines, sturgeon (strong-flavored fish)",
+   "strength": 2,
+   "page": 270,
+   "why": "Rare red that handles strong fish without tasting metallic."
+  },
+  {
+   "grape": "Pinotage",
+   "food": "Spicy food",
+   "dish": "Vindaloo (chilled light style); butter chicken, tikka masala, biryani, samosas (richer style)",
+   "strength": 2,
+   "page": 271,
+   "why": "Styles match different Indian heat levels."
+  },
+  {
+   "grape": "Pinotage",
+   "food": "Chicken",
+   "dish": "Squab, duck, pheasant, goose, ostrich",
+   "strength": 2,
+   "page": 272,
+   "why": "Strong birds work; mild ones don't."
+  },
+  {
+   "grape": "Tannat",
+   "food": "Chicken",
+   "dish": "Duck confit",
+   "strength": 3,
+   "page": 278,
+   "why": "Classic Madiran pairing; fat and richness tame the tannin."
+  },
+  {
+   "grape": "Tannat",
+   "food": "Pork",
+   "dish": "Cassoulet",
+   "strength": 3,
+   "page": 278,
+   "why": "Classic Gascon match for the massive wine."
+  },
+  {
+   "grape": "Tannat",
+   "food": "Lamb",
+   "dish": "Lamb in all forms",
+   "strength": 3,
+   "page": 278,
+   "why": "Tannat loves lamb."
+  },
+  {
+   "grape": "Tannat",
+   "food": "Red meat",
+   "dish": "T-bone, rib-eye, rich stews and braises",
+   "strength": 2,
+   "page": 278,
+   "why": "Fat and protein balance its tannin."
+  },
+  {
+   "grape": "Tannat",
+   "food": "Red meat",
+   "dish": "Oxtails, shanks, venison, wild boar; Uruguayan beef; braised short ribs",
+   "strength": 3,
+   "page": 279,
+   "why": "Rich off-cuts and wild meats need its tannin and acid to cut them."
+  },
+  {
+   "grape": "Tannat",
+   "food": "Chicken",
+   "dish": "Goose, wild pheasant; roast chicken only with softer Uruguayan Tannat",
+   "strength": 2,
+   "page": 279,
+   "why": "Rich wild birds suit it; Uruguayan versions are gentler."
+  },
+  {
+   "grape": "Tempranillo",
+   "food": "Lamb",
+   "dish": "Roast rack of lamb, wood-oven baby lamb, leg of lamb, lamb stew, lamb burgers",
+   "strength": 3,
+   "page": 287,
+   "why": "Magical synergy with lamb, Spain's staple."
+  },
+  {
+   "grape": "Tempranillo",
+   "food": "Pork",
+   "dish": "Chorizo, jamón, cochinillo (roast suckling pig), sausages; ribs with balsamic and fennel",
+   "strength": 3,
+   "page": 287,
+   "why": "Elegant Rioja and Navarra suit Spain's pork."
+  },
+  {
+   "grape": "Tempranillo",
+   "food": "Red meat",
+   "dish": "Herb-marinated rib-eye; veal chop with tomato-mint salsa; venison (big styles)",
+   "strength": 2,
+   "page": 287,
+   "why": "Herbs bridge its balsamico character."
+  },
+  {
+   "grape": "Tempranillo",
+   "food": "Chicken",
+   "dish": "Herb-roasted chicken, chorizo-stuffed quail, game hens with dried-fruit compote; duck (big styles)",
+   "strength": 2,
+   "page": 288,
+   "why": "Elegant styles suit fowl."
+  },
+  {
+   "grape": "Tempranillo",
+   "food": "Pasta and pizza",
+   "dish": "Ratatouille, vegetable brochettes, vegetarian lasagna, roasted vegetable risotto; bean and lentil dishes",
+   "strength": 2,
+   "page": 288,
+   "why": "Herbal, less oaky styles suit vegetarian food."
+  },
+  {
+   "grape": "Tempranillo",
+   "food": "Seafood",
+   "dish": "Tapas, dim sum, fish, shellfish (Rioja rosado)",
+   "strength": 2,
+   "page": 288,
+   "why": "Rioja rosado is a flexible house staple."
+  },
+  {
+   "grape": "Touriga Nacional",
+   "food": "Pork",
+   "dish": "Grilled pork chops with dried cherry, bacon and onion conserve",
+   "strength": 3,
+   "page": 297,
+   "why": "Smoky grill, sweet spice and dark fruit echo plum, cherry and pepper notes."
+  },
+  {
+   "grape": "Touriga Nacional",
+   "food": "Lamb",
+   "dish": "Lamb dishes, rack of lamb",
+   "strength": 2,
+   "page": 294,
+   "why": "Rustic Dão and bold Douro reds suit lamb."
+  },
+  {
+   "grape": "Touriga Nacional",
+   "food": "Red meat",
+   "dish": "Beef daube, flank steak, standing rib roast; meat with cocoa or coffee rub; dark-fruit chutney",
+   "strength": 2,
+   "page": 294,
+   "why": "Treat like a rustic Bordeaux or Cabernet-Shiraz; play up mocha oak."
+  },
+  {
+   "grape": "Touriga Nacional",
+   "food": "Chicken",
+   "dish": "Coq au vin, roast duck, chicken mole, quail, squab",
+   "strength": 2,
+   "page": 294,
+   "why": "Earthy medium-bodied Dão suits fowl; gamy birds brilliant."
+  },
+  {
+   "grape": "Touriga Nacional",
+   "food": "Pasta and pizza",
+   "dish": "Grilled or stuffed portobellos, morels, black mushrooms (vegetarian)",
+   "strength": 2,
+   "page": 295,
+   "why": "Meaty dark mushrooms suit earthy Dão."
+  },
+  {
+   "grape": "Port",
+   "food": "Dessert",
+   "dish": "Toffee pudding, tarte Tatin, caramel, nougat, crème brûlée, custards (tawny)",
+   "strength": 3,
+   "page": 295,
+   "why": "Cooked sugar always calls for tawny port."
+  },
+  {
+   "grape": "Port",
+   "food": "Dessert",
+   "dish": "Dark chocolate with cherry or berry (chocolate cake with jam, pot de crème with cherry sauce) (vintage, LBV, ruby)",
+   "strength": 3,
+   "page": 295,
+   "why": "Ruby styles are chocolate's playmates."
+  },
+  {
+   "grape": "Port",
+   "food": "Cheese",
+   "dish": "Stilton, Montbriac, Gorgonzola with dried fruit and walnuts",
+   "strength": 3,
+   "page": 296,
+   "why": "Sugar and salt with pungent blue is near perfection."
+  },
+  {
+   "grape": "Xinomavro",
+   "food": "Lamb",
+   "dish": "Greek lamb dishes, grilled lamb skewers with honey glaze, simple roasts",
+   "strength": 3,
+   "page": 302,
+   "why": "Gamy personality loves Greece's trademark lamb."
+  },
+  {
+   "grape": "Xinomavro",
+   "food": "Pasta and pizza",
+   "dish": "Moussaka, grilled peppers and zucchini, greens, Greek salad, dolmas - vegetarian",
+   "strength": 3,
+   "page": 302,
+   "why": "High acid stands up to vegetables, lemon, yogurt and feta."
+  },
+  {
+   "grape": "Xinomavro",
+   "food": "Seafood",
+   "dish": "Octopus, squid, shrimp, scallops (rosé, white or light red)",
+   "strength": 2,
+   "page": 302,
+   "why": "Medium body and high acid can manage shellfish."
+  },
+  {
+   "grape": "Xinomavro",
+   "food": "Red meat",
+   "dish": "Grilled red meats (young wine); simple roasts (aged wine); anything with tomato",
+   "strength": 2,
+   "page": 301,
+   "why": "Tomato mirrors its flavor; tannin suits grilled meat."
+  }
+ ],
+ "food_wines": [
+  {
+   "food": "Seafood",
+   "dish": "Deep-fried clams",
+   "wines": [
+    "Pinot Blanc"
+   ],
+   "avoid": [],
+   "page": 11,
+   "why": "Crisp acidity works like lemon against salt and oil."
+  },
+  {
+   "food": "Pork",
+   "dish": "Pork medallions with sautéed apples",
+   "wines": [
+    "Chenin Blanc"
+   ],
+   "avoid": [],
+   "page": 11,
+   "why": "Off-dry wine echoes the sweetness of the apples."
+  },
+  {
+   "food": "Fish",
+   "dish": "Grouper with mango salsa",
+   "wines": [
+    "Chenin Blanc"
+   ],
+   "avoid": [],
+   "page": 13,
+   "why": "Slight sweetness in wine mirrors fruity salsa."
+  },
+  {
+   "food": "Seafood",
+   "dish": "Fritto misto or shrimp tempura",
+   "wines": [
+    "Vermentino"
+   ],
+   "avoid": [],
+   "page": 12,
+   "why": "Zesty young wine refreshes against fried, salty batter."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Wedding cake with buttercream",
+   "wines": [
+    "Sparkling (extra-dry or demi-sec)"
+   ],
+   "avoid": [
+    "Brut Champagne"
+   ],
+   "page": 13,
+   "why": "Dry bubbly tastes sour against sugary frosting."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Slow-cooked beef stew",
+   "wines": [
+    "Grenache / Garnacha"
+   ],
+   "avoid": [],
+   "page": 15,
+   "why": "Smooth oak-aged Grenache suits slow braises."
+  },
+  {
+   "food": "Fish",
+   "dish": "Sole amandine",
+   "wines": [
+    "Pinot Blanc"
+   ],
+   "avoid": [],
+   "page": 15,
+   "why": "Unoaked or oaked Pinot Blanc both fit the gentle fish."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Charcoal-grilled steak",
+   "wines": [
+    "Cabernet Sauvignon"
+   ],
+   "avoid": [],
+   "page": 14,
+   "why": "Char and fat suit a full tannic red."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Big Mac / burger",
+   "wines": [
+    "Grenache / Garnacha"
+   ],
+   "avoid": [],
+   "page": 8,
+   "why": "Ripe Grenache suits a juicy burger."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Very spicy, boldly flavored dishes (curry, mole, barbecue shrimp)",
+   "wines": [],
+   "avoid": [
+    "Albariño"
+   ],
+   "page": 36,
+   "why": "Bold chili and sauce bury the delicate wine."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Most red meat (except lemony Tuscan-style steak)",
+   "wines": [],
+   "avoid": [
+    "Albariño"
+   ],
+   "page": 36,
+   "why": "Too light for red meat unless the dish is built for white."
+  },
+  {
+   "food": "Chicken",
+   "dish": "Sweet dishes: foie gras, duck à l'orange, butternut risotto, fruit sauces",
+   "wines": [],
+   "avoid": [
+    "Albariño"
+   ],
+   "page": 36,
+   "why": "Sweetness makes the dry wine taste puckery."
+  },
+  {
+   "food": "Fish",
+   "dish": "Cruciferous and root vegetables, bitter greens (kale, chard, spinach) - vegetarian",
+   "wines": [],
+   "avoid": [
+    "Albariño"
+   ],
+   "page": 36,
+   "why": "Only okay with these unless lots of lemon is added."
+  },
+  {
+   "food": "Fish",
+   "dish": "Tart vinaigrette salads; heavily smoked or mesquite-grilled foods; briny oysters and mussels",
+   "wines": [],
+   "avoid": [
+    "Arneis"
+   ],
+   "page": 41,
+   "why": "Low-acid, delicate wine is overpowered or tastes off."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Strong spices: chiles, five spice, star anise, garam masala, clove",
+   "wines": [],
+   "avoid": [
+    "Arneis"
+   ],
+   "page": 41,
+   "why": "Wine disappears behind strong spice."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Prime rib, grilled venison",
+   "wines": [],
+   "avoid": [
+    "Assyrtiko"
+   ],
+   "page": 48,
+   "why": "Traditional red-meat dishes don't suit the lean white."
+  },
+  {
+   "food": "Pork",
+   "dish": "Glazed Easter ham, turkey with prune stuffing, sweet glazed dishes",
+   "wines": [],
+   "avoid": [
+    "Assyrtiko"
+   ],
+   "page": 48,
+   "why": "Near-sweet savory dishes need sweeter, softer wine."
+  },
+  {
+   "food": "Pasta and pizza",
+   "dish": "Gorgonzola risotto, duck with sausage and lentils, chili dog",
+   "wines": [],
+   "avoid": [
+    "Assyrtiko"
+   ],
+   "page": 48,
+   "why": "Bold dishes drown its delicate flavor."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Chocolate, coffee or mocha desserts",
+   "wines": [],
+   "avoid": [
+    "Chenin Blanc"
+   ],
+   "page": 55,
+   "why": "These flavors bury the wine's subtlety."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Prime rib, calves' liver",
+   "wines": [],
+   "avoid": [
+    "Chenin Blanc"
+   ],
+   "page": 55,
+   "why": "Traditional red-meat dishes don't suit it."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Fiery dishes with lots of pepper or Scotch bonnet",
+   "wines": [
+    "Chenin Blanc (off-dry)",
+    "Sparkling"
+   ],
+   "avoid": [
+    "Chenin Blanc (dry)"
+   ],
+   "page": 55,
+   "why": "Dry versions are overpowered; off-dry and low-alcohol sparkling cope better."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Boeuf bourguignon, lasagna Bolognese",
+   "wines": [],
+   "avoid": [
+    "Garganega (Soave)"
+   ],
+   "page": 61,
+   "why": "Rich meat-and-tomato dishes overwhelm it."
+  },
+  {
+   "food": "Pasta and pizza",
+   "dish": "Mushroom dishes (porcini, morels, even chanterelles)",
+   "wines": [],
+   "avoid": [
+    "Garganega (Soave)"
+   ],
+   "page": 61,
+   "why": "Mushrooms simply don't pair with it."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Curries and smoked dishes with spicy rubs",
+   "wines": [],
+   "avoid": [
+    "Garganega (Soave)"
+   ],
+   "page": 61,
+   "why": "Fiery heat overwhelms the wine."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Simply roasted lamb, beef or venison",
+   "wines": [],
+   "avoid": [
+    "Grüner Veltliner"
+   ],
+   "page": 67,
+   "why": "Not at its best with traditional red meat."
+  },
+  {
+   "food": "Chicken",
+   "dish": "Thick cream-based sauces; very sweet dishes",
+   "wines": [],
+   "avoid": [
+    "Grüner Veltliner"
+   ],
+   "page": 67,
+   "why": "Subtle wine is smothered; sweetness makes it struggle."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Szechuan and other hot Asian food, hot salsas",
+   "wines": [],
+   "avoid": [
+    "Marsanne / Roussanne"
+   ],
+   "page": 74,
+   "why": "Heat exaggerates its high alcohol."
+  },
+  {
+   "food": "Fish",
+   "dish": "Ceviche, sweet-and-sour, vinaigrettes, artichokes, asparagus",
+   "wines": [],
+   "avoid": [
+    "Marsanne / Roussanne"
+   ],
+   "page": 74,
+   "why": "Low acidity can't cope with sharp dishes or problem vegetables."
+  },
+  {
+   "food": "Chicken",
+   "dish": "Mesquite-grilled meats, smoked chicken, smoked-salmon terrine",
+   "wines": [],
+   "avoid": [
+    "Marsanne / Roussanne"
+   ],
+   "page": 74,
+   "why": "Strong smoke overwhelms it."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Lamb loin, rib-eye steak",
+   "wines": [],
+   "avoid": [
+    "Muscat / Moscato"
+   ],
+   "page": 84,
+   "why": "Dry Muscat works with pork and veal, not rich red meat."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Chocolate, dense buttercream, thick custards",
+   "wines": [],
+   "avoid": [
+    "Moscato d'Asti / Asti Spumante"
+   ],
+   "page": 85,
+   "why": "Light sparkling Muscat gets trampled."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Fresh fruit, simple tarts, basic poached fruit",
+   "wines": [],
+   "avoid": [
+    "Fortified Muscat"
+   ],
+   "page": 85,
+   "why": "Fiery intense fortified wines dominate simple desserts."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Spicy salsas and hot sauces",
+   "wines": [],
+   "avoid": [
+    "Muscat / Moscato (dry)"
+   ],
+   "page": 84,
+   "why": "Too much heat destroys its charm."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Lamb, venison, beef, calves' liver, steak and kidney pie",
+   "wines": [],
+   "avoid": [
+    "Pinot Blanc"
+   ],
+   "page": 92,
+   "why": "Not a red-meat wine."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Bold-spiced or hot dishes: Texas chili, andouille gumbo, cumin, turmeric, smoked paprika",
+   "wines": [],
+   "avoid": [
+    "Pinot Blanc"
+   ],
+   "page": 92,
+   "why": "Delicate wine is knocked out by heat and strong spice."
+  },
+  {
+   "food": "Seafood",
+   "dish": "Caviar",
+   "wines": [],
+   "avoid": [
+    "Prosecco"
+   ],
+   "page": 101,
+   "why": "A clash; only salmon roe on eggs works."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Rich red meats (unless sauce is sweet, e.g. filet with port reduction)",
+   "wines": [],
+   "avoid": [
+    "Prosecco"
+   ],
+   "page": 100,
+   "why": "Usually unsuccessful."
+  },
+  {
+   "food": "Fish",
+   "dish": "Strong fish, bitter vegetables (broccoli rabe, kale, eggplant)",
+   "wines": [],
+   "avoid": [
+    "Prosecco"
+   ],
+   "page": 100,
+   "why": "Make the wine taste metallic."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Rich buttercream desserts",
+   "wines": [],
+   "avoid": [
+    "Prosecco"
+   ],
+   "page": 100,
+   "why": "Dessert sweeter than wine spoils it."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Charcoal- or pan-grilled and blackened foods",
+   "wines": [],
+   "avoid": [
+    "Marsanne / Roussanne"
+   ],
+   "page": 108,
+   "why": "Smoky seared flavors overwhelm Roussanne's charm."
+  },
+  {
+   "food": "Fish",
+   "dish": "Sardines, anchovies, mackerel, nuoc mam; very light dishes like sand dabs",
+   "wines": [],
+   "avoid": [
+    "Marsanne / Roussanne"
+   ],
+   "page": 108,
+   "why": "Pungent fish clash; delicate dishes are crushed."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Chiles, Sriracha",
+   "wines": [],
+   "avoid": [
+    "Marsanne / Roussanne"
+   ],
+   "page": 108,
+   "why": "Heat makes the high-alcohol wine seem hotter."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Lamb, aged beef, venison",
+   "wines": [],
+   "avoid": [
+    "Sémillon"
+   ],
+   "page": 116,
+   "why": "Not a red-meat wine."
+  },
+  {
+   "food": "Seafood",
+   "dish": "Salty clams, mussels, Parmesan chunks, pancetta pizza",
+   "wines": [],
+   "avoid": [
+    "Sémillon (dry)"
+   ],
+   "page": 116,
+   "why": "Most dry Sémillon can't handle heavy salt."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Chocolate or mocha desserts",
+   "wines": [],
+   "avoid": [
+    "Sémillon (sweet)",
+    "Sauternes"
+   ],
+   "page": 116,
+   "why": "Chocolate overpowers sweet wine."
+  },
+  {
+   "food": "Fish",
+   "dish": "Peruvian ceviche, Asian chicken salad",
+   "wines": [
+    "Sémillon (SSB)"
+   ],
+   "avoid": [
+    "Sémillon (aged)"
+   ],
+   "page": 116,
+   "why": "Aged nutty Sémillon mismatches bright tangy dishes."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Heavily grilled or blackened (mesquite) foods",
+   "wines": [],
+   "avoid": [
+    "Torrontés"
+   ],
+   "page": 124,
+   "why": "Char detracts from its charm."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Hot spices and salty foods",
+   "wines": [],
+   "avoid": [
+    "Torrontés"
+   ],
+   "page": 124,
+   "why": "Salt and heat tighten the fruit."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Overly sweet dishes",
+   "wines": [],
+   "avoid": [
+    "Torrontés"
+   ],
+   "page": 124,
+   "why": "Reveal a bitter streak in the wine."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Red meats, moussaka, cream-sauced veal loin, turkey chili",
+   "wines": [],
+   "avoid": [
+    "Trebbiano"
+   ],
+   "page": 131,
+   "why": "Rich or meaty dishes crush this light wine."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Charcoal-grilled, curried or strongly spiced dishes",
+   "wines": [],
+   "avoid": [
+    "Trebbiano"
+   ],
+   "page": 131,
+   "why": "Strong flavors blow the wine away."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Very sweet desserts; chocolate-heavy biscotti",
+   "wines": [],
+   "avoid": [
+    "Vin Santo"
+   ],
+   "page": 131,
+   "why": "Vin Santo is only moderately sweet."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Thick rib-sticking stews and soups; long-smoked meats and fish",
+   "wines": [],
+   "avoid": [
+    "Txakoli (Hondarribi Zuri)"
+   ],
+   "page": 138,
+   "why": "Low alcohol wine is crushed by heavy or smoky food."
+  },
+  {
+   "food": "Pork",
+   "dish": "Roasted stuffed dates and other sweet dishes",
+   "wines": [],
+   "avoid": [
+    "Txakoli (Hondarribi Zuri)"
+   ],
+   "page": 139,
+   "why": "Accents of sweetness fine, outright sugar not."
+  },
+  {
+   "food": "Chicken",
+   "dish": "Orange chicken, honey-glazed ham, sweet dishes",
+   "wines": [],
+   "avoid": [
+    "Verdejo"
+   ],
+   "page": 144,
+   "why": "Dry wine clashes with sweetness."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Prime rib, cowboy steak",
+   "wines": [],
+   "avoid": [
+    "Verdejo"
+   ],
+   "page": 144,
+   "why": "Too rich and meaty."
+  },
+  {
+   "food": "Cheese",
+   "dish": "Blue cheese and very salty dishes",
+   "wines": [],
+   "avoid": [
+    "Verdejo"
+   ],
+   "page": 144,
+   "why": "Salt kills the fruit and leaves it tart."
+  },
+  {
+   "food": "Pasta and pizza",
+   "dish": "Earthy garlic, onion or mushroom dishes; very rich creamy dishes",
+   "wines": [],
+   "avoid": [
+    "Verdejo"
+   ],
+   "page": 145,
+   "why": "Make the wine seem disjointed or tart."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Pungent curries, bold sauces (tamari, oyster sauce), heavy spice",
+   "wines": [],
+   "avoid": [
+    "Vermentino"
+   ],
+   "page": 151,
+   "why": "Subtle wine is overwhelmed."
+  },
+  {
+   "food": "Seafood",
+   "dish": "Fresh oysters, Korean pickled banchan",
+   "wines": [],
+   "avoid": [
+    "Vermentino"
+   ],
+   "page": 151,
+   "why": "Lacks enough acidity for very briny or pickled food."
+  },
+  {
+   "food": "Chicken",
+   "dish": "Squab, beets, brown mushrooms, pungent cheeses; candied yams, mango chutney",
+   "wines": [],
+   "avoid": [
+    "Vermentino"
+   ],
+   "page": 151,
+   "why": "Earthy or very sweet food disjoints it."
+  },
+  {
+   "food": "Fish",
+   "dish": "Any fish, even rich ones",
+   "wines": [
+    "Rosé (Aglianico rosato)"
+   ],
+   "avoid": [
+    "Aglianico"
+   ],
+   "page": 162,
+   "why": "Tannin plus fish oil tastes metallic."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Habanero chile sauces",
+   "wines": [
+    "Rosé (Aglianico rosato)"
+   ],
+   "avoid": [
+    "Aglianico"
+   ],
+   "page": 162,
+   "why": "Heat clashes with tannin; dry rubs are fine."
+  },
+  {
+   "food": "Chicken",
+   "dish": "Quail, chicken, Cornish hen, light dishes",
+   "wines": [],
+   "avoid": [
+    "Aglianico"
+   ],
+   "page": 162,
+   "why": "Overwhelms most poultry and simple food."
+  },
+  {
+   "food": "Seafood",
+   "dish": "Most shellfish, lobster, crab",
+   "wines": [
+    "Rosé (Barbera rosato)"
+   ],
+   "avoid": [
+    "Barbera"
+   ],
+   "page": 170,
+   "why": "Fins fine, mollusks clash."
+  },
+  {
+   "food": "Fish",
+   "dish": "Chilean sea bass, sturgeon",
+   "wines": [],
+   "avoid": [
+    "Barbera"
+   ],
+   "page": 170,
+   "why": "Strong fish clash with its flavor and tannin."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Chili, curry, fiery Buffalo wings",
+   "wines": [
+    "Rosé (chilled Barbera rosato)"
+   ],
+   "avoid": [
+    "Barbera"
+   ],
+   "page": 170,
+   "why": "Heat overwhelms it."
+  },
+  {
+   "food": "Pork",
+   "dish": "Sweet-and-sour sauces, fruit compotes, tropical salsas",
+   "wines": [],
+   "avoid": [
+    "Barbera"
+   ],
+   "page": 170,
+   "why": "Tastes austere next to obvious sugar."
+  },
+  {
+   "food": "Seafood",
+   "dish": "Rich shellfish",
+   "wines": [],
+   "avoid": [
+    "Cabernet Franc"
+   ],
+   "page": 176,
+   "why": "No herbal bridge to shellfish."
+  },
+  {
+   "food": "Fish",
+   "dish": "Catfish, mackerel, sardines; sashimi or tuna tartare",
+   "wines": [],
+   "avoid": [
+    "Cabernet Franc"
+   ],
+   "page": 177,
+   "why": "Strong or raw fish clash."
+  },
+  {
+   "food": "Fish",
+   "dish": "Most fish, especially oily",
+   "wines": [],
+   "avoid": [
+    "Carignan"
+   ],
+   "page": 184,
+   "why": "Assertive tannins clash with fish."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Spicy-hot foods",
+   "wines": [],
+   "avoid": [
+    "Carignan"
+   ],
+   "page": 184,
+   "why": "Chili boosts alcohol and bitter tannins."
+  },
+  {
+   "food": "Chicken",
+   "dish": "Simple roast poultry, plain veal loin, fresh mild cheeses",
+   "wines": [],
+   "avoid": [
+    "Carignan"
+   ],
+   "page": 184,
+   "why": "Light dishes are blown away."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Fresh peaches, nectarines, apples, pears (without chocolate)",
+   "wines": [],
+   "avoid": [
+    "Banyuls / fortified Carignan"
+   ],
+   "page": 184,
+   "why": "Fortified red prefers chocolate, nuts and dried fruit."
+  },
+  {
+   "food": "Seafood",
+   "dish": "Oysters, clams, mussels, sea snails",
+   "wines": [],
+   "avoid": [
+    "Carmenère"
+   ],
+   "page": 191,
+   "why": "Taste coppery and tinny together."
+  },
+  {
+   "food": "Fish",
+   "dish": "Simple white fish, oily fish",
+   "wines": [],
+   "avoid": [
+    "Carmenère"
+   ],
+   "page": 191,
+   "why": "Overwhelms or turns metallic."
+  },
+  {
+   "food": "Pork",
+   "dish": "Dishes that border on sweet",
+   "wines": [],
+   "avoid": [
+    "Carmenère"
+   ],
+   "page": 191,
+   "why": "Dry herbal wine clashes with sweetness."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Prime rib, marbled rib-eye",
+   "wines": [
+    "Cabernet Sauvignon"
+   ],
+   "avoid": [
+    "Cinsaut"
+   ],
+   "page": 197,
+   "why": "Cinsaut adds no magic to fine beef."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Ultraspicy food",
+   "wines": [
+    "Rosé (low-alcohol, off-dry Loire or California)"
+   ],
+   "avoid": [
+    "Cinsaut"
+   ],
+   "page": 197,
+   "why": "Its high alcohol clashes with heat."
+  },
+  {
+   "food": "Seafood",
+   "dish": "Buffalo wings with blue cheese, fried clams (with red Cinsaut)",
+   "wines": [],
+   "avoid": [
+    "Cinsaut (red)"
+   ],
+   "page": 197,
+   "why": "Salt flattens fruit and accentuates tannin."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Ripe strawberries and raspberries",
+   "wines": [],
+   "avoid": [
+    "Rosé (dry)"
+   ],
+   "page": 198,
+   "why": "Dry rosé tastes tart with sweet ripe fruit; tart fruit works better."
+  },
+  {
+   "food": "Chicken",
+   "dish": "Duck, goose, pork belly, blanquette de veau, rabbit in mustard cream",
+   "wines": [],
+   "avoid": [
+    "Dolcetto"
+   ],
+   "page": 206,
+   "why": "Low acid can't cut rich, creamy dishes."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Steak, prime rib",
+   "wines": [],
+   "avoid": [
+    "Dolcetto"
+   ],
+   "page": 206,
+   "why": "Lacks the tannin rich protein needs."
+  },
+  {
+   "food": "Fish",
+   "dish": "Pickled antipasti, marinated fish, sharp salads",
+   "wines": [],
+   "avoid": [
+    "Dolcetto"
+   ],
+   "page": 205,
+   "why": "Low-acid wine suffers with tart food."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Desserts (except plain ripe strawberries with crème fraîche)",
+   "wines": [],
+   "avoid": [
+    "Gamay"
+   ],
+   "page": 215,
+   "why": "Not a dessert wine."
+  },
+  {
+   "food": "Fish",
+   "dish": "Delicate dishes and intricate sauces",
+   "wines": [],
+   "avoid": [
+    "Gamay"
+   ],
+   "page": 215,
+   "why": "Extroverted fruit blows them out."
+  },
+  {
+   "food": "Red meat",
+   "dish": "Thick steaks, peppery stews, heavy pastas, cassoulet (pure Grenache)",
+   "wines": [
+    "Grenache-Syrah blends"
+   ],
+   "avoid": [
+    "Grenache / Garnacha (pure)"
+   ],
+   "page": 222,
+   "why": "Lacks tannin and acid for heavy protein."
+  },
+  {
+   "food": "Seafood",
+   "dish": "Raw oysters and clams",
+   "wines": [],
+   "avoid": [
+    "Rosé (Grenache)"
+   ],
+   "page": 223,
+   "why": "Rosé tastes sour with raw mollusks; cooked ones are fine."
+  },
+  {
+   "food": "Fish",
+   "dish": "Broccoli, Brussels sprouts, leafy greens, asparagus",
+   "wines": [],
+   "avoid": [
+    "Grenache / Garnacha"
+   ],
+   "page": 224,
+   "why": "Too ripe and jammy for green vegetables."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Fresh peaches, nectarines, plums, tropical fruit",
+   "wines": [],
+   "avoid": [
+    "Banyuls"
+   ],
+   "page": 224,
+   "why": "Fortified Grenache struggles with fresh fruit."
+  },
+  {
+   "food": "Fish",
+   "dish": "All fish, even eel with prunes",
+   "wines": [
+    "Rosé (Malbec rosé)"
+   ],
+   "avoid": [
+    "Malbec"
+   ],
+   "page": 233,
+   "why": "Full red overwhelms fish; choose rosé."
+  },
+  {
+   "food": "Chicken",
+   "dish": "Cream sauces; sautéed chicken, veal or pork scaloppine, quail",
+   "wines": [],
+   "avoid": [
+    "Malbec"
+   ],
+   "page": 233,
+   "why": "Dairy makes it disjointed; delicate meats are overpowered."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Kung pao chicken, shrimp in lobster sauce",
+   "wines": [
+    "Rosé",
+    "Off-dry white"
+   ],
+   "avoid": [
+    "Malbec"
+   ],
+   "page": 233,
+   "why": "Most Asian fare doesn't suit it."
+  },
+  {
+   "food": "Seafood",
+   "dish": "Oysters, mussels, clams, sea snails",
+   "wines": [],
+   "avoid": [
+    "Mencía"
+   ],
+   "page": 239,
+   "why": "Briny shellfish strip all its charm."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Very spicy food",
+   "wines": [],
+   "avoid": [
+    "Mencía"
+   ],
+   "page": 239,
+   "why": "Fruit vanishes; oaky ones taste of spicy oak."
+  },
+  {
+   "food": "Pork",
+   "dish": "Dumplings with plum or hoisin sauce, foie gras with fig jam, caramelized onion tart",
+   "wines": [],
+   "avoid": [
+    "Mencía"
+   ],
+   "page": 239,
+   "why": "Slightly sweet starters challenge its mineral acidity."
+  },
+  {
+   "food": "Pasta and pizza",
+   "dish": "Pizza and burgers (exported Mencía)",
+   "wines": [],
+   "avoid": [
+    "Mencía"
+   ],
+   "page": 239,
+   "why": "Serious exported versions call for more serious food."
+  },
+  {
+   "food": "Pork",
+   "dish": "Roast pork loin, pork stir-fry, plain veal chop",
+   "wines": [],
+   "avoid": [
+    "Mourvèdre / Monastrell (red)"
+   ],
+   "page": 247,
+   "why": "Subtle white meats get lost."
+  },
+  {
+   "food": "Fish",
+   "dish": "Seafood",
+   "wines": [
+    "Rosé (Mourvèdre)"
+   ],
+   "avoid": [
+    "Mourvèdre / Monastrell (red)"
+   ],
+   "page": 247,
+   "why": "Red adds nothing to fish."
+  },
+  {
+   "food": "Pasta and pizza",
+   "dish": "Tomato sauces with robust styles; mildly sweet, tart or hot sauces",
+   "wines": [
+    "Mourvèdre / Monastrell (softer blends)"
+   ],
+   "avoid": [
+    "Mourvèdre / Monastrell (robust)"
+   ],
+   "page": 245,
+   "why": "Tomato makes big versions metallic."
+  },
+  {
+   "food": "Fish",
+   "dish": "Fish and shellfish",
+   "wines": [],
+   "avoid": [
+    "Nebbiolo"
+   ],
+   "page": 255,
+   "why": "Big wines clash; shellfish never."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Hot chili dishes",
+   "wines": [],
+   "avoid": [
+    "Nebbiolo"
+   ],
+   "page": 255,
+   "why": "Tannin plus capsaicin is a disaster."
+  },
+  {
+   "food": "Pork",
+   "dish": "Country ham, salt-and-pepper prawns, salty feta; light pork, chicken, quail, sweet peas",
+   "wines": [],
+   "avoid": [
+    "Nebbiolo"
+   ],
+   "page": 256,
+   "why": "Salt and light dishes fight its tannin and oak."
+  },
+  {
+   "food": "Cheese",
+   "dish": "Most strong cheeses with big Barolo (except truffled fonduta)",
+   "wines": [],
+   "avoid": [
+    "Nebbiolo"
+   ],
+   "page": 255,
+   "why": "Brawny Barolo pairs poorly with strong cheese."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Fiery-hot food",
+   "wines": [],
+   "avoid": [
+    "Petite Sirah"
+   ],
+   "page": 263,
+   "why": "Tannin and alcohol make heat painful."
+  },
+  {
+   "food": "Fish",
+   "dish": "Most fish, delicate food",
+   "wines": [],
+   "avoid": [
+    "Petite Sirah"
+   ],
+   "page": 264,
+   "why": "Too tannic and powerful."
+  },
+  {
+   "food": "Seafood",
+   "dish": "Oysters, clams, mussels; sushi such as toro, uni",
+   "wines": [],
+   "avoid": [
+    "Pinotage"
+   ],
+   "page": 271,
+   "why": "Bivalves and raw fish don't suit it."
+  },
+  {
+   "food": "Pork",
+   "dish": "Sweet-and-sour pork, apricot-glazed pork, candied-walnut chicken, mango salsa; rich cream sauces",
+   "wines": [],
+   "avoid": [
+    "Pinotage"
+   ],
+   "page": 272,
+   "why": "Sweet or creamy dishes clash."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Chocolate pancakes, chocolate truffle cake",
+   "wines": [],
+   "avoid": [
+    "Pinotage"
+   ],
+   "page": 270,
+   "why": "Dry Pinotage doesn't suit chocolate desserts."
+  },
+  {
+   "food": "Chicken",
+   "dish": "Chicken, Cornish hen, quail, poussin",
+   "wines": [],
+   "avoid": [
+    "Pinotage"
+   ],
+   "page": 272,
+   "why": "Too much for mild birds."
+  },
+  {
+   "food": "Fish",
+   "dish": "Any fish",
+   "wines": [],
+   "avoid": [
+    "Tannat"
+   ],
+   "page": 280,
+   "why": "The quintessential red that turns fish metallic."
+  },
+  {
+   "food": "Pork",
+   "dish": "Chicken, quail, turkey, pork, veal (with French Tannat)",
+   "wines": [],
+   "avoid": [
+    "Tannat"
+   ],
+   "page": 280,
+   "why": "Overwhelms mild white meats."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Asian and exotic spices, five spice, cardamom; sharp citrus sauces, pickles, vinaigrette salads",
+   "wines": [],
+   "avoid": [
+    "Tannat"
+   ],
+   "page": 280,
+   "why": "Exotic spice and sharpness highlight bitter tannin."
+  },
+  {
+   "food": "Cheese",
+   "dish": "Pungent blue cheeses",
+   "wines": [],
+   "avoid": [
+    "Tannat"
+   ],
+   "page": 279,
+   "why": "Mild rich cheeses work better."
+  },
+  {
+   "food": "Fish",
+   "dish": "Strongly flavored fish and shellfish",
+   "wines": [
+    "Rosé (Rioja rosado)"
+   ],
+   "avoid": [
+    "Tempranillo"
+   ],
+   "page": 289,
+   "why": "Even unoaked reds are hurt."
+  },
+  {
+   "food": "Fish",
+   "dish": "Endive, eggplant, escarole, chard; vinaigrette salads, pickles, asparagus, citrus, yogurt dressings",
+   "wines": [],
+   "avoid": [
+    "Tempranillo"
+   ],
+   "page": 289,
+   "why": "Bitter and sharp foods suffocate its fruit."
+  },
+  {
+   "food": "Cheese",
+   "dish": "Blue cheeses",
+   "wines": [
+    "Rosé (with mild Cambozola, Castello, Montbriac)"
+   ],
+   "avoid": [
+    "Tempranillo"
+   ],
+   "page": 289,
+   "why": "Every blue hurt the red wine."
+  },
+  {
+   "food": "Fish",
+   "dish": "Fish and shellfish",
+   "wines": [
+    "Rosé (Touriga)"
+   ],
+   "avoid": [
+    "Touriga Nacional"
+   ],
+   "page": 296,
+   "why": "Powerful reds clash with seafood."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Hot peppers; chili-spiked chocolate with port",
+   "wines": [],
+   "avoid": [
+    "Touriga Nacional",
+    "Port"
+   ],
+   "page": 296,
+   "why": "Heat reacts harshly with alcohol."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Plain berries",
+   "wines": [
+    "Sparkling"
+   ],
+   "avoid": [
+    "Port"
+   ],
+   "page": 296,
+   "why": "Berry acidity cuts into fortified wine; use as accent only."
+  },
+  {
+   "food": "Dessert",
+   "dish": "Intense chocolate with tawny; heavy mocha",
+   "wines": [
+    "Port (vintage or ruby)"
+   ],
+   "avoid": [
+    "Port (tawny)"
+   ],
+   "page": 296,
+   "why": "Subtle tawny is overpowered by intense chocolate."
+  },
+  {
+   "food": "Spicy food",
+   "dish": "Fiery heat",
+   "wines": [],
+   "avoid": [
+    "Xinomavro"
+   ],
+   "page": 303,
+   "why": "Burns out its elegance."
+  },
+  {
+   "food": "Pork",
+   "dish": "Sweet dishes; heavy cream, butter or mayonnaise sauces; bold dishes",
+   "wines": [],
+   "avoid": [
+    "Xinomavro"
+   ],
+   "page": 303,
+   "why": "Sweetness exaggerates acidity; rich dishes overwhelm it."
+  }
+ ],
+ "recipes": [
+  {
+   "title": "Steamed Manila Clams with Udon",
+   "chef": "Larry Tse, The House, San Francisco",
+   "page": 37,
+   "food": "Seafood",
+   "course": "main",
+   "protein": "Manila clams",
+   "wines": [
+    "Albariño"
+   ],
+   "why": "Clean dashi broth with seaweed and leek echoes the wine's minerality; salinity wants its acidity."
+  },
+  {
+   "title": "Grilled Snapper with Root Vegetable Salad",
+   "chef": "Lachlan M. Patterson, Frasca Food and Wine, Boulder",
+   "page": 43,
+   "food": "Fish",
+   "course": "main",
+   "protein": "red snapper",
+   "wines": [
+    "Arneis"
+   ],
+   "why": "Fresh raw vegetable slaw echoes the wine's freshness; mild white fish lets it sing."
+  },
+  {
+   "title": "Filet Bean and Scallop Salad",
+   "chef": "Anne S. Quatrano, Bacchanalia, Atlanta",
+   "page": 49,
+   "food": "Seafood",
+   "course": "starter",
+   "protein": "sea scallops",
+   "wines": [
+    "Assyrtiko"
+   ],
+   "why": "Gentle vinaigrette meets the wine's acid; toasted hazelnuts let oak-aged styles work too."
+  },
+  {
+   "title": "Mushroom Salad with Warm Goat Cheese Toasts",
+   "chef": "Loretta Keller, COCO500 and the Moss Room, San Francisco",
+   "page": 56,
+   "food": "Cheese",
+   "course": "starter",
+   "protein": "goat cheese (vegetarian)",
+   "wines": [
+    "Chenin Blanc"
+   ],
+   "why": "Tangy goat cheese meets Chenin's acidity; mushrooms echo Loire chalky minerality."
+  },
+  {
+   "title": "Grilled Branzino with Heirloom-Tomato Panzanella",
+   "chef": "Ethan Stowell, Union / Tavolàta / How to Cook a Wolf, Seattle",
+   "page": 62,
+   "food": "Fish",
+   "course": "starter",
+   "protein": "branzino (sea bass)",
+   "wines": [
+    "Garganega (Soave)"
+   ],
+   "why": "Tart-sweet tomatoes, basil and toasted bread salad bridge the fish to the wine."
+  },
+  {
+   "title": "Vegetable Pot-au-Feu with Toasted Spice Broth",
+   "chef": "Floyd Cardoz, Tabla, New York",
+   "page": 68,
+   "food": "Spicy food",
+   "course": "main",
+   "protein": "vegetables and lentils (vegetarian)",
+   "wines": [
+    "Grüner Veltliner"
+   ],
+   "why": "Sambhar-style spices pick up the wine's spice; sweet squash and carrots echo its ripeness."
+  },
+  {
+   "title": "Veal Chops with Aligot",
+   "chef": "Philippe Jeanty, Bistro Jeanty, Yountville",
+   "page": 76,
+   "food": "Red meat",
+   "course": "main",
+   "protein": "veal chops",
+   "wines": [
+    "Marsanne / Roussanne"
+   ],
+   "why": "Cheesy aligot potatoes share the wine's rich texture; veal is flavorful but not overpowering."
+  },
+  {
+   "title": "Almond Cake with a Warm Red Berry–Vanilla Compote",
+   "chef": "Emily Luchetti, Farallon and Waterbar, San Francisco",
+   "page": 86,
+   "food": "Dessert",
+   "course": "dessert",
+   "protein": "none (almond cake)",
+   "wines": [
+    "Muscat / Moscato",
+    "Black Muscat"
+   ],
+   "why": "Almond richness suits fortified styles, berries' acidity suits sparkling; spans nearly every sweet Muscat."
+  },
+  {
+   "title": "Hawaiian Burger with Pineapple–Macadamia Nut Relish",
+   "chef": "Hubert Keller, Fleur de Lys and Burger Bar, San Francisco / Las Vegas",
+   "page": 94,
+   "food": "Chicken",
+   "course": "main",
+   "protein": "ground chicken",
+   "wines": [
+    "Pinot Blanc",
+    "Crémant d'Alsace"
+   ],
+   "why": "Chicken instead of beef, mild macadamias, coconut and tart-sweet pineapple echo the wine."
+  },
+  {
+   "title": "Ras el Hanout Crab Salad with Onion Rings",
+   "chef": "Vikram Vij, Vij's, Vancouver",
+   "page": 102,
+   "food": "Seafood",
+   "course": "starter",
+   "protein": "crab",
+   "wines": [
+    "Prosecco"
+   ],
+   "why": "Sweet crab and coconut echo the wine; mild heat foils its sweetness; earthy spice plays well."
+  },
+  {
+   "title": "Lobster Cioppino",
+   "chef": "Richard Vellante, Legal Sea Foods, Boston",
+   "page": 109,
+   "food": "Seafood",
+   "course": "main",
+   "protein": "lobster, clams, mussels, scallops, shrimp",
+   "wines": [
+    "Marsanne / Roussanne"
+   ],
+   "why": "Lobster's rich texture loves Roussanne; low-tomato broth and creamy rouille avoid clashing."
+  },
+  {
+   "title": "Sherry-Roasted Figs with Crispy Streusel and Crème Fraîche",
+   "chef": "Kate Zuckerman (Chanterelle, New York)",
+   "page": 118,
+   "food": "Dessert",
+   "course": "dessert",
+   "protein": "none (figs)",
+   "wines": [
+    "Sémillon",
+    "Sauternes"
+   ],
+   "why": "Modest sweetness, fig fruit, streusel spice for oak and crème fraîche for texture suit every dessert Sémillon."
+  },
+  {
+   "title": "Peruvian Seafood Chowder",
+   "chef": "Michelle Bernstein, Michy's and Sra. Martinez, Miami",
+   "page": 125,
+   "food": "Seafood",
+   "course": "main",
+   "protein": "shrimp",
+   "wines": [
+    "Torrontés"
+   ],
+   "why": "Creamy texture, sweet corn and shrimp, and gentle chile heat show off the wine's fruit."
+  },
+  {
+   "title": "Louisiana Popcorn Rice and Wild Rice Pilaf with Crabmeat, Almonds, and Lemon",
+   "chef": "Susan Spicer, Bayona, New Orleans",
+   "page": 133,
+   "food": "Seafood",
+   "course": "main",
+   "protein": "crabmeat",
+   "wines": [
+    "Trebbiano"
+   ],
+   "why": "Sweet crab echoes the fruit; lemon and toasted almonds lift a simple wine without crushing it."
+  },
+  {
+   "title": "White Bean and Salt Cod Stew with Guindilla Peppers",
+   "chef": "Gerald Hirigoyen, Piperade and Bocadillos, San Francisco",
+   "page": 140,
+   "food": "Fish",
+   "course": "starter",
+   "protein": "salt cod",
+   "wines": [
+    "Txakoli (Hondarribi Zuri)"
+   ],
+   "why": "Salt cod is the classic Basque partner; beans and pickled peppers suit the zippy wine."
+  },
+  {
+   "title": "Shrimp Tartine with Fava Bean, Almond, and Mint Pesto",
+   "chef": "David Kinch, Manresa, Los Gatos",
+   "page": 146,
+   "food": "Seafood",
+   "course": "starter",
+   "protein": "shrimp",
+   "wines": [
+    "Verdejo"
+   ],
+   "why": "Green fava-mint pesto mirrors the wine; almonds, anchovy and bread balance its acidity."
+  },
+  {
+   "title": "Pan-Roasted Halibut with Melted Leeks and Meyer Lemon–Caper Butter",
+   "chef": "Craig Stoll, Delfina Restaurant, San Francisco",
+   "page": 153,
+   "food": "Fish",
+   "course": "main",
+   "protein": "halibut",
+   "wines": [
+    "Vermentino"
+   ],
+   "why": "Sweet halibut meets the wine's fruit; Meyer lemon echoes its citrus; creamy leeks match its texture."
+  },
+  {
+   "title": "Lasagna with Neapolitan Ragù",
+   "chef": "Joyce Goldstein, San Francisco (chef, author)",
+   "page": 163,
+   "food": "Pasta and pizza",
+   "course": "main",
+   "protein": "beef, veal and pork ragù",
+   "wines": [
+    "Aglianico"
+   ],
+   "why": "Meat and cream temper tomato acidity; rich enough for big modern or rustic Aglianico."
+  },
+  {
+   "title": "Juniper-Scented Chicken Liver Pâté on Crostini",
+   "chef": "Evan Kleiman, Angeli Caffe, Los Angeles",
+   "page": 171,
+   "food": "Chicken",
+   "course": "starter",
+   "protein": "chicken livers",
+   "wines": [
+    "Barbera"
+   ],
+   "why": "Acidity cuts the liver's richness; red fruit and spice pick up juniper and tomato."
+  },
+  {
+   "title": "Penne with Asparagus, Prosciutto, and Peppers",
+   "chef": "Michael Romano, Union Square Cafe, New York",
+   "page": 178,
+   "food": "Pasta and pizza",
+   "course": "main",
+   "protein": "prosciutto",
+   "wines": [
+    "Cabernet Franc"
+   ],
+   "why": "Asparagus, thyme and roasted peppers echo its green notes; buttery nuttiness suits oaked styles."
+  },
+  {
+   "title": "Warm Kabocha Squash Salad with Dandelion, Bacon, Roncal, and Pecans",
+   "chef": "Suzanne Goin, Lucques / A.O.C. / The Hungry Cat, Los Angeles",
+   "page": 185,
+   "food": "Pork",
+   "course": "starter",
+   "protein": "bacon",
+   "wines": [
+    "Carignan"
+   ],
+   "why": "Bitter greens and sweet squash play off its earthiness; cheese softens tannin; sherry vinaigrette meets its acid."
+  },
+  {
+   "title": "Lentil Soup with Fennel Sausages",
+   "chef": "Frank Stitt, Highlands Bar and Grill / Bottega / Chez Fonfon, Birmingham",
+   "page": 192,
+   "food": "Pork",
+   "course": "main",
+   "protein": "fennel sausage",
+   "wines": [
+    "Carmenère"
+   ],
+   "why": "Lentils' green earthiness and sausage spice suit the dusty, herbal wine."
+  },
+  {
+   "title": "Duck Basteeya",
+   "chef": "Mourad Lahlou, Aziza, San Francisco",
+   "page": 199,
+   "food": "Chicken",
+   "course": "starter",
+   "protein": "duck",
+   "wines": [
+    "Cinsaut",
+    "Rosé"
+   ],
+   "why": "Cinnamon and gentle sweetness enhance a full rosé's fruit; duck's texture suits the weight."
+  },
+  {
+   "title": "Wild Salmon with Dolcetto Wine Sauce, Chanterelles, and Brussels Sprout Leaves",
+   "chef": "Paul Bartolotta, Bartolotta Ristorante di Mare, Las Vegas",
+   "page": 207,
+   "food": "Fish",
+   "course": "main",
+   "protein": "wild salmon",
+   "wines": [
+    "Dolcetto"
+   ],
+   "why": "Red wine sauce links fish to wine; porcini and chanterelles bridge to Piedmont reds."
+  },
+  {
+   "title": "Salad of Cornish Game Hen with Shiitake Mushroom Vinaigrette",
+   "chef": "Charlie Trotter, Charlie Trotter's, Chicago",
+   "page": 216,
+   "food": "Chicken",
+   "course": "starter",
+   "protein": "Cornish game hen",
+   "wines": [
+    "Gamay"
+   ],
+   "why": "Creamy earthy mushroom dressing and dried cranberries suit Gamay's tart red fruit and earthiness."
+  },
+  {
+   "title": "Roasted Chicken with Fingerling Potatoes and Fava Bean and Cipollini Onion Salad",
+   "chef": "Laurent Manrique, Café de la Presse, San Francisco",
+   "page": 225,
+   "food": "Chicken",
+   "course": "main",
+   "protein": "chicken",
+   "wines": [
+    "Grenache / Garnacha",
+    "Rosé"
+   ],
+   "why": "Roast chicken and Grenache is a favorite; bacon bridges peppery GSMs; waxy potatoes match richness."
+  },
+  {
+   "title": "Braised Shank of Beef",
+   "chef": "Fergus Henderson, St. John, London",
+   "page": 234,
+   "food": "Red meat",
+   "course": "main",
+   "protein": "beef shank",
+   "wines": [
+    "Malbec"
+   ],
+   "why": "Unctuous slow-braised meat coaxes out the wine's velvety side."
+  },
+  {
+   "title": "Seared Tuna with Braised Cabbage and Roasted Mushrooms",
+   "chef": "Douglas Keane, Cyrus and Healdsburg Bar and Grill, Healdsburg",
+   "page": 240,
+   "food": "Fish",
+   "course": "main",
+   "protein": "ahi tuna",
+   "wines": [
+    "Mencía"
+   ],
+   "why": "Tuna carries a red; mushrooms, bacon and cabbage link to its earthy, green notes."
+  },
+  {
+   "title": "Barbecued Turkey Skewers with Caramelized Sage Onions",
+   "chef": "Cindy Pawlcyn, Mustards Grill, Napa Valley",
+   "page": 248,
+   "food": "Chicken",
+   "course": "main",
+   "protein": "turkey thighs",
+   "wines": [
+    "Mourvèdre / Monastrell",
+    "Rosé"
+   ],
+   "why": "Grilling, brined turkey and tangy pomegranate molasses suit red and rosé styles."
+  },
+  {
+   "title": "Braised Duck Leg in Ragù with Chestnut Polenta and Green Olives",
+   "chef": "Nate Appleman, Pulino's Bar and Pizzeria, New York",
+   "page": 257,
+   "food": "Chicken",
+   "course": "main",
+   "protein": "duck legs",
+   "wines": [
+    "Nebbiolo"
+   ],
+   "why": "Rich slow-braised duck cancels tannin; chestnuts' sweetness lifts fruit; olives bridge."
+  },
+  {
+   "title": "Mixed Grill",
+   "chef": "Christopher Gross, Christopher's and Crush Lounge, Phoenix",
+   "page": 265,
+   "food": "Red meat",
+   "course": "main",
+   "protein": "lamb chops, beef, chicken, merguez sausage",
+   "wines": [
+    "Petite Sirah"
+   ],
+   "why": "Varied grilled proteins stand up to its tannin; meat juices soften the dressing."
+  },
+  {
+   "title": "Roasted Pork Shoulder with Pan-Roasted Carrots",
+   "chef": "Michael Leviton, Lumière, Newton, Massachusetts",
+   "page": 273,
+   "food": "Pork",
+   "course": "main",
+   "protein": "pork shoulder",
+   "wines": [
+    "Pinotage"
+   ],
+   "why": "Game-style marinade and slow cooking soften tannins; spices echo the wine's brown spice."
+  },
+  {
+   "title": "Rustic Beef Stew with Prunes and Guajillo Chile Sauce",
+   "chef": "Robert Del Grande, RDG + Bar Annie, Houston",
+   "page": 281,
+   "food": "Red meat",
+   "course": "main",
+   "protein": "beef chuck",
+   "wines": [
+    "Tannat"
+   ],
+   "why": "Prunes bridge to black fruit; toasted nuts suit oak; salt balances tannin and fruit."
+  },
+  {
+   "title": "Roast Rack of Lamb with Creamy Rice with Parsnips",
+   "chef": "Dan Barber, Blue Hill, New York",
+   "page": 290,
+   "food": "Lamb",
+   "course": "main",
+   "protein": "rack of lamb",
+   "wines": [
+    "Tempranillo"
+   ],
+   "why": "Earthy grass-fed lamb and sweet creamy parsnip rice bring out fruit; rare lamb suits aged reserva."
+  },
+  {
+   "title": "Grilled Pork Chops with Dried Cherry, Bacon, and Vidalia Onion Conserve",
+   "chef": "Ben Barker, Magnolia Grill, Durham, North Carolina",
+   "page": 297,
+   "food": "Pork",
+   "course": "main",
+   "protein": "pork rib chops",
+   "wines": [
+    "Touriga Nacional"
+   ],
+   "why": "Smoky grilling, sweet spice and dried-cherry conserve echo the wine's plum, cherry and pepper."
+  },
+  {
+   "title": "Grilled Lamb Skewers with Xinomavro and Honey Glaze",
+   "chef": "Tom Douglas, Dahlia Lounge / Palace Kitchen / Lola, Seattle",
+   "page": 304,
+   "food": "Lamb",
+   "course": "main",
+   "protein": "leg of lamb",
+   "wines": [
+    "Xinomavro"
+   ],
+   "why": "Gamy grilled lamb and peppery reduced-wine glaze echo the wine; parsley salad points up its herbal side."
+  }
+ ],
+ "regions": [
+  {
+   "place": "Spain (Galicia, Rías Baixas)",
+   "grapes": [
+    "Albariño",
+    "Treixadura",
+    "Loureiro",
+    "Caiño",
+    "Godello"
+   ],
+   "foods": [
+    "Octopus with pimentón",
+    "Percebes (goose barnacles)",
+    "Seafood tapas",
+    "Caldo gallego",
+    "Chorizo"
+   ],
+   "page": 35
+  },
+  {
+   "place": "Portugal (Minho, Vinho Verde)",
+   "grapes": [
+    "Alvarinho",
+    "Loureiro",
+    "Trajadura",
+    "Arinto"
+   ],
+   "foods": [
+    "Bacalhau (salt cod) croquettes",
+    "Rich stews"
+   ],
+   "page": 35
+  },
+  {
+   "place": "Italy (Piedmont)",
+   "grapes": [
+    "Arneis",
+    "Erbaluce",
+    "Moscato"
+   ],
+   "foods": [
+    "Ligurian seafood",
+    "Summer produce"
+   ],
+   "page": 44
+  },
+  {
+   "place": "Greece (Santorini)",
+   "grapes": [
+    "Assyrtiko",
+    "Athiri",
+    "Aidani"
+   ],
+   "foods": [
+    "Fresh fish and octopus",
+    "Dolmas",
+    "Tzatziki",
+    "Roast lamb with avgolemono",
+    "Feta"
+   ],
+   "page": 47
+  },
+  {
+   "place": "France (Loire Valley)",
+   "grapes": [
+    "Chenin Blanc",
+    "Cabernet Franc"
+   ],
+   "foods": [
+    "Goat cheese",
+    "Pork with apples",
+    "Fruit tarts"
+   ],
+   "page": 52
+  },
+  {
+   "place": "Italy (Veneto)",
+   "grapes": [
+    "Garganega (Soave)",
+    "Trebbiano"
+   ],
+   "foods": [
+    "Panettone with Recioto",
+    "Pesto dishes",
+    "Crab risotto"
+   ],
+   "page": 60
+  },
+  {
+   "place": "Austria (Wachau, Kamptal, Kremstal, Vienna)",
+   "grapes": [
+    "Grüner Veltliner"
+   ],
+   "foods": [
+    "Wiener schnitzel",
+    "Wurst and charcuterie",
+    "Heurigen tavern food"
+   ],
+   "page": 66
+  },
+  {
+   "place": "France (Rhône Valley)",
+   "grapes": [
+    "Marsanne / Roussanne",
+    "Viognier",
+    "Syrah / Shiraz",
+    "Grenache / Garnacha"
+   ],
+   "foods": [
+    "Brandade (Provençal salt cod)",
+    "Bistro food"
+   ],
+   "page": 73
+  },
+  {
+   "place": "Greece (Samos, Patras, Cephalonia)",
+   "grapes": [
+    "Muscat / Moscato"
+   ],
+   "foods": [
+    "Greek yogurt with honey and nuts"
+   ],
+   "page": 79
+  },
+  {
+   "place": "Spain (Málaga, Jerez)",
+   "grapes": [
+    "Moscatel",
+    "Pedro Ximénez"
+   ],
+   "foods": [
+    "Cabrales blue cheese",
+    "Nut and caramel desserts"
+   ],
+   "page": 84
+  },
+  {
+   "place": "Portugal (Setúbal)",
+   "grapes": [
+    "Moscatel de Setúbal"
+   ],
+   "foods": [
+    "Dried fruit and nut desserts"
+   ],
+   "page": 80
+  },
+  {
+   "place": "Italy (Sicily, Pantelleria)",
+   "grapes": [
+    "Zibibbo (Muscat of Alexandria)"
+   ],
+   "foods": [
+    "Gorgonzola"
+   ],
+   "page": 84
+  },
+  {
+   "place": "France (Alsace)",
+   "grapes": [
+    "Pinot Blanc",
+    "Auxerrois",
+    "Muscat / Moscato",
+    "Pinot Grigio / Gris",
+    "Riesling",
+    "Gewürztraminer"
+   ],
+   "foods": [
+    "Blanquette de veau",
+    "Charcuterie",
+    "Munster cheese"
+   ],
+   "page": 90
+  },
+  {
+   "place": "Canada (British Columbia: Okanagan, Vancouver Island)",
+   "grapes": [
+    "Pinot Blanc"
+   ],
+   "foods": [
+    "Ice wine with desserts"
+   ],
+   "page": 90
+  },
+  {
+   "place": "Italy (Veneto)",
+   "grapes": [
+    "Prosecco"
+   ],
+   "foods": [
+    "Wild game with polenta",
+    "Porcini and chestnuts",
+    "Salumi",
+    "Antipasti"
+   ],
+   "page": 99
+  },
+  {
+   "place": "France (Bordeaux, Sauternes)",
+   "grapes": [
+    "Sémillon",
+    "Sauvignon Blanc",
+    "Muscadelle"
+   ],
+   "foods": [
+    "Roquefort",
+    "Foie gras",
+    "Fruit desserts"
+   ],
+   "page": 113
+  },
+  {
+   "place": "Australia (Hunter Valley)",
+   "grapes": [
+    "Sémillon"
+   ],
+   "foods": [
+    "Honey-glazed grilled poultry",
+    "Gratins"
+   ],
+   "page": 115
+  },
+  {
+   "place": "Argentina (Salta, Mendoza, La Rioja)",
+   "grapes": [
+    "Torrontés",
+    "Malbec"
+   ],
+   "foods": [
+    "Beef and raisin empanadas",
+    "Asado"
+   ],
+   "page": 123
+  },
+  {
+   "place": "Italy (Tuscany)",
+   "grapes": [
+    "Trebbiano",
+    "Malvasia",
+    "Vin Santo",
+    "Sangiovese",
+    "Vermentino"
+   ],
+   "foods": [
+    "Biscotti with Vin Santo"
+   ],
+   "page": 129
+  },
+  {
+   "place": "Spain (Basque Country, San Sebastián)",
+   "grapes": [
+    "Txakoli (Hondarribi Zuri)",
+    "Hondarribi Beltza"
+   ],
+   "foods": [
+    "Pintxos",
+    "Salt cod",
+    "Squid",
+    "Marcona almonds",
+    "Chorizo"
+   ],
+   "page": 137
+  },
+  {
+   "place": "Spain (Rueda, Castilla-León)",
+   "grapes": [
+    "Verdejo",
+    "Sauvignon Blanc",
+    "Viura"
+   ],
+   "foods": [
+    "Green spring vegetables",
+    "Herbed grilled chicken"
+   ],
+   "page": 143
+  },
+  {
+   "place": "Italy (Sardinia, Gallura)",
+   "grapes": [
+    "Vermentino",
+    "Cannonau (Grenache)",
+    "Carignano"
+   ],
+   "foods": [
+    "Raw fish",
+    "Fritto misto",
+    "Seafood pasta"
+   ],
+   "page": 149
+  },
+  {
+   "place": "France (Corsica, Patrimonio)",
+   "grapes": [
+    "Vermentino"
+   ],
+   "foods": [
+    "Pork and veal",
+    "Charcuterie"
+   ],
+   "page": 149
+  },
+  {
+   "place": "Italy (Campania, Basilicata)",
+   "grapes": [
+    "Aglianico",
+    "Fiano",
+    "Greco"
+   ],
+   "foods": [
+    "Neapolitan lasagna",
+    "Ragù",
+    "Rustic stews and roasts"
+   ],
+   "page": 160
+  },
+  {
+   "place": "Italy (Piedmont)",
+   "grapes": [
+    "Barbera",
+    "Nebbiolo",
+    "Dolcetto",
+    "Arneis",
+    "Moscato"
+   ],
+   "foods": [
+    "Salumi",
+    "Truffles and mushrooms",
+    "Risotto",
+    "Antipasti",
+    "Chicken liver crostini"
+   ],
+   "page": 169
+  },
+  {
+   "place": "France (Loire: Chinon, Bourgueil)",
+   "grapes": [
+    "Cabernet Franc",
+    "Chenin Blanc"
+   ],
+   "foods": [
+    "Goat cheese",
+    "Herb-roasted meats"
+   ],
+   "page": 174
+  },
+  {
+   "place": "Canada (Okanagan, Ontario)",
+   "grapes": [
+    "Cabernet Franc",
+    "Pinot Blanc"
+   ],
+   "foods": [
+    "Ice wine with chocolate and berry desserts"
+   ],
+   "page": 175
+  },
+  {
+   "place": "France (Languedoc-Roussillon)",
+   "grapes": [
+    "Carignan",
+    "Grenache / Garnacha",
+    "Cinsaut",
+    "Mourvèdre / Monastrell",
+    "Syrah / Shiraz",
+    "Muscat / Moscato"
+   ],
+   "foods": [
+    "Cassoulet",
+    "Banyuls with chocolate"
+   ],
+   "page": 181
+  },
+  {
+   "place": "North Africa (Morocco, Algeria, Tunisia)",
+   "grapes": [
+    "Carignan",
+    "Cinsaut"
+   ],
+   "foods": [
+    "Couscous",
+    "Tagines",
+    "Duck basteeya"
+   ],
+   "page": 181
+  },
+  {
+   "place": "Chile (Colchagua, Cachapoal, Aconcagua)",
+   "grapes": [
+    "Carmenère",
+    "Cabernet Sauvignon",
+    "Merlot"
+   ],
+   "foods": [
+    "Smoked meats",
+    "Lentils"
+   ],
+   "page": 189
+  },
+  {
+   "place": "Lebanon (Bekaa Valley)",
+   "grapes": [
+    "Cinsaut",
+    "Cabernet Sauvignon"
+   ],
+   "foods": [
+    "Rustic stews",
+    "Spiced meats"
+   ],
+   "page": 195
+  },
+  {
+   "place": "France (Tavel, southern Rhône, Provence)",
+   "grapes": [
+    "Cinsaut",
+    "Grenache / Garnacha",
+    "Rosé"
+   ],
+   "foods": [
+    "Salade niçoise",
+    "Ratatouille",
+    "Bouillabaisse-style seafood"
+   ],
+   "page": 197
+  },
+  {
+   "place": "France (Beaujolais)",
+   "grapes": [
+    "Gamay"
+   ],
+   "foods": [
+    "Charolais beef",
+    "Steak tartare",
+    "Charcuterie"
+   ],
+   "page": 214
+  },
+  {
+   "place": "Spain (Navarra)",
+   "grapes": [
+    "Grenache / Garnacha",
+    "Rosé"
+   ],
+   "foods": [
+    "Gambas a la plancha",
+    "Seafood"
+   ],
+   "page": 222
+  },
+  {
+   "place": "Spain (Priorat, Montsant)",
+   "grapes": [
+    "Grenache / Garnacha",
+    "Carignan"
+   ],
+   "foods": [
+    "Lamb"
+   ],
+   "page": 221
+  },
+  {
+   "place": "France (Roussillon: Banyuls, Maury)",
+   "grapes": [
+    "Grenache / Garnacha",
+    "Carignan",
+    "Muscat / Moscato"
+   ],
+   "foods": [
+    "Dark chocolate desserts",
+    "Blue cheese"
+   ],
+   "page": 220
+  },
+  {
+   "place": "Argentina (Mendoza)",
+   "grapes": [
+    "Malbec",
+    "Bonarda",
+    "Torrontés"
+   ],
+   "foods": [
+    "Asado with chimichurri",
+    "Empanadas"
+   ],
+   "page": 232
+  },
+  {
+   "place": "France (Southwest: Cahors, Gascony)",
+   "grapes": [
+    "Malbec",
+    "Tannat"
+   ],
+   "foods": [
+    "Cassoulet",
+    "Roquefort"
+   ],
+   "page": 232
+  },
+  {
+   "place": "Spain (Bierzo, Galicia)",
+   "grapes": [
+    "Mencía",
+    "Godello",
+    "Albariño"
+   ],
+   "foods": [
+    "Cocido (meat stew)",
+    "Chorizo",
+    "Morcilla",
+    "Squab"
+   ],
+   "page": 236
+  },
+  {
+   "place": "Portugal (Dão)",
+   "grapes": [
+    "Jaen (Mencía)",
+    "Touriga Nacional",
+    "Alfrocheiro"
+   ],
+   "foods": [
+    "Hearty meats"
+   ],
+   "page": 237
+  },
+  {
+   "place": "France (Provence, Bandol)",
+   "grapes": [
+    "Mourvèdre / Monastrell",
+    "Cinsaut",
+    "Grenache / Garnacha"
+   ],
+   "foods": [
+    "Duck with olives",
+    "Brandade",
+    "Marinated sardines",
+    "Ratatouille"
+   ],
+   "page": 244
+  },
+  {
+   "place": "Spain (Murcia: Jumilla, Yecla)",
+   "grapes": [
+    "Mourvèdre / Monastrell",
+    "Grenache / Garnacha"
+   ],
+   "foods": [
+    "Tapas",
+    "Chorizo",
+    "Fried olives"
+   ],
+   "page": 244
+  },
+  {
+   "place": "Italy (Piedmont, Barolo/Barbaresco)",
+   "grapes": [
+    "Nebbiolo"
+   ],
+   "foods": [
+    "Brasato al Barolo",
+    "White truffles",
+    "Fonduta",
+    "Porcini"
+   ],
+   "page": 254
+  },
+  {
+   "place": "South Africa (Stellenbosch, Paarl)",
+   "grapes": [
+    "Pinotage",
+    "Chenin Blanc",
+    "Cinsaut"
+   ],
+   "foods": [
+    "Braai",
+    "Biltong",
+    "Snoek"
+   ],
+   "page": 270
+  },
+  {
+   "place": "Uruguay (Canelones)",
+   "grapes": [
+    "Tannat",
+    "Merlot"
+   ],
+   "foods": [
+    "Grilled meats"
+   ],
+   "page": 277
+  },
+  {
+   "place": "France (Madiran, Gascony, Irouléguy)",
+   "grapes": [
+    "Tannat",
+    "Cabernet Franc",
+    "Malbec"
+   ],
+   "foods": [
+    "Duck confit",
+    "Cassoulet",
+    "Armagnac"
+   ],
+   "page": 278
+  },
+  {
+   "place": "Spain (Rioja, Navarra)",
+   "grapes": [
+    "Tempranillo",
+    "Grenache / Garnacha",
+    "Carignan",
+    "Graciano",
+    "Viura"
+   ],
+   "foods": [
+    "Lamb",
+    "Chorizo",
+    "Jamón",
+    "Cochinillo (suckling pig)"
+   ],
+   "page": 287
+  },
+  {
+   "place": "Spain (Ribera del Duero, Toro)",
+   "grapes": [
+    "Tempranillo"
+   ],
+   "foods": [
+    "Wood-oven roast baby lamb"
+   ],
+   "page": 287
+  },
+  {
+   "place": "Portugal (Douro, Dão)",
+   "grapes": [
+    "Touriga Nacional",
+    "Tinta Roriz (Tempranillo)",
+    "Touriga Franca",
+    "Jaen (Mencía)",
+    "Port"
+   ],
+   "foods": [
+    "Lamb",
+    "Beef daube",
+    "Stilton with port",
+    "Toffee desserts"
+   ],
+   "page": 293
+  },
+  {
+   "place": "Greece (Macedonia: Naoussa, Amyndeo)",
+   "grapes": [
+    "Xinomavro",
+    "Negoska",
+    "Assyrtiko"
+   ],
+   "foods": [
+    "Lamb",
+    "Moussaka",
+    "Octopus",
+    "Feta",
+    "Greek salad",
+    "Dolmas"
+   ],
+   "page": 302
+  }
+ ],
+ "principles": [
+  {
+   "rule": "Wine acidity is the most important pairing factor; tart wines cut rich, salty, oily, fried or mildly spicy dishes like a squeeze of lemon.",
+   "page": 11
+  },
+  {
+   "rule": "With sharp foods (vinaigrette salads, capers, tomatoes, leeks) the wine must be at least as tart as the dish or it tastes thin.",
+   "page": 12
+  },
+  {
+   "rule": "High-acid whites and sparkling wines handle salty food better than most reds; tannin makes salt seem stronger.",
+   "page": 12
+  },
+  {
+   "rule": "Low-acid whites such as Trebbiano or Marsanne are harder to pair; give them mild dishes with a squeeze of citrus.",
+   "page": 12
+  },
+  {
+   "rule": "Off-dry wines tame moderate chili heat and echo slightly sweet fruit sauces, chutneys and salsas.",
+   "page": 13
+  },
+  {
+   "rule": "Sweet wine against salty food (Sauternes with Roquefort, port with Stilton) works but needs testing.",
+   "page": 13
+  },
+  {
+   "rule": "A dessert wine must be at least as sweet as the dessert; dry bubbly with sugary frosting tastes sour.",
+   "page": 13
+  },
+  {
+   "rule": "Grilled, charred or naturally bitter foods flatter tannic reds; fat and protein in rare red meat soften tannin.",
+   "page": 14
+  },
+  {
+   "rule": "Hard aged cheeses can make tannic reds taste metallic, and stinky soft cheeses bring out ammonia notes in big reds.",
+   "page": 14
+  },
+  {
+   "rule": "Tannic reds with oily fish give a metallic taste; low-tannin reds like Gamay manage fish far better.",
+   "page": 14
+  },
+  {
+   "rule": "Food amplifies oak; match oaky wines with grilled, smoked, blackened or caramelized dishes, and prefer unoaked wines for flexibility.",
+   "page": 15
+  },
+  {
+   "rule": "Match the weight of wine and dish: medium reds (Barbera, Pinotage) with roast chicken, rich Aglianico with lasagna.",
+   "page": 16
+  },
+  {
+   "rule": "Salt and chili heat make high-alcohol wines taste hotter; keep powerful wines away from spicy food.",
+   "page": 16
+  },
+  {
+   "rule": "Cured meats like prosciutto or bacon can steer fish, poultry or pork dishes toward light reds and rosés.",
+   "page": 19
+  },
+  {
+   "rule": "Delicate herbs suit Assyrtiko and Arneis; pungent herbs like rosemary and basil suit Verdejo, Carmenère and Cabernet Franc.",
+   "page": 19
+  },
+  {
+   "rule": "Green olives push a dish toward Vermentino, Albariño or Verdejo; black olives toward Carmenère, Cinsaut or Mencía.",
+   "page": 19
+  },
+  {
+   "rule": "Dark mushrooms make most dishes red-friendly; light creamy mushrooms favor textured whites like Roussanne and Marsanne.",
+   "page": 19
+  },
+  {
+   "rule": "Serving fish on green lentils or beans lets it pair with red wine.",
+   "page": 19
+  },
+  {
+   "rule": "The sauce usually dictates the wine; rich buttery or creamy sauces want textured wines like Roussanne, Torrontés or Grenache.",
+   "page": 20
+  },
+  {
+   "rule": "Side dishes and condiments can matter more than the main ingredient when choosing wine.",
+   "page": 21
+  },
+  {
+   "rule": "Use juicy fruity reds (Rioja joven, Beaujolais, Dolcetto) for sangria; peaches macerated in good Moscato d'Asti.",
+   "page": 23
+  },
+  {
+   "rule": "With tart food avoid most reds; only sharp reds like Barbera, Xinomavro or Gamay cope, and rosé or sparkling are good options.",
+   "page": 24
+  },
+  {
+   "rule": "Slightly sweet dishes need a slightly sweet wine such as Chenin Blanc, Prosecco or Muscat.",
+   "page": 24
+  },
+  {
+   "rule": "Salty dishes want low-to-moderate alcohol wines, perhaps with a touch of sweetness, and no heavy oak or tannin.",
+   "page": 24
+  },
+  {
+   "rule": "For spicy dishes choose young, low-alcohol, unoaked, off-dry whites or rosés, or sparkling; very fiery food calls for beer.",
+   "page": 24
+  },
+  {
+   "rule": "Aged reds suit simple rare meats; aged whites suit nutty, dried-fruit or sherry flavors plus a touch of citrus.",
+   "page": 24
+  },
+  {
+   "rule": "Very hot-temperature dishes exaggerate alcohol; let them cool or serve chilled wine.",
+   "page": 24
+  },
+  {
+   "rule": "Assyrtiko often feels too intense alone; serve it with at least olives or nuts.",
+   "page": 48
+  },
+  {
+   "rule": "Treat Chenin Blanc like Riesling: pick dry, off-dry, sparkling or sweet to suit the dish, never mismatched.",
+   "page": 54
+  },
+  {
+   "rule": "Grüner Veltliner craves food; even sushi or olives beat drinking it alone.",
+   "page": 67
+  },
+  {
+   "rule": "Too much salt in a dish (e.g. salty clams) spikes a rich white's alcohol and dulls its fruit.",
+   "page": 111
+  },
+  {
+   "rule": "Light spritzy whites like Txakoli can stand in for pilsner beer with bar snacks, wings and pizza.",
+   "page": 138
+  },
+  {
+   "rule": "Treat sherry-style whites like dry sherry: olives, nuts, semi-hard cheese, seafood, brothy soups.",
+   "page": 144
+  },
+  {
+   "rule": "Pure tomato sauce can strip big reds; tomato within a meaty sauce brings out their fruit.",
+   "page": 161
+  },
+  {
+   "rule": "In Piedmont, drink Barbera with antipasti and pasta, then move to Barolo or Barbaresco for the main course.",
+   "page": 169
+  },
+  {
+   "rule": "If the wine is oaky, play to the oak with grilling, char and smoky flavors.",
+   "page": 175
+  },
+  {
+   "rule": "Dry rosé is a serious food wine: almost any fish or shellfish, Chinese family meals, paella and gumbo.",
+   "page": 196
+  },
+  {
+   "rule": "Classic red-wine-with-fish matches: salmon with Dolcetto or Pinot Noir, tuna with Merlot; a red wine sauce links them.",
+   "page": 209
+  },
+  {
+   "rule": "Light fruity reds (Dolcetto, Gamay, Barbera) improve with a light chill for picnics and spicy food.",
+   "page": 206
+  },
+  {
+   "rule": "Malbec breaks the rule that big reds dislike strong cheese: it handles Roquefort and Gorgonzola.",
+   "page": 233
+  },
+  {
+   "rule": "Wines with herbal notes shine when herbs go on the grill or into marinades and sauces.",
+   "page": 238
+  },
+  {
+   "rule": "Pomegranate molasses gives tang without hurting red wine the way vinegar does.",
+   "page": 250
+  },
+  {
+   "rule": "Older reds need simple, juicy food: rare meat, or a little prune purée or tomato paste in the sauce.",
+   "page": 254
+  },
+  {
+   "rule": "Salt exaggerates alcohol and hard tannin; with tannic reds season lightly and add more at the end.",
+   "page": 283
+  },
+  {
+   "rule": "Wine age game: the rarer the meat, the older the wine; serve stews and long-cooked cuts with young wines.",
+   "page": 288
+  },
+  {
+   "rule": "Tempranillo can carry a whole meal: rosado to start, young red with the first course, a fuller one with the main.",
+   "page": 288
+  },
+  {
+   "rule": "For vegetarian dishes reach for high-acid reds: Cabernet Franc, Carmenère and Xinomavro.",
+   "page": 302
+  },
+  {
+   "rule": "Reducing the same wine to a glaze, rather than marinating in it, keeps meat texture and links dish to wine.",
+   "page": 306
+  }
+ ],
+ "cheese": [
+  {
+   "cheese": "Roquefort and other blue cheese",
+   "wines": [
+    "Sauternes"
+   ],
+   "page": 13
+  },
+  {
+   "cheese": "Stilton",
+   "wines": [
+    "Port"
+   ],
+   "page": 13
+  },
+  {
+   "cheese": "Fresh chèvre, mozzarella, ricotta",
+   "wines": [
+    "Albariño"
+   ],
+   "page": 36
+  },
+  {
+   "cheese": "Tetilla (Spain), slightly aged chèvre",
+   "wines": [
+    "Albariño"
+   ],
+   "page": 36
+  },
+  {
+   "cheese": "Brie, Explorateur",
+   "wines": [
+    "Albariño"
+   ],
+   "page": 36
+  },
+  {
+   "cheese": "Manchego (Spain), queijo de Évora (Portugal)",
+   "wines": [
+    "Albariño"
+   ],
+   "page": 36
+  },
+  {
+   "cheese": "Burrata, chèvre, Havarti, stracchino, Chaource, pavé d'affinois, mild Cheddar, Fontina, ricotta salata",
+   "wines": [
+    "Arneis"
+   ],
+   "page": 42
+  },
+  {
+   "cheese": "Feta (Greece, Bulgaria), chèvre",
+   "wines": [
+    "Assyrtiko"
+   ],
+   "page": 48
+  },
+  {
+   "cheese": "Crescenza, teleme, Brie, tetilla",
+   "wines": [
+    "Assyrtiko"
+   ],
+   "page": 48
+  },
+  {
+   "cheese": "Asiago, pecorino, raclette",
+   "wines": [
+    "Assyrtiko"
+   ],
+   "page": 48
+  },
+  {
+   "cheese": "Gouda, Gruyère",
+   "wines": [
+    "Vinsanto (Santorini)"
+   ],
+   "page": 48
+  },
+  {
+   "cheese": "Chèvre (dry); fromage blanc, ricotta (off-dry); teleme, Boursault, Brie (dry)",
+   "wines": [
+    "Chenin Blanc"
+   ],
+   "page": 55
+  },
+  {
+   "cheese": "Cantal, Iberico, Parmesan, aged Cheddar",
+   "wines": [
+    "Chenin Blanc (sparkling)"
+   ],
+   "page": 55
+  },
+  {
+   "cheese": "Cambozola, Gorgonzola dolcelatte",
+   "wines": [
+    "Chenin Blanc (moelleux or sweet)"
+   ],
+   "page": 55
+  },
+  {
+   "cheese": "Taleggio (dry or off-dry), Morbier (off-dry or sparkling)",
+   "wines": [
+    "Chenin Blanc"
+   ],
+   "page": 55
+  },
+  {
+   "cheese": "Chèvre, feta, Boursin, stracchino, Brie, pavé d'affinois, mild white Cheddar, Fontina",
+   "wines": [
+    "Garganega (Soave)"
+   ],
+   "page": 61
+  },
+  {
+   "cheese": "Cambozola, Gorgonzola dolcelatte",
+   "wines": [
+    "Recioto di Soave"
+   ],
+   "page": 61
+  },
+  {
+   "cheese": "Chaource, pavé d'affinois, robiola, Garrotxa, Gruyère",
+   "wines": [
+    "Grüner Veltliner"
+   ],
+   "page": 67
+  },
+  {
+   "cheese": "Aged Cheddar, mimolette, Époisses, Munster",
+   "wines": [
+    "Grüner Veltliner"
+   ],
+   "page": 67
+  },
+  {
+   "cheese": "Cabrales, Cambozola",
+   "wines": [
+    "Grüner Veltliner (off-dry or sweet)"
+   ],
+   "page": 67
+  },
+  {
+   "cheese": "Havarti, tetilla, Brillat-Savarin, Camembert, Emmentaler, tomme de Savoie, Munster, Serra (Portugal)",
+   "wines": [
+    "Marsanne / Roussanne"
+   ],
+   "page": 75
+  },
+  {
+   "cheese": "Aged Asiago, aged white Cheddar",
+   "wines": [
+    "Sparkling (St.-Péray Marsanne)"
+   ],
+   "page": 75
+  },
+  {
+   "cheese": "Mascarpone, ricotta",
+   "wines": [
+    "Moscato d'Asti / Asti Spumante"
+   ],
+   "page": 85
+  },
+  {
+   "cheese": "Brillat-Savarin, Camembert, Gruyère, raclette, Taleggio",
+   "wines": [
+    "Muscat / Moscato (dry, off-dry, late-harvest)"
+   ],
+   "page": 85
+  },
+  {
+   "cheese": "Gorgonzola with Moscato di Pantelleria; Cabrales with Muscat sherry or Málaga; bleu d'Auvergne with Beaumes de Venise; Roquefort, Maytag",
+   "wines": [
+    "Muscat / Moscato (late-harvest, fortified)"
+   ],
+   "page": 84
+  },
+  {
+   "cheese": "Époisses, Munster, Serra (Portugal)",
+   "wines": [
+    "Muscat / Moscato (off-dry, late-harvest)"
+   ],
+   "page": 85
+  },
+  {
+   "cheese": "Aged Cheddar, Piave",
+   "wines": [
+    "Muscat / Moscato (sparkling or fortified)"
+   ],
+   "page": 85
+  },
+  {
+   "cheese": "Chèvre, feta, Port Salut, tetilla, Brie, Explorateur",
+   "wines": [
+    "Pinot Blanc"
+   ],
+   "page": 93
+  },
+  {
+   "cheese": "Gruyère, aged provolone",
+   "wines": [
+    "Crémant d'Alsace (sparkling Pinot Blanc)"
+   ],
+   "page": 93
+  },
+  {
+   "cheese": "Fourme d'Ambert, Gorgonzola dolcelatte",
+   "wines": [
+    "Pinot Blanc (sweet/ice wine)"
+   ],
+   "page": 93
+  },
+  {
+   "cheese": "Cassatella, feta, crescenza, teleme, Brillat-Savarin, Saint-André, aged Cheddar, Parmesan",
+   "wines": [
+    "Prosecco"
+   ],
+   "page": 101
+  },
+  {
+   "cheese": "Fromage blanc, Petit-Suisse, crescenza, young Mahón, Camembert, Explorateur, Fontina, vacherin fribourgeois, Époisses, Taleggio",
+   "wines": [
+    "Marsanne / Roussanne"
+   ],
+   "page": 108
+  },
+  {
+   "cheese": "Mimolette, aged St. George",
+   "wines": [
+    "Sparkling (St.-Péray)"
+   ],
+   "page": 108
+  },
+  {
+   "cheese": "Roquefort",
+   "wines": [
+    "Sauternes"
+   ],
+   "page": 116
+  },
+  {
+   "cheese": "Chèvre, feta, Butterkäse, crescenza, Explorateur, Saint-André, Cheddar, Gouda, Red Hawk, Taleggio",
+   "wines": [
+    "Sémillon (dry)"
+   ],
+   "page": 117
+  },
+  {
+   "cheese": "Aged Cheddar, Parmesan, Fourme d'Ambert, Roquefort",
+   "wines": [
+    "Sémillon (off-dry or sweet)"
+   ],
+   "page": 117
+  },
+  {
+   "cheese": "Neufchâtel, ricotta, Port Salut, tetilla, Brie, robiola, young Idiazábal, provolone, Chaumes, Morbier",
+   "wines": [
+    "Torrontés"
+   ],
+   "page": 124
+  },
+  {
+   "cheese": "Brindamour, queso fresco, ricotta, young Mahón, young pecorino, Brie, Camembert, Reblochon, young Taleggio",
+   "wines": [
+    "Trebbiano"
+   ],
+   "page": 132
+  },
+  {
+   "cheese": "Cheddar, Fontina",
+   "wines": [
+    "Trebbiano",
+    "Vin Santo"
+   ],
+   "page": 132
+  },
+  {
+   "cheese": "Gorgonzola, young Stilton",
+   "wines": [
+    "Vin Santo"
+   ],
+   "page": 132
+  },
+  {
+   "cheese": "Chèvre, feta, Brie, tetilla, Gouda, Mahón, aged Manchego, Parmesan",
+   "wines": [
+    "Txakoli (Hondarribi Zuri)"
+   ],
+   "page": 139
+  },
+  {
+   "cheese": "Chèvre, feta, teleme, tetilla, Boursault, Brie, provolone, Roncal, aged chèvre, aged Edam",
+   "wines": [
+    "Verdejo"
+   ],
+   "page": 145
+  },
+  {
+   "cheese": "Burrata, chèvre, Bel Paese, Havarti, Brie, pavé d'affinois, Cantal, Mahón, semi-aged chèvre, dry Monterey Jack",
+   "wines": [
+    "Vermentino"
+   ],
+   "page": 152
+  },
+  {
+   "cheese": "Gouda, pecorino, aged Manchego, Roncal, Chaumes, Taleggio",
+   "wines": [
+    "Aglianico"
+   ],
+   "page": 162
+  },
+  {
+   "cheese": "Burrata, mascarpone, Camembert, robiola, Comté, pecorino, mimolette, aged Piave",
+   "wines": [
+    "Barbera"
+   ],
+   "page": 170
+  },
+  {
+   "cheese": "Chèvre, Neufchâtel, Garrotxa, Gloucester, aged Gouda, Parmesan, Capriole goat cheese, Chaumes",
+   "wines": [
+    "Cabernet Franc"
+   ],
+   "page": 177
+  },
+  {
+   "cheese": "Cambozola, Gorgonzola dolcelatte",
+   "wines": [
+    "Cabernet Franc (sweet/ice wine)"
+   ],
+   "page": 177
+  },
+  {
+   "cheese": "Mahón, Petit Basque, mimolette, Parmesan, Beaufort, Red Hawk",
+   "wines": [
+    "Carignan"
+   ],
+   "page": 184
+  },
+  {
+   "cheese": "Cabrales, Cambozola",
+   "wines": [
+    "Banyuls / fortified Carignan"
+   ],
+   "page": 184
+  },
+  {
+   "cheese": "Caciocavallo, Comté, aged Cotija, aged provolone, Chaumes, Taleggio",
+   "wines": [
+    "Carmenère"
+   ],
+   "page": 191
+  },
+  {
+   "cheese": "Burrata, fresh chèvre, Monterey Jack, Saint-Nectaire, Brie, Mount Tam",
+   "wines": [
+    "Rosé (Cinsaut)"
+   ],
+   "page": 198
+  },
+  {
+   "cheese": "Asiago, Gruyère",
+   "wines": [
+    "Cinsaut (red)"
+   ],
+   "page": 198
+  },
+  {
+   "cheese": "Mozzarella, ricotta, Boursault, Brie, Fontina, Gouda, Morbier, Taleggio",
+   "wines": [
+    "Dolcetto"
+   ],
+   "page": 206
+  },
+  {
+   "cheese": "Burrata, chèvre, Havarti, Port Salut, Humboldt Fog, Pierre Robert, Cheddar, Manchego, Chaumes, Taleggio",
+   "wines": [
+    "Gamay"
+   ],
+   "page": 215
+  },
+  {
+   "cheese": "Chèvre, mascarpone, Boursin, teleme, Comté, pecorino romano",
+   "wines": [
+    "Rosé (Grenache)"
+   ],
+   "page": 224
+  },
+  {
+   "cheese": "Brie, tetilla, Morbier, Taleggio",
+   "wines": [
+    "Grenache / Garnacha"
+   ],
+   "page": 224
+  },
+  {
+   "cheese": "Aged Cheddar, aged Mahón, Fourme d'Ambert, Gorgonzola",
+   "wines": [
+    "Banyuls",
+    "Maury"
+   ],
+   "page": 224
+  },
+  {
+   "cheese": "Roquefort (with Cahors), Gorgonzola dolcelatte (with Argentine Malbec)",
+   "wines": [
+    "Malbec"
+   ],
+   "page": 233
+  },
+  {
+   "cheese": "Port Salut, teleme, Lancashire, raclette, Asiago, aged Jack, Morbier, Taleggio",
+   "wines": [
+    "Malbec"
+   ],
+   "page": 233
+  },
+  {
+   "cheese": "Chèvre, tetilla, Brie, robiola, Gouda, Petit Basque, mimolette, Roncal",
+   "wines": [
+    "Mencía"
+   ],
+   "page": 239
+  },
+  {
+   "cheese": "Chèvre, fromage blanc, crescenza, Saint-Paulin",
+   "wines": [
+    "Rosé (Mourvèdre)"
+   ],
+   "page": 247
+  },
+  {
+   "cheese": "Camembert, Fontina, Idiazábal, Taleggio, vacherin Mont d'Or",
+   "wines": [
+    "Mourvèdre / Monastrell"
+   ],
+   "page": 247
+  },
+  {
+   "cheese": "Comté, Fontina, Cantal, aged pecorino toscano, Durrus, Taleggio; fonduta (Fontina fondue)",
+   "wines": [
+    "Nebbiolo"
+   ],
+   "page": 256
+  },
+  {
+   "cheese": "Camembert, robiola, Emmentaler, São Jorge (Portugal), aged Cheddar, aged Jack, Cambozola, Point Reyes Blue, Chaumes, Morbier",
+   "wines": [
+    "Petite Sirah"
+   ],
+   "page": 264
+  },
+  {
+   "cheese": "Havarti, Port Salut, Brebiou, Camembert, Cheddar (Vermont), Comté, aged Mahón, mimolette",
+   "wines": [
+    "Pinotage"
+   ],
+   "page": 272
+  },
+  {
+   "cheese": "Chèvre, feta (red or rosé), Brie, Saint-André, triple-crème, Gruyère, Idiazábal, aged Cotija, aged Mahón, Butterkäse, Chaumes",
+   "wines": [
+    "Tannat"
+   ],
+   "page": 280
+  },
+  {
+   "cheese": "Burrata, chèvre, Saint-Nectaire, tetilla, Pierre Robert, robiola",
+   "wines": [
+    "Tempranillo",
+    "Rosé (Rioja rosado)"
+   ],
+   "page": 289
+  },
+  {
+   "cheese": "Manchego, São Jorge (Portugal), dry or aged Jack, aged Mahón",
+   "wines": [
+    "Tempranillo"
+   ],
+   "page": 289
+  },
+  {
+   "cheese": "Cambozola, Castello, Montbriac",
+   "wines": [
+    "Rosé (Rioja rosado)"
+   ],
+   "page": 289
+  },
+  {
+   "cheese": "Brillat-Savarin, Camembert",
+   "wines": [
+    "Touriga Nacional"
+   ],
+   "page": 296
+  },
+  {
+   "cheese": "Pecorino romano, Petit Basque, aged Beemster, aged Cheddar",
+   "wines": [
+    "Touriga Nacional",
+    "Port"
+   ],
+   "page": 296
+  },
+  {
+   "cheese": "Stilton, Gorgonzola, Montbriac",
+   "wines": [
+    "Port"
+   ],
+   "page": 296
+  },
+  {
+   "cheese": "Feta (Greece, Bulgaria)",
+   "wines": [
+    "Rosé (Xinomavro)"
+   ],
+   "page": 303
+  },
+  {
+   "cheese": "Gouda, Port Salut, Camembert, Nevat, young Livarot, young Taleggio",
+   "wines": [
+    "Xinomavro",
+    "Rosé (Xinomavro)"
+   ],
+   "page": 303
+  },
+  {
+   "cheese": "Comté, Gruyère, kasseri (Greece), kefalograviera (Greece), Parmesan",
+   "wines": [
+    "Xinomavro"
+   ],
+   "page": 303
+  }
+ ],
+ "dessert": [
+  {
+   "dessert": "Apple tart with whipped cream; honey mousse with ginger pear-quince compote; peach and nectarine desserts; crème brûlée",
+   "wines": [
+    "Chenin Blanc (late-harvest)"
+   ],
+   "page": 55
+  },
+  {
+   "dessert": "Panettone; almond or vanilla pound cake with fruit; pear-frangipane or marmalade tart",
+   "wines": [
+    "Recioto di Soave"
+   ],
+   "page": 60
+  },
+  {
+   "dessert": "Strawberries and cream",
+   "wines": [
+    "Muscat de Beaumes de Venise",
+    "Muscat de Lunel",
+    "Muscat de Rivesaltes"
+   ],
+   "page": 84
+  },
+  {
+   "dessert": "Cheesecake (New York, pumpkin, lemon ricotta, dulce de leche; not chocolate)",
+   "wines": [
+    "Muscat / Moscato (late-harvest)"
+   ],
+   "page": 84
+  },
+  {
+   "dessert": "Mango, lychee, rambutan with black sticky rice; panna cotta",
+   "wines": [
+    "Asti Spumante"
+   ],
+   "page": 83
+  },
+  {
+   "dessert": "Dried fruit compotes, dried apricots poached in wine, caramel-nut tortes, butterscotch pudding",
+   "wines": [
+    "Muscat / Moscato (fortified)",
+    "Liqueur Muscat (Rutherglen)",
+    "Moscatel de Málaga"
+   ],
+   "page": 83
+  },
+  {
+   "dessert": "White chocolate desserts, custards, mousses",
+   "wines": [
+    "Muscat / Moscato (late-harvest)"
+   ],
+   "page": 83
+  },
+  {
+   "dessert": "Almond Cake with a Warm Red Berry–Vanilla Compote",
+   "wines": [
+    "Muscat / Moscato (all but driest)",
+    "Black Muscat"
+   ],
+   "page": 86
+  },
+  {
+   "dessert": "Strawberries and cream; stone-fruit and tree-fruit desserts; butterscotch, toffee, crème brûlée",
+   "wines": [
+    "Sauternes",
+    "Sémillon (late-harvest)"
+   ],
+   "page": 116
+  },
+  {
+   "dessert": "Sherry-Roasted Figs with Crispy Streusel and Crème Fraîche",
+   "wines": [
+    "Sémillon (sweet)",
+    "Sauternes"
+   ],
+   "page": 118
+  },
+  {
+   "dessert": "Simple almond or hazelnut biscotti; nut desserts with raisins, caramel, maple, molasses, nougat",
+   "wines": [
+    "Vin Santo"
+   ],
+   "page": 130
+  },
+  {
+   "dessert": "Bittersweet chocolate desserts, molten chocolate cake, chocolate with chile or herbs",
+   "wines": [
+    "Banyuls / fortified Carignan"
+   ],
+   "page": 183
+  },
+  {
+   "dessert": "Dark chocolate, Raisinettes, chocolate-covered macaroons, baked figs, dried fruit compotes",
+   "wines": [
+    "Banyuls",
+    "Maury",
+    "Rasteau"
+   ],
+   "page": 223
+  },
+  {
+   "dessert": "Chocolate-mint desserts, rhubarb tart, clafoutis",
+   "wines": [
+    "Barolo Chinato"
+   ],
+   "page": 255
+  },
+  {
+   "dessert": "Toffee pudding, tarte Tatin (apple, pear or banana), caramel and nougat desserts, crème brûlée, dried-fruit desserts",
+   "wines": [
+    "Port (tawny)"
+   ],
+   "page": 295
+  },
+  {
+   "dessert": "Dark chocolate cake with cherry or berry jam; chocolate pot de crème with cherry sauce; molten chocolate cake with berries",
+   "wines": [
+    "Port (vintage, LBV, ruby)"
+   ],
+   "page": 295
+  }
+ ]
+}

@@ -575,7 +575,11 @@ const GRAPES = [
   ["Mencía", /\bmencia\b|\bbierzo\b/],
   ["Blaufränkisch", /\bblaufrankisch\b|\bkekfrankos\b|\blemberger\b/],
   ["Zweigelt", /\bzweigelt\b/],
-  ["Saperavi", /\bsaperavi\b/],
+  ["Saperavi", /\bsaperavi\b|\bkindzmarauli\b|\bmukuzani\b|\bakhasheni\b|\bnapareuli\b/],
+  ["Cinsaut", /\bcinsaul?t\b/],
+  ["Fetească Neagră", /\bfeteasca neagra\b/],
+  ["Rară Neagră", /\brara neagra\b/],
+  ["Baga", /\bbaga\b|\bbairrada\b/],
   ["Xinomavro", /\bxinomavro\b|\bnaoussa\b/],
   ["Agiorgitiko", /\bagiorgitiko\b|\bnemea\b/],
   ["Chardonnay", /\bchardonnay\b|\bchablis\b|\bmeursault\b|\bpuligny\b|\bchassagne\b|\bpouilly.fuisse\b|\bmacon\b|\bmontrachet\b|\bcorton.charlemagne\b/],
@@ -598,6 +602,13 @@ const GRAPES = [
   ["Pinot Blanc", /\bpinot blanc\b|\bpinot bianco\b|\bweissburgunder\b/],
   ["Marsanne / Roussanne", /\bmarsanne\b|\broussanne\b/],
   ["Assyrtiko", /\bassyrtiko\b/],
+  ["Arneis", /\barneis\b/],
+  ["Trebbiano", /\btrebbiano\b|\bugni blanc\b/],
+  ["Txakoli", /\btxakoli\b|\bhondarrabi\b|\bhondarribi\b|\bgetariako\b/],
+  ["Rkatsiteli", /\brkatsiteli\b|\btsinandali\b/],
+  ["Mtsvane", /\bmtsvane\b|\btsinandali\b/],
+  ["Kisi", /\bkisi\b/],
+  ["Fetească Albă / Regală", /\bfeteasca (alba|regala)\b/],
   ["Torrontés", /\btorrontes\b/],
   ["Fiano", /\bfiano\b/],
   ["Furmint", /\bfurmint\b|\btokaji\b/],
@@ -737,7 +748,8 @@ function storeFoods(w) {
 // doesn't make it a match for lobster.
 const WHITE_GRAPES = new Set(["Chardonnay", "Sauvignon Blanc", "Riesling", "Pinot Grigio / Gris", "Gewürztraminer", "Chenin Blanc",
   "Viognier", "Grüner Veltliner", "Albariño", "Sémillon", "Muscat / Moscato", "Vermentino", "Verdejo", "Godello", "Chasselas",
-  "Garganega (Soave)", "Cortese (Gavi)", "Pinot Blanc", "Marsanne / Roussanne", "Assyrtiko", "Torrontés", "Fiano", "Furmint", "Glera (Prosecco)"]);
+  "Garganega (Soave)", "Cortese (Gavi)", "Pinot Blanc", "Marsanne / Roussanne", "Assyrtiko", "Torrontés", "Fiano", "Furmint", "Glera (Prosecco)",
+  "Arneis", "Trebbiano", "Txakoli", "Rkatsiteli", "Mtsvane", "Kisi", "Fetească Albă / Regală"]);
 const grapeFits = (w, g) => (w.type === "Red" ? !WHITE_GRAPES.has(g) : w.type === "White" ? WHITE_GRAPES.has(g)
   : w.type === "Sparkling" && g === "Glera (Prosecco)"); // rosé and other sparkling use their style lines
 // A sweet wine keeps to desserts, cheese and spice, whatever its grape.
@@ -1597,7 +1609,7 @@ function renderChoiceChips() {
     ...(state.bottleOnly ? [["Standard bottles", (x) => { x.bottleOnly = false; }]] : [])];
   const chips = choiceChips.map(([label], k) =>
     `<span class="chip">${esc(label)}<button type="button" class="chip-x" data-chip="${k}" aria-label="Remove: ${esc(label)}">✕</button></span>`);
-  $("active-filters").innerHTML = `<span class="choices-head">Your choices</span> <span class="choices-where">${esc(where)}</span>` +
+  $("active-filters").innerHTML = `<span class="choices-head"><span class="zone-num">3</span> Your choices</span> <span class="choices-where">${esc(where)}</span>` +
     (state.pickLabel ? ` <span class="chip chip-pick">${esc(state.pickLabel)}</span>` : "") +
     (chips.length ? ` ${chips.join(" ")}` : ` <span class="hint-inline">nothing else chosen: everything is shown</span>`);
 }

@@ -1,0 +1,574 @@
+{"kind":"meta","book":"The Wine Lover's Cookbook: Great Meals for the Perfect Glass of Wine","author":"Sid Goldstein","year":1999,"note":"Chronicle Books; foreword John Ash. PDF has no printed page numbers; book's internal cross-refs use printed pages."}
+{"kind":"principles","rule":"Start with the wine's body and mouthfeel, then choose foods whose weight and texture enhance it.","page":17}
+{"kind":"principles","rule":"Consider both the grape's fruit character and the flavours oak ageing adds (toast, vanilla, butter, spice) when choosing food.","page":18}
+{"kind":"principles","rule":"Match intensity: delicate whites with delicate dishes like sole, robust reds with hearty braises like osso buco.","page":18}
+{"kind":"principles","rule":"Keep basic tastes similar: a sauce should never be sweeter than the wine, and wine acid should equal the dish's acid.","page":18}
+{"kind":"principles","rule":"A contrast can work too, e.g. a slightly sweet wine offsetting a salty glazed ham.","page":18}
+{"kind":"principles","rule":"High-acid wines (Sauvignon Blanc, Pinot Gris, Sangiovese, Pinot Noir) balance acidic dishes well.","page":20}
+{"kind":"principles","rule":"Walnuts and pecans carry their own tannin and soften the apparent tannin of young Cabernet, Merlot, Syrah and Zinfandel.","page":20}
+{"kind":"principles","rule":"Salty foods (anchovy, olives, soy, fish sauce) suit light fruity wines but make tannic reds and oaky whites taste harsher.","page":20}
+{"kind":"principles","rule":"Pairings can succeed through similarity (herbal dish with herbal wine) or contrast (light fruity rosé refreshing a rich mole).","page":20}
+{"kind":"principles","rule":"Asparagus is hard on wine; if needed, choose high-acid Pinot Gris or Sauvignon Blanc.","page":21}
+{"kind":"principles","rule":"Artichokes make wine taste oddly sweet and are best avoided with wine.","page":21}
+{"kind":"principles","rule":"Hot chiles exaggerate oak, alcohol and tannin; pick fruity whites or soft fruity reds and dry rosé instead.","page":22}
+{"kind":"principles","rule":"Egg yolks coat the palate; Champagne, Sauvignon Blanc, Pinot Gris, Riesling, Gewürztraminer or fruity Chardonnay stand the best chance.","page":22}
+{"kind":"principles","rule":"Most vinegars strip a wine's fruit; balsamic used sparingly is the exception. Keep salad dressings at least three parts oil to one vinegar.","page":23}
+{"kind":"principles","rule":"White-wine vinegar dressings suit white wines; red-wine or balsamic vinegar suit reds, though balsamic adapts to whites in salads.","page":23}
+{"kind":"principles","rule":"Pickled foods clash with wine, except capers used sparingly with Sauvignon Blanc or Pinot Gris.","page":23}
+{"kind":"principles","rule":"Bridge ingredients link dish and wine through shared flavour, body, intensity or taste; small tweaks like Dijon in a red sauce help.","page":23}
+{"kind":"principles","rule":"Grilled char echoes the toast of oak barrels, so grilled dishes flatter oaked Chardonnay and most barrel-aged reds.","page":24}
+{"kind":"principles","rule":"Roasting's juicy interior softens full-bodied wines and its browned crust connects to barrel-aged flavours.","page":24}
+{"kind":"principles","rule":"Roasted garlic, nutty and mellow, is a friendly bridge to most red and white wines.","page":25}
+{"kind":"principles","rule":"Sautéing adds fat and mouthfeel that suits oily-textured Chardonnay and helps cut tannin in Cabernet and Syrah.","page":25}
+{"kind":"food_wines","food":"Spicy food","dish":"chile-hot dishes","wines":["Riesling","Pinot Grigio / Gris","Sauvignon Blanc","Gewürztraminer","Zinfandel / Primitivo","Pinot Noir","Rhône blends","Rosé","White Zinfandel"],"avoid":["oaky Chardonnay","tannic reds","high-alcohol wines","older reds"],"page":22,"why":"Fruit and softness survive chile heat; oak, tannin and alcohol get amplified."}
+{"kind":"food_wines","food":"Chicken","dish":"egg dishes, quiche, hollandaise (vegetarian)","wines":["Champagne","Sauvignon Blanc","Pinot Grigio / Gris","Riesling","Gewürztraminer","fruity Chardonnay"],"avoid":[],"page":22,"why":"Crisp or fruity wines cut through yolk that coats the palate; still a risky match."}
+{"kind":"food_wines","food":"Fish","dish":"sole fillet with lemon-butter sauce","wines":["light delicate white"],"avoid":[],"page":18,"why":"Delicate fish needs an equally delicate wine."}
+{"kind":"food_wines","food":"Red meat","dish":"osso buco (veal shank braise)","wines":["robust full-bodied red"],"avoid":[],"page":18,"why":"Hearty braise matches a heavy red's intensity."}
+{"kind":"food_wines","food":"Red meat","dish":"beef bourguignon","wines":["Pinot Noir"],"avoid":[],"page":17,"why":"Traditional regional marriage of Burgundy dish with Burgundy wine."}
+{"kind":"food_wines","food":"Pasta and pizza","dish":"tomato-based pasta","wines":["Sangiovese"],"avoid":[],"page":17,"why":"Classic regional Chianti pairing; acid matches tomato."}
+{"kind":"food_wines","food":"Seafood","dish":"salty dishes with anchovies, olives, soy or fish sauce","wines":["Gewürztraminer","Riesling","Rosé","Pinot Noir"],"avoid":["tannic reds","oaky whites"],"page":20,"why":"Salt flatters light fruity wines but heightens tannin and oak."}
+{"kind":"regions","place":"Burgundy, France","grapes":["Pinot Noir"],"foods":["beef bourguignon"],"page":17}
+{"kind":"regions","place":"Tuscany (Chianti), Italy","grapes":["Sangiovese"],"foods":["tomato-based pastas"],"page":17}
+{"kind":"principles","rule":"Braising melds flavours and weight; pair with rich whites (Chardonnay, Viognier) or full reds (Zinfandel, Syrah, Cabernet, Merlot).","page":26}
+{"kind":"principles","rule":"Spicy, salty, smoked or heavily seasoned dishes want fruity, lower-alcohol wines; avoid oaky and tannic ones.","page":27}
+{"kind":"principles","rule":"Rich, fatty foods suit heavier full-bodied wines such as Chardonnay, Cabernet, Merlot, Zinfandel and Syrah.","page":27}
+{"kind":"principles","rule":"Keep a dish's sweetness below the wine's; a squeeze of citrus or dash of vinegar can tame a sweet sauce.","page":27}
+{"kind":"principles","rule":"High-acid foods (goat cheese, tomato, citrus) need high-acid wines like Sauvignon Blanc, Pinot Gris, some Riesling, Zinfandel, Pinot Noir.","page":27}
+{"kind":"principles","rule":"Serve lighter before fuller, dry before sweet, and low-alcohol before high-alcohol wines across a meal.","page":27}
+{"kind":"principles","rule":"Taste the wine while finishing a sauce; if it seems too tannic, add citrus zest or nuts to the dish.","page":28}
+{"kind":"principles","rule":"Cook with decent wine, ideally the same grape you will drink with the dish.","page":28}
+{"kind":"principles","rule":"Poached and steamed dishes suit delicate wines (Pinot Gris, some Riesling); smoked foods suit lighter fruity wines.","page":28}
+{"kind":"principles","rule":"Neither food nor wine should overpower the other; aim for synergy, and trust your own palate.","page":28}
+{"kind":"principles","rule":"Sparkling wine's bubbles and high acid cleanse the palate, making it ideal with smoky, salty, spicy, Asian and Latin food.","page":31}
+{"kind":"principles","rule":"Brut and blanc de noirs sparkling wines are the most flexible through a meal; sparkling rosé suits meat and poultry.","page":33}
+{"kind":"principles","rule":"Sparkling wine is a natural brunch wine and handles egg dishes well; serve it well chilled.","page":37}
+{"kind":"principles","rule":"Sec sparkling suits lighter desserts; demi-sec and doux sparkling are true dessert wines.","page":36}
+{"kind":"principles","rule":"Sauvignon Blanc handles spicy, assertive dishes, soups, salads, goat cheese and tomatoes where Chardonnay fails.","page":46}
+{"kind":"bridges","grape":"Champagne","ingredients":["smoked salmon","lox","smoked oysters","smoked mussels","caviar","sushi","curry powder","ginger","cayenne","capers","olives","mushrooms","soy sauce","avocado","orange","toasted hazelnuts","almonds","pine nuts","cream","butter"],"page":34}
+{"kind":"grape_foods","grape":"Champagne","food":"Seafood","dish":"lobster, oysters, clams, mussels, shrimp","strength":2,"page":34,"why":"Listed as core partners; acidity and bubbles suit briny shellfish."}
+{"kind":"grape_foods","grape":"Champagne","food":"Fish","dish":"salmon, tuna, monkfish, mackerel, snapper, sea bass","strength":2,"page":34,"why":"Core fish partners for sparkling wine's crisp acidity."}
+{"kind":"grape_foods","grape":"Champagne","food":"Chicken","dish":"chicken, duck, turkey, quail","strength":2,"page":34,"why":"Poultry listed among sparkling wine's base ingredients."}
+{"kind":"grape_foods","grape":"Champagne","food":"Pork","dish":"pork","strength":2,"page":34,"why":"Listed as a base ingredient for sparkling wine."}
+{"kind":"grape_foods","grape":"Champagne","food":"Red meat","dish":"veal","strength":1,"page":34,"why":"Veal listed among sparkling wine's base ingredients."}
+{"kind":"grape_foods","grape":"Champagne","food":"Seafood","dish":"smoked fish and shellfish, caviar, sushi","strength":3,"page":36,"why":"Acidity balances smoke and salt; called the quintessential match."}
+{"kind":"grape_foods","grape":"Champagne","food":"Spicy food","dish":"Asian dishes","strength":2,"page":37,"why":"Brisk acidity contrasts bold, salty Asian flavours."}
+{"kind":"grape_foods","grape":"Rosé","food":"Red meat","dish":"meat and poultry with sparkling rosé","strength":2,"page":33,"why":"Sparkling rosé is richer and suits meat and poultry surprisingly well."}
+{"kind":"regions","place":"Champagne, France","grapes":["Champagne","Pinot Noir","Chardonnay"],"foods":[],"page":35}
+{"kind":"regions","place":"Asti, Piedmont, Italy","grapes":["Muscat / Moscato"],"foods":[],"page":35}
+{"kind":"regions","place":"California (Napa, Sonoma, Mendocino, Anderson Valley)","grapes":["Sparkling"],"foods":[],"page":35}
+{"kind":"recipes","title":"Shrimp and Avocado Salsa in Pita Toasts","page":38,"food":"Seafood","course":"starter","protein":"bay shrimp","wines":["Champagne","Pinot Grigio / Gris"],"why":"Classic pairing: brut bubbles tame mild jalapeño heat; Pinot Gris acidity also works."}
+{"kind":"recipes","title":"Quesadillas with Smoked Mussels, Havarti, and Roasted Red Peppers","page":41,"food":"Seafood","course":"starter","protein":"smoked mussels","wines":["Champagne","Sauvignon Blanc"],"why":"Bubbles contrast smoky mussels and slightly salty creamy cheese."}
+{"kind":"recipes","title":"Poached Swordfish with Champagne-Grape Sauce","page":43,"food":"Fish","course":"main","protein":"swordfish","wines":["Champagne","Pinot Grigio / Gris"],"why":"Sparkling wine in the poaching sauce plus grapes echo the wine's grapey acidity."}
+{"kind":"food_wines","food":"Seafood","dish":"smoked mussels or oysters with creamy cheese","wines":["Champagne","Sauvignon Blanc"],"avoid":[],"page":41,"why":"Bubbles and acid cut smoke and salt."}
+{"kind":"food_wines","food":"Fish","dish":"delicately poached swordfish","wines":["Champagne","Pinot Grigio / Gris"],"avoid":[],"page":43,"why":"Delicate fish suits crisp, high-acid wines."}
+{"kind":"bridges","grape":"Sauvignon Blanc","ingredients":["orange","lime","lemon","fennel","bell peppers","dill","tarragon","thyme","basil","chives","cilantro","sorrel","curry powder","toasted hazelnuts","pine nuts","almonds","sour cream","yogurt","shiitake","oyster mushrooms","goat cheese","Swiss","Parmigiano-Reggiano","ricotta","Brie","feta","fontina","buffalo mozzarella","garlic","Dijon mustard","capers","green olives","fresh ginger","prosciutto","tomatoes","sun-dried tomatoes","eggplant"],"page":49}
+{"kind":"grape_foods","grape":"Sauvignon Blanc","food":"Seafood","dish":"shrimp, clams, oysters, mussels, scallops","strength":2,"page":49,"why":"Core shellfish partners for this crisp, herbal white."}
+{"kind":"grape_foods","grape":"Sauvignon Blanc","food":"Fish","dish":"catfish, sole, sea bass, snapper, trout, swordfish","strength":2,"page":49,"why":"Lean white fish suit its lightness and acidity."}
+{"kind":"grape_foods","grape":"Sauvignon Blanc","food":"Chicken","dish":"chicken, game hens, turkey","strength":2,"page":49,"why":"Listed as core poultry partners."}
+{"kind":"grape_foods","grape":"Sauvignon Blanc","food":"Cheese","dish":"goat cheese","strength":3,"page":46,"why":"Its acidity balances tangy, high-acid goat cheese."}
+{"kind":"grape_foods","grape":"Sauvignon Blanc","food":"Pasta and pizza","dish":"tomato dishes, soups and salads (vegetarian)","strength":2,"page":46,"why":"Acidity handles tomato, soups and salads that defeat most wines."}
+{"kind":"grape_foods","grape":"Sauvignon Blanc","food":"Spicy food","dish":"spicy, assertively flavoured dishes","strength":2,"page":46,"why":"Dry, lower alcohol and little oak, so it survives spice."}
+{"kind":"cheese","cheese":"goat cheese","wines":["Sauvignon Blanc"],"page":46}
+{"kind":"cheese","cheese":"Havarti","wines":["Champagne","Sauvignon Blanc"],"page":41}
+{"kind":"regions","place":"Loire, France (Sancerre, Pouilly-Fumé)","grapes":["Sauvignon Blanc"],"foods":[],"page":50}
+{"kind":"regions","place":"Bordeaux (Graves), France","grapes":["Sauvignon Blanc","Sémillon"],"foods":[],"page":50}
+{"kind":"regions","place":"New Zealand, Chile, South Africa, Washington, California","grapes":["Sauvignon Blanc"],"foods":[],"page":50}
+{"kind":"principles","rule":"Sauvignon Blanc suits aromatic, tangy, spicier foods; fresh herbs in the dish echo its herbal streak.","page":51}
+{"kind":"principles","rule":"Sauvignon Blanc is a good opening wine for appetizers and first courses, and the best white for salads, soups and green vegetables.","page":51}
+{"kind":"principles","rule":"For delicate seafood with fresh herbs choose unoaked Sauvignon Blanc or crisp Pinot Gris; oaky wines overwhelm.","page":55}
+{"kind":"principles","rule":"Soup and wine is tricky because two liquids at different temperatures confuse the palate; complementary flavours rescue it.","page":59}
+{"kind":"principles","rule":"Roasting vegetables brings out sweetness that suits Sauvignon Blanc.","page":70}
+{"kind":"recipes","title":"Wild Mushroom and Goat Cheese Bruschetta","page":52,"food":"Cheese","course":"starter","protein":"wild mushrooms and goat cheese (vegetarian)","wines":["Sauvignon Blanc","Champagne"],"why":"Earthy mushroom and tangy goat cheese mirror the wine and highlight its acidity."}
+{"kind":"recipes","title":"Shrimp-Scallop Pâté with Cilantro, Dill, and Pine Nuts","page":55,"food":"Seafood","course":"starter","protein":"bay scallops and shrimp","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"why":"Fresh herbs echo the wine's herbal, citrus notes; avoid oaky versions."}
+{"kind":"recipes","title":"Roasted Eggplant-Garlic Soup","page":57,"food":"Pasta and pizza","course":"starter","protein":"eggplant (vegetarian)","wines":["Sauvignon Blanc","Zinfandel / Primitivo"],"why":"Wine's acidity cuts rich roasted-garlic soup; rustic Zinfandel suits it as a main."}
+{"kind":"recipes","title":"Black-eyed Pea and Tomato Soup with Cabbage","page":59,"food":"Pork","course":"starter","protein":"black-eyed peas with diced ham","wines":["Sauvignon Blanc","Pinot Noir"],"why":"Hearty soup contrasts with a young fruity white."}
+{"kind":"recipes","title":"Sid's Caesar","page":61,"food":"Fish","course":"starter","protein":"anchovy and Parmesan salad","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"why":"Tart crisp fruit contrasts salty anchovy and Parmesan."}
+{"kind":"recipes","title":"Chilled Leeks with Green Olives, Capers, and Sun-Dried Tomato Vinaigrette","page":63,"food":"Pasta and pizza","course":"starter","protein":"leeks (vegetarian)","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"why":"Classic pairing: olives, capers and sun-dried tomato flatter the wine's green crispness."}
+{"kind":"recipes","title":"Mixed Greens with Thyme-Scented Goat Cheese Cakes and Balsamic-Dijon Vinaigrette","page":66,"food":"Cheese","course":"starter","protein":"goat cheese (vegetarian)","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"why":"Tart goat cheese and wine-friendly balsamic dressing match the wine's tang."}
+{"kind":"recipes","title":"Radish Slaw with Rémoulade and Pistachios","page":68,"food":"Pasta and pizza","course":"side","protein":"radish (vegetarian)","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"why":"Crisp fruit counters radish bitterness and creamy dressing; Oregon Pinot Gris an option."}
+{"kind":"recipes","title":"Roasted Potato and Carrot Salad with Basil-Citrus Dressing","page":70,"food":"Pasta and pizza","course":"side","protein":"potatoes and carrots (vegetarian)","wines":["Sauvignon Blanc","Riesling"],"why":"Roasted sweetness and citrus dressing highlight the wine's citrus; German or Alsace Riesling too."}
+{"kind":"recipes","title":"Prawn–Celery Root Salad with Ruby Grapefruit and Toasted Pine Nuts","page":73,"food":"Seafood","course":"starter","protein":"prawns","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"why":"Sweet-tart-bitter elements heighten the wine's citrus-herbal flavours."}
+{"kind":"recipes","title":"Pizza with Peppered Shrimp, Canadian Bacon, Mushrooms, and Feta Cheese","page":75,"food":"Pasta and pizza","course":"main","protein":"shrimp and Canadian bacon","wines":["Sauvignon Blanc","Zinfandel / Primitivo"],"why":"Crisp white contrasts smoky ham; fruity Zinfandel amplifies the tomato sauce."}
+{"kind":"food_wines","food":"Fish","dish":"Caesar salad with anchovies and Parmesan","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"avoid":[],"page":61,"why":"Tart white contrasts the salt."}
+{"kind":"food_wines","food":"Pasta and pizza","dish":"salads with goat cheese and balsamic vinaigrette (vegetarian)","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"avoid":[],"page":66,"why":"Balsamic is the wine-friendly vinegar; goat cheese acidity matches."}
+{"kind":"food_wines","food":"Pasta and pizza","dish":"pizza with shrimp, smoked ham and feta","wines":["Sauvignon Blanc","Zinfandel / Primitivo"],"avoid":[],"page":75,"why":"Works almost equally with crisp white or fruity red."}
+{"kind":"food_wines","food":"Seafood","dish":"delicate shrimp and scallop dishes with fresh herbs","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"avoid":["oaky Sauvignon Blanc","oaky Chardonnay"],"page":55,"why":"Oak overwhelms delicate herbal seafood."}
+{"kind":"food_wines","food":"Pasta and pizza","dish":"hearty vegetable soups (vegetarian)","wines":["Sauvignon Blanc","Zinfandel / Primitivo","Pinot Noir"],"avoid":[],"page":57,"why":"Acidity refreshes rich soup; rustic red when served as a main."}
+{"kind":"grape_foods","grape":"Sauvignon Blanc","food":"Seafood","dish":"shrimp and scallops with fresh herbs","strength":2,"page":55,"why":"Herbs mirror the wine's herbal and citrus notes."}
+{"kind":"grape_foods","grape":"Sauvignon Blanc","food":"Pasta and pizza","dish":"wild mushrooms with goat cheese on toast (vegetarian)","strength":2,"page":52,"why":"Mushroom and goat cheese are among its friendliest ingredients."}
+{"kind":"grape_foods","grape":"Zinfandel / Primitivo","food":"Pasta and pizza","dish":"tomato-sauced pizza with shrimp and ham","strength":2,"page":75,"why":"Fruity red amplifies tomato sauce and harmonises with toppings."}
+{"kind":"grape_foods","grape":"Riesling","food":"Pasta and pizza","dish":"potato salad with citrus dressing (vegetarian)","strength":1,"page":70,"why":"Fruit and freshness counter a citrusy creamy dressing."}
+{"kind":"cheese","cheese":"feta","wines":["Sauvignon Blanc","Zinfandel / Primitivo"],"page":75}
+{"kind":"cheese","cheese":"Parmesan","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"page":61}
+{"kind":"regions","place":"Provence, France","grapes":["Sauvignon Blanc"],"foods":["chilled leeks with olives, capers and sun-dried tomatoes"],"page":63}
+{"kind":"regions","place":"Oregon, USA","grapes":["Pinot Grigio / Gris"],"foods":["radish slaw with rémoulade"],"page":68}
+{"kind":"recipes","title":"Risotto with Lemon Shrimp, Roasted Garlic, and Goat Cheese","page":80,"food":"Pasta and pizza","course":"main","protein":"shrimp risotto","wines":["Sauvignon Blanc","Chardonnay"],"why":"Lemony shrimp and goat cheese echo the wine's citrus; lightly oaked Chardonnay adds body."}
+{"kind":"recipes","title":"Pappardelle Frutti di Mare \"Mediterraneo\"","page":83,"food":"Pasta and pizza","course":"main","protein":"calamari, scallops, shrimp, sea bass","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"why":"Classic match: unoaked crisp white handles intense, lightly spicy tomato seafood sauce."}
+{"kind":"recipes","title":"Zack's Pan-Seared \"Spykick\" Catfish with Tomatillo-Root Vegetable Gratin","page":85,"food":"Fish","course":"main","protein":"catfish","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"why":"Tart, smoky notes echo tomatillo and smoked mozzarella; crispness tames the spice."}
+{"kind":"recipes","title":"Grilled Sea Bass with Mango–Roasted Red Pepper Relish","page":88,"food":"Fish","course":"main","protein":"sea bass","wines":["Sauvignon Blanc","Chardonnay"],"why":"Mango mirrors tropical fruit in both wines; roasted pepper ties to Sauvignon."}
+{"kind":"recipes","title":"Turkey Piccata with Hot-Sweet Mustard–Lime Sauce","page":90,"food":"Chicken","course":"main","protein":"turkey breast (or veal)","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"why":"Lime echoes the wine's citrus; tangy-sweet mustard links to its fruit."}
+{"kind":"recipes","title":"Ricotta-Stuffed Chicken Breast with Roasted Red Bell Pepper Sauce","page":92,"food":"Chicken","course":"main","protein":"chicken breast","wines":["Sauvignon Blanc","Pinot Noir"],"why":"Roasted pepper and ricotta bring out herbal notes; peppers' sweetness suits Pinot Noir's cherry."}
+{"kind":"food_wines","food":"Pasta and pizza","dish":"tomato-based seafood pasta with chile flakes","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"avoid":["oaky whites"],"page":83,"why":"Classic: crisp unoaked whites handle tomato acidity and mild spice."}
+{"kind":"food_wines","food":"Fish","dish":"grilled sea bass with mango-jalapeño relish","wines":["Sauvignon Blanc","Chardonnay"],"avoid":[],"page":88,"why":"Tropical fruit link; halve the chiles if pouring oaky Chardonnay, as heat clashes with oak."}
+{"kind":"food_wines","food":"Chicken","dish":"turkey or veal piccata with lime and capers","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"avoid":[],"page":90,"why":"Citrus and capers suit crisp high-acid whites."}
+{"kind":"food_wines","food":"Fish","dish":"spicy pan-seared catfish","wines":["Sauvignon Blanc","Pinot Grigio / Gris"],"avoid":[],"page":85,"why":"Crisp, fruity whites tame spice."}
+{"kind":"principles","rule":"If serving a dish with Pinot Noir instead of a white, cook its sauce with red wine rather than sherry.","page":92}
+{"kind":"principles","rule":"With an oaky Chardonnay, cut the chile in a dish, because heat clashes with oak.","page":88}
+{"kind":"principles","rule":"Pinot Gris is like Sauvignon Blanc without the herbal side; its acidity suits seafood needing more acid than most whites offer.","page":95}
+{"kind":"principles","rule":"Pinot Gris/Grigio's mineral, brisk acidity counters fattier seafood and acidic foods like tomato, and copes with spicy dishes.","page":96}
+{"kind":"principles","rule":"Lean Italian Pinot Grigio suits light dishes and delicate shellfish; fuller Oregon and Alsace Pinot Gris can handle salmon and sea bass.","page":100}
+{"kind":"principles","rule":"Pinot Gris/Grigio is an all-purpose wine for appetizers, lunches and warm weather.","page":100}
+{"kind":"grape_foods","grape":"Pinot Grigio / Gris","food":"Fish","dish":"salmon (Oregon Pinot Gris)","strength":3,"page":96,"why":"Oregon Pinot Gris is widely seen as the perfect foil for salmon."}
+{"kind":"grape_foods","grape":"Pinot Grigio / Gris","food":"Seafood","dish":"shrimp, clams, oysters, mussels, scallops","strength":2,"page":98,"why":"Core shellfish partners for its brisk acidity."}
+{"kind":"grape_foods","grape":"Pinot Grigio / Gris","food":"Fish","dish":"smoked salmon, sea bass, snapper, trout, swordfish, sole","strength":2,"page":98,"why":"Listed base ingredients; acidity cuts richer fish."}
+{"kind":"grape_foods","grape":"Pinot Grigio / Gris","food":"Spicy food","dish":"spicy gumbo and similar dishes","strength":2,"page":96,"why":"Flexible with a wide range of spicier dishes."}
+{"kind":"grape_foods","grape":"Pinot Grigio / Gris","food":"Seafood","dish":"simple fresh seafood at lunch (Italian Pinot Grigio)","strength":2,"page":95,"why":"Lean, neutral, refreshing style made for light seafood."}
+{"kind":"grape_foods","grape":"Sauvignon Blanc","food":"Chicken","dish":"turkey piccata with lime","strength":3,"page":90,"why":"Book calls it a terrific natural pairing via citrus."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Chicken","dish":"chicken with roasted red pepper sauce","strength":1,"page":92,"why":"Sweet roasted peppers meet the wine's cherry fruit."}
+{"kind":"bridges","grape":"Pinot Grigio / Gris","ingredients":["lime","lemon","roasted fennel","bell peppers","garlic","shallots","onions","dill","tarragon","thyme","basil","chives","cilantro","sage","toasted pine nuts","almonds","goat cheese","ricotta","mozzarella","fontina","sour cream","yogurt","Dijon mustard","capers","green olives","bacon","prosciutto","tomatoes","sun-dried tomatoes"],"page":98}
+{"kind":"regions","place":"Oregon (Willamette, Umpqua)","grapes":["Pinot Grigio / Gris"],"foods":["salmon"],"page":99}
+{"kind":"regions","place":"Alsace, France","grapes":["Pinot Grigio / Gris"],"foods":[],"page":99}
+{"kind":"regions","place":"Alto Adige and Friuli, Italy","grapes":["Pinot Grigio / Gris"],"foods":["simple fresh seafood"],"page":99}
+{"kind":"dessert","dessert":"general desserts (late-harvest Pinot Gris, Vendange Tardive / SGN, Tokay Pinot Gris)","wines":["Late-harvest Pinot Gris"],"page":99}
+{"kind":"cheese","cheese":"ricotta","wines":["Sauvignon Blanc","Pinot Noir"],"page":92}
+{"kind":"cheese","cheese":"smoked mozzarella","wines":["Sauvignon Blanc"],"page":85}
+{"kind":"recipes","title":"Marinated Mussels and Roasted Red Bell Peppers","page":101,"food":"Seafood","course":"starter","protein":"mussels","wines":["Pinot Grigio / Gris","Sauvignon Blanc"],"why":"Classic pairing: crisp acidity and racy fruit lift a fresh herb-marinated shellfish starter."}
+{"kind":"recipes","title":"\"TDF\" Gumbo Ma-Gumbo","page":104,"food":"Seafood","course":"starter","protein":"shrimp, crab, chicken, andouille","wines":["Pinot Grigio / Gris","Sauvignon Blanc"],"why":"Bright tangy fruit tames and contrasts spicy, hearty Cajun gumbo; keep Sauvignon unoaked."}
+{"kind":"recipes","title":"Scallop Salad with Anchovies, Radishes, and Almonds","page":108,"food":"Seafood","course":"starter","protein":"sea scallops","wines":["Pinot Grigio / Gris","Sauvignon Blanc"],"why":"Crisp fruity white contrasts sweet, salty, tart and bitter elements."}
+{"kind":"recipes","title":"Dragon-Fire Noodles with Shrimp","page":110,"food":"Spicy food","course":"main","protein":"shrimp with egg noodles","wines":["Pinot Grigio / Gris","Riesling"],"why":"Fruity, high-acid wine counterbalances chile heat; light Italian Pinot Grigio best."}
+{"kind":"recipes","title":"Grilled Salmon with Roasted Poblano–Lime Butter","page":112,"food":"Fish","course":"main","protein":"salmon","wines":["Pinot Grigio / Gris","Sauvignon Blanc"],"why":"Oregon's quintessential match: brisk acid cuts oily salmon; lime echoes the wine."}
+{"kind":"recipes","title":"Grilled Swordfish with Tomatillo-Cilantro Salsa Verde","page":114,"food":"Fish","course":"main","protein":"swordfish","wines":["Pinot Grigio / Gris","Sauvignon Blanc"],"why":"Tart tomatillo and bitter cilantro mirror the wine's zesty acidity; unoaked Sauvignon too."}
+{"kind":"recipes","title":"Rolled Veal with Prosciutto, Fontina, and Caper Sauce","page":117,"food":"Red meat","course":"main","protein":"veal scaloppini","wines":["Pinot Grigio / Gris","Sauvignon Blanc"],"why":"Saltimbocca-style; fuller Oregon Pinot Gris matches cheese texture, sage and prosciutto."}
+{"kind":"food_wines","food":"Fish","dish":"grilled salmon","wines":["Pinot Grigio / Gris","Sauvignon Blanc"],"avoid":[],"page":112,"why":"Brisk acidity weaves around oily richness and cleanses the palate."}
+{"kind":"food_wines","food":"Spicy food","dish":"fiery Chinese chile noodles","wines":["Pinot Grigio / Gris","Riesling"],"avoid":[],"page":110,"why":"Fruit plus acidity offsets chile heat."}
+{"kind":"food_wines","food":"Seafood","dish":"Cajun seafood gumbo","wines":["Pinot Grigio / Gris","Sauvignon Blanc"],"avoid":["oaky Sauvignon Blanc"],"page":104,"why":"Tangy fruit tames spice and hearty weight."}
+{"kind":"food_wines","food":"Red meat","dish":"veal saltimbocca-style with prosciutto, sage and cheese","wines":["Pinot Grigio / Gris","Sauvignon Blanc"],"avoid":[],"page":117,"why":"Fuller Pinot Gris suits cheese and cured ham; Italian classic."}
+{"kind":"grape_foods","grape":"Pinot Grigio / Gris","food":"Red meat","dish":"veal with prosciutto and fontina","strength":3,"page":117,"why":"Book's classic Italian marriage; fuller Oregon style best."}
+{"kind":"grape_foods","grape":"Pinot Grigio / Gris","food":"Seafood","dish":"marinated mussels","strength":3,"page":101,"why":"Marked classic pairing; crisp acid suits fresh shellfish."}
+{"kind":"regions","place":"Italy","grapes":["Pinot Grigio / Gris"],"foods":["veal saltimbocca-style rolls with prosciutto and fontina","simple seafood"],"page":117}
+{"kind":"regions","place":"Louisiana (Cajun)","grapes":["Pinot Grigio / Gris","Sauvignon Blanc"],"foods":["seafood gumbo"],"page":104}
+{"kind":"cheese","cheese":"fontina","wines":["Pinot Grigio / Gris"],"page":117}
+{"kind":"principles","rule":"Riesling's forward fruit, crispness and low alcohol make it superb at the table, and good Riesling ages well.","page":119}
+{"kind":"principles","rule":"German Riesling: Kabinett for appetizers including spicy ones; Spätlese for Asian food and seafood or poultry in cream sauce.","page":119}
+{"kind":"principles","rule":"Riesling and Gewürztraminer, fruity and unoaked, are very flexible with spicy Asian and Latin dishes.","page":120}
+{"kind":"principles","rule":"Riesling handles smoked and salty foods, flatters fruit salads and dishes with fruit sauces.","page":120}
+{"kind":"principles","rule":"Riesling is a good opening wine, and can contrast hearty dishes through lighter weight; ideal for summer outdoors.","page":124}
+{"kind":"grape_foods","grape":"Riesling","food":"Pork","dish":"holiday baked ham","strength":3,"page":120,"why":"Fruit and acid handle smoky, salty ham superbly."}
+{"kind":"grape_foods","grape":"Riesling","food":"Spicy food","dish":"spicy Asian and Latin dishes","strength":3,"page":120,"why":"High fruit and no oak make it extraordinarily flexible with spice."}
+{"kind":"grape_foods","grape":"Riesling","food":"Seafood","dish":"shrimp, scallops, mussels","strength":2,"page":122,"why":"Listed core shellfish partners."}
+{"kind":"grape_foods","grape":"Riesling","food":"Fish","dish":"trout, smoked trout, salmon, smoked salmon, snapper, sole, sea bass","strength":2,"page":122,"why":"Listed core fish partners, including smoked fish."}
+{"kind":"grape_foods","grape":"Riesling","food":"Chicken","dish":"chicken; poultry in cream sauce (Spätlese)","strength":2,"page":119,"why":"Fuller Spätlese suits cream-sauced poultry."}
+{"kind":"grape_foods","grape":"Riesling","food":"Pork","dish":"pork and smoked pork","strength":2,"page":122,"why":"Listed core partners; fruit contrasts smoke and salt."}
+{"kind":"grape_foods","grape":"Riesling","food":"Cheese","dish":"blue cheese, Roquefort, Cambozola, feta","strength":2,"page":123,"why":"Listed bridge cheeses; fruit offsets salty tang."}
+{"kind":"grape_foods","grape":"Late-harvest white","food":"Red meat","dish":"foie gras or rich pâté with Auslese and sweeter Riesling","strength":3,"page":119,"why":"Book calls sweet Riesling sublime with foie gras and rich pâté."}
+{"kind":"bridges","grape":"Riesling","ingredients":["apple","pear","lime","orange","orange zest","corn","leeks","sweet onions","peas","mushrooms","bacon","pancetta","prosciutto","green olives","black olives","mint","tarragon","cilantro","ginger","curry powder","nutmeg","honey","soy sauce","Roquefort","blue cheese","Cambozola","feta"],"page":123}
+{"kind":"cheese","cheese":"blue cheese, Roquefort, Cambozola","wines":["Riesling"],"page":123}
+{"kind":"cheese","cheese":"feta","wines":["Riesling"],"page":123}
+{"kind":"dessert","dessert":"general desserts","wines":["Riesling (Auslese, Beerenauslese, Trockenbeerenauslese, Eiswein)","Late-harvest white"],"page":119}
+{"kind":"regions","place":"Germany (Mosel-Saar-Ruwer, Rheingau, Rheinhessen, Pfalz)","grapes":["Riesling"],"foods":["foie gras and rich pâté with sweet styles"],"page":123}
+{"kind":"regions","place":"Alsace, France; Austria; Washington; South Australia; California","grapes":["Riesling"],"foods":[],"page":123}
+{"kind":"recipes","title":"Chilled Summer Peach Soup","page":126,"food":"Dessert","course":"starter","protein":"peaches (vegetarian)","wines":["Riesling","Gewürztraminer"],"why":"Peach soup mirrors Riesling's peach notes; keep the soup less sweet than the wine."}
+{"kind":"recipes","title":"Wilted Red Cabbage Salad with Tangerines, Bay Shrimp, and Almonds","page":128,"food":"Seafood","course":"starter","protein":"bay shrimp","wines":["Riesling","Gewürztraminer"],"why":"Slightly sweet dressing matches off-dry wine; tangerine heightens fruit."}
+{"kind":"recipes","title":"Harvest Salad with Pears, Blue Cheese, and Pomegranates","page":130,"food":"Cheese","course":"starter","protein":"blue cheese and pears (vegetarian)","wines":["Riesling","Sauvignon Blanc"],"why":"Salty tangy blue cheese contrasts fruity off-dry Riesling; pears echo its pear notes."}
+{"kind":"recipes","title":"Grilled Vegetable Salad with Major Grey Chutney Dressing","page":132,"food":"Spicy food","course":"side","protein":"grilled vegetables (vegetarian)","wines":["Riesling","Gewürztraminer"],"why":"Sweet-tart spicy dressing needs a medium-sweet wine."}
+{"kind":"recipes","title":"Creole-Style Prawns","page":134,"food":"Seafood","course":"main","protein":"prawns","wines":["Riesling","Sauvignon Blanc"],"why":"Sweet-tangy ketchup-based sauce wraps around off-dry Riesling; Sauvignon gives tart contrast."}
+{"kind":"recipes","title":"Asian-Style Grilled Salmon with Fennel–Pickled Ginger Relish","page":137,"food":"Fish","course":"main","protein":"salmon","wines":["Riesling","Gewürztraminer"],"why":"Ginger and sweet fennel lift Riesling's floral bouquet; choose Kabinett or Spätlese."}
+{"kind":"recipes","title":"Hoisin Barbecued Game Hens with Chinese-Style Vegetables","page":140,"food":"Chicken","course":"main","protein":"Cornish game hens","wines":["Riesling","Gewürztraminer"],"why":"Fruity low-alcohol wine accentuates salty, sweet, spicy hoisin flavours."}
+{"kind":"recipes","title":"Smoked Pork Chops with Sauerkraut and Green Apples","page":143,"food":"Pork","course":"main","protein":"smoked pork chops and sausage","wines":["Riesling","Pinot Grigio / Gris"],"why":"Classic Alsatian choucroute match: acid meets sauerkraut, slight sweetness contrasts smoky salty pork."}
+{"kind":"food_wines","food":"Pork","dish":"choucroute: smoked pork, sausage and sauerkraut","wines":["Riesling","Pinot Grigio / Gris"],"avoid":[],"page":143,"why":"Classic: off-dry Riesling contrasts smoke and salt, matches sauerkraut tang."}
+{"kind":"food_wines","food":"Chicken","dish":"hoisin or soy-glazed grilled poultry","wines":["Riesling","Gewürztraminer"],"avoid":[],"page":140,"why":"Forward fruit accents rather than smothers Asian spices."}
+{"kind":"food_wines","food":"Fish","dish":"salmon with ginger and Asian seasonings","wines":["Riesling","Gewürztraminer"],"avoid":[],"page":137,"why":"Ginger and fennel heighten floral aromatics."}
+{"kind":"food_wines","food":"Seafood","dish":"Creole prawns in sweet-tangy tomato sauce","wines":["Riesling","Sauvignon Blanc"],"avoid":[],"page":134,"why":"Off-dry fruit matches a slightly sweet sauce."}
+{"kind":"food_wines","food":"Spicy food","dish":"chicken curry, sweet-and-sour pork, tandoori chicken, spicy stir-fried seafood","wines":["Gewürztraminer"],"avoid":[],"page":147,"why":"Exotic fruit and mild sweetness contrast salt and spice."}
+{"kind":"food_wines","food":"Pork","dish":"sweet-and-sour pork","wines":["Gewürztraminer"],"avoid":[],"page":147,"why":"Fruity, mildly sweet wine handles sweet-sour and soy."}
+{"kind":"grape_foods","grape":"Riesling","food":"Pork","dish":"smoked pork chops with sauerkraut (choucroute)","strength":3,"page":143,"why":"Marked classic pairing for off-dry Riesling."}
+{"kind":"grape_foods","grape":"Riesling","food":"Chicken","dish":"hoisin-glazed grilled game hens","strength":2,"page":140,"why":"Bright, cleansing contrast to salty-sweet-spicy glaze."}
+{"kind":"grape_foods","grape":"Riesling","food":"Cheese","dish":"blue cheese and pear salad","strength":3,"page":130,"why":"Classic pairing; salty blue cheese contrasts fruity off-dry wine."}
+{"kind":"grape_foods","grape":"Gewürztraminer","food":"Spicy food","dish":"Asian and Indian dishes with soy or spice","strength":3,"page":147,"why":"Book rates it a revelation with these cuisines."}
+{"kind":"grape_foods","grape":"Gewürztraminer","food":"Chicken","dish":"chicken curry, tandoori chicken","strength":3,"page":147,"why":"Fruit and mild sweetness contrast spice."}
+{"kind":"grape_foods","grape":"Gewürztraminer","food":"Pork","dish":"sweet-and-sour pork, pork","strength":2,"page":147,"why":"Named example and listed base ingredient."}
+{"kind":"grape_foods","grape":"Gewürztraminer","food":"Seafood","dish":"crab, mussels, shrimp; spicy stir-fried seafood","strength":2,"page":149,"why":"Listed base ingredients; handles spice."}
+{"kind":"grape_foods","grape":"Gewürztraminer","food":"Chicken","dish":"poultry, turkey, squab","strength":2,"page":149,"why":"Listed base ingredients."}
+{"kind":"grape_foods","grape":"Gewürztraminer","food":"Spicy food","dish":"sweet-tart chutneys, relishes, smoky salsas","strength":2,"page":147,"why":"Captures smoky, spicy, slightly sweet flavours where others fail."}
+{"kind":"bridges","grape":"Gewürztraminer","ingredients":["orange","pineapple","passion fruit","mango","guava","papaya","lychee","curry powder","ginger","fennel seed","cinnamon","clove","sweet onions","coconut","Jalapeño Jack","smoked Gouda","smoked mozzarella","soy sauce","sugar","honey"],"page":149}
+{"kind":"cheese","cheese":"smoked Gouda, smoked mozzarella, Jalapeño Jack","wines":["Gewürztraminer"],"page":149}
+{"kind":"dessert","dessert":"apricot, peach and apple desserts","wines":["Late-harvest Gewürztraminer (vendange tardive / SGN)"],"page":146}
+{"kind":"principles","rule":"Gewürztraminer and Riesling succeed with smoked, spicy, salty and slightly sweet dishes where other wines fall flat.","page":147}
+{"kind":"principles","rule":"Gewürztraminer is low in acid; avoid very acidic dishes, which make it taste lifeless.","page":150}
+{"kind":"principles","rule":"Even with a fruit soup, adjust the dish so it is not sweeter than the wine.","page":127}
+{"kind":"regions","place":"Alsace, France","grapes":["Riesling","Pinot Grigio / Gris"],"foods":["choucroute garnie (smoked pork, sausage, sauerkraut)"],"page":143}
+{"kind":"regions","place":"Alsace, France","grapes":["Gewürztraminer"],"foods":["apricot, peach and apple desserts with late-harvest versions"],"page":146}
+{"kind":"regions","place":"Pfalz, Germany; California; Washington","grapes":["Gewürztraminer"],"foods":[],"page":150}
+{"kind":"principles","rule":"Gewürztraminer overwhelms delicately flavoured seafood or poultry; serve it well chilled.","page":151}
+{"kind":"food_wines","food":"Fish","dish":"delicately flavoured white fish or poultry","wines":["Pinot Grigio / Gris","Sauvignon Blanc"],"avoid":["Gewürztraminer"],"page":151,"why":"Gewürztraminer's perfume overpowers delicate flavours."}
+{"kind":"recipes","title":"Arugula, Smoked Trout, Roasted Beets, and Caramelized Cashews with Ginger-Chile Dressing","page":152,"food":"Fish","course":"starter","protein":"smoked trout","wines":["Gewürztraminer","Riesling"],"why":"Spicy wine suits smoked fish, beets and spiced nuts; off-dry California style best."}
+{"kind":"recipes","title":"Indian Chicken with Nectarine Chutney","page":156,"food":"Chicken","course":"main","protein":"whole roast chicken","wines":["Gewürztraminer","Riesling"],"why":"Slightly sweet spicy wine harmonises with spice, tartness and chutney sweetness."}
+{"kind":"recipes","title":"Spicy Gingered-Carrot Soup","page":160,"food":"Spicy food","course":"starter","protein":"carrots (vegetarian with chicken stock)","wines":["Gewürztraminer","Pinot Grigio / Gris"],"why":"Off-dry wine links Asian spices and contrasts creamy peanut richness."}
+{"kind":"recipes","title":"Baked Ham with Spicy Apricot-Orange Glaze and Curried Apple Couscous","page":162,"food":"Pork","course":"main","protein":"smoked ham","wines":["Gewürztraminer","Riesling"],"why":"Classic pairing with smoky salty ham; sweet spicy glaze and curry pull it together."}
+{"kind":"food_wines","food":"Chicken","dish":"Indian spiced chicken with fruit chutney","wines":["Gewürztraminer","Riesling"],"avoid":["Chardonnay"],"page":156,"why":"Chardonnay is obliterated by these spices; aromatic off-dry whites harmonise."}
+{"kind":"food_wines","food":"Pork","dish":"baked glazed ham","wines":["Gewürztraminer","Riesling"],"avoid":[],"page":162,"why":"Classic: slight sweetness offsets smoke and salt."}
+{"kind":"food_wines","food":"Fish","dish":"smoked trout salad","wines":["Gewürztraminer","Riesling"],"avoid":[],"page":152,"why":"Spicy, off-dry whites suit smoke and spice."}
+{"kind":"grape_foods","grape":"Gewürztraminer","food":"Pork","dish":"baked glazed ham","strength":3,"page":162,"why":"Marked classic pairing; classic with smoked, salty foods."}
+{"kind":"grape_foods","grape":"Gewürztraminer","food":"Chicken","dish":"Indian roast chicken with nectarine chutney","strength":2,"page":156,"why":"Fruity spicy wine supports sweet-tart spice."}
+{"kind":"grape_foods","grape":"Gewürztraminer","food":"Fish","dish":"smoked trout","strength":2,"page":152,"why":"Nice foil for smoked and spicier foods."}
+{"kind":"regions","place":"India, Morocco, Thailand (cuisines)","grapes":["Gewürztraminer","Riesling"],"foods":["Indian chicken with chutney","curries"],"page":156}
+{"kind":"principles","rule":"Viognier is full, high-alcohol and low-acid; pair with aromatic, full-flavoured, somewhat rich foods.","page":166}
+{"kind":"principles","rule":"Smoky dishes and dishes featuring peach or apricot support Viognier beautifully.","page":170}
+{"kind":"grape_foods","grape":"Viognier","food":"Fish","dish":"salmon, mahi-mahi, halibut, sea bass","strength":2,"page":168,"why":"Listed base ingredients for this rich white."}
+{"kind":"grape_foods","grape":"Viognier","food":"Seafood","dish":"shrimp, crab, lobster, mussels, smoked mussels and oysters","strength":2,"page":168,"why":"Rich shellfish and smoky shellfish suit its body."}
+{"kind":"grape_foods","grape":"Viognier","food":"Chicken","dish":"chicken, duck","strength":2,"page":168,"why":"Listed base ingredients."}
+{"kind":"grape_foods","grape":"Viognier","food":"Pork","dish":"pork","strength":2,"page":168,"why":"Listed base ingredient."}
+{"kind":"grape_foods","grape":"Viognier","food":"Red meat","dish":"veal","strength":1,"page":168,"why":"Listed base ingredient."}
+{"kind":"bridges","grape":"Viognier","ingredients":["corn","squash","dried apricot","dried peach","pineapple","coconut","mango","papaya","orange","blood orange","ginger","curry powder","sweet paprika","rosemary","lavender","basil","thyme","fennel seed","toasted macadamia","almonds","pine nuts","cashews","honey","cream","sour cream","butter","olive oil"],"page":168}
+{"kind":"regions","place":"Northern Rhône, France (Condrieu, Château-Grillet)","grapes":["Viognier"],"foods":[],"page":169}
+{"kind":"regions","place":"Languedoc-Roussillon, France; California; Virginia","grapes":["Viognier"],"foods":[],"page":169}
+{"kind":"recipes","title":"Louis-Style Shrimp in Endive \"Boats\"","page":171,"food":"Seafood","course":"starter","protein":"bay shrimp","wines":["Viognier","Gewürztraminer"],"why":"Sweet spicy creamy dressing heightens Viognier's exotic flavour and lush body."}
+{"kind":"recipes","title":"Smoked Oyster–Cream Cheese Wontons","page":173,"food":"Seafood","course":"starter","protein":"smoked oysters","wines":["Viognier","Champagne"],"why":"Creamy filling matches silky texture; smoke meets exotic fruit; bubbles give contrast."}
+{"kind":"recipes","title":"Lobster Salad with Apricot-Walnut Vinaigrette","page":175,"food":"Seafood","course":"starter","protein":"lobster","wines":["Viognier","Chardonnay"],"why":"Apricot dressing mirrors Viognier's fruit; rich lobster suits both full whites."}
+{"kind":"food_wines","food":"Seafood","dish":"lobster","wines":["Viognier","Chardonnay"],"avoid":[],"page":175,"why":"Full-bodied whites match lobster's richness."}
+{"kind":"food_wines","food":"Seafood","dish":"smoked oysters with cream cheese","wines":["Viognier","Champagne"],"avoid":[],"page":173,"why":"Texture match, or crisp contrast."}
+{"kind":"grape_foods","grape":"Chardonnay","food":"Seafood","dish":"lobster","strength":2,"page":175,"why":"Natural affinity of full body with rich lobster."}
+{"kind":"recipes","title":"Chicken Paprika with Dried Peach and Almond Relish","page":177,"food":"Chicken","course":"main","protein":"chicken breast","wines":["Viognier","Riesling"],"why":"Classic pairing: sweet-hot paprika and dried-peach relish echo Viognier's apricot-peach fruit."}
+{"kind":"recipes","title":"Duck Breasts with Honey, Ginger, and Lavender","page":180,"food":"Chicken","course":"main","protein":"duck breast","wines":["Viognier","Pinot Noir"],"why":"Aromatic ginger, lavender, vanilla and honey mirror Viognier; duck also suits Pinot Noir's cherry spice."}
+{"kind":"food_wines","food":"Chicken","dish":"chicken paprikash with sour cream","wines":["Viognier","Riesling"],"avoid":[],"page":177,"why":"Opulent fruit meets sweet paprika and dried fruit."}
+{"kind":"food_wines","food":"Chicken","dish":"duck breast with honey and aromatic spices","wines":["Viognier","Pinot Noir"],"avoid":[],"page":180,"why":"Aromatic match for white; cherry-spice link for red."}
+{"kind":"grape_foods","grape":"Viognier","food":"Chicken","dish":"chicken paprika with dried-fruit relish","strength":3,"page":177,"why":"Marked classic pairing; dried peach echoes the wine."}
+{"kind":"grape_foods","grape":"Viognier","food":"Chicken","dish":"duck breast with honey, ginger, lavender","strength":2,"page":180,"why":"Aromatic ingredients capture the wine's perfume; rich sauce matches body."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Chicken","dish":"duck breast with spice","strength":2,"page":180,"why":"Duck and spice accentuate cherry-spice fruit."}
+{"kind":"principles","rule":"Chardonnay is perhaps the hardest wine to pair: high alcohol and heavy oak; unoaked or lightly oaked versions are far easier.","page":184}
+{"kind":"principles","rule":"Heavily oaked, buttery Chardonnay works best as an aperitif or with simply prepared seafood and lighter meats.","page":185}
+{"kind":"principles","rule":"Match Chardonnay mainly on texture: dishes of similar weight and creaminess succeed more reliably than flavour matches.","page":185}
+{"kind":"principles","rule":"Avoid chile-spicy dishes with Chardonnay; heat accentuates its alcohol and oak.","page":191}
+{"kind":"principles","rule":"Toasted nuts sprinkled on a dish draw it toward an oaky Chardonnay; butter and cream also love it.","page":191}
+{"kind":"principles","rule":"Corn and tarragon are secret-weapon ingredients for Chardonnay.","page":192}
+{"kind":"food_wines","food":"Spicy food","dish":"chile-hot dishes","wines":["Riesling","Gewürztraminer"],"avoid":["Chardonnay"],"page":191,"why":"Chiles amplify Chardonnay's alcohol and oak."}
+{"kind":"grape_foods","grape":"Chardonnay","food":"Seafood","dish":"crab, shrimp, clams, scallops, lobster","strength":2,"page":188,"why":"Rich shellfish suit its full body."}
+{"kind":"grape_foods","grape":"Chardonnay","food":"Fish","dish":"halibut, sea bass, monkfish, snapper, trout, grouper, swordfish, salmon, tuna","strength":2,"page":188,"why":"Listed base fish, ideally simply prepared."}
+{"kind":"grape_foods","grape":"Chardonnay","food":"Chicken","dish":"chicken, game hen, turkey, pheasant, goose","strength":2,"page":188,"why":"Listed poultry partners; richer dishes best."}
+{"kind":"grape_foods","grape":"Chardonnay","food":"Red meat","dish":"veal, simply prepared","strength":2,"page":191,"why":"Pairs nicely with veal mains kept simple."}
+{"kind":"grape_foods","grape":"Chardonnay","food":"Pork","dish":"pork, simply prepared","strength":2,"page":191,"why":"Pairs nicely with pork mains kept simple."}
+{"kind":"bridges","grape":"Chardonnay","ingredients":["orange","lime","lemon","citrus zest","pears","apples","roasted fennel","corn","avocado","pumpkin","squash","coconut","coconut milk","polenta","tarragon","basil","thyme","nutmeg","curry powder","ginger","saffron","toasted hazelnuts","pine nuts","cashews","almonds","olive oil","butter","cream","milk","sour cream","shiitake","oyster mushrooms","crimini","chanterelle","Brie","Parmesan","Swiss","Jack","bacon","pancetta","sweet onions","roasted garlic","Dijon mustard","mango","papaya","pineapple"],"page":188}
+{"kind":"cheese","cheese":"Brie, Parmesan, Swiss, Jack","wines":["Chardonnay"],"page":189}
+{"kind":"regions","place":"Burgundy, France (Meursault, Puligny- and Chassagne-Montrachet, Corton-Charlemagne, Chalonnaise, Mâconnais, Chablis)","grapes":["Chardonnay"],"foods":[],"page":189}
+{"kind":"regions","place":"Australia (Barossa, Hunter, Margaret River, Yarra, Padthaway); California; Long Island; Alto Adige and Friuli; New Zealand; Chile; South Africa","grapes":["Chardonnay"],"foods":[],"page":190}
+{"kind":"recipes","title":"Chilled Corn and Sun-Dried Tomato Chowder with Goat Cheese–Chive Croutons","page":192,"food":"Pasta and pizza","course":"starter","protein":"corn (vegetarian with chicken stock)","wines":["Chardonnay","Sauvignon Blanc"],"why":"Sweet corn and tarragon are Chardonnay bridges; goat cheese croutons suit Sauvignon."}
+{"kind":"recipes","title":"Scallop and Smoked Salmon Cakes with Rémoulade","page":196,"food":"Seafood","course":"starter","protein":"scallops and smoked salmon","wines":["Chardonnay","Viognier"],"why":"Creamy, succulent cakes match Chardonnay's weight: a texture pairing."}
+{"kind":"recipes","title":"Crab, Jícama, and Mango Salad with Lemon-Curry Dressing","page":200,"food":"Seafood","course":"starter","protein":"crab","wines":["Chardonnay","Viognier"],"why":"Classic pairing: rich crab, mango and light curry echo tropical fruit and oak spice."}
+{"kind":"grape_foods","grape":"Chardonnay","food":"Seafood","dish":"crab salad with mango and curry","strength":3,"page":200,"why":"Marked classic pairing; tropical fruit and spice echo the wine."}
+{"kind":"grape_foods","grape":"Chardonnay","food":"Seafood","dish":"scallop and smoked salmon cakes","strength":2,"page":196,"why":"Similar texture and weight unite food and wine."}
+{"kind":"food_wines","food":"Seafood","dish":"crab with tropical fruit and mild curry","wines":["Chardonnay","Viognier"],"avoid":[],"page":200,"why":"Rich crab and mango echo ripe fruit in full whites."}
+{"kind":"food_wines","food":"Seafood","dish":"seafood cakes with creamy sauce","wines":["Chardonnay","Viognier"],"avoid":[],"page":196,"why":"Texture match."}
+{"kind":"recipes","title":"Risotto with Squash, Oyster Mushrooms, and Peppered Jack Cheese","page":202,"food":"Pasta and pizza","course":"main","protein":"butternut squash and mushrooms (vegetarian with chicken stock)","wines":["Chardonnay","Sauvignon Blanc"],"why":"Squash and mushroom mesh with the wine; creamy risotto matches its body; best with little oak."}
+{"kind":"recipes","title":"Rigatoni with Shiitake Mushrooms, Fennel, and Oysters","page":204,"food":"Pasta and pizza","course":"main","protein":"oysters","wines":["Chardonnay","Sauvignon Blanc"],"why":"Silky oysters and a touch of cream suit crisper Chardonnay like Chablis; earthy shiitake complements."}
+{"kind":"recipes","title":"Spinach Fettuccine with Sea Bass and Lemongrass-Coconut Cream Sauce","page":206,"food":"Pasta and pizza","course":"main","protein":"sea bass","wines":["Chardonnay","Viognier"],"why":"Rich coconut cream sauce gives the body Chardonnay needs; Viognier suits the aromatics."}
+{"kind":"recipes","title":"Broiled Monkfish with Fennel, Hazelnuts, and Orange Sauce","page":208,"food":"Fish","course":"main","protein":"monkfish","wines":["Chardonnay","Sauvignon Blanc"],"why":"Orange, fennel and toasted hazelnut echo the wine; lobster-like monkfish suits Chardonnay."}
+{"kind":"recipes","title":"Cold Poached Salmon with Tarragon-Mint Aïoli","page":210,"food":"Fish","course":"main","protein":"salmon","wines":["Chardonnay","Pinot Noir"],"why":"Creamy herb aïoli suits full Chardonnay; Pinot Noir is a natural match for oily salmon."}
+{"kind":"recipes","title":"Three-Seed Crusted Ahi with Lima Beans, Corn, and Pancetta","page":212,"food":"Fish","course":"main","protein":"ahi tuna","wines":["Chardonnay","Pinot Noir"],"why":"Creamy beans and smoky pancetta steer to oaked Chardonnay; rare ahi alone is best with Pinot Noir."}
+{"kind":"recipes","title":"Herb and Spice Roasted Cornish Game Hens","page":215,"food":"Chicken","course":"main","protein":"Cornish game hens","wines":["Chardonnay","Sauvignon Blanc"],"why":"Simple herb-mustard roast showcases fruity Chardonnay's flavour and body."}
+{"kind":"recipes","title":"Braised Pork with Apples, Mushrooms, and Calvados","page":218,"food":"Pork","course":"main","protein":"pork shoulder","wines":["Chardonnay","Pinot Noir"],"why":"Braised pork, apple, mushroom and sour cream suit round oaked Chardonnay; Pinot Noir a classic pork match."}
+{"kind":"recipes","title":"Veal Roast with Dijon-Tinged Vegetable Sauce","page":220,"food":"Red meat","course":"main","protein":"leg of veal","wines":["Chardonnay","Pinot Noir"],"why":"A little Dijon links to Chardonnay; slow-roasted veal suits full white or Pinot Noir."}
+{"kind":"recipes","title":"Grilled Rabbit with Preserved Lemon–Toasted Pine Nut Couscous","page":222,"food":"Red meat","course":"main","protein":"rabbit (or grilled chicken)","wines":["Chardonnay","Sauvignon Blanc"],"why":"Preserved lemon links to the wine; toasted pine nuts bridge to oak."}
+{"kind":"recipes","title":"Preserved Lemons","page":225,"food":"Chicken","course":"side","protein":"lemons (condiment)","wines":["Chardonnay"],"why":"Moroccan pantry staple used to connect seafood, poultry and rabbit dishes to Chardonnay."}
+{"kind":"food_wines","food":"Fish","dish":"rare seared ahi tuna","wines":["Pinot Noir"],"avoid":[],"page":212,"why":"Author rates rare ahi with Pinot Noir a standout match."}
+{"kind":"food_wines","food":"Pork","dish":"braised pork with apples, mushrooms and cream","wines":["Chardonnay","Pinot Noir"],"avoid":[],"page":218,"why":"Pork's richness suits barrel-aged white; Pinot texture also complements."}
+{"kind":"food_wines","food":"Red meat","dish":"roast veal","wines":["Chardonnay","Pinot Noir"],"avoid":[],"page":220,"why":"Veal is amiable with full-bodied whites and light reds."}
+{"kind":"food_wines","food":"Fish","dish":"cold poached salmon with herb mayonnaise","wines":["Chardonnay","Pinot Noir"],"avoid":[],"page":210,"why":"Creamy sauce for white, oily salmon for red."}
+{"kind":"food_wines","food":"Seafood","dish":"oysters in light cream pasta","wines":["Chardonnay (Chablis)","Sauvignon Blanc"],"avoid":[],"page":204,"why":"Silky oysters balance crisp Chardonnay."}
+{"kind":"food_wines","food":"Red meat","dish":"grilled rabbit","wines":["Chardonnay","Sauvignon Blanc"],"avoid":[],"page":222,"why":"Versatile lean meat; lemon and pine nuts bridge."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Fish","dish":"rare seared ahi tuna","strength":3,"page":212,"why":"Author rates rare ahi with Pinot Noir a standout match."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Fish","dish":"salmon","strength":2,"page":210,"why":"Natural match with salmon's oily richness."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Pork","dish":"pork","strength":3,"page":218,"why":"Book calls Pinot Noir a classic match with pork."}
+{"kind":"grape_foods","grape":"Chardonnay","food":"Pork","dish":"braised pork with apples and Calvados","strength":3,"page":218,"why":"Pork braised is a perfect complement to barrel-aged Chardonnay."}
+{"kind":"grape_foods","grape":"Chardonnay","food":"Fish","dish":"monkfish with orange, fennel and hazelnuts","strength":2,"page":208,"why":"Lobster-like texture plus nutty, citrus bridges."}
+{"kind":"grape_foods","grape":"Chardonnay","food":"Pasta and pizza","dish":"creamy risotto with squash and mushrooms (vegetarian)","strength":2,"page":202,"why":"Texture and flavour match, best with lightly oaked wine."}
+{"kind":"grape_foods","grape":"Chardonnay","food":"Chicken","dish":"herb-roasted game hens","strength":2,"page":215,"why":"Homey match that works extremely well."}
+{"kind":"grape_foods","grape":"Chardonnay","food":"Red meat","dish":"roast veal with Dijon","strength":2,"page":220,"why":"Veal amiable with full-bodied Chardonnay."}
+{"kind":"principles","rule":"White wine can match meat: braised pork with apples and cream suits round, barrel-aged Chardonnay.","page":218}
+{"kind":"principles","rule":"Dijon mustard used sparingly is a versatile bridge to many wines, Chardonnay included.","page":220}
+{"kind":"principles","rule":"Side ingredients can redirect a pairing: creamy beans and smoky pancetta steer tuna from Pinot Noir to oaked Chardonnay.","page":212}
+{"kind":"principles","rule":"Crisp, higher-acid Chardonnay such as Chablis suits silky oysters, especially with a little cream.","page":204}
+{"kind":"regions","place":"Chablis, Burgundy, France","grapes":["Chardonnay"],"foods":["oysters"],"page":204}
+{"kind":"regions","place":"Normandy, France","grapes":["Chardonnay"],"foods":["pork with apples and Calvados"],"page":218}
+{"kind":"regions","place":"Morocco","grapes":["Chardonnay"],"foods":["preserved lemons","couscous with grilled rabbit"],"page":222}
+{"kind":"cheese","cheese":"peppered Jack","wines":["Chardonnay","Sauvignon Blanc"],"page":202}
+{"kind":"principles","rule":"Lighter, fruit-forward Pinot Noir is especially food-friendly; fruity styles even handle seasoned, smoked and mildly spicy dishes.","page":230}
+{"kind":"principles","rule":"Pinot Noir is the most flexible red: meat, poultry, vegetarian dishes and some fish such as salmon and ahi.","page":235}
+{"kind":"principles","rule":"Lightly aromatic spices harmonise with fruity Pinot Noir; don't overwhelm it with powerful, assertive dishes.","page":235}
+{"kind":"principles","rule":"Oily, meaty fish like salmon and tuna have enough fat to coat the tongue and balance a red wine's tannin.","page":239}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Red meat","dish":"beef, veal, sweetbreads, kidneys, liver, rabbit","strength":2,"page":232,"why":"Listed base ingredients for this flexible red."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Lamb","dish":"lamb","strength":2,"page":232,"why":"Listed base ingredient."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Chicken","dish":"chicken, game hens, squab, pheasant, duck, quail","strength":2,"page":232,"why":"Poultry and game birds listed as core partners."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Fish","dish":"grilled salmon with mushrooms and Pinot Noir sauce","strength":3,"page":239,"why":"Marked classic pairing; oily meaty fish blends seamlessly with the wine."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Fish","dish":"grilled ahi with ginger-black bean sauce","strength":3,"page":242,"why":"Sweet oily tuna and fleshy wine are called sublime together."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Pasta and pizza","dish":"mushroom risotto with radicchio and Parmesan (vegetarian)","strength":2,"page":236,"why":"Earthy, bitter notes heightened by the wine's fruit and earthiness."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Chicken","dish":"Asian-spiced grilled squab","strength":2,"page":245,"why":"Five-spice marinade plays off Asian spice notes in the wine."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Pork","dish":"grilled pork tenderloin with pomegranate and star anise sauce","strength":2,"page":249,"why":"Sweet-tart pomegranate and star anise echo the wine."}
+{"kind":"bridges","grape":"Pinot Noir","ingredients":["berries","cherries","dried cherries","shiitake","portobello","crimini","porcini","chanterelle","morel","truffles","onions","sweet onions","shallots","garlic","roasted garlic","Brie","Teleme","aged goat cheese","aged Cheddar","pesto","black beans","lentils","eggplant","beets","roasted red peppers","black olives","cinnamon","clove","star anise","ginger","fennel seed","pepper","mint","basil","tarragon","thyme","rosemary","lavender","oregano","roasted tomato","sun-dried tomato","Dijon mustard"],"page":233}
+{"kind":"cheese","cheese":"Brie, Teleme, aged goat cheese, aged Cheddar","wines":["Pinot Noir"],"page":233}
+{"kind":"cheese","cheese":"Parmesan (in mushroom risotto)","wines":["Pinot Noir","Chardonnay"],"page":236}
+{"kind":"regions","place":"Burgundy (Côte d'Or), France","grapes":["Pinot Noir"],"foods":[],"page":234}
+{"kind":"regions","place":"Oregon (Willamette Valley); California (Anderson Valley, Russian River, Carneros, Santa Barbara, Monterey)","grapes":["Pinot Noir"],"foods":["salmon"],"page":234}
+{"kind":"recipes","title":"Risotto with Roasted Shallots, Portobello Mushrooms, Radicchio, and Parmesan","page":236,"food":"Pasta and pizza","course":"main","protein":"portobello mushrooms (vegetarian with chicken stock)","wines":["Pinot Noir","Chardonnay"],"why":"Earthy bitter flavours meet Pinot's fruit and earth; Chardonnay gives a texture match."}
+{"kind":"recipes","title":"Grilled Salmon with Mushrooms, Sweet Onions, and Pinot Noir Sauce","page":239,"food":"Fish","course":"main","protein":"salmon","wines":["Pinot Noir","Zinfandel / Primitivo"],"why":"Classic pairing: oily salmon balances tannin; Pinot Noir sauce carries mushroom and onion."}
+{"kind":"recipes","title":"Grilled Ahi with Ginger–Black Bean Sauce","page":242,"food":"Fish","course":"main","protein":"ahi tuna","wines":["Pinot Noir","Sauvignon Blanc"],"why":"Rare ahi seduces Pinot Noir; ginger-black bean sauce draws out young, low-oak fruit and spice."}
+{"kind":"recipes","title":"Asian-Style Grilled Squab with Fennel, Bok Choy, and Chanterelle Mushrooms","page":245,"food":"Chicken","course":"main","protein":"squab","wines":["Pinot Noir","Chardonnay"],"why":"Asian marinade echoes Pinot's spice; rich Chardonnay supports the bird's fat."}
+{"kind":"recipes","title":"Grilled Pork Tenderloin with Pomegranate Sauce","page":249,"food":"Pork","course":"main","protein":"pork tenderloin","wines":["Pinot Noir","Merlot"],"why":"Sweet-tart pomegranate and star anise mirror Pinot Noir's fruit and exotic spice."}
+{"kind":"food_wines","food":"Fish","dish":"grilled salmon","wines":["Pinot Noir","Zinfandel / Primitivo"],"avoid":[],"page":239,"why":"Classic: salmon's oil softens tannin and blends with red fruit."}
+{"kind":"food_wines","food":"Fish","dish":"rare grilled tuna with Asian sauce","wines":["Pinot Noir","Sauvignon Blanc"],"avoid":["heavily oaked Pinot Noir"],"page":242,"why":"Young, low-oak Pinot shows fruit and spice."}
+{"kind":"food_wines","food":"Pork","dish":"grilled pork tenderloin with fruit sauce","wines":["Pinot Noir","Merlot"],"avoid":[],"page":249,"why":"Fruity sauce echoes sweet-tart red fruit."}
+{"kind":"food_wines","food":"Chicken","dish":"grilled squab or game birds with Asian spice","wines":["Pinot Noir","Chardonnay"],"avoid":[],"page":245,"why":"Spice echoes the wine; rich white supports fat."}
+{"kind":"food_wines","food":"Pasta and pizza","dish":"mushroom risotto (vegetarian)","wines":["Pinot Noir","Chardonnay"],"avoid":[],"page":236,"why":"Earthy flavours match earthy red; creamy texture suits Chardonnay."}
+{"kind":"recipes","title":"Thai-Style Grilled Lamb with Raspberry-Mango Relish","page":252,"food":"Lamb","course":"main","protein":"butterflied leg of lamb","wines":["Pinot Noir","Zinfandel / Primitivo"],"why":"Spicy, sweet, salty marinade needs a fruity low-tannin red; oaky or tannic wines clash."}
+{"kind":"recipes","title":"Coffee- and Spice-Rubbed Lamb with Coffee-Vanilla Sauce","page":255,"food":"Lamb","course":"main","protein":"lamb sirloin or chops","wines":["Pinot Noir","Cabernet Sauvignon"],"why":"Coffee and vanilla mirror the notes aged Pinot and barrel-aged reds develop."}
+{"kind":"recipes","title":"Roast Leg of Veal with Wild Mushroom Sauce and Walnuts","page":258,"food":"Red meat","course":"main","protein":"leg of veal","wines":["Pinot Noir","Merlot"],"why":"Wild mushrooms accentuate Pinot's earthiness; walnuts soften tannin; Merlot's soft fruit suits too."}
+{"kind":"food_wines","food":"Lamb","dish":"Asian-marinated grilled lamb (spicy, sweet, salty)","wines":["Pinot Noir","Zinfandel / Primitivo"],"avoid":["heavily oaked reds","tannic reds"],"page":252,"why":"Oak and tannin fight sweet-salty-spicy flavours; fruity low-tannin reds harmonise."}
+{"kind":"food_wines","food":"Lamb","dish":"coffee and spice rubbed lamb","wines":["Pinot Noir","Cabernet Sauvignon"],"avoid":[],"page":255,"why":"Mirrors coffee and vanilla in aged reds."}
+{"kind":"food_wines","food":"Red meat","dish":"veal with wild mushroom sauce","wines":["Pinot Noir","Merlot"],"avoid":[],"page":258,"why":"Pinot Noir and wild mushrooms are a natural fit."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Lamb","dish":"Thai-style grilled lamb with fruit relish","strength":2,"page":252,"why":"Fruity, lower tannin suits sweet-spicy-salty marinade."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Lamb","dish":"coffee-rubbed lamb (aged Pinot Noir)","strength":2,"page":255,"why":"Echoes coffee notes of aged Pinot."}
+{"kind":"grape_foods","grape":"Pinot Noir","food":"Red meat","dish":"roast veal with wild mushrooms","strength":3,"page":258,"why":"Wild mushrooms bring out the earthiness in Pinot Noir."}
+{"kind":"grape_foods","grape":"Merlot","food":"Red meat","dish":"roast veal with mushroom sauce","strength":1,"page":258,"why":"Soft juicy fruit harmonises with rich mushroom sauce."}
+{"kind":"principles","rule":"Coffee and vanilla in a sauce heighten almost any red wine, especially ones with some bottle age.","page":255}
+{"kind":"principles","rule":"Walnuts soften tannins in young reds and add crunch.","page":258}
+{"kind":"principles","rule":"Sangiovese's cherry fruit, acidity and grip suit tomato pastas, grilled meats, sausage, poultry, game and garlicky rustic Italian food.","page":262}
+{"kind":"principles","rule":"Sangiovese connects best with simple rustic grilled or roasted dishes; avoid rich intense sauces except with Super Tuscans and Brunello.","page":266}
+{"kind":"principles","rule":"Fresh herbs bring out Sangiovese's country character; tomatoes are an excellent bridge.","page":266}
+{"kind":"grape_foods","grape":"Sangiovese","food":"Pasta and pizza","dish":"tomato-based pastas","strength":3,"page":262,"why":"Acidity and grip suit high-acid tomato dishes; classic Chianti pairing."}
+{"kind":"grape_foods","grape":"Sangiovese","food":"Red meat","dish":"grilled meats, beef, veal, rabbit","strength":2,"page":262,"why":"Grip and acidity suit grilled meats and game."}
+{"kind":"grape_foods","grape":"Sangiovese","food":"Lamb","dish":"lamb","strength":2,"page":264,"why":"Listed base ingredient."}
+{"kind":"grape_foods","grape":"Sangiovese","food":"Pork","dish":"pork and sausage","strength":2,"page":264,"why":"Listed base ingredients; sausage named among best partners."}
+{"kind":"grape_foods","grape":"Sangiovese","food":"Chicken","dish":"chicken, game hen, squab, quail","strength":2,"page":264,"why":"Listed poultry partners."}
+{"kind":"grape_foods","grape":"Sangiovese","food":"Pasta and pizza","dish":"pizza and calzone with spicy sausage and tomato","strength":3,"page":271,"why":"Book prefers Sangiovese or Zinfandel over beer here."}
+{"kind":"grape_foods","grape":"Zinfandel / Primitivo","food":"Pasta and pizza","dish":"spicy tomato pizza and calzone","strength":3,"page":271,"why":"Named with Sangiovese as the go-to for spicy tomato pizzas."}
+{"kind":"bridges","grape":"Sangiovese","ingredients":["raspberries","plums","cherries","sun-dried cherries","oranges","blood oranges","onions","garlic","mushrooms","eggplant","fennel","roasted red peppers","tomatoes","roasted tomatoes","sun-dried tomatoes","green olives","black olives","capers","basil","rosemary","thyme","oregano","pecans","walnuts","Dijon mustard","prosciutto","pancetta"],"page":264}
+{"kind":"regions","place":"Tuscany, Italy (Chianti Classico, Brunello di Montalcino, Vino Nobile di Montepulciano, Carmignano)","grapes":["Sangiovese"],"foods":["tomato-based pastas","grilled meats","sausage","beans","garlic, olives and rustic country cooking"],"page":262}
+{"kind":"regions","place":"California (Napa, Sonoma, Mendocino)","grapes":["Sangiovese"],"foods":[],"page":265}
+{"kind":"recipes","title":"White Bean Soup with Escargots and Olive Relish","page":267,"food":"Seafood","course":"starter","protein":"white beans and escargots","wines":["Sangiovese","Zinfandel / Primitivo"],"why":"Beans, herbs and snails complement Sangiovese's rustic flavours."}
+{"kind":"recipes","title":"Herb and Sun-Dried Tomato Calzone with Hot Sausage, Prosciutto, and Okra","page":271,"food":"Pasta and pizza","course":"main","protein":"hot sausage and prosciutto","wines":["Sangiovese","Zinfandel / Primitivo"],"why":"Spicy-berry fruit and acidity swing with zesty tomato and hot sausage filling."}
+{"kind":"recipes","title":"Veal-Stuffed Manicotti with Roasted Yellow Pepper Pesto","page":275,"food":"Pasta and pizza","course":"main","protein":"ground veal","wines":["Sangiovese","Zinfandel / Primitivo"],"why":"Bright acidity and forward fruit support simple, direct comfort flavours."}
+{"kind":"food_wines","food":"Pasta and pizza","dish":"spicy tomato pizza or calzone with sausage","wines":["Sangiovese","Zinfandel / Primitivo"],"avoid":[],"page":271,"why":"Acidity and berry spice match tomato and hot sausage."}
+{"kind":"food_wines","food":"Pasta and pizza","dish":"stuffed pasta with meat filling","wines":["Sangiovese","Zinfandel / Primitivo"],"avoid":[],"page":275,"why":"Simple rustic flavours flatter food-friendly reds."}
+{"kind":"food_wines","food":"Pasta and pizza","dish":"hearty white bean soup (vegetarian option)","wines":["Sangiovese","Zinfandel / Primitivo"],"avoid":[],"page":267,"why":"Rustic beans and herbs match country reds."}
+{"kind":"regions","place":"Tuscany meets New Orleans","grapes":["Sangiovese","Zinfandel / Primitivo"],"foods":["calzone with andouille, okra and filé"],"page":271}
+{"kind":"recipes","title":"Chicken Cacciatore with Kalamata Olives and Fennel","page":279,"food":"Chicken","course":"main","protein":"chicken breasts and thighs","wines":["Sangiovese","Zinfandel / Primitivo"],"why":"Classic pairing: bright fruit contrasts salty olives, acidity cuts tomato sauce, fennel echoes."}
+{"kind":"recipes","title":"Grilled Pork Tenderloin with Sun-Dried Cherry-Blood Orange Sauce","page":281,"food":"Pork","course":"main","protein":"pork tenderloin","wines":["Sangiovese","Pinot Noir"],"why":"Sun-dried cherries and blood orange amplify the wine's sweet-tart cherry fruit."}
+{"kind":"food_wines","food":"Chicken","dish":"chicken cacciatore with olives and tomato","wines":["Sangiovese","Zinfandel / Primitivo"],"avoid":[],"page":279,"why":"Classic Italian match: acidity cuts tomato, fruit offsets salty olives."}
+{"kind":"food_wines","food":"Pork","dish":"grilled pork tenderloin with cherry sauce","wines":["Sangiovese","Pinot Noir","Zinfandel / Primitivo","Merlot","Cabernet Sauvignon"],"avoid":[],"page":281,"why":"Dried cherries amplify cherry fruit in many reds."}
+{"kind":"grape_foods","grape":"Sangiovese","food":"Chicken","dish":"chicken cacciatore","strength":3,"page":279,"why":"Marked classic pairing; rustic Italian tomato dish."}
+{"kind":"grape_foods","grape":"Sangiovese","food":"Pork","dish":"grilled pork tenderloin with sun-dried cherry sauce","strength":2,"page":281,"why":"Cherries and blood orange highlight the wine's cherry notes."}
+{"kind":"principles","rule":"Sun-dried cherries are a near-universal bridge to reds (Sangiovese, Cabernet, Pinot Noir, Zinfandel, Merlot), amplifying their cherry fruit.","page":281}
+{"kind":"regions","place":"Italy","grapes":["Sangiovese"],"foods":["chicken cacciatore with olives and fennel"],"page":279}
+{"kind":"principles","rule":"Zinfandel's berry fruit and lively acidity suit grilled meats and spicier food, especially Latin-style dishes.","page":284}
+{"kind":"principles","rule":"Very high-alcohol Zinfandel is less food-friendly; too much chile heat clashes with its alcohol.","page":288}
+{"kind":"principles","rule":"Zinfandel handles salty dishes better than most reds because its sweet berry fruit contrasts salt.","page":288}
+{"kind":"principles","rule":"Match Zinfandel with weightier braised, grilled or smoked dishes and with berry-based fruit sauces.","page":288}
+{"kind":"grape_foods","grape":"Zinfandel / Primitivo","food":"Red meat","dish":"beef, venison, buffalo; grilled meats","strength":2,"page":286,"why":"Listed base ingredients; berry fruit and acidity suit grilled meat."}
+{"kind":"grape_foods","grape":"Zinfandel / Primitivo","food":"Lamb","dish":"lamb","strength":2,"page":286,"why":"Listed base ingredient."}
+{"kind":"grape_foods","grape":"Zinfandel / Primitivo","food":"Pork","dish":"pork and sausage","strength":2,"page":286,"why":"Listed base ingredients."}
+{"kind":"grape_foods","grape":"Zinfandel / Primitivo","food":"Chicken","dish":"chicken, game hens, squab, duck","strength":2,"page":286,"why":"Listed poultry partners."}
+{"kind":"grape_foods","grape":"Zinfandel / Primitivo","food":"Spicy food","dish":"spicier Latin-style meat dishes","strength":2,"page":284,"why":"Bright berry fruit partners spice, if alcohol isn't too high."}
+{"kind":"bridges","grape":"Zinfandel / Primitivo","ingredients":["tomatoes","sun-dried tomatoes","portobello","shiitake","mint","bay leaf","rosemary","oregano","thyme","black pepper","cinnamon","clove","fennel seed","juniper","walnuts","pecans","hazelnuts","black beans","eggplant","garlic","roasted garlic","onions","shallots","balsamic vinegar","green peppercorns","Kalamata olives","green olives","Parmesan","peppered goat cheese","dry Jack","Manchego","smoked Gouda","buffalo mozzarella"],"page":286}
+{"kind":"cheese","cheese":"Parmesan, peppered goat cheese, dry Jack, Manchego, smoked Gouda, buffalo mozzarella","wines":["Zinfandel / Primitivo"],"page":286}
+{"kind":"regions","place":"California (Sonoma, Russian River, Dry Creek, Mendocino, Napa, Santa Cruz Mountains, Sierra Foothills, Lake County)","grapes":["Zinfandel / Primitivo"],"foods":[],"page":287}
+{"kind":"regions","place":"Apulia, Italy","grapes":["Zinfandel / Primitivo"],"foods":[],"page":287}
+{"kind":"regions","place":"Western and South Australia","grapes":["Zinfandel / Primitivo"],"foods":[],"page":287}
+{"kind":"dessert","dessert":"general desserts (late-harvest port-like Zinfandel)","wines":["Late-harvest Zinfandel"],"page":288}
+{"kind":"recipes","title":"Paella with Peppered Chicken, Spicy Sausage, and Escargots","page":289,"food":"Chicken","course":"main","protein":"chicken thighs, spicy sausage, escargots, mussels","wines":["Zinfandel / Primitivo","Syrah / Shiraz"],"why":"Peppery chicken and spicy sausage harmonise with bold berry fruit and peppery notes."}
+{"kind":"recipes","title":"Basil Fettuccine with Sun-Dried Tomatoes, Olives, and Prosciutto","page":293,"food":"Pasta and pizza","course":"main","protein":"prosciutto","wines":["Zinfandel / Primitivo","Sangiovese"],"why":"Classic match for young spicy-berry Zinfandel; walnuts tame tannin; Sangiovese handles salty olives."}
+{"kind":"recipes","title":"\"Best Ever\" Moussaka","page":295,"food":"Lamb","course":"main","protein":"ground lamb","wines":["Zinfandel / Primitivo","Syrah / Shiraz"],"why":"Deep fruit intensity cuts through hearty, rich layered flavours."}
+{"kind":"recipes","title":"Coq au Zin","page":298,"food":"Chicken","course":"main","protein":"chicken pieces","wines":["Zinfandel / Primitivo","Pinot Noir"],"why":"Braised in nearly a bottle of Zinfandel with pancetta and garlic; Pinot Noir works if cooked with it."}
+{"kind":"food_wines","food":"Chicken","dish":"paella with chicken and spicy sausage","wines":["Zinfandel / Primitivo","Syrah / Shiraz"],"avoid":[],"page":289,"why":"Peppery berry reds match spicy sausage."}
+{"kind":"food_wines","food":"Pasta and pizza","dish":"pasta with sun-dried tomatoes, olives and prosciutto","wines":["Zinfandel / Primitivo","Sangiovese"],"avoid":[],"page":293,"why":"Classic: rustic Mediterranean pasta with young spicy reds."}
+{"kind":"food_wines","food":"Lamb","dish":"moussaka","wines":["Zinfandel / Primitivo","Syrah / Shiraz"],"avoid":[],"page":295,"why":"Fruit intensity cuts rich layered lamb and eggplant."}
+{"kind":"food_wines","food":"Chicken","dish":"coq au vin (chicken braised in red wine)","wines":["Zinfandel / Primitivo","Pinot Noir","Cabernet Franc"],"avoid":[],"page":298,"why":"Drink the same red used in the braise; Loire Cabernet Franc is traditional."}
+{"kind":"grape_foods","grape":"Zinfandel / Primitivo","food":"Lamb","dish":"moussaka","strength":3,"page":295,"why":"Book says moussaka has a natural affinity for Zinfandel."}
+{"kind":"grape_foods","grape":"Zinfandel / Primitivo","food":"Pasta and pizza","dish":"fettuccine with sun-dried tomatoes, olives, prosciutto","strength":3,"page":293,"why":"Called a classic match for young Zinfandel."}
+{"kind":"grape_foods","grape":"Zinfandel / Primitivo","food":"Chicken","dish":"coq au vin made with Zinfandel","strength":2,"page":298,"why":"Wine in the braise ties dish and glass."}
+{"kind":"grape_foods","grape":"Zinfandel / Primitivo","food":"Chicken","dish":"paella with chicken and spicy sausage","strength":2,"page":289,"why":"Berry intensity and pepper suit the spice."}
+{"kind":"grape_foods","grape":"Syrah / Shiraz","food":"Lamb","dish":"moussaka","strength":2,"page":295,"why":"Fruit intensity and full body cut rich flavours."}
+{"kind":"grape_foods","grape":"Cabernet Franc","food":"Chicken","dish":"traditional coq au vin","strength":1,"page":298,"why":"Traditionally braised with Loire Cabernet Franc."}
+{"kind":"regions","place":"Spain","grapes":["Zinfandel / Primitivo","Syrah / Shiraz","Spanish red"],"foods":["paella"],"page":289}
+{"kind":"regions","place":"Greece","grapes":["Zinfandel / Primitivo","Syrah / Shiraz"],"foods":["moussaka"],"page":295}
+{"kind":"regions","place":"Loire, France","grapes":["Cabernet Franc"],"foods":["coq au vin"],"page":298}
+{"kind":"cheese","cheese":"feta (in moussaka)","wines":["Zinfandel / Primitivo","Syrah / Shiraz"],"page":296}
+{"kind":"recipes","title":"Clove-Infused Pork–Black Bean Stew with Tomatillo–Roasted Red Pepper Salsa","page":301,"food":"Pork","course":"main","protein":"pork shoulder","wines":["Zinfandel / Primitivo","Sangiovese"],"why":"Hearty Latin stew wants robust Zinfandel to amplify spice; Sangiovese's acid matches tomatillo."}
+{"kind":"recipes","title":"Grilled Lamb with Roasted Garlic–Mint Sauce","page":306,"food":"Lamb","course":"main","protein":"butterflied leg of lamb","wines":["Zinfandel / Primitivo","Cabernet Sauvignon"],"why":"Classic pairing: intense mint and roasted garlic sauce mirrored by full berry Zinfandel."}
+{"kind":"recipes","title":"Grilled Flank Steak with Roasted Corn–Pancetta Salsa","page":309,"food":"Red meat","course":"main","protein":"flank steak","wines":["Zinfandel / Primitivo","Sangiovese"],"why":"Restrained chile works with a lower-alcohol Zinfandel; Sangiovese's cherry and acid also fit."}
+{"kind":"food_wines","food":"Pork","dish":"spicy Latin pork and black bean stew","wines":["Zinfandel / Primitivo","Sangiovese"],"avoid":[],"page":301,"why":"Robust fruit amplifies spice; acid contrasts richness."}
+{"kind":"food_wines","food":"Lamb","dish":"grilled lamb with mint and roasted garlic","wines":["Zinfandel / Primitivo","Cabernet Sauvignon"],"avoid":[],"page":306,"why":"Classic: intense herb sauce mirrored by full berry fruit."}
+{"kind":"food_wines","food":"Red meat","dish":"grilled flank steak with mildly spicy salsa","wines":["Zinfandel / Primitivo","Sangiovese"],"avoid":["high-alcohol Zinfandel (over about 13.8%)"],"page":309,"why":"Chile clashes with high alcohol; keep heat restrained."}
+{"kind":"grape_foods","grape":"Zinfandel / Primitivo","food":"Lamb","dish":"grilled lamb with roasted garlic-mint sauce","strength":3,"page":306,"why":"Marked classic pairing; shows Zinfandel at its very best."}
+{"kind":"grape_foods","grape":"Zinfandel / Primitivo","food":"Pork","dish":"spicy pork and black bean stew","strength":2,"page":301,"why":"Hearty texture calls for hearty, robust Zinfandel."}
+{"kind":"grape_foods","grape":"Zinfandel / Primitivo","food":"Red meat","dish":"grilled flank steak with corn-pancetta salsa","strength":2,"page":309,"why":"Works if Zinfandel is lower in alcohol."}
+{"kind":"grape_foods","grape":"Sangiovese","food":"Red meat","dish":"grilled flank steak","strength":1,"page":309,"why":"Juicy cherry fruit and acidity support it."}
+{"kind":"grape_foods","grape":"Cabernet Sauvignon","food":"Lamb","dish":"grilled lamb with mint-garlic sauce","strength":1,"page":306,"why":"Named alternative to Zinfandel."}
+{"kind":"regions","place":"Latin America / Mexico (cuisine)","grapes":["Zinfandel / Primitivo","Sangiovese"],"foods":["pork and black bean stew with tomatillo salsa"],"page":301}
+{"kind":"principles","rule":"Syrah: full, round, low-acid, polished tannins; its smoky, peppery, gamey fruit suits meat, game and hearty fare.","page":313}
+{"kind":"principles","rule":"Petite Sirah is a different grape from Syrah but pairs with food much the same way.","page":313}
+{"kind":"principles","rule":"Syrah shines with robust braises and all kinds of grilled meats; Rhône blends are softer and handle spicier dishes.","page":318}
+{"kind":"principles","rule":"Dry rosé is a chilled warm-weather wine for alfresco meals, cold summer dishes and spicy food.","page":318}
+{"kind":"principles","rule":"Syrah is the most peppery red, so it marries peppery, intense sauces especially well.","page":325}
+{"kind":"grape_foods","grape":"Syrah / Shiraz","food":"Red meat","dish":"beef, veal, venison, buffalo; grilled meats and game","strength":3,"page":318,"why":"Particularly well matched with full-flavoured grilled meats and game."}
+{"kind":"grape_foods","grape":"Syrah / Shiraz","food":"Lamb","dish":"lamb","strength":2,"page":315,"why":"Listed base ingredient."}
+{"kind":"grape_foods","grape":"Syrah / Shiraz","food":"Pork","dish":"pork","strength":2,"page":315,"why":"Listed base ingredient."}
+{"kind":"grape_foods","grape":"Syrah / Shiraz","food":"Chicken","dish":"squab","strength":1,"page":315,"why":"Listed base ingredient."}
+{"kind":"grape_foods","grape":"Syrah / Shiraz","food":"Fish","dish":"salmon, tuna","strength":1,"page":315,"why":"Meaty fish listed as base ingredients."}
+{"kind":"grape_foods","grape":"Rosé","food":"Spicy food","dish":"spicy foods and cold summer dishes","strength":2,"page":313,"why":"Southern French dry rosés refresh against spice and heat."}
+{"kind":"grape_foods","grape":"Grenache / Garnacha","food":"Spicy food","dish":"spicy dishes (as dry rosé or soft Rhône blends)","strength":1,"page":313,"why":"Rhône blends and rosés from Grenache handle spice."}
+{"kind":"bridges","grape":"Syrah / Shiraz","ingredients":["blackberries","plums","currants","prunes","garlic","roasted garlic","onions","portobello","shiitake","porcini","walnuts","pecans","Parmigiano-Reggiano","dry Jack","peppered goat cheese","feta","rosemary","thyme","mint","lavender","bay leaf","green olives","black olives","roasted tomato","sun-dried tomato","eggplant","fennel","chocolate","green peppercorns","black pepper","white pepper","Dijon mustard","coarse-grained mustard"],"page":316}
+{"kind":"cheese","cheese":"Parmigiano-Reggiano, dry Jack, peppered goat cheese, feta","wines":["Syrah / Shiraz"],"page":316}
+{"kind":"regions","place":"Northern Rhône, France (Côte Rôtie, Hermitage, Crozes-Hermitage, St.-Joseph, Cornas)","grapes":["Syrah / Shiraz"],"foods":[],"page":312}
+{"kind":"regions","place":"Southern Rhône, France (Châteauneuf-du-Pape, Gigondas, Vacqueyras, Côtes-du-Rhône)","grapes":["Grenache / Garnacha","Syrah / Shiraz","Mourvèdre / Monastrell","Carignan"],"foods":[],"page":312}
+{"kind":"regions","place":"Tavel, Lirac, Bandol (southern France)","grapes":["Rosé","Grenache / Garnacha","Cinsault","Mourvèdre / Monastrell"],"foods":["spicy foods","cold summer dishes"],"page":313}
+{"kind":"regions","place":"Provence and Languedoc-Roussillon, France","grapes":["Syrah / Shiraz","Rhône blends"],"foods":["grilled lamb with olives and herbs"],"page":322}
+{"kind":"regions","place":"Australia (Barossa, McLaren Vale, Coonawarra)","grapes":["Syrah / Shiraz","Cabernet Sauvignon"],"foods":[],"page":317}
+{"kind":"recipes","title":"Penne with Sausage, Porcini and Portobello Mushrooms, and Syrah","page":319,"food":"Pasta and pizza","course":"main","protein":"Italian sausage","wines":["Syrah / Shiraz","Zinfandel / Primitivo"],"why":"Sausage, earthy porcini and red-wine tomato sauce match Syrah's intensity."}
+{"kind":"recipes","title":"Grilled Lamb with Olive Sauce","page":322,"food":"Lamb","course":"main","protein":"butterflied leg of lamb","wines":["Syrah / Shiraz","Rhône blends","Zinfandel / Primitivo"],"why":"Classic pairing: briny olives and herbs contrast the sweet juicy fruit of Syrah or Rhône blends."}
+{"kind":"recipes","title":"Filet Mignon \"Diana\"","page":325,"food":"Red meat","course":"main","protein":"beef filet mignon","wines":["Syrah / Shiraz","Zinfandel / Primitivo"],"why":"Peppercorn-crusted steak in intense sauce suits Syrah, the most peppery red."}
+{"kind":"food_wines","food":"Pasta and pizza","dish":"pasta with sausage and wild mushrooms in red wine tomato sauce","wines":["Syrah / Shiraz","Zinfandel / Primitivo"],"avoid":[],"page":319,"why":"Intense sauce matches full-flavoured reds."}
+{"kind":"food_wines","food":"Lamb","dish":"grilled lamb with olives and Provençal herbs","wines":["Syrah / Shiraz","Rhône blends","Zinfandel / Primitivo"],"avoid":[],"page":322,"why":"Classic: briny olives contrast juicy fruit."}
+{"kind":"food_wines","food":"Red meat","dish":"pepper-crusted steak (steak Diane style)","wines":["Syrah / Shiraz","Zinfandel / Primitivo"],"avoid":[],"page":325,"why":"Peppery wines echo peppercorn crust."}
+{"kind":"grape_foods","grape":"Syrah / Shiraz","food":"Lamb","dish":"grilled lamb with olive sauce","strength":3,"page":322,"why":"Marked classic pairing."}
+{"kind":"grape_foods","grape":"Syrah / Shiraz","food":"Red meat","dish":"pepper-crusted filet mignon","strength":2,"page":325,"why":"Most peppery red meets intense pepper sauce."}
+{"kind":"grape_foods","grape":"Syrah / Shiraz","food":"Pasta and pizza","dish":"penne with sausage and porcini","strength":2,"page":319,"why":"Ideal partner for intense sausage-mushroom sauce."}
+{"kind":"recipes","title":"Roast Pork with Holy Mole Sauce and Mexican Rice","page":327,"food":"Pork","course":"main","protein":"pork roast","wines":["Rhône blends","Syrah / Shiraz","Champagne","Rosé"],"why":"Unsweetened chocolate in mole echoes Syrah; bright blanc de noirs or dry rosé cleanse the palate."}
+{"kind":"food_wines","food":"Pork","dish":"pork with chocolate-chile mole","wines":["Rhône blends","Syrah / Shiraz","Champagne (blanc de noirs)","Rosé"],"avoid":[],"page":327,"why":"Chocolate links to Syrah; light fruity bubbles or rosé contrast the rich spicy sauce."}
+{"kind":"food_wines","food":"Spicy food","dish":"Mexican mole","wines":["Rhône blends","Champagne (blanc de noirs)","Rosé"],"avoid":[],"page":327,"why":"Chile heat is hard on reds; soft Rhône blends or bright pinks work."}
+{"kind":"grape_foods","grape":"Syrah / Shiraz","food":"Pork","dish":"roast pork with mole (Syrah blend)","strength":2,"page":327,"why":"Chocolate notes in Syrah echo the mole."}
+{"kind":"grape_foods","grape":"Rosé","food":"Pork","dish":"roast pork with mole sauce","strength":2,"page":327,"why":"Light fruity rosé contrasts and cleanses rich chocolate-chile sauce."}
+{"kind":"grape_foods","grape":"Champagne","food":"Pork","dish":"pork with mole (blanc de noirs)","strength":1,"page":327,"why":"Bright fruit and bubbles cleanse chocolate and spice."}
+{"kind":"regions","place":"Mexico","grapes":["Syrah / Shiraz","Rosé","Champagne"],"foods":["mole sauce","Mexican rice"],"page":327}
+{"kind":"principles","rule":"Merlot is often more food-friendly than Cabernet: smooth, round, bright fruit that fits a wide range of foods.","page":331}
+{"kind":"principles","rule":"Heavily oaked, tannic Merlot is harder to pair young; Bordeaux blends follow the food affinities of their main grape.","page":332}
+{"kind":"principles","rule":"Merlot suits medium-weight dishes more than very heavy food; cooking with Merlot in sauces helps mirror the wine.","page":336}
+{"kind":"principles","rule":"A sprinkle of walnuts or pecans reduces the impression of tannin in tannic Merlot.","page":336}
+{"kind":"principles","rule":"Colour can help: a deep red dish creates a subconscious link to a red wine.","page":340}
+{"kind":"principles","rule":"Keep a fruit sauce less sweet than the wine or the wine seems dry and lifeless; adjust port and sugar to taste.","page":344}
+{"kind":"principles","rule":"Soft, supple Merlot suits braises that combine many complementary flavours.","page":347}
+{"kind":"grape_foods","grape":"Merlot","food":"Red meat","dish":"beef, veal, venison","strength":2,"page":334,"why":"Listed base ingredients."}
+{"kind":"grape_foods","grape":"Merlot","food":"Lamb","dish":"lamb","strength":2,"page":334,"why":"Listed base ingredient."}
+{"kind":"grape_foods","grape":"Merlot","food":"Pork","dish":"pork","strength":2,"page":334,"why":"Listed base ingredient."}
+{"kind":"grape_foods","grape":"Merlot","food":"Chicken","dish":"squab, duck","strength":2,"page":334,"why":"Listed base ingredients."}
+{"kind":"grape_foods","grape":"Merlot","food":"Fish","dish":"salmon, tuna","strength":1,"page":334,"why":"Meaty fish listed as base ingredients."}
+{"kind":"bridges","grape":"Merlot","ingredients":["blackberries","blueberries","cranberries","currants","portobello","shiitake","onions","garlic","roasted garlic","rosemary","thyme","mint","tarragon","walnuts","pecans","fresh, dried and smoked tomatoes","eggplant","fennel","beets","Camembert","smoked Gouda","Cheddar","Parmesan","bacon","pancetta","Dijon mustard"],"page":334}
+{"kind":"cheese","cheese":"Camembert, smoked Gouda, Cheddar, Parmesan","wines":["Merlot"],"page":335}
+{"kind":"regions","place":"Bordeaux (Saint-Émilion, Pomerol), France","grapes":["Merlot","Cabernet Franc"],"foods":[],"page":335}
+{"kind":"regions","place":"Washington (Columbia Valley); Long Island; California; Italy (Alto Adige, Tuscany, Veneto, Friuli); Australia; Chile","grapes":["Merlot"],"foods":[],"page":335}
+{"kind":"recipes","title":"Sautéed Duck Breasts with Smoked Tomato Sauce","page":337,"food":"Chicken","course":"main","protein":"duck breast","wines":["Merlot","Pinot Noir"],"why":"Smoked tomato sauce coaxes out barrel-smoke notes in Merlot, Pinot Noir and Zinfandel."}
+{"kind":"recipes","title":"Grilled Pork Tenderloin with Roasted Beet–Cranberry Sauce","page":340,"food":"Pork","course":"main","protein":"pork tenderloin","wines":["Merlot","Zinfandel / Primitivo"],"why":"Classic pairing: beet and cranberry connect to Merlot's ripe berry fruit, even by colour."}
+{"kind":"recipes","title":"Grilled Venison with Cherry Sauce and Crispy Corn Noodles","page":344,"food":"Red meat","course":"main","protein":"venison loin (or pork tenderloin)","wines":["Merlot","Cabernet Sauvignon"],"why":"Sweet-cherry sauce mirrors young Merlot; keep it less sweet than the wine; Cabernet superb too."}
+{"kind":"recipes","title":"Braised Veal with Portobello Mushrooms, Celery Root, and Toasted Pecans","page":347,"food":"Red meat","course":"main","protein":"veal stew meat","wines":["Merlot","Chardonnay"],"why":"Soft tannins and medium weight blend with savoury veal, earthy mushrooms and toasted nuts."}
+{"kind":"food_wines","food":"Chicken","dish":"duck breast with smoked tomato sauce","wines":["Merlot","Pinot Noir","Zinfandel / Primitivo"],"avoid":[],"page":337,"why":"Smoky sauce draws out oak-smoke in reds."}
+{"kind":"food_wines","food":"Pork","dish":"grilled pork tenderloin with beet-cranberry sauce","wines":["Merlot","Zinfandel / Primitivo"],"avoid":[],"page":340,"why":"Classic: berry sauce links to berry fruit."}
+{"kind":"food_wines","food":"Red meat","dish":"grilled venison with cherry sauce","wines":["Merlot","Cabernet Sauvignon"],"avoid":[],"page":344,"why":"Cherry sauce mirrors cherry fruit; game suits both."}
+{"kind":"food_wines","food":"Red meat","dish":"braised veal with mushrooms and pecans","wines":["Merlot","Chardonnay"],"avoid":[],"page":347,"why":"Soft red or rich white both suit a savoury braise."}
+{"kind":"grape_foods","grape":"Merlot","food":"Pork","dish":"grilled pork tenderloin with beet-cranberry sauce","strength":3,"page":340,"why":"Marked classic pairing."}
+{"kind":"grape_foods","grape":"Merlot","food":"Red meat","dish":"grilled venison with cherry sauce","strength":2,"page":344,"why":"Cherry sauce mirrors young Merlot's sweet cherry."}
+{"kind":"grape_foods","grape":"Merlot","food":"Red meat","dish":"braised veal with mushrooms","strength":2,"page":347,"why":"Ideal choice for braises."}
+{"kind":"grape_foods","grape":"Merlot","food":"Chicken","dish":"duck breast with smoked tomato sauce","strength":2,"page":337,"why":"Smoky sauce flatters barrel-aged notes."}
+{"kind":"grape_foods","grape":"Cabernet Sauvignon","food":"Red meat","dish":"grilled venison with cherry sauce","strength":2,"page":344,"why":"Called a superb match; use less port in the sauce."}
+{"kind":"cheese","cheese":"smoked mozzarella (on braised veal)","wines":["Merlot","Chardonnay"],"page":348}
+{"kind":"principles","rule":"Young Cabernet's power and tannin are hard on food; age brings elegance and better compatibility.","page":350}
+{"kind":"principles","rule":"Cabernet generally does poorly with seafood, spicy food and vinegar, except careful use of balsamic.","page":350}
+{"kind":"principles","rule":"Match Cabernet to high-quality meat, game or cheese in dishes with focused flavours so the wine is the star.","page":350}
+{"kind":"food_wines","food":"Seafood","dish":"seafood generally","wines":["white wines","Pinot Noir"],"avoid":["Cabernet Sauvignon"],"page":350,"why":"Cabernet usually does poorly with seafood; a red-wine seafood stew is the rare exception."}
+{"kind":"food_wines","food":"Spicy food","dish":"spicy dishes and vinegar-heavy dishes","wines":["Riesling","Gewürztraminer","Zinfandel / Primitivo"],"avoid":["Cabernet Sauvignon"],"page":350,"why":"Spice and vinegar make Cabernet harsh."}
+{"kind":"grape_foods","grape":"Cabernet Sauvignon","food":"Red meat","dish":"high-quality beef and game","strength":3,"page":350,"why":"Offers unparalleled pleasure with quality meat and game."}
+{"kind":"grape_foods","grape":"Cabernet Sauvignon","food":"Cheese","dish":"quality cheese","strength":2,"page":350,"why":"Named as an exquisite partner with cheese."}
+{"kind":"grape_foods","grape":"Cabernet Sauvignon","food":"Red meat","dish":"beef, veal, venison, buffalo","strength":2,"page":352,"why":"Listed base ingredients."}
+{"kind":"grape_foods","grape":"Cabernet Sauvignon","food":"Lamb","dish":"lamb","strength":2,"page":352,"why":"Listed base ingredient."}
+{"kind":"grape_foods","grape":"Cabernet Sauvignon","food":"Pork","dish":"pork","strength":1,"page":352,"why":"Listed base ingredient."}
+{"kind":"grape_foods","grape":"Cabernet Sauvignon","food":"Chicken","dish":"squab, duck","strength":1,"page":352,"why":"Listed base ingredients."}
+{"kind":"bridges","grape":"Cabernet Sauvignon","ingredients":["currants","walnuts","pecans","portobello","porcini","morel","truffles","Dijon mustard","black olives","green olives","balsamic vinegar","Camembert","Gorgonzola","aged Jack","Parmesan","mint","rosemary","thyme","oregano","basil","black pepper","eggplant","roasted tomato","butter"],"page":352}
+{"kind":"cheese","cheese":"Camembert, Gorgonzola, aged Jack, Parmesan","wines":["Cabernet Sauvignon"],"page":352}
+{"kind":"regions","place":"Bordeaux, France (Pauillac, Margaux, Graves, St.-Julien, St.-Estèphe, Médoc, Haut-Médoc, Pomerol)","grapes":["Cabernet Sauvignon","Merlot","Cabernet Franc"],"foods":[],"page":353}
+{"kind":"regions","place":"California; Washington (Columbia Valley); Australia (Coonawarra, McLaren Vale, Clare, Barossa, Hunter, Margaret River); Chile (Maipo, Rapel); Tuscany","grapes":["Cabernet Sauvignon"],"foods":[],"page":353}
+{"kind":"principles","rule":"Fatty meats coat the palate and shield it from young Cabernet's tannin.","page":354}
+{"kind":"principles","rule":"Older, mellower Cabernet suits less intense dishes; heavy reduction sauces suit young Cabernet better.","page":355}
+{"kind":"principles","rule":"Dishes with a single clear flavour focus show Cabernet best; walnuts and pecans tame young tannins.","page":355}
+{"kind":"principles","rule":"Creamy, rich blue cheese like Gorgonzola helps tame a young, tannic Cabernet.","page":356}
+{"kind":"principles","rule":"Slight bitterness, as in eggplant, can offset red wine tannin.","page":360}
+{"kind":"principles","rule":"Match intensity: an intense balsamic-mushroom sauce parallels a concentrated Cabernet or Syrah.","page":362}
+{"kind":"principles","rule":"Earthy porcini mushrooms mellow Cabernet's tannin; juicy lamb supplies flavour and fat.","page":365}
+{"kind":"principles","rule":"Taste the sauce with the wine you'll serve; add a touch of balsamic if the sauce is sweeter than the wine.","page":369}
+{"kind":"principles","rule":"Dijon mustard and rosemary are especially flattering to Cabernet.","page":371}
+{"kind":"recipes","title":"New York Steaks with Gorgonzola-Walnut \"Butter\" and Minted Tabbouleh","page":356,"food":"Red meat","course":"main","protein":"New York strip steak","wines":["Cabernet Sauvignon","Rhône blends"],"why":"Creamy Gorgonzola and tannic walnuts tame young Cabernet; mint tabbouleh refreshes."}
+{"kind":"recipes","title":"Grilled Filets with Roasted Eggplant and Cherry Tomato Ragout","page":360,"food":"Red meat","course":"main","protein":"beef filet mignon","wines":["Cabernet Sauvignon","Merlot"],"why":"Simple juicy steak showcases the wine; eggplant bitterness offsets tannin."}
+{"kind":"recipes","title":"Grilled Veal Chops with Balsamic Mushroom Sauce","page":362,"food":"Red meat","course":"main","protein":"veal chops","wines":["Cabernet Sauvignon","Syrah / Shiraz"],"why":"Concentrated balsamic and morel sauce parallels the intensity of Cabernet or Syrah."}
+{"kind":"recipes","title":"Grilled Lamb with Rustic Porcini Sauce","page":365,"food":"Lamb","course":"main","protein":"butterflied leg of lamb","wines":["Cabernet Sauvignon","Sangiovese"],"why":"Earthy porcini mellows tannin; juicy lamb provides fat and flavour."}
+{"kind":"recipes","title":"Mustard- and Sourdough-Coated Venison with Currant Sauce","page":368,"food":"Red meat","course":"main","protein":"venison loin","wines":["Cabernet Sauvignon","Syrah / Shiraz"],"why":"Classic pairing: red-wine currant sauce mirrors the wine and rare venison; fruit flatters Syrah."}
+{"kind":"recipes","title":"Roast Prime Rib with Cabernet-Vegetable Jus and Herbed Yorkshire Pudding","page":371,"food":"Red meat","course":"main","protein":"prime rib of beef","wines":["Cabernet Sauvignon","Merlot"],"why":"Classic pairing: fat coats the palate against tannin; Dijon and rosemary flatter Cabernet."}
+{"kind":"food_wines","food":"Red meat","dish":"grilled steak with blue cheese and walnut butter","wines":["Cabernet Sauvignon","Rhône blends"],"avoid":[],"page":356,"why":"Creamy cheese and walnuts soften young tannins."}
+{"kind":"food_wines","food":"Red meat","dish":"simple grilled beef filet","wines":["Cabernet Sauvignon","Merlot"],"avoid":[],"page":360,"why":"Simplicity showcases young or mature Cabernet."}
+{"kind":"food_wines","food":"Red meat","dish":"veal chops with balsamic mushroom sauce","wines":["Cabernet Sauvignon","Syrah / Shiraz"],"avoid":[],"page":362,"why":"Parallel intensity."}
+{"kind":"food_wines","food":"Lamb","dish":"grilled lamb with porcini sauce","wines":["Cabernet Sauvignon","Sangiovese"],"avoid":[],"page":365,"why":"Earthy mushrooms and fat tame tannin."}
+{"kind":"food_wines","food":"Red meat","dish":"venison with currant sauce","wines":["Cabernet Sauvignon","Syrah / Shiraz"],"avoid":[],"page":368,"why":"Classic: fruity red-wine sauce mirrors Cabernet."}
+{"kind":"food_wines","food":"Red meat","dish":"roast prime rib of beef","wines":["Cabernet Sauvignon","Merlot"],"avoid":[],"page":371,"why":"Classic: fat protects against tannin."}
+{"kind":"grape_foods","grape":"Cabernet Sauvignon","food":"Red meat","dish":"roast prime rib with Dijon and rosemary","strength":3,"page":371,"why":"Marked classic pairing."}
+{"kind":"grape_foods","grape":"Cabernet Sauvignon","food":"Red meat","dish":"venison with currant sauce","strength":3,"page":368,"why":"Marked classic pairing."}
+{"kind":"grape_foods","grape":"Cabernet Sauvignon","food":"Red meat","dish":"New York steak with Gorgonzola-walnut butter","strength":2,"page":356,"why":"Cheese and walnuts tame young tannin."}
+{"kind":"grape_foods","grape":"Cabernet Sauvignon","food":"Red meat","dish":"grilled filet mignon","strength":2,"page":360,"why":"Simple grilled steak showcases the fruit."}
+{"kind":"grape_foods","grape":"Cabernet Sauvignon","food":"Red meat","dish":"grilled veal chops with balsamic mushrooms","strength":2,"page":362,"why":"Intense sauce matches ripe fruit."}
+{"kind":"grape_foods","grape":"Cabernet Sauvignon","food":"Lamb","dish":"grilled lamb with porcini sauce","strength":2,"page":365,"why":"Porcini mellows tannin; lamb fat helps."}
+{"kind":"grape_foods","grape":"Merlot","food":"Red meat","dish":"roast prime rib","strength":2,"page":371,"why":"Soft round mouthfeel plays off roast beef."}
+{"kind":"grape_foods","grape":"Syrah / Shiraz","food":"Red meat","dish":"venison with currant sauce","strength":2,"page":368,"why":"Fruity sauce amplifies Syrah's concentrated fruit."}
+{"kind":"grape_foods","grape":"Sangiovese","food":"Lamb","dish":"grilled lamb with porcini sauce","strength":1,"page":365,"why":"Named alternative."}
+{"kind":"cheese","cheese":"Gorgonzola (with steak)","wines":["Cabernet Sauvignon","Rhône blends"],"page":356}
+{"kind":"regions","place":"England","grapes":["Cabernet Sauvignon","Merlot"],"foods":["roast prime rib with Yorkshire pudding"],"page":371}
+{"kind":"principles","rule":"Dessert wines come from very ripe, often botrytised grapes; a 3-4 ounce pour is plenty, and half bottles suit small groups.","page":380}
+{"kind":"principles","rule":"Don't make the dessert much sweeter than the wine, or the wine tastes dry.","page":384}
+{"kind":"principles","rule":"Late-harvest Riesling, low in alcohol, is easier to drink after a meal than port and suits delicate desserts.","page":383}
+{"kind":"dessert","dessert":"rich chocolate and coffee desserts; nuts","wines":["Port"],"page":382}
+{"kind":"dessert","dessert":"chocolate truffles","wines":["Port"],"page":384}
+{"kind":"cheese","cheese":"Stilton","wines":["Port"],"page":382}
+{"kind":"cheese","cheese":"Stilton (with apple-cranberry-walnut pie)","wines":["Port","Sauternes"],"page":389}
+{"kind":"dessert","dessert":"apple, pear, peach and apricot desserts","wines":["Sauternes"],"page":383}
+{"kind":"dessert","dessert":"biscotti and fresh apricots","wines":["Sauternes","Late-harvest Sauvignon Blanc / Sémillon"],"page":384}
+{"kind":"dessert","dessert":"fresh fruit, custards, crème brûlée, peach, apricot and citrus pies and tarts","wines":["Late-harvest Riesling","Late-harvest Gewürztraminer"],"page":384}
+{"kind":"dessert","dessert":"fresh green apples","wines":["Late-harvest Riesling"],"page":384}
+{"kind":"dessert","dessert":"fresh mango or papaya","wines":["Late-harvest Gewürztraminer"],"page":384}
+{"kind":"dessert","dessert":"almonds","wines":["Sherry (sweet)"],"page":384}
+{"kind":"grape_foods","grape":"Sauternes","food":"Red meat","dish":"foie gras as a first course","strength":3,"page":383,"why":"Classic match at the start of a meal."}
+{"kind":"grape_foods","grape":"Port","food":"Cheese","dish":"Stilton","strength":3,"page":382,"why":"The classic port pairing: salty blue cheese contrasts lush sweet wine."}
+{"kind":"grape_foods","grape":"Port","food":"Dessert","dish":"chocolate and coffee desserts, nuts","strength":3,"page":382,"why":"Magnificent with rich chocolate, coffee and nuts."}
+{"kind":"grape_foods","grape":"Sauternes","food":"Dessert","dish":"apple, pear, peach, apricot desserts","strength":3,"page":383,"why":"Extremely harmonious with orchard and stone fruit."}
+{"kind":"grape_foods","grape":"Late-harvest white","food":"Dessert","dish":"fruit, custards, crème brûlée, fruit tarts (late-harvest Riesling)","strength":2,"page":384,"why":"Stands up beautifully to delicate desserts."}
+{"kind":"regions","place":"Douro, Portugal","grapes":["Port","Touriga Nacional","Tinta Roriz","Tinta Barroca","Tinto Cão","Touriga Franca"],"foods":["Stilton","chocolate and coffee desserts","nuts"],"page":381}
+{"kind":"regions","place":"Sauternes / Graves, Bordeaux, France","grapes":["Sauternes","Sémillon","Sauvignon Blanc"],"foods":["foie gras","apricot, peach, apple and pear desserts"],"page":382}
+{"kind":"regions","place":"Jerez, Spain","grapes":["Sherry (sweet)"],"foods":["almonds"],"page":379}
+{"kind":"regions","place":"England","grapes":["Port"],"foods":["Stilton cheese"],"page":389}
+{"kind":"regions","place":"Germany, Austria, Alsace, California, Australia, Washington","grapes":["Late-harvest Riesling","Late-harvest Gewürztraminer"],"foods":["fruit tarts","custards","crème brûlée"],"page":383}
+{"kind":"recipes","title":"Dried Apricot, Peach, and Pecan Tart","page":386,"food":"Dessert","course":"dessert","protein":"dried fruit and pecans","wines":["Port","Sauternes"],"why":"Port in the filling makes the match natural; Sauternes captures the dried fruit."}
+{"kind":"recipes","title":"Apple, Cranberry, and Walnut Pie with Stilton","page":389,"food":"Dessert","course":"dessert","protein":"apples, cranberries, walnuts with Stilton","wines":["Port","Sauternes"],"why":"Stilton on the side echoes the classic British port-and-Stilton match; Sauternes a lesser alternative."}
+{"kind":"recipes","title":"Suzanne's Summer Apricot-Blackberry Pie","page":392,"food":"Dessert","course":"dessert","protein":"apricots and blackberries","wines":["Sauternes","Riesling"],"why":"Classic pairing: apricot-berry pie frames golden Sauternes; Riesling weaves around fruit desserts."}
+{"kind":"recipes","title":"Fig and Raspberry Clafouti","page":394,"food":"Dessert","course":"dessert","protein":"figs and raspberries","wines":["Sauternes","Port"],"why":"Honeyed figs wrap around the honey notes of aged Sauternes; port suits the figs."}
+{"kind":"recipes","title":"Rhubarb and Berry Crisp","page":397,"food":"Dessert","course":"dessert","protein":"rhubarb and berries","wines":["Sauternes","Port"],"why":"Lush sweet fruit of Sauternes or port finishes tart spring fruit."}
+{"kind":"recipes","title":"Peach and Banana Bread Pudding","page":399,"food":"Dessert","course":"dessert","protein":"peaches, bananas, brioche","wines":["Late-harvest Riesling","Sauternes"],"why":"Classic pairing: peach and banana showcase sweet late-harvest Riesling; Sauternes matches texture."}
+{"kind":"dessert","dessert":"Dried Apricot, Peach, and Pecan Tart","wines":["Port","Sauternes"],"page":386}
+{"kind":"dessert","dessert":"Apple, Cranberry, and Walnut Pie with Stilton","wines":["Port","Sauternes"],"page":389}
+{"kind":"dessert","dessert":"apricot-blackberry pie","wines":["Sauternes","Riesling"],"page":392}
+{"kind":"dessert","dessert":"fig and raspberry clafoutis","wines":["Sauternes","Port"],"page":394}
+{"kind":"dessert","dessert":"rhubarb and berry crisp","wines":["Sauternes","Port"],"page":397}
+{"kind":"dessert","dessert":"peach and banana bread pudding","wines":["Late-harvest Riesling","Sauternes"],"page":399}
+{"kind":"regions","place":"South-central France","grapes":["Sauternes","Port"],"foods":["clafoutis"],"page":394}
+{"kind":"principles","rule":"Build menus on contrast and balance: alternate rich courses with lighter or piquant ones rather than stacking richness.","page":401}
+{"kind":"menus","name":"New Year's Day Bowl Buffet","page":401,"courses":[{"dish":"Shrimp and Avocado Salsa in Pita Toasts","wine":"Champagne"},{"dish":"Arugula, Smoked Trout, Roasted Beets, and Caramelized Cashews with Ginger-Chile Dressing","wine":"Gewürztraminer"},{"dish":"Clove-Infused Pork–Black Bean Stew with Tomatillo–Roasted Red Pepper Salsa","wine":"Zinfandel / Primitivo"}]}
+{"kind":"menus","name":"Valentine's Night Dinner for Two","page":402,"courses":[{"dish":"Lobster Salad with Apricot-Walnut Vinaigrette","wine":"Viognier"},{"dish":"Filet Mignon \"Diana\"","wine":"Syrah / Shiraz"},{"dish":"chocolate-covered strawberries","wine":"Port"}]}
+{"kind":"menus","name":"Spring Fling","page":402,"courses":[{"dish":"Risotto with Lemon Shrimp, Roasted Garlic, and Goat Cheese","wine":"Sauvignon Blanc"},{"dish":"Grilled Salmon with Mushrooms, Sweet Onions, and Pinot Noir Sauce","wine":"Pinot Noir"},{"dish":"Rhubarb and Berry Crisp","wine":"Sauternes"}]}
+{"kind":"menus","name":"Totally Casual Memorial Day","page":402,"courses":[{"dish":"Radish Slaw with Rémoulade and Pistachios","wine":"Sauvignon Blanc"},{"dish":"Penne with Sausage, Porcini and Portobello Mushrooms, and Syrah","wine":"Syrah / Shiraz"},{"dish":"ice cream with blueberries and strawberries, biscotti","wine":"Late-harvest Riesling"}]}
+{"kind":"menus","name":"Bastille Day in Provence","page":403,"courses":[{"dish":"Roasted Eggplant-Garlic Soup (served cold)","wine":"Sauvignon Blanc"},{"dish":"Grilled Lamb with Olive Sauce","wine":"Syrah / Shiraz"},{"dish":"raspberries with crème fraîche","wine":"Sauternes"}]}
+{"kind":"menus","name":"Fourth of July Barbecue / Pool Party","page":403,"courses":[{"dish":"Marinated Mussels and Roasted Red Bell Peppers","wine":"Pinot Grigio / Gris"},{"dish":"Grilled Flank Steak with Roasted Corn–Pancetta Salsa","wine":"Zinfandel / Primitivo"},{"dish":"Suzanne's Summer Apricot-Blackberry Pie","wine":"Sauternes"}]}
+{"kind":"menus","name":"Late Summer Garden Supper","page":403,"courses":[{"dish":"Chilled Corn and Sun-Dried Tomato Chowder with Goat Cheese–Chive Croutons","wine":"Chardonnay"},{"dish":"Grilled Lamb with Rustic Porcini Sauce","wine":"Cabernet Sauvignon"},{"dish":"Fig and Raspberry Clafouti","wine":"Sauternes"}]}
+{"kind":"menus","name":"Harvest Party","page":403,"courses":[{"dish":"Chilled Leeks with Green Olives, Capers, and Sun-Dried Tomato Vinaigrette","wine":"Sauvignon Blanc"},{"dish":"Grilled Lamb with Roasted Garlic–Mint Sauce","wine":"Zinfandel / Primitivo"},{"dish":"Peach and Banana Bread Pudding","wine":"Late-harvest Riesling"}]}
+{"kind":"menus","name":"Red Wine with Fish; White Wine with Meat","page":404,"courses":[{"dish":"Grilled Ahi with Ginger–Black Bean Sauce (small portions)","wine":"Pinot Noir"},{"dish":"Veal Roast with Dijon-Tinged Vegetable Sauce","wine":"Chardonnay"},{"dish":"chocolate mousse","wine":"Port"}]}
+{"kind":"menus","name":"Pre-Theater Supper","page":404,"courses":[{"dish":"Sid's Caesar","wine":"Sauvignon Blanc"},{"dish":"Basil Fettuccine with Sun-Dried Tomatoes, Olives, and Prosciutto","wine":"Zinfandel / Primitivo"},{"dish":"biscotti","wine":""}]}
+{"kind":"menus","name":"Take the Chill Off","page":404,"courses":[{"dish":"Spicy Gingered-Carrot Soup","wine":"Gewürztraminer"},{"dish":"Roast Leg of Veal with Wild Mushroom Sauce and Walnuts","wine":"Pinot Noir"},{"dish":"crème brûlée","wine":"Sauternes"}]}
+{"kind":"menus","name":"A Wine Lover's Thanksgiving","page":405,"courses":[{"dish":"Shrimp-Scallop Pâté with Cilantro, Dill, and Pine Nuts","wine":"Sauvignon Blanc"},{"dish":"Herb and Spice Roasted Cornish Game Hens","wine":"Chardonnay (or Pinot Noir)"},{"dish":"Apple, Cranberry, and Walnut Pie with Stilton","wine":"Port"}]}
+{"kind":"menus","name":"Bacchus Meets Santa Claus","page":405,"courses":[{"dish":"Wilted Red Cabbage Salad with Tangerines, Bay Shrimp, and Almonds","wine":"Riesling"},{"dish":"Roast Prime Rib with Cabernet-Vegetable Jus and Herbed Yorkshire Pudding","wine":"Cabernet Sauvignon"},{"dish":"Dried Apricot, Peach, and Pecan Tart","wine":"Port"}]}
+{"kind":"dessert","dessert":"chocolate-covered strawberries","wines":["Port"],"page":402}
+{"kind":"dessert","dessert":"ice cream with berries and biscotti","wines":["Late-harvest Riesling"],"page":402}
+{"kind":"dessert","dessert":"raspberries with crème fraîche","wines":["Sauternes"],"page":403}
+{"kind":"dessert","dessert":"chocolate mousse","wines":["Port"],"page":404}
+{"kind":"dessert","dessert":"crème brûlée","wines":["Sauternes"],"page":404}
+{"kind":"regions","place":"Provence, France","grapes":["Sauvignon Blanc","Syrah / Shiraz","Sauternes"],"foods":["chilled eggplant-garlic soup","grilled lamb with olive sauce","raspberries with crème fraîche"],"page":403}
+{"kind":"grape_foods","grape":"Chardonnay","food":"Chicken","dish":"Thanksgiving roast birds (game hens)","strength":2,"page":405,"why":"Author's Thanksgiving main pairing, with Pinot Noir as option."}
