@@ -32,13 +32,13 @@
       "edition": "2026-10-14",
       "currency": "CHF",
       "fx": {
-        "CAD_per_CHF": 1.6969,
-        "date": "2026-10-23",
+        "CAD_per_CHF": 1.6947,
+        "date": "2026-10-30",
         "source": "Bank of Canada"
       },
       "note": "Lucullus's full price list; prices in CHF excluding VAT, with approximate CAD",
       "data_file": "wines-lucullus.json",
-      "refreshed": "2026-10-26"
+      "refreshed": "2026-11-01"
     },
     "Weinshop365": {
       "status": "ok",
