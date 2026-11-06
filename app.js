@@ -336,6 +336,7 @@ function defaultState() {
     fruity: false,    // "Fruity & ripe"
     longFinish: false, // "Long finish": Claude's answer only (no store gives it)
     pickLabel: "",    // the quick pick that set these filters, for the "Showing:" line
+    cellarCompare: "", // two cellars ticked: "both", "vintages" or "only:<cellar>"; "" is all their wines
     sorts: ["best-desc", "", ""], // the Sort by box (older saved places may hold three levels)
     shown: PAGE_SIZE,
   };
@@ -349,7 +350,7 @@ const words = (s) => " " + fold(s).replace(/[^a-z0-9]+/g, " ").trim() + " ";
 function matches(w, skip, st = state) {
   if (!st.sources.has(w.source)) return false;
   if (cellarOn(st)) { // a family cellar is ticked: its wines only, and the store boxes mean "that this store sells"
-    if (w.kind !== "cellar") return false;
+    if (w.kind !== "cellar" || !compareKeep(w, st)) return false;
     const stores = storesTicked(st);
     if (stores.length && !storeMatchesOf(w.id).some((s) => stores.includes(s.source))) return false;
   }
@@ -509,7 +510,7 @@ function renderCellarFilter() {
     const slot = slotOf(s);
     return checkbox("cellar", s, state.sources.has(s), esc(s), counts.get(s) || 0, ` check-cellar${cellarTone(s)}`) + (slot && !cellarNames()[slot]
       ? `<button type="button" class="btn btn-mini" data-action="mw-name-cellar" data-slot="${esc(slot)}">Whose is ${esc(s)}? Name it</button>` : "");
-  }).join("");
+  }).join("") + compareBoxHtml();
 }
 
 function renderCountries() {
@@ -1477,7 +1478,7 @@ function syncInputs() {
 function filtersOnCount() {
   return state.countries.size + state.types.size + state.sweetStyle.size + state.grapes.size + state.food.size +
     (state.vintFrom != null || state.vintTo != null) + state.oldOnly + (state.abvFrom != null || state.abvTo != null) + (state.priceFrom != null) +
-    (state.priceTo != null) + !!state.q + state.newOnly + !state.bottleOnly + !state.notRated;
+    (state.priceTo != null) + !!state.q + state.newOnly + !state.bottleOnly + !state.notRated + !!activeCompare();
 }
 
 // ---- Rendering: results --------------------------------------------------------
@@ -1546,7 +1547,7 @@ let lastResults = [];
 // The cellars ticked under "Family cellars", all their wines.
 function cellarWinesTicked(st = state) {
   const cels = [...st.sources].filter((x) => !ALL_SOURCES.includes(x));
-  return cellarFindWines().filter((w) => cels.includes(w.source));
+  return cellarFindWines().filter((w) => cels.includes(w.source) && compareKeep(w, st));
 }
 
 // "5,386 wines at BC Liquor - LDB"; "Cellar 1: the LCBO sells 50 of its 169 wines · 31 with
@@ -1573,6 +1574,7 @@ function renderResults() {
 
   renderChoiceChips();
   renderSortStatus();
+  renderCellarResearch();
 
   if (!n) {
     const newHint = state.newOnly && !WINES.some((w) => w.new_since_last)
@@ -1603,7 +1605,7 @@ let choiceChips = [];
 function renderChoiceChips() {
   const stores = storesTicked(), cels = [...state.sources].filter((x) => !ALL_SOURCES.includes(x));
   const where = !state.sources.size ? "No store or cellar ticked"
-    : cels.length ? `${cels.join(", ")}${stores.length ? `, sold by ${stores.map(sourceLabel).join(" or ")}` : " (the whole cellar)"}`
+    : cels.length ? `${cels.join(", ")}${stores.length ? `, sold by ${stores.map(sourceLabel).join(" or ")}` : activeCompare() ? "" : " (the whole cellar)"}`
     : `At ${stores.map(sourceLabel).join(", ")}`;
   choiceChips = [...choicesMade(),
     ...(state.bottleOnly ? [["Standard bottles", (x) => { x.bottleOnly = false; }]] : [])];
@@ -1620,6 +1622,7 @@ function removeChip(k) {
   state.pickLabel = "";
   state.shown = PAGE_SIZE;
   syncInputs();
+  renderSources();
   refresh();
 }
 
@@ -1637,6 +1640,7 @@ function choicesMade(st = state) {
   if (st.longFinish) out.push(["Long finish", FINDER_CLEAR.longFinish]);
   if (st.readyNow) out.push(["Ready to drink now", FINDER_CLEAR.readyNow]);
   if (st.ratedOnly) out.push(["Scored by Claude or the family", FINDER_CLEAR.ratedOnly]);
+  if (activeCompare(st)) out.push([compareLabel(activeCompare(st), st), (x) => { x.cellarCompare = ""; }]);
   if (st.q) out.push([`the words “${st.q}”`, (x) => { x.q = ""; }]);
   if (!st.notRated) out.push(["measured sweetness only", (x) => { x.notRated = true; }]);
   if (st.newOnly) out.push(["new wines only", (x) => { x.newOnly = false; }]);
@@ -1744,6 +1748,7 @@ function refresh() {
   renderRanges();
   renderCountries();
   renderTypes();
+  renderCellarFilter();
   renderResults();
 }
 
@@ -1943,8 +1948,8 @@ const claudeRatingsOf = (w) => [ratingOf(w.id).claude, frOf(w.id).claude, ...rel
 const hasClaudeRating = (w) => notesFor(w).length > 0 || claudeRatingsOf(w).some((c) => !thinScore(c));
 
 function scoreLine(w, i) {
-  const price = w.currency ? `${w.currency} ${Number(w.price_local).toFixed(2)}` : money(w.price);
-  return `${i + 1}. ${w.name}${w.vintage ? `, ${w.vintage}` : ""} — ${sourceLabel(w.source)}, ${price} [${w.id}]`;
+  const price = w.kind === "cellar" || w.price == null ? "" : `, ${w.currency ? `${w.currency} ${Number(w.price_local).toFixed(2)}` : money(w.price)}`;
+  return `${i + 1}. ${w.name}${w.vintage && !w.name.includes(String(w.vintage)) ? `, ${w.vintage}` : ""} — ${sourceLabel(w.source)}${price} [${w.id}]`;
 }
 
 function scorePrompt() {
@@ -3239,6 +3244,7 @@ function cellarsChanged() {
   sharedWinesCache = null;
   cellarIndex = null;
   cellarMatchCache.clear();
+  cellarLinks = null;
   updateCellarSorts();
 }
 
@@ -3428,6 +3434,90 @@ function priceOf(w, st = state) {
     if (!best || std > best.std || (std === best.std && s.price < best.p)) best = { std, p: s.price };
   }
   return best ? best.p : null;
+}
+
+// ---- Comparing family cellars ---------------------------------------------------------
+// With two or more cellars ticked: the wines they share, the same wine in other vintages,
+// and the wines only one of them has. Matching is cellarMatches', taken in both directions.
+let cellarLinks = null; // {byId, twins: id -> that wine in other cellars}
+function cellarTwins() {
+  if (cellarLinks) return cellarLinks;
+  const byId = new Map(cellarFindWines().map((w) => [w.id, w])), twins = new Map();
+  const link = (a, b) => { if (!twins.has(a.id)) twins.set(a.id, new Set()); twins.get(a.id).add(b); };
+  for (const w of byId.values()) for (const id of cellarMatches(w).ids || []) {
+    const o = byId.get(id);
+    if (o && o.source !== w.source) { link(w, o); link(o, w); }
+  }
+  return (cellarLinks = { byId, twins });
+}
+const sameVintage = (a, b) => (a.vintage ?? null) === (b.vintage ?? null);
+const cellarsTicked = (st = state) => [...st.sources].filter((s) => !ALL_SOURCES.includes(s)).sort();
+function activeCompare(st = state) {
+  const m = st.cellarCompare || "", cels = cellarsTicked(st);
+  return cels.length >= 2 && (!m.startsWith("only:") || cels.includes(m.slice(5))) ? m : "";
+}
+function compareKeep(w, st = state) {
+  const mode = activeCompare(st);
+  if (!mode) return true;
+  const cels = cellarsTicked(st);
+  const others = [...(cellarTwins().twins.get(w.id) || [])].filter((o) => cels.includes(o.source));
+  const exact = others.filter((o) => sameVintage(w, o));
+  if (mode === "both") return exact.length > 0 && !exact.some((o) => cels.indexOf(o.source) < cels.indexOf(w.source)); // once, with "Also in"
+  if (mode === "vintages") return others.length > 0 && !exact.length;
+  return w.source === mode.slice(5) && !others.length;
+}
+function compareLabel(mode, st = state) {
+  const cels = cellarsTicked(st);
+  if (mode === "both") return `in ${cels.length === 2 ? "both" : "two or more of"} ${cels.join(" and ")}`;
+  if (mode === "vintages") return `in ${cels.join(" and ")}, in different vintages`;
+  return `only in ${mode.slice(5)}`;
+}
+function compareBoxHtml() {
+  const cels = cellarsTicked();
+  if (cels.length < 2) return "";
+  const count = (mode) => cellarFindWines().filter((w) => matches(w, null, { ...state, cellarCompare: mode })).length;
+  const tap = (mode, label, n = count(mode)) => `<button type="button" class="tap" data-compare="${esc(mode)}" aria-pressed="${activeCompare() === mode}">${esc(label)} <span class="tap-n">${n}</span></button>`;
+  // "169 + 294 = 463": a wine in both cellars is one card for each, so this is a sum, not a count of different wines
+  const each = cels.map((c) => cellarFindWines().filter((w) => w.source === c && matches(w, null, { ...state, cellarCompare: "" })).length);
+  return `<div class="compare-cellars" role="group" aria-label="Compare these cellars"><p class="source-sub">Compare these cellars</p>` +
+    tap("", "All their wines", `${each.join(" + ")} = ${count("")}`) + tap("both", cels.length === 2 ? "In both" : "In two or more") + tap("vintages", "Same wine, other vintage") +
+    cels.map((c) => tap(`only:${c}`, `Only in ${c}`)).join("") +
+    `<p class="hint">A wine in both cellars is counted once for each under “All their wines”.</p></div>`;
+}
+
+// Bulk research: the wines in the compared list without a write-up of their own, a few at
+// a time through the Short List. A write-up of another vintage doesn't count here.
+const RESEARCH_BATCH = 5;
+function hasOwnResearch(w) {
+  const { byId } = cellarTwins(), other = new Set();
+  for (const id of cellarMatches(w).ids || []) {
+    const o = byId.get(id);
+    if (o && !sameVintage(w, o)) { other.add(id); other.add(sharedIdOf(id)); }
+  }
+  return notesFor(w).some((n) => !other.has(n.id));
+}
+const researchTodo = () => lastResults.filter((w) => w.kind === "cellar" && !hasOwnResearch(w));
+function renderCellarResearch() {
+  const box = $("cellar-research");
+  box.hidden = !isKeeper() || !activeCompare() || !lastResults.length; // the keeper's tool
+  if (box.hidden) return;
+  const left = researchTodo().length, n = lastResults.length;
+  box.innerHTML = left
+    ? `<p><strong>${left.toLocaleString()} of ${n.toLocaleString()}</strong> ${n === 1 ? "wine" : "wines"} in this list still ${left === 1 ? "needs" : "need"} Claude research.</p>
+       <button type="button" class="btn btn-claude" data-action="research-batch">📖 Research the next ${Math.min(RESEARCH_BATCH, left)} with Claude</button>`
+    : `<p>✓ Every wine in this list has Claude research.</p>`;
+}
+// Wines from the last batch that now have their write-ups come off the Short List, and
+// the next ones go on; anything else already on it stays and counts towards the batch.
+function startResearchBatch() {
+  shortlist = shortlist.filter((s) => s.kind !== "cellar" || !hasOwnResearch(s));
+  for (const w of researchTodo()) {
+    if (shortlist.length >= RESEARCH_BATCH) break;
+    if (!isOnList(w.id)) { const { _s, _w, ...copy } = w; shortlist.push(copy); }
+  }
+  saveShortlist();
+  showView("shortlist");
+  askClaude("about");
 }
 
 const cellarOn = (st = state) => [...st.sources].some((s) => !ALL_SOURCES.includes(s));
@@ -5285,6 +5375,7 @@ function renderFinderSummary() {
 // "at BC Liquor - LDB", "at BC Liquor - LDB and ZYN", "at 4 stores", "in Cellar 1"
 function storesPhrase(st = state) {
   if (!st.sources.size) return "(no store ticked)";
+  if (activeCompare(st)) return compareLabel(activeCompare(st), st);
   if (cellarOn(st)) return `in ${[...st.sources].filter((x) => !ALL_SOURCES.includes(x)).join(" and ")}`;
   const list = storesTicked(st).map(sourceLabel);
   return list.length <= 2 ? `at ${list.join(" and ")}` : `at ${list.length} stores`;
@@ -5343,6 +5434,8 @@ function wireEvents() {
       refresh();
     }
     else if (t.dataset.chip) removeChip(+t.dataset.chip);
+    else if (t.dataset.compare != null) { state.cellarCompare = t.dataset.compare; state.shown = PAGE_SIZE; renderSources(); refresh(); }
+    else if (t.dataset.action === "research-batch") startResearchBatch();
     else if (t.dataset.view) { showView(t.dataset.view); if (t.dataset.focus) $(t.dataset.focus)?.focus({ preventScroll: true }); }
     else if (t.dataset.add) {
       const id = t.dataset.add;

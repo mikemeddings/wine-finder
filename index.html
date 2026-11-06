@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-11-06.1">
+<link rel="stylesheet" href="app.css?v=2026-11-06.6">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -181,6 +181,7 @@
       </div>
       <div id="active-filters" class="active-filters"></div>
       <p id="sort-status" class="sort-status" hidden></p>
+      <div id="cellar-research" class="cellar-research" hidden></div>
       <div id="result-list" class="result-list" aria-live="polite"></div>
       <button type="button" class="btn more" id="show-more" hidden>Show more wines</button>
     </section>
@@ -468,6 +469,7 @@
       <li>Tick <strong>Jon's cellar</strong> to see everything in it, including wines bought from wineries.</li>
       <li>Then tick stores under <strong>Sold by</strong> to see only the ones those stores sell. Each wine shows <strong>Sold at:</strong> with the store's price, or “not sold”.</li>
       <li>Store wines that match a cellar wine show a badge such as <strong>In Jon's cellar (2016)</strong>. Sort by “In Jon's cellar first” to bring them to the top.</li>
+      <li>Tick two cellars and <strong>Compare these cellars</strong> appears: see the wines in both, the same wine in other vintages, or the wines only one cellar has.</li>
       <li>On a new computer a shared cellar appears as “Cellar 1”: press <strong>Whose is Cellar 1? Name it</strong> once and type the name.</li>
     </ul>
     <p>Only wine names and scores are shared: never prices, bin locations, notes or bottle counts.</p>
@@ -823,7 +825,7 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-11-06.1"></script>
-<script src="somm.js?v=2026-11-06.1"></script>
+<script src="app.js?v=2026-11-06.6"></script>
+<script src="somm.js?v=2026-11-06.6"></script>
 </body>
 </html>

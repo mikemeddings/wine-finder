@@ -412,6 +412,11 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .badge-cellar.cellar-c2 { background: #dce8fb; border-color: #1d4f9c; color: #12315f; }
 .wine-price-cellar.cellar-c2, .check-cellar.cellar-c2 { color: #1d4f9c; }
 .wine-cellar.cellar-c2 { border-left-color: #1d4f9c; }
+/* Comparing cellars */
+.compare-cellars { display: flex; flex-direction: column; align-items: stretch; gap: 0.35rem; margin-top: 0.5rem; }
+.compare-cellars .tap { text-align: left; }
+.cellar-research { border: 2px solid var(--claude); border-radius: 0.5rem; background: #fff; padding: 0.5rem 0.75rem; margin: 0.5rem 0; }
+.cellar-research p { margin: 0 0 0.4rem; }
 .sold-at a { color: var(--blue); font-weight: 600; }
 .not-sold { color: #6b6b6b; }
 
