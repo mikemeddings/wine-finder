@@ -4975,27 +4975,6 @@
     "from": "Claude (researched for Mike)"
    }
   },
-  "cellar-c2-176": {
-   "name": "Château Larcis Ducasse 2012",
-   "type": "Red",
-   "claude": {
-    "points": 92,
-    "vintage": 2012,
-    "note": "Andreas Larsson 93, James Lawther 90",
-    "date": "2026-11-06",
-    "quick": true,
-    "body": "medium",
-    "tannin": "soft",
-    "sweet": "dry",
-    "fruity": true,
-    "finish": "long",
-    "pair": "roast lamb, duck, mushrooms",
-    "grapes": "Merlot Cabernet Franc",
-    "drinkFrom": 2020,
-    "drinkTo": 2030,
-    "from": "Claude (researched for Mike)"
-   }
-  },
   "cellar-c2-101": {
    "name": "Domaine William Fèvre Chablis 1er Cru Montée de Tonnerre 2010",
    "type": "White",
@@ -6027,25 +6006,6 @@
     "sweet": "dry",
     "pair": "lake fish, poultry, alpine cheese",
     "grapes": "Rèze Heida",
-    "from": "Claude (researched for Mike)"
-   }
-  },
-  "cellar-c2-113": {
-   "name": "Gérald Besse Syrah Les Serpentines 2019",
-   "type": "Red",
-   "claude": {
-    "points": 92,
-    "vintage": 2019,
-    "note": "Andreas Larsson 93",
-    "date": "2026-11-06",
-    "quick": true,
-    "body": "full",
-    "tannin": "medium",
-    "sweet": "dry",
-    "fruity": true,
-    "finish": "long",
-    "pair": "grilled lamb, venison, peppered steak",
-    "grapes": "Syrah",
     "from": "Claude (researched for Mike)"
    }
   },
