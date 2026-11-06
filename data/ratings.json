@@ -3827,6 +3827,2765 @@
     "drinkTo": 2060,
     "from": "Claude (researched for Mike)"
    }
+  },
+  "cellar-c2-1": {
+   "name": "Alheit Vineyards Cartology Bushvines 2012",
+   "type": "White",
+   "claude": {
+    "points": 92,
+    "vintage": 2012,
+    "note": "Neal Martin 93, Parker 92+, Eedes 91",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast chicken, lobster, creamy pasta",
+    "grapes": "Chenin Blanc",
+    "drinkFrom": 2015,
+    "drinkTo": 2023,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-9": {
+   "name": "Benoit Dorsaz Cornalin Quintessence 2020",
+   "type": "Red",
+   "claude": {
+    "points": null,
+    "vintage": 2020,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "venison, game terrine, veal with truffles",
+    "grapes": "Cornalin",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-26": {
+   "name": "Château Branaire-Ducru 2022",
+   "type": "Red",
+   "claude": {
+    "points": 96,
+    "vintage": 2022,
+    "note": "Kelley 96, Anson 96, Martin 95-97, Dunnuck 95-97",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, ribeye steak",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2028,
+    "drinkTo": 2055,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-32": {
+   "name": "Le Clos du Caillou Châteauneuf-du-Pape Domaine du Caillou Les Quartz 2010",
+   "type": "Red",
+   "claude": {
+    "points": 93,
+    "vintage": 2010,
+    "note": "Wine Anorak 92-94, Delectable pro 9.3",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, game, grilled beef",
+    "grapes": "Grenache Syrah Mourvèdre",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-40": {
+   "name": "M. Chapoutier Châteauneuf-du-Pape Barbe Rac 2005",
+   "type": "Red",
+   "claude": {
+    "points": 94,
+    "vintage": 2005,
+    "note": "Parker 96, Leve 95, Robinson 19/20, Raynolds 89-92",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "game, braised lamb, hard cheese",
+    "grapes": "Grenache",
+    "drinkFrom": 2012,
+    "drinkTo": 2025,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-47": {
+   "name": "Domaine de Chevalier 2015",
+   "type": "Red",
+   "claude": {
+    "points": 95,
+    "vintage": 2015,
+    "note": "Suckling 97, Perrotti-Brown 96, Anson 95, Martin 94",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, duck breast, mushrooms",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2025,
+    "drinkTo": 2048,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-48": {
+   "name": "Domaine de Chevalier 2009",
+   "type": "Red",
+   "claude": {
+    "points": 96,
+    "vintage": 2009,
+    "note": "Suckling 98, Anson 97, Parker 95, Martin 94",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, game birds, mushrooms",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2025,
+    "drinkTo": 2044,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-62": {
+   "name": "Conterno Fantino Barolo Sorì Ginestra 2004",
+   "type": "Red",
+   "claude": {
+    "points": 96,
+    "vintage": 2004,
+    "note": "Galloni 96, Wine Advocate 96, Tanzer 96",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "braised beef, truffle pasta, aged cheese",
+    "grapes": "Nebbiolo",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-65": {
+   "name": "Domaine Courbis Cornas La Sabarotte 2010",
+   "type": "Red",
+   "claude": {
+    "points": 91,
+    "vintage": 2010,
+    "note": "9.4 on Delectable, 9.3 pro ratings",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled lamb, venison, charcuterie",
+    "grapes": "Syrah",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-67": {
+   "name": "Cullen Wines Diana Madeline 2017",
+   "type": "Red",
+   "claude": {
+    "points": 95,
+    "vintage": 2017,
+    "note": "Wine Front 96, Wine Enthusiast 95",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, ribeye steak",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-87": {
+   "name": "Joseph Drouhin Beaune 1er Cru Clos des Mouches Blanc 2010",
+   "type": "White",
+   "claude": {
+    "points": 92,
+    "vintage": 2010,
+    "note": "Galloni 93+, Neal Martin 90, Robinson site 17.5",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "lobster, roast chicken, creamy fish",
+    "grapes": "Chardonnay",
+    "drinkFrom": 2017,
+    "drinkTo": 2030,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-103": {
+   "name": "Domaine William Fèvre Chablis Grand Cru Les Preuses 2012",
+   "type": "White",
+   "claude": {
+    "points": 93,
+    "vintage": 2012,
+    "note": "Neal Martin 92+",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "oysters, lobster, roast chicken",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-104": {
+   "name": "Domaine Fourrier Gevrey-Chambertin Vieille Vigne 2013",
+   "type": "Red",
+   "claude": {
+    "points": 90,
+    "vintage": 2013,
+    "note": "Tanzer 89, Neal Martin 91-93, Robinson site 17/20",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "roast chicken, duck, mushrooms",
+    "grapes": "Pinot Noir",
+    "drinkFrom": 2017,
+    "drinkTo": 2030,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-119": {
+   "name": "Domaine Henri Gouges Nuits-Saint-Georges 1er Cru Clos des Porrets St. Georges 2005",
+   "type": "Red",
+   "claude": {
+    "points": 90,
+    "vintage": 2005,
+    "note": "8.9 on Delectable, 8.8 pro ratings",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "roast duck, beef bourguignon, mushrooms",
+    "grapes": "Pinot Noir",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-121": {
+   "name": "Domaine Henri Gouges Nuits-Saint-Georges 1er Cru Les Pruliers 2005",
+   "type": "Red",
+   "claude": {
+    "points": 91,
+    "vintage": 2005,
+    "note": "Tanzer 90-93, Wine Advocate 90-92, Delectable 9.2",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast duck, game birds, mushrooms",
+    "grapes": "Pinot Noir",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-132": {
+   "name": "Château Haut-Batailley 2009",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2009,
+    "note": "Decanter 95, Martin 94, Suckling 93, Parker 89",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, ribeye steak, mushrooms",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2016,
+    "drinkTo": 2040,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-156": {
+   "name": "Weingut Keller Scheurebe Spätlese 2011",
+   "type": "White",
+   "claude": {
+    "points": 86,
+    "vintage": 2011,
+    "note": "8.5 on Delectable, three user ratings only",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "light",
+    "sweet": "medium-sweet",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "spicy Asian dishes, fruit tart, soft cheese",
+    "grapes": "Scheurebe",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-157": {
+   "name": "Weingut Keller Westhofener Kirchspiel Riesling Spätlese Goldkapsel 2009",
+   "type": "White",
+   "claude": {
+    "points": 92,
+    "vintage": 2009,
+    "note": "9.4 on Delectable, two user ratings only",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "light",
+    "sweet": "medium-sweet",
+    "fruity": true,
+    "finish": "long",
+    "pair": "spicy Asian dishes, pork, fruit tart",
+    "grapes": "Riesling",
+    "drinkFrom": 2012,
+    "drinkTo": 2023,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-183": {
+   "name": "Domaine Leflaive Puligny-Montrachet 2013",
+   "type": "White",
+   "claude": {
+    "points": 90,
+    "vintage": 2013,
+    "note": "Spectator 92, Gilman 91+, Martin 89-91, Burghound 89-91",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled fish, roast chicken, scallops",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-213": {
+   "name": "Moss Wood Cabernet Sauvignon 2015",
+   "type": "Red",
+   "claude": {
+    "points": 96,
+    "vintage": 2015,
+    "note": "Huon Hooke 98, Ray Jordan 98",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, ribeye steak",
+    "grapes": "Cabernet Sauvignon",
+    "drinkFrom": 2020,
+    "drinkTo": 2045,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-214": {
+   "name": "Müller-Catoir Haardter Bürgergarten Im Breumel Riesling Großes Gewächs 2020",
+   "type": "White",
+   "claude": {
+    "points": 94,
+    "vintage": 2020,
+    "note": "Suckling 98, Jancis Robinson site 17",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "lobster, roast pork, Asian dishes",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-241": {
+   "name": "Pisano Tannat Axis Mundi 2002",
+   "type": "Red",
+   "claude": {
+    "points": 88,
+    "vintage": 2002,
+    "note": "9.3 on Delectable, two user ratings only",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "grilled beef, lamb, hard cheese",
+    "grapes": "Tannat",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-263": {
+   "name": "Roger Sabon Châteauneuf-du-Pape Cuvée Prestige 2009",
+   "type": "Red",
+   "claude": {
+    "points": 93,
+    "vintage": 2009,
+    "note": "Parker 96, Dunnuck 94, Delectable 8.9",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, game, beef stew",
+    "grapes": "Grenache Syrah Mourvèdre",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-273": {
+   "name": "Château Sociando-Mallet 2005",
+   "type": "Red",
+   "claude": {
+    "points": 93,
+    "vintage": 2005,
+    "note": "Anson 95, Dunnuck 94, Suckling 93, Parker 93",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, ribeye steak, hard cheese",
+    "grapes": "Merlot Cabernet Sauvignon",
+    "drinkFrom": 2024,
+    "drinkTo": 2040,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-274": {
+   "name": "Sottimano Barbaresco Cottá 2008",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2008,
+    "note": "9.3 on Delectable, users and pros",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "braised beef, truffle pasta, aged cheese",
+    "grapes": "Nebbiolo",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-90": {
+   "name": "Emrich-Schönleber Halenberg Riesling Großes Gewächs 2019",
+   "type": "White",
+   "claude": {
+    "points": 92,
+    "vintage": 2019,
+    "note": "Delectable 9.3 (4 ratings), one pro 9.1",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast pork, scallops, spiced chicken",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-279": {
+   "name": "Château Suduiraut 2001",
+   "type": "Dessert",
+   "claude": {
+    "points": 95,
+    "vintage": 2001,
+    "note": "Parker 98, Suckling 95, Neal Martin 94",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "sweet",
+    "fruity": true,
+    "finish": "long",
+    "pair": "foie gras, blue cheese, fruit tart",
+    "grapes": "Sémillon Sauvignon Blanc",
+    "drinkFrom": 2014,
+    "drinkTo": 2034,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-266": {
+   "name": "Sadie Family T'Voetpad 2015",
+   "type": "White",
+   "claude": {
+    "points": 95,
+    "vintage": 2015,
+    "note": "Christian Eedes, Winemag 96",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast chicken, grilled fish, soft cheese",
+    "grapes": "Chenin Muscat Palomino Semillon",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-269": {
+   "name": "Schäfer-Fröhlich Bockenauer Felseneck Riesling Großes Gewächs 2010",
+   "type": "White",
+   "claude": {
+    "points": 93,
+    "vintage": 2010,
+    "note": "Delectable pro 9.5 (6 pros), overall 9.3",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast pork, trout, mild curry",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-186": {
+   "name": "Château Léoville Barton 2005",
+   "type": "Red",
+   "claude": {
+    "points": 94,
+    "vintage": 2005,
+    "note": "Jamie Goode 94",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, ribeye steak, hard cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-71": {
+   "name": "Vincent Dancer Chassagne-Montrachet 1er Cru Tête du Clos 2014",
+   "type": "White",
+   "claude": {
+    "points": 93,
+    "vintage": 2014,
+    "note": "Delectable pro 9.3; Burgundy Report \"Great wine\"",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "lobster, roast chicken, comté",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-94": {
+   "name": "Giacomo Fenocchio Barolo Villero 2013",
+   "type": "Red",
+   "claude": {
+    "points": 94,
+    "vintage": 2013,
+    "note": "Suckling 95, Wine Advocate 93, Enthusiast 93",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "braised beef, truffle pasta, aged cheese",
+    "grapes": "Nebbiolo",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-27": {
+   "name": "Château Branaire-Ducru 2010",
+   "type": "Red",
+   "claude": {
+    "points": 93,
+    "vintage": 2010,
+    "note": "Martin 95, Parker 94, Suckling 94, Perrotti-Brown 89",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, grilled beef, hard cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2024,
+    "drinkTo": 2045,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-10": {
+   "name": "Benoit Dorsaz Petite Arvine Quintessence 2020",
+   "type": "White",
+   "claude": {
+    "points": null,
+    "vintage": 2020,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "grilled fish, poultry in cream, raclette",
+    "grapes": "Petite Arvine",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-201": {
+   "name": "Marie-Thérèse Chappaz Grain Mariage 2015",
+   "type": "Red",
+   "claude": {
+    "points": null,
+    "vintage": 2015,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "pair": "game, grilled lamb, mature cheese",
+    "grapes": "Humagne Rouge Cornalin",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-16": {
+   "name": "Domaine Henri Boillot Volnay 1er Cru Les Chevrets 2010",
+   "type": "Red",
+   "claude": {
+    "points": 91,
+    "vintage": 2010,
+    "note": "Delectable pro 9.3 (3 pros), overall 9.2",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast duck, coq au vin, mushrooms",
+    "grapes": "Pinot Noir",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-244": {
+   "name": "Isabelle & Denis Pommier Chablis 1er Cru Fourchaume 2014",
+   "type": "White",
+   "claude": {
+    "points": 91,
+    "vintage": 2014,
+    "note": "Delectable pro 9.3 (8 pros), Lyle Fass 9.4",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "oysters, shellfish, sushi, goat cheese",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-191": {
+   "name": "Domaine Lignier-Michelot Morey-Saint-Denis 1er Cru Les Faconnières 2005",
+   "type": "Red",
+   "claude": {
+    "points": 89,
+    "vintage": 2005,
+    "note": "Guide Hachette 2008: one star, \"vin très réussi\"",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "venison, pot-au-feu",
+    "grapes": "Pinot Noir",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-154": {
+   "name": "Weingut Keller Niersteiner Hipping Riesling Kabinett - H - 2012",
+   "type": "White",
+   "claude": {
+    "points": 92,
+    "vintage": 2012,
+    "note": "Delectable 9.3 from two ratings, 9.8 and 8.9",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "light",
+    "sweet": "off-dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "smoked trout, mild Thai, fresh fruit",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-291": {
+   "name": "Domaine de la Vougeraie Charlemagne 2013",
+   "type": "White",
+   "claude": {
+    "points": null,
+    "vintage": 2013,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "lobster, turbot, roast chicken",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-6": {
+   "name": "Ata Rangi Pinot Noir 2019",
+   "type": "Red",
+   "claude": {
+    "points": 97,
+    "vintage": 2019,
+    "note": "Suckling 98, Galloni 97, Lobenberg 97-98+",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast duck, lamb rack, mushroom risotto",
+    "grapes": "Pinot Noir",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-120": {
+   "name": "Domaine Henri Gouges Nuits-Saint-Georges 1er Cru Les Pruliers 2009",
+   "type": "Red",
+   "claude": {
+    "points": 90,
+    "vintage": 2009,
+    "note": "Clive Coates, World of Fine Wine 90",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "game birds, beef bourguignon, Époisses",
+    "grapes": "Pinot Noir",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-42": {
+   "name": "M. Chapoutier Saint-Joseph Les Granits 2010",
+   "type": "Red",
+   "claude": {
+    "points": 95,
+    "vintage": 2010,
+    "note": "Wine Advocate 95, Spectator 95, Decanter 94",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "grilled lamb, venison, peppered steak",
+    "grapes": "Syrah",
+    "drinkFrom": 2016,
+    "drinkTo": 2030,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-77": {
+   "name": "Donatsch Completer 2015",
+   "type": "White",
+   "claude": {
+    "points": 92,
+    "vintage": 2019,
+    "note": "Stephan Reinhardt 93 for 2019",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "veal in cream, roast pork, mountain cheese",
+    "grapes": "Completer",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-206": {
+   "name": "MastroJanni Brunello di Montalcino 2013",
+   "type": "Red",
+   "claude": {
+    "points": 88,
+    "vintage": 2013,
+    "note": "WOFW 87: Belfrage 92, Besa 84, Jefford 84",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "roast beef, wild boar ragù, pecorino",
+    "grapes": "Sangiovese",
+    "drinkFrom": 2020,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-284": {
+   "name": "Château du Tertre 2009",
+   "type": "Red",
+   "claude": {
+    "points": 91,
+    "vintage": 2009,
+    "note": "Parker 92, Falstaff 92, Spectator 91, WOFW 89",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, duck confit, hard cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2016,
+    "drinkTo": 2026,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-261": {
+   "name": "Serge Roh Amigne Grand Cru Vétroz 2016",
+   "type": "White",
+   "claude": {
+    "points": null,
+    "vintage": 2016,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "sweet": "off-dry",
+    "pair": "foie gras, blue cheese, spicy Asian dishes",
+    "grapes": "Amigne",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-275": {
+   "name": "La Soufrandière Pouilly-Vinzelles Les Quarts 2016",
+   "type": "White",
+   "claude": {
+    "points": 92,
+    "vintage": 2016,
+    "note": "Decanter 93, Stephen Brook 90",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast chicken, lobster, comté",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-278": {
+   "name": "Château Suduiraut 2009",
+   "type": "Dessert",
+   "claude": {
+    "points": 97,
+    "vintage": 2009,
+    "note": "Neal Martin 98 (Vinous, April 2018)",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "sweet",
+    "fruity": true,
+    "finish": "long",
+    "pair": "foie gras, blue cheese, fruit tart",
+    "grapes": "Sémillon Sauvignon Blanc",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-185": {
+   "name": "Château Léoville Barton 2015",
+   "type": "Red",
+   "claude": {
+    "points": 95,
+    "vintage": 2015,
+    "note": "Galloni 96+, Suckling 96, Anson 95, Martin 94",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast lamb, ribeye steak",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2021,
+    "drinkTo": 2045,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-29": {
+   "name": "Château Brane-Cantenac 2019",
+   "type": "Red",
+   "claude": {
+    "points": 95,
+    "vintage": 2019,
+    "note": "Neal Martin 95 (Vinous, September 2025)",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast lamb, duck breast",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-79": {
+   "name": "Dönnhoff Hermannshöhle Riesling Großes Gewächs 2015",
+   "type": "White",
+   "claude": {
+    "points": 95,
+    "vintage": 2015,
+    "note": "Delectable 9.5 pro; Marc On 9.6",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast pork, sausages, grilled fish",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-58": {
+   "name": "Elvio Cogno Barolo Bricco Pernice 2010",
+   "type": "Red",
+   "claude": {
+    "points": 94,
+    "vintage": 2010,
+    "note": "Wine & Spirits unscored; Galloni 94 for 2011",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "braised beef, mushroom risotto, truffle pasta",
+    "grapes": "Nebbiolo",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-127": {
+   "name": "Domaine de la Grange des Pères Pays d'Hérault 2010",
+   "type": "Red",
+   "claude": {
+    "points": 91,
+    "vintage": 2012,
+    "note": "Dunnuck 91 for 2012, Wine Advocate",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, game, beef stew",
+    "grapes": "Syrah Mourvèdre Cabernet Sauvignon",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-173": {
+   "name": "Château Lagrange (St. Julien) 2025",
+   "type": "Red",
+   "claude": {
+    "points": 94,
+    "vintage": 2025,
+    "note": "Kelley 94-96, Anson 94, Martin 93-95, Galloni 92-94",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast lamb, ribeye steak",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2030,
+    "drinkTo": 2060,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-15": {
+   "name": "Domaine Henri Boillot Puligny-Montrachet 1er Cru Clos de la Mouchère 2010",
+   "type": "White",
+   "claude": {
+    "points": 93,
+    "vintage": 2010,
+    "note": "Delectable 9.4 pro; Conrad Green 9.4",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "scallops, sole, roast chicken",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-246": {
+   "name": "Joh. Jos. Prüm Graacher Himmelreich Riesling Spätlese 2019",
+   "type": "White",
+   "claude": {
+    "points": 92,
+    "vintage": 2019,
+    "note": "Delectable 9.2 from three user ratings",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "light",
+    "sweet": "medium-sweet",
+    "fruity": true,
+    "finish": "long",
+    "pair": "spicy Asian dishes, smoked trout, pork",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-195": {
+   "name": "Dr. Loosen Ürziger Würzgarten Riesling Großes Gewächs Alte Reben 2019",
+   "type": "White",
+   "claude": {
+    "points": 96,
+    "vintage": 2019,
+    "note": "Reinhardt 96+, Wine Advocate",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast pork, grilled fish, poultry",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-174": {
+   "name": "Château Lagrange (St. Julien) 2005",
+   "type": "Red",
+   "claude": {
+    "points": 94,
+    "vintage": 2005,
+    "note": "Suckling 96, Dunnuck 95, Anson 94, Martin 94",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast lamb, beef fillet, hard cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2023,
+    "drinkTo": 2065,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-152": {
+   "name": "Weingut Keller Hipping Riesling \"R\" 2011",
+   "type": "White",
+   "claude": {
+    "points": 95,
+    "vintage": 2011,
+    "note": "Delectable 9.6 pro, 9.5 users",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "off-dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "spicy Asian dishes, roast pork, smoked fish",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-176": {
+   "name": "Château Larcis Ducasse 2012",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2012,
+    "note": "Andreas Larsson 93, James Lawther 90",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, duck, mushrooms",
+    "grapes": "Merlot Cabernet Franc",
+    "drinkFrom": 2020,
+    "drinkTo": 2030,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-101": {
+   "name": "Domaine William Fèvre Chablis 1er Cru Montée de Tonnerre 2010",
+   "type": "White",
+   "claude": {
+    "points": 92,
+    "vintage": 2010,
+    "note": "Delectable 9.2 pro; Ron Siegel 9.3",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "oysters, grilled fish, goat cheese",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-193": {
+   "name": "Carl Loewen Longuicher Maximin Herrenberg Riesling Trocken Alte Reben \"1896\" 2018",
+   "type": "White",
+   "claude": {
+    "points": 90,
+    "vintage": 2018,
+    "note": "Delectable: Ely Cohn 9.2, Stuart Pollack 8.9",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "grilled fish, oysters, roast chicken",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-61": {
+   "name": "Château La Conseillante 2011",
+   "type": "Red",
+   "claude": {
+    "points": 90,
+    "vintage": 2011,
+    "note": "Neal Martin 90 (Vinous, September 2021)",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "roast lamb, duck, mushrooms",
+    "grapes": "Merlot Cabernet Franc",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-293": {
+   "name": "Domaine Weinbach Riesling Schlossberg 2010",
+   "type": "White",
+   "claude": {
+    "points": 93,
+    "vintage": 2010,
+    "note": "Decanter 93",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "choucroute, roast pork, grilled trout",
+    "grapes": "Riesling",
+    "drinkFrom": 2015,
+    "drinkTo": 2028,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-177": {
+   "name": "Château Latour-Martillac 2009",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2009,
+    "note": "Parker 93 (Wine Advocate, March 2012)",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, steak, game",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2020,
+    "drinkTo": 2042,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-91": {
+   "name": "Emrich-Schönleber Halenberg Riesling Großes Gewächs 2011",
+   "type": "White",
+   "claude": {
+    "points": 95,
+    "vintage": 2011,
+    "note": "Delectable 9.6 pro, 9.5 users",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast pork, lobster, poultry",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-151": {
+   "name": "Domaine Rémi Jobard Meursault 1er Cru Les Genevrières 2012",
+   "type": "White",
+   "claude": {
+    "points": 92,
+    "vintage": 2012,
+    "note": "Margaret Rand 17.5/20, World of Fine Wine 92",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "lobster, roast chicken, creamy fish",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-188": {
+   "name": "Château Léoville Poyferré 2016",
+   "type": "Red",
+   "claude": {
+    "points": 97,
+    "vintage": 2016,
+    "note": "Martin 97, Anson 98, Dunnuck 98, Robinson 18",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, rib of beef, hard cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2030,
+    "drinkTo": 2060,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-153": {
+   "name": "Weingut Keller Hubacker Riesling Großes Gewächs 2012",
+   "type": "White",
+   "claude": {
+    "points": 94,
+    "vintage": 2012,
+    "note": "Michael Schmidt 18.5/20",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "trout, roast chicken, Asian-spiced pork",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-102": {
+   "name": "Domaine William Fèvre Chablis Grand Cru Les Clos 2010",
+   "type": "White",
+   "claude": {
+    "points": 96,
+    "vintage": 2010,
+    "note": "Loren Sonkin 98 (IntoWine)",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "soft-ripened cheese, lobster, roast chicken",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-46": {
+   "name": "Domaine de Chevalier 2016",
+   "type": "Red",
+   "claude": {
+    "points": 96,
+    "vintage": 2016,
+    "note": "Martin 97, Suckling 97, Perrotti-Brown 96+, Robinson 16",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast duck, lamb, wild mushrooms",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2027,
+    "drinkTo": 2052,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-19": {
+   "name": "Albert Boxler Riesling Brand K 2008",
+   "type": "White",
+   "claude": {
+    "points": 92,
+    "vintage": 2010,
+    "note": "Wine Anorak 92 for 2010",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "choucroute, trout, shellfish",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-287": {
+   "name": "G.D. Vajra Barolo Bricco delle Viole 2011",
+   "type": "Red",
+   "claude": {
+    "points": 94,
+    "vintage": 2011,
+    "note": "Wine Spectator 95 (#36 of 2016), Robinson 18",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "braised beef, truffle pasta, aged cheese",
+    "grapes": "Nebbiolo",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-163": {
+   "name": "Domaine la Colombe Curzilles 2018",
+   "type": "White",
+   "claude": {
+    "points": null,
+    "vintage": 2018,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "pair": "fish with tarragon, snails, summer salads",
+    "grapes": "Chasselas Doral Pinot Gris",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-89": {
+   "name": "Emrich-Schönleber Halenberg Riesling Großes Gewächs 2020",
+   "type": "White",
+   "claude": {
+    "points": 96,
+    "vintage": 2020,
+    "note": "Reinhardt 96, Suckling 99, Robinson 18.5/20",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "turbot, scallops, roast pork",
+    "grapes": "Riesling",
+    "drinkFrom": 2026,
+    "drinkTo": 2060,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-86": {
+   "name": "Joseph Drouhin Beaune 1er Cru Clos des Mouches Blanc 2017",
+   "type": "White",
+   "claude": {
+    "points": 92,
+    "vintage": 2017,
+    "note": "Michael Apstein 92",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast chicken, lobster, sole in butter",
+    "grapes": "Chardonnay",
+    "drinkFrom": 2025,
+    "drinkTo": 2035,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-88": {
+   "name": "Château Duhart-Milon 2005",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2005,
+    "note": "Parker 93, Martin 91, Robinson 17.5",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, beef, hard cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2015,
+    "drinkTo": 2035,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-189": {
+   "name": "Château Léoville Poyferré 2011",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2011,
+    "note": "Parker 94, Suckling 93, Martin 91",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "roast lamb, steak, hard cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2022,
+    "drinkTo": 2038,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-63": {
+   "name": "Edmond Cornu & Fils Corton-Bressandes 2005",
+   "type": "Red",
+   "claude": {
+    "points": 88,
+    "vintage": 2005,
+    "note": "Bourgogne Aujourd'hui 16/20",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "pair": "beef bourguignon, game, Époisses",
+    "grapes": "Pinot Noir",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-221": {
+   "name": "Novelle - Le Grand Clos Merlot Iconique 2019",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2019,
+    "note": "Vins Confédérés 92 (95), tasted Feb 2024",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "pair": "navarin of lamb, veal, duck breast",
+    "grapes": "Merlot",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-95": {
+   "name": "Giacomo Fenocchio Barolo Villero 2010",
+   "type": "Red",
+   "claude": {
+    "points": 94,
+    "vintage": 2010,
+    "note": "Richard Hemming 19/20",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "braised beef, game, truffle risotto",
+    "grapes": "Nebbiolo",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-212": {
+   "name": "Domaine Bernard Moreau et Fils Chassagne-Montrachet 1er Cru Morgeot 2010",
+   "type": "White",
+   "claude": {
+    "points": null,
+    "vintage": 2010,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "pair": "lobster, roast poultry, creamy fish",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-181": {
+   "name": "Fattoria Le Pupille (Elisabetta Geppetti) Saffredi 2006",
+   "type": "Red",
+   "claude": {
+    "points": 94,
+    "vintage": 2006,
+    "note": "Parker 96, Galloni 96, Robinson 17/20",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "grilled steak, wild boar, aged pecorino",
+    "grapes": "Cabernet Sauvignon Merlot Syrah",
+    "drinkFrom": 2018,
+    "drinkTo": 2034,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-280": {
+   "name": "Château Talbot 2010",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2010,
+    "note": "Parker 94, Martin 92, Perrotti-Brown 91, Robinson 17",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast beef, lamb, hard cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2022,
+    "drinkTo": 2045,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-232": {
+   "name": "F.X. Pichler Riesling Smaragd Loibner Oberhauser 2012",
+   "type": "White",
+   "claude": {
+    "points": 92,
+    "vintage": 2012,
+    "note": "Falstaff 93 (Vinopolis newsletter)",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "schnitzel, grilled trout, roast pork",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-171": {
+   "name": "Château Labégorce 2015",
+   "type": "Red",
+   "claude": {
+    "points": 93,
+    "vintage": 2015,
+    "note": "Enthusiast 95, Suckling 94, Dunnuck 94, Spectator 88",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, beef, mushrooms",
+    "grapes": "Merlot Cabernet Sauvignon",
+    "drinkFrom": 2021,
+    "drinkTo": 2032,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-271": {
+   "name": "Château Sigalas Rabaud 2001",
+   "type": "Dessert",
+   "claude": {
+    "points": 90,
+    "vintage": 2001,
+    "note": "Parker 91, Martin 91, Wine Doctor 17.5/20",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "sweet",
+    "fruity": true,
+    "finish": "long",
+    "pair": "foie gras, blue cheese, apricot tart",
+    "grapes": "Sémillon Sauvignon Blanc",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-233": {
+   "name": "F.X. Pichler Riesling Smaragd Ried Steinertal 2010",
+   "type": "White",
+   "claude": {
+    "points": null,
+    "vintage": 2010,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "pair": "Wiener schnitzel, trout, Asian dishes",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-218": {
+   "name": "Novelle - Le Grand Clos Empreinte Marine 2021",
+   "type": "White",
+   "claude": {
+    "points": 92,
+    "vintage": 2021,
+    "note": "Reinhardt 91, Beck 92, Probst 93",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "off-dry",
+    "fruity": true,
+    "pair": "oysters, fish tartare, sea bass, aged Gruyère",
+    "grapes": "Arvine Petit Manseng Savagnin",
+    "drinkFrom": 2022,
+    "drinkTo": 2030,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-294": {
+   "name": "Zind-Humbrecht Pinot Gris Clos Windsbuhl 2001",
+   "type": "White",
+   "claude": {
+    "points": 91,
+    "vintage": 2008,
+    "note": "Winetomas 91 for 2008",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "off-dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast pork, foie gras, spiced poultry",
+    "grapes": "Pinot Gris",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-73": {
+   "name": "Daydreamer Amelia 2015",
+   "type": "Red",
+   "claude": {
+    "points": 90,
+    "vintage": 2016,
+    "note": "Natalie MacLean 90 for 2016",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "pair": "grilled lamb, pork loin, planked salmon",
+    "grapes": "Syrah Viognier",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-226": {
+   "name": "Passopisciaro Contrada PC Bianco 2020",
+   "type": "White",
+   "claude": {
+    "points": 93,
+    "vintage": 2020,
+    "note": "Guido 94, Suckling 94, Larner 93, Callegari 93",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "grilled fish, roast chicken, seafood pasta",
+    "grapes": "Chardonnay",
+    "drinkFrom": 2024,
+    "drinkTo": 2032,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-175": {
+   "name": "Hubert Lamy Saint-Aubin 1er Cru Les Murgers des Dents de Chien Blanc 2010",
+   "type": "White",
+   "claude": {
+    "points": null,
+    "vintage": 2010,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "pair": "scallops, sole, goat cheese",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-126": {
+   "name": "Château Grand-Puy-Lacoste 2009",
+   "type": "Red",
+   "claude": {
+    "points": 95,
+    "vintage": 2009,
+    "note": "Parker 95, Martin 95, Anson 96, Robinson 18",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, rib of beef, hard cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2022,
+    "drinkTo": 2040,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-260": {
+   "name": "Serge Roh Amigne Amigne de Vétroz 2016",
+   "type": "White",
+   "claude": {
+    "points": null,
+    "vintage": 2016,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "pair": "foie gras, blue cheese, spicy dishes",
+    "grapes": "Amigne",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-204": {
+   "name": "Marqués de Riscal Rioja Reserva 2020",
+   "type": "Red",
+   "claude": {
+    "points": 91,
+    "vintage": 2020,
+    "note": "Suckling 94, Enthusiast 92, Decanter 91, Spectator 89",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, grilled chorizo, manchego",
+    "grapes": "Tempranillo Graciano",
+    "drinkTo": 2029,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-179": {
+   "name": "Laurent-Perrier Champagne Brut",
+   "type": "Sparkling",
+   "claude": {
+    "points": 91,
+    "vintage": "NV",
+    "note": "Aarts 92 (2022), Ken's Wine Guide 92 (2017)",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "light",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "bacon-wrapped scallops, sushi, oysters",
+    "grapes": "Chardonnay Pinot Noir Meunier",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-282": {
+   "name": "Château du Tertre 2013",
+   "type": "Red",
+   "claude": {
+    "points": 89,
+    "vintage": 2013,
+    "note": "Spurrier 88, Social Vignerons 90",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "roast chicken, lamb chops, mild cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2017,
+    "drinkTo": 2027,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-21": {
+   "name": "Albert Boxler Riesling Sommerberg Dudenstein 2010",
+   "type": "White",
+   "claude": {
+    "points": null,
+    "vintage": 2010,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "pair": "trout, roast pork, choucroute",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-182": {
+   "name": "Leeuwin Estate Chardonnay Art Series 2020",
+   "type": "White",
+   "claude": {
+    "points": 97,
+    "vintage": 2020,
+    "note": "Advocate 98, Halliday 97, Suckling 97, Spectator 95",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "lobster, scallops, roast chicken",
+    "grapes": "Chardonnay",
+    "drinkFrom": 2024,
+    "drinkTo": 2036,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-118": {
+   "name": "Château Giscours 2022",
+   "type": "Red",
+   "claude": {
+    "points": 96,
+    "vintage": 2022,
+    "note": "Suckling 98, Dunnuck 97, Advocate 96, Spectator 95",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, ribeye steak, hard cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2028,
+    "drinkTo": 2055,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-45": {
+   "name": "Domaine de Chevalier 2019",
+   "type": "Red",
+   "claude": {
+    "points": 96,
+    "vintage": 2019,
+    "note": "Advocate 97, Vinous 97, Suckling 97, Spectator 94",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, duck breast, mushrooms",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2029,
+    "drinkTo": 2055,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-38": {
+   "name": "Cave du Rhodan Heida 2017",
+   "type": "White",
+   "claude": {
+    "points": null,
+    "vintage": 2017,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "sweet": "dry",
+    "pair": "raclette, lake fish, goat cheese",
+    "grapes": "Heida (Savagnin)",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-150": {
+   "name": "Jean-Pierre Pellegrin Gamay Sauvage 2022",
+   "type": "Red",
+   "claude": {
+    "points": 90,
+    "vintage": 2021,
+    "note": "WA 91 for 2021; no 2022 review",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "pair": "roast chicken, charcuterie, grilled sausages",
+    "grapes": "Gamay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-158": {
+   "name": "Kumeu River Chardonnay Maté's Vineyard 2017",
+   "type": "White",
+   "claude": {
+    "points": 95,
+    "vintage": 2017,
+    "note": "Czerwinski 95, Neal Martin 94",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast chicken, crayfish, grilled fish",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-200": {
+   "name": "Marie-Thérèse Chappaz Grain Cinq 2020",
+   "type": "White",
+   "claude": {
+    "points": 94,
+    "vintage": 2020,
+    "note": "Lobenberg 95, Parker 94",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "lake fish, poultry, alpine cheese",
+    "grapes": "Petite Arvine, Pinot Blanc",
+    "drinkFrom": 2023,
+    "drinkTo": 2038,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-70": {
+   "name": "Vincent Dancer Chassagne-Montrachet 1er Cru La Romanée 2013",
+   "type": "White",
+   "claude": {
+    "points": 93,
+    "vintage": 2013,
+    "note": "Delectable pro average 9.36, Fass 9.8",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "lobster, turbot, roast chicken",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-288": {
+   "name": "Vasse Felix Chardonnay Heytesbury 2022",
+   "type": "White",
+   "claude": {
+    "points": 96,
+    "vintage": 2022,
+    "note": "Erin Larkin, Wine Advocate 97",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "scallops, roast chicken, crab",
+    "grapes": "Chardonnay",
+    "drinkFrom": 2024,
+    "drinkTo": 2038,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-57": {
+   "name": "Clos Tsampéhro Blanc 2014",
+   "type": "White",
+   "claude": {
+    "points": null,
+    "vintage": 2014,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "sweet": "dry",
+    "pair": "lake fish, poultry, alpine cheese",
+    "grapes": "Rèze Heida",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-5": {
+   "name": "Château d'Armailhac 2010",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2010,
+    "note": "Parker 93, Atkin 93, Martin 92, Perrotti-Brown 92",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, beef, hard cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2021,
+    "drinkTo": 2040,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-30": {
+   "name": "Weingut Clemens Busch Marienburg Fahrlay-Terrassen Riesling Großes Gewächs 2020",
+   "type": "White",
+   "claude": {
+    "points": 97,
+    "vintage": 2020,
+    "note": "Suckling 98, Decanter 97, Reinhardt 97",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "turbot, roast pork, lobster",
+    "grapes": "Riesling",
+    "drinkFrom": 2023,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-159": {
+   "name": "Kumeu River Chardonnay Maté's Vineyard 2016",
+   "type": "White",
+   "claude": {
+    "points": 95,
+    "vintage": 2016,
+    "note": "Stock 96, Campbell 96, Czerwinski 94, Robinson 18",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast chicken, crayfish, grilled fish",
+    "grapes": "Chardonnay",
+    "drinkFrom": 2019,
+    "drinkTo": 2030,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-93": {
+   "name": "Giacomo Fenocchio Barolo Castellero 2020",
+   "type": "Red",
+   "claude": {
+    "points": 93,
+    "vintage": 2021,
+    "note": "Suckling 94, Vinous 94+, Dunnuck 93 for 2021",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "braised beef, truffle pasta, game",
+    "grapes": "Nebbiolo",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-122": {
+   "name": "Graham Porto 20 Year Old Tawny",
+   "type": "Fortified",
+   "claude": {
+    "points": 93,
+    "vintage": "NV",
+    "note": "Howard 96, Morris 93, MacLean 92, Mayson 91",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "sweet",
+    "fruity": true,
+    "finish": "long",
+    "pair": "walnut cake, aged blue cheese",
+    "grapes": "Touriga Nacional Touriga Franca",
+    "drinkFrom": 2025,
+    "drinkTo": 2028,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-56": {
+   "name": "Clos Tsampéhro Blanc 2018",
+   "type": "White",
+   "claude": {
+    "points": null,
+    "vintage": 2018,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "sweet": "dry",
+    "pair": "lake fish, poultry, alpine cheese",
+    "grapes": "Rèze Heida",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-113": {
+   "name": "Gérald Besse Syrah Les Serpentines 2019",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2019,
+    "note": "Andreas Larsson 93",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "grilled lamb, venison, peppered steak",
+    "grapes": "Syrah",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-245": {
+   "name": "Porseleinberg Swartland 2010",
+   "type": "Red",
+   "claude": {
+    "points": 95,
+    "vintage": 2010,
+    "note": "Eedes 97, Sherwood 96, Neal Martin 93",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "grilled lamb, cured meats, olive tapenade",
+    "grapes": "Syrah",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-254": {
+   "name": "Château de Rayne-Vigneau 2007",
+   "type": "Dessert",
+   "claude": {
+    "points": 94,
+    "vintage": 2007,
+    "note": "Neal Martin 95, Suckling 92-95, Decanter 19",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "sweet",
+    "fruity": true,
+    "finish": "long",
+    "pair": "foie gras, blue cheese, fruit tart",
+    "grapes": "Sémillon Sauvignon Blanc",
+    "drinkFrom": 2015,
+    "drinkTo": 2025,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-169": {
+   "name": "Château La Fleur de Boüard 2016",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2016,
+    "note": "Natalie MacLean 93, community 93",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "pair": "prime rib, tourtière, roast turkey",
+    "grapes": "Merlot Cabernet Franc",
+    "drinkFrom": 2022,
+    "drinkTo": 2028,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-238": {
+   "name": "Luigi Pira Barolo Marenca 2007",
+   "type": "Red",
+   "claude": {
+    "points": 93,
+    "vintage": 2007,
+    "note": "9.3 on Delectable, overall and pro",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "rich pastas, game, braised beef",
+    "grapes": "Nebbiolo",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-170": {
+   "name": "Château La Lagune 2017",
+   "type": "Red",
+   "claude": {
+    "points": 91,
+    "vintage": 2017,
+    "note": "Galloni 92, Leve 91, Falstaff 91, Parker 90",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "pair": "roast lamb, game, hard cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-43": {
+   "name": "Château Cherubin 2010",
+   "type": "Red",
+   "claude": {
+    "points": 90,
+    "vintage": 2010,
+    "note": "9.2 on Delectable, five user ratings",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "roast lamb, duck, hard cheese",
+    "grapes": "Merlot Cabernet Franc",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-2": {
+   "name": "Elio Altare Barolo Arborina 2011",
+   "type": "Red",
+   "claude": {
+    "points": 89,
+    "vintage": 2011,
+    "note": "World of Fine Wine 88, Belfrage 92",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "braised beef, truffle pasta, aged cheese",
+    "grapes": "Nebbiolo",
+    "drinkFrom": 2020,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-124": {
+   "name": "Château Grand-Puy-Lacoste 2025",
+   "type": "Red",
+   "claude": {
+    "points": 95,
+    "vintage": 2025,
+    "note": "Martin 94-96, Suckling 96-97, Galloni 92-94, Dunnuck 94-96",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, ribeye, aged cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2032,
+    "drinkTo": 2060,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-35": {
+   "name": "Francois Carillon Puligny-Montrachet 1er Cru Les Combettes 2015",
+   "type": "White",
+   "claude": {
+    "points": 91,
+    "vintage": 2015,
+    "note": "World of Fine Wine 91, 9.3 on Delectable",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast chicken, scallops, lobster, creamy fish",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-49": {
+   "name": "Domaine de Chevalier 2005",
+   "type": "Red",
+   "claude": {
+    "points": 95,
+    "vintage": 2005,
+    "note": "Anson 97, Decanter 96, Parker 95, Martin 95",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, duck, game, aged cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2015,
+    "drinkTo": 2040,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-205": {
+   "name": "Massolino Barolo Margheria 2010",
+   "type": "Red",
+   "claude": {
+    "points": 93,
+    "vintage": 2010,
+    "note": "Galloni 95, Larner 94, Robinson 18/20",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "braised beef, game, truffle risotto",
+    "grapes": "Nebbiolo",
+    "drinkFrom": 2018,
+    "drinkTo": 2035,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-292": {
+   "name": "Weingut Robert Weil Kiedricher Gräfenberg Riesling Großes Gewächs 2019",
+   "type": "White",
+   "claude": {
+    "points": 93,
+    "vintage": 2019,
+    "note": "Jefford 96, Rose 93, Reinhardt 92",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "trout, roast chicken, shellfish",
+    "grapes": "Riesling",
+    "drinkFrom": 2021,
+    "drinkTo": 2038,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-98": {
+   "name": "Ferraton Père & Fils Ermitage Blanc Le Reverdy 2012",
+   "type": "White",
+   "claude": {
+    "points": 93,
+    "vintage": 2012,
+    "note": "Vinous 93",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "lobster, roast chicken, creamy fish",
+    "grapes": "Marsanne",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-270": {
+   "name": "Schäfer-Fröhlich Bockenauer Felseneck Riesling Spätlese Goldkapsel 2015",
+   "type": "White",
+   "claude": {
+    "points": 94,
+    "vintage": 2015,
+    "note": "Schildknecht 94, Reinhardt 94, Robinson 18.5/20",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "light",
+    "sweet": "medium-sweet",
+    "fruity": true,
+    "finish": "long",
+    "pair": "spicy Asian dishes, fruit tart, blue cheese",
+    "grapes": "Riesling",
+    "drinkFrom": 2021,
+    "drinkTo": 2045,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-68": {
+   "name": "Cullen Wines Diana Madeline 2013",
+   "type": "Red",
+   "claude": {
+    "points": 96,
+    "vintage": 2013,
+    "note": "Mattinson 96, Hooke 96",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, ribeye, hard cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-69": {
+   "name": "Cullen Wines Diana Madeline 2012",
+   "type": "Red",
+   "claude": {
+    "points": 96,
+    "vintage": 2012,
+    "note": "Walsh 97, Stelzer 97",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, beef fillet, hard cheese",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-129": {
+   "name": "Grosset Riesling Polish Hill Clare Valley 2008",
+   "type": "White",
+   "claude": {
+    "points": 95,
+    "vintage": 2008,
+    "note": "Hooke 96, Stock 96, Mattinson 95",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "oysters, Thai salad, grilled fish",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-259": {
+   "name": "Robert Bowen Chardonnay Burnside 2010",
+   "type": "White",
+   "claude": {
+    "points": null,
+    "vintage": 2010,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "sweet": "dry",
+    "pair": "roast chicken, grilled fish, scallops",
+    "grapes": "Chardonnay",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-22": {
+   "name": "Albert Boxler Riesling Sommerberg Dudenstein 2008",
+   "type": "White",
+   "claude": {
+    "points": 93,
+    "vintage": 2008,
+    "note": "19/20 from Böttcher, La Passion du Vin forum",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast pork, spiced dishes, washed-rind cheese",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-240": {
+   "name": "Luigi Pira Barolo Margheria 2006",
+   "type": "Red",
+   "claude": {
+    "points": 90,
+    "vintage": 2006,
+    "note": "World of Fine Wine 90, Robinson 18",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "braised beef, game, aged cheese",
+    "grapes": "Nebbiolo",
+    "drinkFrom": 2013,
+    "drinkTo": 2020,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-128": {
+   "name": "Grosset Riesling Polish Hill Clare Valley 2013",
+   "type": "White",
+   "claude": {
+    "points": 94,
+    "vintage": 2013,
+    "note": "Robinson 18.5/20, as listed by Winehouse",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "oysters, Thai salad, grilled fish",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-14": {
+   "name": "Boekenhoutskloof Cabernet Sauvignon Stellenbosch 2018",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2018,
+    "note": "Eedes 96, Suckling 93, Mueller 91, Martin 90",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "grilled steak, lamb chops, hard cheese",
+    "grapes": "Cabernet Sauvignon Cabernet Franc",
+    "drinkFrom": 2021,
+    "drinkTo": 2031,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-228": {
+   "name": "La Pèira Pays d'Hérault La Pèira Blanc 2016",
+   "type": "White",
+   "claude": {
+    "points": 93,
+    "vintage": 2016,
+    "note": "Wine Advocate 93-95, via producer's blog",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast chicken, grilled fish, goat cheese",
+    "grapes": "Roussanne Marsanne Viognier",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-123": {
+   "name": "Alain Graillot Crozes-Hermitage La Guiraude 2015",
+   "type": "Red",
+   "claude": {
+    "points": 93,
+    "vintage": 2015,
+    "note": "Suckling 94, Dunnuck 94, Advocate 94, Vinous 93",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "grilled lamb, venison, peppered steak",
+    "grapes": "Syrah",
+    "drinkFrom": 2022,
+    "drinkTo": 2033,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-211": {
+   "name": "Domaine de la Mordorée Châteauneuf-du-Pape La Belle Voyageuse 2014",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2014,
+    "note": "Raynolds 91-93, Wine Spectator 92",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast lamb, game stew, hard cheese",
+    "grapes": "Grenache Mourvèdre Syrah",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-144": {
+   "name": "Louis Jadot Moulin-à-Vent Clos de Rochegrès Château des Jacques 2018",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2018,
+    "note": "Kelley 94, Raynolds 93, Tom Parker 16/20",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast duck, coq au vin, charcuterie",
+    "grapes": "Gamay",
+    "drinkFrom": 2022,
+    "drinkTo": 2038,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-256": {
+   "name": "Real Companhia Velha Douro Carvalhas Vinhas Velhas 2014",
+   "type": "Red",
+   "claude": {
+    "points": 88,
+    "vintage": 2014,
+    "note": "9.0 on Delectable, one user rating",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "pair": "grilled lamb, roast beef, aged cheese",
+    "grapes": "Touriga Nacional Touriga Franca",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-264": {
+   "name": "Sadie Family Chenin Blanc Skurfberg 2013",
+   "type": "White",
+   "claude": {
+    "points": 95,
+    "vintage": 2013,
+    "note": "Sherwood 96, Platter's 4.5 stars",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast chicken, white fish, shellfish",
+    "grapes": "Chenin Blanc",
+    "drinkTo": 2037,
+    "from": "Claude (researched for Mike)"
+   }
   }
  }
 }
