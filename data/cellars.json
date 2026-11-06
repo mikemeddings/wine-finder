@@ -2,7 +2,7 @@
  "updated": "2026-11-06",
  "cellars": {
   "c1": {
-   "updated": "2026-10-24",
+   "updated": "2026-11-06",
    "wines": [
     {
      "id": "cellar-c1-1",
@@ -1374,6 +1374,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 95,
      "ct_score": 92.8727272727273,
      "drink_from": 2020,
      "drink_to": 2027
@@ -2372,6 +2373,8 @@
      "country": "South Africa",
      "type": "White",
      "size_ml": 750,
+     "my_score": 92,
+     "ct_score": 91.2222222222222,
      "drink_from": 2018,
      "drink_to": 2025
     },
@@ -2385,6 +2388,7 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.4761904761905,
      "drink_from": 2025,
      "drink_to": 2040
     },
@@ -2424,6 +2428,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.89453125,
      "drink_from": 2025,
      "drink_to": 2035
     },
@@ -2437,6 +2442,7 @@
      "country": "New Zealand",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.8333333333333,
      "drink_from": 2025,
      "drink_to": 2040
     },
@@ -2450,6 +2456,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 96,
      "drink_from": 2039,
      "drink_to": 2049
     },
@@ -2463,6 +2470,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 90.75,
      "drink_from": 2026,
      "drink_to": 2035
     },
@@ -2476,6 +2484,7 @@
      "country": "Switzerland",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91,
      "drink_from": 2026,
      "drink_to": 2030
     },
@@ -2489,6 +2498,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92,
      "drink_from": 2024,
      "drink_to": 2030
     },
@@ -2541,6 +2551,7 @@
      "country": "South Africa",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.4,
      "drink_from": 2025,
      "drink_to": 2036
     },
@@ -2554,6 +2565,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.4565217391304,
      "drink_from": 2018,
      "drink_to": 2028
     },
@@ -2567,6 +2579,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 93,
+     "ct_score": 91.3157894736842,
      "drink_from": 2018,
      "drink_to": 2029
     },
@@ -2580,6 +2594,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 93.4444444444444,
      "drink_from": 2020,
      "drink_to": 2028
     },
@@ -2593,6 +2608,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.6666666666667,
      "drink_from": 2018,
      "drink_to": 2030
     },
@@ -2606,6 +2622,8 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "my_score": 93,
+     "ct_score": 91.5,
      "drink_from": 2016,
      "drink_to": 2028
     },
@@ -2619,6 +2637,8 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 91.7916666666667,
      "drink_from": 2016,
      "drink_to": 2026
     },
@@ -2632,6 +2652,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 94,
      "drink_from": 2018,
      "drink_to": 2030
     },
@@ -2645,6 +2666,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.875,
      "drink_from": 2016,
      "drink_to": 2028
     },
@@ -2658,6 +2680,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 95,
      "drink_from": 2015,
      "drink_to": 2030
     },
@@ -2671,6 +2694,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 90.0571428571429,
      "drink_from": 2012,
      "drink_to": 2025
     },
@@ -2684,6 +2708,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 94.25,
      "drink_from": 2040,
      "drink_to": 2051
     },
@@ -2697,6 +2722,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.1086956521739,
      "drink_from": 2038,
      "drink_to": 2050
     },
@@ -2710,6 +2736,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 92.1538461538462,
      "drink_from": 2020,
      "drink_to": 2036
     },
@@ -2723,6 +2750,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 94.75,
      "drink_from": 2040,
      "drink_to": 2051
     },
@@ -2736,6 +2764,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.4642857142857,
      "drink_from": 2036,
      "drink_to": 2045
     },
@@ -2749,6 +2778,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.75,
      "drink_from": 2027,
      "drink_to": 2046
     },
@@ -2762,6 +2792,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92,
      "drink_from": 2025,
      "drink_to": 2035
     },
@@ -2775,6 +2806,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 92.3414634146341,
      "drink_from": 2017,
      "drink_to": 2030
     },
@@ -2788,6 +2820,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 95.178947368421,
      "drink_from": 2030,
      "drink_to": 2050
     },
@@ -2801,6 +2834,7 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 88,
      "drink_from": 2020,
      "drink_to": 2025
     },
@@ -2814,6 +2848,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 93.125,
      "drink_from": 2025,
      "drink_to": 2030
     },
@@ -2827,6 +2862,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "my_score": 90.5,
      "drink_from": 2017,
      "drink_to": 2025
     },
@@ -2853,6 +2889,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "my_score": 93,
      "drink_from": 2021,
      "drink_to": 2027
     },
@@ -2879,6 +2916,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 92,
+     "ct_score": 92.8518518518518,
      "drink_from": 2015,
      "drink_to": 2025
     },
@@ -2892,6 +2931,8 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 90.3829787234042,
      "drink_from": 2020,
      "drink_to": 2024
     },
@@ -2905,6 +2946,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 92.4117647058823,
      "drink_from": 2025,
      "drink_to": 2030
     },
@@ -2918,6 +2961,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 94,
      "drink_from": 2025,
      "drink_to": 2032
     },
@@ -2931,6 +2975,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 95.5,
      "drink_from": 2039,
      "drink_to": 2050
     },
@@ -2944,6 +2989,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.3711340206186,
      "drink_from": 2036,
      "drink_to": 2045
     },
@@ -2957,6 +3003,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.1980198019802,
      "drink_from": 2028,
      "drink_to": 2040
     },
@@ -2970,6 +3017,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.2876712328767,
      "drink_from": 2027,
      "drink_to": 2045
     },
@@ -2983,6 +3031,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 93,
+     "ct_score": 92.9116809116809,
      "drink_from": 2018,
      "drink_to": 2030
     },
@@ -2996,6 +3046,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 93,
+     "ct_score": 92.5045871559633,
      "drink_from": 2018,
      "drink_to": 2030
     },
@@ -3009,6 +3061,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 93.0108695652174,
      "drink_from": 2024,
      "drink_to": 2030
     },
@@ -3022,6 +3075,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 94.1698113207547,
      "drink_from": 2030,
      "drink_to": 2033
     },
@@ -3048,6 +3102,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.2511627906977,
      "drink_from": 2020,
      "drink_to": 2035
     },
@@ -3061,6 +3116,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 94.1434599156118,
      "drink_from": 2018,
      "drink_to": 2030
     },
@@ -3087,6 +3144,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91,
      "drink_from": 2022,
      "drink_to": 2026
     },
@@ -3100,6 +3158,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "my_score": 92,
      "drink_from": 2020,
      "drink_to": 2026
     },
@@ -3113,6 +3172,7 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93,
      "drink_from": 2020,
      "drink_to": 2033
     },
@@ -3126,6 +3186,7 @@
      "country": "Chile",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 94.241935483871,
      "drink_from": 2027,
      "drink_to": 2040
     },
@@ -3139,6 +3200,7 @@
      "country": "Chile",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.0746268656716,
      "drink_from": 2027,
      "drink_to": 2039
     },
@@ -3152,6 +3214,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.3454545454545,
      "drink_from": 2022,
      "drink_to": 2050
     },
@@ -3165,6 +3228,7 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 92.6060606060606,
      "drink_from": 2020,
      "drink_to": 2025
     },
@@ -3178,6 +3242,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 92,
+     "ct_score": 92.5,
      "drink_from": 2017,
      "drink_to": 2026
     },
@@ -3191,6 +3257,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 86.3333333333333,
      "drink_from": 2024,
      "drink_to": 2027
     },
@@ -3204,6 +3271,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 92,
      "drink_from": 2020,
      "drink_to": 2030
     },
@@ -3217,6 +3285,7 @@
      "country": "South Africa",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 90.6,
      "drink_from": 2017,
      "drink_to": 2024
     },
@@ -3230,6 +3299,7 @@
      "country": "Australia",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 92.1818181818182,
      "drink_from": 2026,
      "drink_to": 2040
     },
@@ -3242,7 +3312,10 @@
      "varietal": "Red Bordeaux Blend",
      "country": "Australia",
      "type": "Red",
-     "size_ml": 750
+     "size_ml": 750,
+     "ct_score": 92.0769230769231,
+     "drink_from": 2022,
+     "drink_to": 2040
     },
     {
      "id": "cellar-c2-69",
@@ -3254,6 +3327,8 @@
      "country": "Australia",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 92,
+     "ct_score": 92.3714285714286,
      "drink_from": 2018,
      "drink_to": 2039
     },
@@ -3267,6 +3342,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.2941176470588,
      "drink_from": 2020,
      "drink_to": 2026
     },
@@ -3280,6 +3356,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.5555555555556,
      "drink_from": 2020,
      "drink_to": 2026
     },
@@ -3293,6 +3370,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 90.936170212766,
      "drink_from": 2018,
      "drink_to": 2029
     },
@@ -3306,6 +3385,7 @@
      "country": "Canada",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 90.75,
      "drink_from": 2017,
      "drink_to": 2025
     },
@@ -3332,6 +3412,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92,
      "drink_from": 2030,
      "drink_to": 2035
     },
@@ -3345,6 +3426,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.4285714285714,
      "drink_from": 2022,
      "drink_to": 2030
     },
@@ -3358,6 +3440,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.2,
      "drink_from": 2025,
      "drink_to": 2030
     },
@@ -3371,6 +3454,7 @@
      "country": "Switzerland",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 88,
      "drink_from": 2026,
      "drink_to": 2032
     },
@@ -3384,6 +3468,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 93.2205882352941,
      "drink_from": 2025,
      "drink_to": 2040
     },
@@ -3397,6 +3482,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.8545454545455,
      "drink_from": 2020,
      "drink_to": 2030
     },
@@ -3410,6 +3496,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 93.2692307692308,
      "drink_from": 2020,
      "drink_to": 2034
     },
@@ -3423,6 +3510,8 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "my_score": 92.5,
+     "ct_score": 92.3720930232558,
      "drink_from": 2016,
      "drink_to": 2030
     },
@@ -3436,6 +3525,8 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "my_score": 93,
+     "ct_score": 93.0390625,
      "drink_from": 2017,
      "drink_to": 2025
     },
@@ -3449,6 +3540,8 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "my_score": 95,
+     "ct_score": 93.3823529411765,
      "drink_from": 2015,
      "drink_to": 2025
     },
@@ -3462,6 +3555,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.9666666666667,
      "drink_from": 2019,
      "drink_to": 2029
     },
@@ -3475,6 +3569,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.3333333333333,
      "drink_from": 2026,
      "drink_to": 2033
     },
@@ -3488,6 +3583,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.8589743589744,
      "drink_from": 2017,
      "drink_to": 2040
     },
@@ -3501,6 +3597,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 92.1031941031941,
      "drink_from": 2015,
      "drink_to": 2030
     },
@@ -3514,6 +3611,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.45,
      "drink_from": 2027,
      "drink_to": 2046
     },
@@ -3527,6 +3625,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 94.2571428571429,
      "drink_from": 2026,
      "drink_to": 2042
     },
@@ -3540,6 +3639,8 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 92.2040816326531,
      "drink_from": 2017,
      "drink_to": 2027
     },
@@ -3553,6 +3654,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 96,
      "drink_from": 2021,
      "drink_to": 2035
     },
@@ -3566,6 +3668,7 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.3333333333333,
      "drink_from": 2030,
      "drink_to": 2035
     },
@@ -3579,6 +3682,7 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 92.4583333333333,
      "drink_from": 2028,
      "drink_to": 2035
     },
@@ -3592,6 +3696,7 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.8269230769231,
      "drink_from": 2020,
      "drink_to": 2040
     },
@@ -3605,6 +3710,7 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 89,
      "drink_from": 2026,
      "drink_to": 2029
     },
@@ -3618,6 +3724,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 86.5,
      "drink_from": 2024,
      "drink_to": 2028
     },
@@ -3631,6 +3738,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.375,
      "drink_from": 2017,
      "drink_to": 2027
     },
@@ -3657,6 +3765,7 @@
      "country": "Switzerland",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 90,
      "drink_from": 2022,
      "drink_to": 2026
     },
@@ -3670,6 +3779,8 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "my_score": 91.5,
+     "ct_score": 91.6794871794872,
      "drink_from": 2018,
      "drink_to": 2026
     },
@@ -3683,6 +3794,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 93.6,
      "drink_from": 2022,
      "drink_to": 2035
     },
@@ -3696,6 +3808,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.4623655913979,
      "drink_from": 2024,
      "drink_to": 2030
     },
@@ -3709,6 +3822,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.3932584269663,
      "drink_from": 2020,
      "drink_to": 2024
     },
@@ -3722,6 +3836,7 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.0779220779221,
      "drink_from": 2022,
      "drink_to": 2033
     },
@@ -3735,6 +3850,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 1500,
+     "ct_score": 93,
      "drink_from": 2024,
      "drink_to": 2030
     },
@@ -3826,6 +3942,8 @@
      "country": "Switzerland",
      "type": "Red",
      "size_ml": 1500,
+     "my_score": 91,
+     "ct_score": 89.2,
      "drink_from": 2024,
      "drink_to": 2032
     },
@@ -3839,6 +3957,8 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 375,
+     "my_score": 88,
+     "ct_score": 86.4,
      "drink_from": 2018,
      "drink_to": 2025
     },
@@ -3852,6 +3972,8 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "my_score": 88,
+     "ct_score": 86.4,
      "drink_from": 2018,
      "drink_to": 2025
     },
@@ -3865,6 +3987,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 90.8333333333333,
      "drink_from": 2024,
      "drink_to": 2029
     },
@@ -3878,6 +4001,7 @@
      "country": "Switzerland",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 87,
      "drink_from": 2025,
      "drink_to": 2028
     },
@@ -3891,6 +4015,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.5846153846154,
      "drink_from": 2039,
      "drink_to": 2049
     },
@@ -3904,6 +4029,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 91.5,
+     "ct_score": 90.3333333333333,
      "drink_from": 2018,
      "drink_to": 2025
     },
@@ -3917,6 +4044,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 91.0689655172414,
      "drink_from": 2018,
      "drink_to": 2030
     },
@@ -3930,6 +4059,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 90.4,
      "drink_from": 2015,
      "drink_to": 2030
     },
@@ -3942,6 +4073,7 @@
      "country": "Portugal",
      "type": "Fortified",
      "size_ml": 750,
+     "ct_score": 91.0402843601896,
      "drink_from": 2017,
      "drink_to": 2021
     },
@@ -3955,6 +4087,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.2758620689655,
      "drink_from": 2027,
      "drink_to": 2029
     },
@@ -3968,6 +4101,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.3333333333333,
      "drink_from": 2040,
      "drink_to": 2051
     },
@@ -3981,6 +4115,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.1409691629956,
      "drink_from": 2020,
      "drink_to": 2040
     },
@@ -3994,6 +4129,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 90,
+     "ct_score": 92.5108695652174,
      "drink_from": 2020,
      "drink_to": 2035
     },
@@ -4007,6 +4144,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 92.84375,
      "drink_from": 2025,
      "drink_to": 2030
     },
@@ -4020,6 +4158,7 @@
      "country": "Australia",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.5423728813559,
      "drink_from": 2022,
      "drink_to": 2033
     },
@@ -4033,6 +4172,8 @@
      "country": "Australia",
      "type": "White",
      "size_ml": 750,
+     "my_score": 92,
+     "ct_score": 90.4464285714286,
      "drink_from": 2019,
      "drink_to": 2028
     },
@@ -4046,6 +4187,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 89,
      "drink_from": 2024,
      "drink_to": 2032
     },
@@ -4059,6 +4201,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.4,
      "drink_from": 2023,
      "drink_to": 2031
     },
@@ -4072,6 +4215,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 90.5,
+     "ct_score": 91.448275862069,
      "drink_from": 2018,
      "drink_to": 2030
     },
@@ -4097,6 +4242,7 @@
      "country": "France",
      "type": "Dessert",
      "size_ml": 750,
+     "ct_score": 95.0967741935484,
      "drink_from": 2020,
      "drink_to": 2040
     },
@@ -4110,6 +4256,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.5777777777778,
      "drink_from": 2025,
      "drink_to": 2035
     },
@@ -4123,6 +4270,8 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "my_score": 93,
+     "ct_score": 91.6184210526316,
      "drink_from": 2020,
      "drink_to": 2032
     },
@@ -4136,6 +4285,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.5,
      "drink_from": 2024,
      "drink_to": 2040
     },
@@ -4149,6 +4299,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.5,
      "drink_from": 2025,
      "drink_to": 2032
     },
@@ -4162,6 +4313,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.8,
      "drink_from": 2025,
      "drink_to": 2035
     },
@@ -4175,6 +4327,8 @@
      "country": "France",
      "type": "Dessert",
      "size_ml": 750,
+     "my_score": 90,
+     "ct_score": 94.5806451612903,
      "drink_from": 2017,
      "drink_to": 2044
     },
@@ -4188,6 +4342,7 @@
      "country": "France",
      "type": "Dessert",
      "size_ml": 750,
+     "ct_score": 94.1935483870968,
      "drink_from": 2025,
      "drink_to": 2050
     },
@@ -4201,6 +4356,8 @@
      "country": "France",
      "type": "Dessert",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 93.5476190476191,
      "drink_from": 2018,
      "drink_to": 2040
     },
@@ -4214,6 +4371,8 @@
      "country": "France",
      "type": "Dessert",
      "size_ml": 750,
+     "my_score": 92,
+     "ct_score": 92.2023809523809,
      "drink_from": 2015,
      "drink_to": 2035
     },
@@ -4227,6 +4386,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 90.4,
      "drink_from": 2024,
      "drink_to": 2033
     },
@@ -4240,6 +4401,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 89.5,
+     "ct_score": 91.1855670103093,
      "drink_from": 2018,
      "drink_to": 2025
     },
@@ -4253,6 +4416,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 95.3661971830986,
      "drink_from": 2018,
      "drink_to": 2025
     },
@@ -4266,6 +4430,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.3227848101266,
      "drink_from": 2014,
      "drink_to": 2025
     },
@@ -4279,6 +4444,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.6026490066225,
      "drink_from": 2015,
      "drink_to": 2025
     },
@@ -4292,6 +4458,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 89,
+     "ct_score": 90.3333333333333,
      "drink_from": 2027,
      "drink_to": 2030
     },
@@ -4305,6 +4473,7 @@
      "country": "Switzerland",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93,
      "drink_from": 2027,
      "drink_to": 2032
     },
@@ -4318,6 +4487,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.4666666666667,
      "drink_from": 2020,
      "drink_to": 2029
     },
@@ -4331,6 +4501,8 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "my_score": 92,
+     "ct_score": 92,
      "drink_from": 2018,
      "drink_to": 2035
     },
@@ -4344,6 +4516,8 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "my_score": 94,
+     "ct_score": 93.3478260869565,
      "drink_from": 2019,
      "drink_to": 2027
     },
@@ -4357,6 +4531,8 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "my_score": 91.5,
+     "ct_score": 90.7777777777778,
      "drink_from": 2016,
      "drink_to": 2028
     },
@@ -4370,6 +4546,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.95,
      "drink_from": 2020,
      "drink_to": 2035
     },
@@ -4383,6 +4560,8 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "my_score": 90.5,
+     "ct_score": 89.6,
      "drink_from": 2012,
      "drink_to": 2027
     },
@@ -4396,6 +4575,8 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "my_score": 93,
+     "ct_score": 93,
      "drink_from": 2018,
      "drink_to": 2028
     },
@@ -4409,6 +4590,7 @@
      "country": "New Zealand",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.6923076923077,
      "drink_from": 2022,
      "drink_to": 2033
     },
@@ -4422,6 +4604,7 @@
      "country": "New Zealand",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.5853658536585,
      "drink_from": 2019,
      "drink_to": 2032
     },
@@ -4435,6 +4618,8 @@
      "country": "New Zealand",
      "type": "White",
      "size_ml": 750,
+     "my_score": 91.5,
+     "ct_score": 92.3370786516854,
      "drink_from": 2018,
      "drink_to": 2026
     },
@@ -4448,6 +4633,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 88.3333333333333,
      "drink_from": 2024,
      "drink_to": 2028
     },
@@ -4474,6 +4660,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.5,
      "drink_from": 2023,
      "drink_to": 2025
     },
@@ -4500,6 +4687,8 @@
      "country": "Switzerland",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 90.5,
+     "ct_score": 90.4444444444444,
      "drink_from": 2020,
      "drink_to": 2025
     },
@@ -4539,6 +4728,7 @@
      "country": "Switzerland",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 89.6666666666667,
      "drink_from": 2020,
      "drink_to": 2025
     },
@@ -4552,6 +4742,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 90.5111111111111,
      "drink_from": 2020,
      "drink_to": 2028
     },
@@ -4565,6 +4756,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 90,
      "drink_from": 2024,
      "drink_to": 2035
     },
@@ -4578,6 +4770,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.1196581196581,
      "drink_from": 2027,
      "drink_to": 2033
     },
@@ -4591,6 +4784,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 94,
      "drink_from": 2026,
      "drink_to": 2032
     },
@@ -4604,6 +4798,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 92.5,
      "drink_from": 2038,
      "drink_to": 2050
     },
@@ -4617,6 +4812,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 92,
+     "ct_score": 91.9770114942529,
      "drink_from": 2015,
      "drink_to": 2035
     },
@@ -4630,6 +4827,8 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "my_score": 90.5,
+     "ct_score": 92.1875,
      "drink_from": 2016,
      "drink_to": 2028
     },
@@ -4643,6 +4842,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.6578947368421,
      "drink_from": 2018,
      "drink_to": 2030
     },
@@ -4656,6 +4856,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 91.2269503546099,
      "drink_from": 2019,
      "drink_to": 2029
     },
@@ -4669,6 +4871,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 90,
+     "ct_score": 89.3595505617977,
      "drink_from": 2013,
      "drink_to": 2025
     },
@@ -4681,6 +4885,7 @@
      "country": "France",
      "type": "Sparkling",
      "size_ml": 750,
+     "ct_score": 88.9862385321101,
      "drink_from": 2026,
      "drink_to": 2029
     },
@@ -4694,6 +4899,8 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 92,
+     "ct_score": 92.609756097561,
      "drink_from": 2016,
      "drink_to": 2025
     },
@@ -4707,6 +4914,8 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 91.5,
+     "ct_score": 92.8582677165354,
      "drink_from": 2020,
      "drink_to": 2028
     },
@@ -4720,6 +4929,7 @@
      "country": "Australia",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 93.8490566037736,
      "drink_from": 2026,
      "drink_to": 2035
     },
@@ -4733,6 +4943,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 90.65,
      "drink_from": 2020,
      "drink_to": 2028
     },
@@ -4746,6 +4957,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 94.4475524475525,
      "drink_from": 2028,
      "drink_to": 2047
     },
@@ -4759,6 +4971,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.6119402985075,
      "drink_from": 2029,
      "drink_to": 2045
     },
@@ -4772,6 +4985,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.1057692307692,
      "drink_from": 2025,
      "drink_to": 2045
     },
@@ -4785,6 +4999,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 94.28,
      "drink_from": 2030,
      "drink_to": 2050
     },
@@ -4798,6 +5013,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 94.152,
      "drink_from": 2026,
      "drink_to": 2047
     },
@@ -4811,6 +5027,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 92,
      "drink_from": 2020,
      "drink_to": 2032
     },
@@ -4824,6 +5041,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 87.3333333333333,
      "drink_from": 2026,
      "drink_to": 2032
     },
@@ -4837,6 +5055,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 91.5,
+     "ct_score": 90.8780487804878,
      "drink_from": 2015,
      "drink_to": 2026
     },
@@ -4850,6 +5070,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 90.5,
+     "ct_score": 90.0714285714286,
      "drink_from": 2013,
      "drink_to": 2025
     },
@@ -4863,6 +5085,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.8333333333333,
      "drink_from": 2020,
      "drink_to": 2031
     },
@@ -4876,6 +5099,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 94.3333333333333,
      "drink_from": 2020,
      "drink_to": 2031
     },
@@ -4889,6 +5113,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.1333333333333,
      "drink_from": 2024,
      "drink_to": 2034
     },
@@ -4902,6 +5127,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 90,
+     "ct_score": 91.4810126582279,
      "drink_from": 2018,
      "drink_to": 2028
     },
@@ -4915,6 +5142,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 1500,
+     "ct_score": 93.6180371352785,
      "drink_from": 2020,
      "drink_to": 2034
     },
@@ -4954,6 +5182,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.5,
      "drink_from": 2022,
      "drink_to": 2028
     },
@@ -4967,6 +5196,7 @@
      "country": "Switzerland",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 92,
      "drink_from": 2023,
      "drink_to": 2025
     },
@@ -4980,6 +5210,7 @@
      "country": "Switzerland",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 90.6666666666667,
      "drink_from": 2025,
      "drink_to": 2030
     },
@@ -5006,6 +5237,7 @@
      "country": "Spain",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 89.1938775510204,
      "drink_from": 2025,
      "drink_to": 2032
     },
@@ -5019,6 +5251,8 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 93,
+     "ct_score": 92.0333333333333,
      "drink_from": 2027,
      "drink_to": 2038
     },
@@ -5032,6 +5266,7 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.3666666666667,
      "drink_from": 2025,
      "drink_to": 2028
     },
@@ -5045,6 +5280,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 89.9473684210526,
      "drink_from": 2024,
      "drink_to": 2026
     },
@@ -5057,6 +5293,7 @@
      "country": "France",
      "type": "Sparkling",
      "size_ml": 750,
+     "ct_score": 88.3628361858191,
      "drink_from": 2020,
      "drink_to": 2026
     },
@@ -5070,6 +5307,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 90.8333333333333,
      "drink_from": 2023,
      "drink_to": 2026
     },
@@ -5083,6 +5321,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 90,
+     "ct_score": 92.6149068322981,
      "drink_from": 2015,
      "drink_to": 2025
     },
@@ -5096,6 +5336,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91,
      "drink_from": 2023,
      "drink_to": 2028
     },
@@ -5109,6 +5350,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.6,
      "drink_from": 2018,
      "drink_to": 2024
     },
@@ -5122,6 +5364,7 @@
      "country": "Australia",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.4736842105263,
      "drink_from": 2024,
      "drink_to": 2035
     },
@@ -5135,6 +5378,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 93.6666666666667,
      "drink_from": 2027,
      "drink_to": 2046
     },
@@ -5187,6 +5431,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91,
      "drink_from": 2025,
      "drink_to": 2029
     },
@@ -5200,6 +5445,7 @@
      "country": "Switzerland",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 92,
      "drink_from": 2022,
      "drink_to": 2026
     },
@@ -5226,6 +5472,7 @@
      "country": "Switzerland",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 92,
      "drink_from": 2023,
      "drink_to": 2034
     },
@@ -5252,6 +5499,7 @@
      "country": "Switzerland",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 87,
      "drink_from": 2028,
      "drink_to": 2033
     },
@@ -5265,6 +5513,7 @@
      "country": "Canada",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.6666666666667,
      "drink_from": 2020,
      "drink_to": 2026
     },
@@ -5291,6 +5540,7 @@
      "country": "Italy",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 90.5714285714286,
      "drink_from": 2024,
      "drink_to": 2029
     },
@@ -5304,6 +5554,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.815415821501,
      "drink_from": 2025,
      "drink_to": 2032
     },
@@ -5317,6 +5568,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.5,
      "drink_from": 2020,
      "drink_to": 2025
     },
@@ -5330,6 +5582,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 94.6666666666667,
      "drink_from": 2022,
      "drink_to": 2031
     },
@@ -5343,6 +5596,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 89,
      "drink_from": 2026,
      "drink_to": 2033
     },
@@ -5356,6 +5610,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 90.7234042553192,
      "drink_from": 2023,
      "drink_to": 2030
     },
@@ -5369,6 +5624,7 @@
      "country": "Austria",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.3333333333333,
      "drink_from": 2017,
      "drink_to": 2025
     },
@@ -5382,6 +5638,8 @@
      "country": "Austria",
      "type": "White",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 92,
      "drink_from": 2018,
      "drink_to": 2026
     },
@@ -5408,6 +5666,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92,
      "drink_from": 2017,
      "drink_to": 2024
     },
@@ -5421,6 +5680,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.6666666666667,
      "drink_from": 2020,
      "drink_to": 2024
     },
@@ -5434,6 +5694,7 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.1515151515152,
      "drink_from": 2020,
      "drink_to": 2032
     },
@@ -5447,6 +5708,8 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 90.5,
+     "ct_score": 92.0625,
      "drink_from": 2020,
      "drink_to": 2030
     },
@@ -5460,6 +5723,8 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 89,
+     "ct_score": 92.5333333333333,
      "drink_from": 2023,
      "drink_to": 2028
     },
@@ -5473,6 +5738,7 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.7272727272727,
      "drink_from": 2017,
      "drink_to": 2026
     },
@@ -5486,6 +5752,8 @@
      "country": "Uruguay",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 91.5,
+     "ct_score": 92.8,
      "drink_from": 2030,
      "drink_to": 2032
     },
@@ -5525,6 +5793,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.3333333333333,
      "drink_from": 2025,
      "drink_to": 2027
     },
@@ -5538,6 +5807,8 @@
      "country": "South Africa",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 94,
      "drink_from": 2018,
      "drink_to": 2028
     },
@@ -5551,6 +5822,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.3333333333333,
      "drink_from": 2026,
      "drink_to": 2040
     },
@@ -5564,6 +5836,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 93,
      "drink_from": 2027,
      "drink_to": 2044
     },
@@ -5577,6 +5850,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.6417910447761,
      "drink_from": 2025,
      "drink_to": 2033
     },
@@ -5590,6 +5864,7 @@
      "country": "Moldova",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 88.7777777777778,
      "drink_from": 2026,
      "drink_to": 2033
     },
@@ -5616,6 +5891,7 @@
      "country": "Portugal",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 93.5945945945946,
      "drink_from": 2025,
      "drink_to": 2030
     },
@@ -5629,6 +5905,7 @@
      "country": "Portugal",
      "type": "Fortified",
      "size_ml": 750,
+     "ct_score": 95.3333333333333,
      "drink_from": 2025,
      "drink_to": 2055
     },
@@ -5642,6 +5919,7 @@
      "country": "Portugal",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 94,
      "drink_from": 2028,
      "drink_to": 2033
     },
@@ -5655,6 +5933,7 @@
      "country": "France",
      "type": "Dessert",
      "size_ml": 750,
+     "ct_score": 90.9913043478261,
      "drink_from": 2015,
      "drink_to": 2030
     },
@@ -5668,6 +5947,7 @@
      "country": "Portugal",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 90.25,
      "drink_from": 2032,
      "drink_to": 2036
     },
@@ -5681,6 +5961,7 @@
      "country": "Portugal",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91,
      "drink_from": 2025,
      "drink_to": 2030
     },
@@ -5707,6 +5988,8 @@
      "country": "Spain",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 87,
+     "ct_score": 91.1261755485893,
      "drink_from": 2016,
      "drink_to": 2026
     },
@@ -5720,6 +6003,7 @@
      "country": "Australia",
      "type": "White",
      "size_ml": 750,
+     "my_score": 92,
      "drink_from": 2018,
      "drink_to": 2024
     },
@@ -5733,6 +6017,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "my_score": 90,
      "drink_from": 2018,
      "drink_to": 2026
     },
@@ -5746,6 +6031,7 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "my_score": 91,
      "drink_from": 2018,
      "drink_to": 2026
     },
@@ -5772,6 +6058,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 91.8405797101449,
      "drink_from": 2016,
      "drink_to": 2028
     },
@@ -5785,6 +6073,8 @@
      "country": "South Africa",
      "type": "White",
      "size_ml": 750,
+     "my_score": 90.5,
+     "ct_score": 91.8695652173913,
      "drink_from": 2019,
      "drink_to": 2026
     },
@@ -5798,6 +6088,8 @@
      "country": "South Africa",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 88,
+     "ct_score": 91.8620689655172,
      "drink_from": 2018,
      "drink_to": 2025
     },
@@ -5811,6 +6103,7 @@
      "country": "South Africa",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 93.4705882352941,
      "drink_from": 2022,
      "drink_to": 2028
     },
@@ -5824,6 +6117,7 @@
      "country": "Greece",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 89.5,
      "drink_from": 2019,
      "drink_to": 2024
     },
@@ -5850,6 +6144,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 93.2616822429907,
      "drink_from": 2018,
      "drink_to": 2026
     },
@@ -5863,6 +6158,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.2,
      "drink_from": 2026,
      "drink_to": 2038
     },
@@ -5876,6 +6172,8 @@
      "country": "France",
      "type": "Dessert",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 91.8356164383562,
      "drink_from": 2016,
      "drink_to": 2024
     },
@@ -5889,6 +6187,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 93.701030927835,
      "drink_from": 2022,
      "drink_to": 2028
     },
@@ -5902,6 +6201,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.2622478386167,
      "drink_from": 2017,
      "drink_to": 2040
     },
@@ -5915,6 +6215,8 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 92,
+     "ct_score": 91.2647058823529,
      "drink_from": 2016,
      "drink_to": 2026
     },
@@ -5928,6 +6230,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 90.6363636363636,
      "drink_from": 2019,
      "drink_to": 2025
     },
@@ -5941,6 +6244,7 @@
      "country": "South Africa",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 88.5,
      "drink_from": 2024,
      "drink_to": 2026
     },
@@ -5967,6 +6271,7 @@
      "country": "France",
      "type": "Dessert",
      "size_ml": 750,
+     "ct_score": 94.1676646706587,
      "drink_from": 2020,
      "drink_to": 2035
     },
@@ -5980,6 +6285,8 @@
      "country": "France",
      "type": "Dessert",
      "size_ml": 750,
+     "my_score": 94,
+     "ct_score": 94.7795918367347,
      "drink_from": 2016,
      "drink_to": 2031
     },
@@ -5993,6 +6300,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 91.4360465116279,
      "drink_from": 2018,
      "drink_to": 2029
     },
@@ -6019,6 +6327,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 88,
      "drink_from": 2022,
      "drink_to": 2025
     },
@@ -6032,6 +6341,7 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 90.8484848484848,
      "drink_from": 2025,
      "drink_to": 2030
     },
@@ -6045,6 +6355,8 @@
      "country": "France",
      "type": "Red",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 91.1986754966887,
      "drink_from": 2016,
      "drink_to": 2030
     },
@@ -6058,6 +6370,8 @@
      "country": "Switzerland",
      "type": "White",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 89,
      "drink_from": 2022,
      "drink_to": 2026
     },
@@ -6071,6 +6385,8 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "my_score": 88,
+     "ct_score": 91.8828828828829,
      "drink_from": 2018,
      "drink_to": 2025
     },
@@ -6084,6 +6400,7 @@
      "country": "Italy",
      "type": "Red",
      "size_ml": 750,
+     "ct_score": 92.7765957446808,
      "drink_from": 2020,
      "drink_to": 2028
     },
@@ -6097,6 +6414,7 @@
      "country": "Australia",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.0833333333333,
      "drink_from": 2028,
      "drink_to": 2032
     },
@@ -6109,6 +6427,7 @@
      "country": "France",
      "type": "Sparkling",
      "size_ml": 750,
+     "ct_score": 89.2241379310345,
      "drink_from": 2026,
      "drink_to": 2029
     },
@@ -6135,6 +6454,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92,
      "drink_from": 2027,
      "drink_to": 2029
     },
@@ -6148,6 +6468,7 @@
      "country": "Germany",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 92.5,
      "drink_from": 2026,
      "drink_to": 2035
     },
@@ -6161,6 +6482,7 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "ct_score": 91.15,
      "drink_from": 2016,
      "drink_to": 2030
     },
@@ -6174,6 +6496,8 @@
      "country": "France",
      "type": "White",
      "size_ml": 750,
+     "my_score": 91,
+     "ct_score": 92.7058823529412,
      "drink_from": 2008,
      "drink_to": 2023
     }
