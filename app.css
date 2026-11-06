@@ -408,6 +408,10 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .cellar-filter { border: 2px solid #8a5a14; border-radius: 0.5rem; background: #f6ead0; padding: 0.5rem 0.75rem; }
 .cellar-filter legend { color: #5a3a08; background: #f6ead0; padding: 0 0.3rem; }
 .check-cellar { font-size: 1.15em; font-weight: 700; color: #5a3a08; }
+/* Cellar 2 in blue, so it can't be mistaken for Cellar 1's amber */
+.badge-cellar.cellar-c2 { background: #dce8fb; border-color: #1d4f9c; color: #12315f; }
+.wine-price-cellar.cellar-c2, .check-cellar.cellar-c2 { color: #1d4f9c; }
+.wine-cellar.cellar-c2 { border-left-color: #1d4f9c; }
 .sold-at a { color: var(--blue); font-weight: 600; }
 .not-sold { color: #6b6b6b; }
 

@@ -507,7 +507,7 @@ function renderCellarFilter() {
   const slotOf = (src) => visibleShared().find(([slot]) => cellarTitle(slot) === src)?.[0];
   $("cellar-filter-list").innerHTML = srcs.map((s) => {
     const slot = slotOf(s);
-    return checkbox("cellar", s, state.sources.has(s), esc(s), counts.get(s) || 0, " check-cellar") + (slot && !cellarNames()[slot]
+    return checkbox("cellar", s, state.sources.has(s), esc(s), counts.get(s) || 0, ` check-cellar${cellarTone(s)}`) + (slot && !cellarNames()[slot]
       ? `<button type="button" class="btn btn-mini" data-action="mw-name-cellar" data-slot="${esc(slot)}">Whose is ${esc(s)}? Name it</button>` : "");
   }).join("");
 }
@@ -1488,11 +1488,11 @@ function cellarCard(w) {
   const scores = [w.my_score != null ? `${esc(w.owner)}'s score <strong>${w.my_score}</strong>` : null,
     w.ct_score != null ? `CellarTracker community <strong>${+w.ct_score.toFixed(1)}</strong>` : null,
     w.drink_from || w.drink_to ? esc(`Drink ${w.drink_from ?? "now"}–${w.drink_to ?? "?"}`) : null].filter(Boolean).join(" · ");
-  return `<article class="wine wine-${esc(w.type)} wine-cellar${on ? " on-list" : ""}">
+  return `<article class="wine wine-${esc(w.type)} wine-cellar${cellarTone(w.source)}${on ? " on-list" : ""}">
     <h3 class="wine-name">${esc(w.name)}</h3>
-    <div class="wine-price wine-price-cellar">In ${esc(w.source)}</div>
+    <div class="wine-price wine-price-cellar${cellarTone(w.source)}">In ${esc(w.source)}</div>
     <p class="wine-facts">${typePill(w.type)} ${facts}</p>
-    <p class="wine-detail"><span class="badge badge-cellar">${esc(w.source)}</span>${w.size_ml && w.size_ml !== 750 ? ` ${esc(sizeText(w))}` : ""} · ${esc(sweetText(w))}</p>
+    <p class="wine-detail"><span class="badge badge-cellar${cellarTone(w.source)}">${esc(w.source)}</span>${w.size_ml && w.size_ml !== 750 ? ` ${esc(sizeText(w))}` : ""} · ${esc(sweetText(w))}</p>
     ${scores ? `<p class="wine-detail mw-scores">${scores}</p>` : ""}${soldAtHtml(w)}${ratingsHtml(w)}${familyLinksHtml(w)}
     ${pairingsFold(w)}
     <div class="wine-actions">
@@ -2257,7 +2257,7 @@ const CT_COLUMNS = { // field: CellarTracker column names it may use (compared i
   size: ["size", "bottlesize"],
   quantity: ["quantity", "qty", "totalquantity", "bottles"],
   price: ["price", "purchaseprice", "value", "valuation"],
-  my: ["my", "myscore", "myrating", "score", "rating"],
+  my: ["my", "myscore", "myrating", "score", "rating", "pscore"],
   ct: ["ct", "cscore", "communityscore", "ctscore"],
   drinkFrom: ["beginconsume", "drinkfrom"],
   drinkTo: ["endconsume", "drinkto"],
@@ -2344,7 +2344,12 @@ function ctSize(s) {
 }
 
 const num = (s) => { const n = parseFloat(String(s ?? "").replace(/[^0-9.\-]/g, "")); return Number.isFinite(n) ? n : null; };
-const scoreOf = (s) => { const n = num(s); return n != null && n >= 50 && n <= 100 ? n : null; };
+// "90-92" is the range across someone's own tasting notes: use its middle.
+const scoreOf = (s) => {
+  const range = String(s ?? "").match(/^\s*(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*$/);
+  const n = range ? (+range[1] + +range[2]) / 2 : num(s);
+  return n != null && n >= 50 && n <= 100 ? n : null;
+};
 const slug = (s) => colKey(s) || "x";
 
 // Rows from a CellarTracker export -> {wines, used, unused} or {error}.
@@ -3198,6 +3203,8 @@ const cellarNames = () => { const n = storeGet(STORE.cellarNames, {}); return n 
 const slotNumber = (slot) => slot.replace(/\D/g, "");
 const cellarLabel = (slot) => cellarNames()[slot] || `Cellar ${slotNumber(slot)}`;
 const cellarTitle = (slot) => (cellarNames()[slot] ? `${cellarNames()[slot]}'s cellar` : `Cellar ${slotNumber(slot)}`);
+// Each shared cellar's own colour: " cellar-c2" for app.css, "" for the standard cellar colour.
+const cellarTone = (source) => { const slot = Object.keys(sharedCellars).find((s) => cellarTitle(s) === source); return slot ? ` cellar-${slot}` : ""; };
 const slotFor = (owner) => Object.keys(sharedCellars).find((s) => fold(cellarNames()[s] || "") === fold(owner));
 
 // Shared cellars this computer doesn't already have its own copy of.
@@ -3784,12 +3791,12 @@ function cellarSummaryHtml(w) {
     const lo = Math.min(...pts), hi = Math.max(...pts), n = m.vintages.length;
     const what = n > 1 ? ` · ${n} vintages` : n === 1 ? ` · the ${m.vintages[0]}` : "";
     const claude = pts.length ? ` · Claude <strong>${lo === hi ? lo : `${lo}–${hi}`}</strong>` : "";
-    return `<span class="badge badge-cellar">In ${esc(m.source)}${esc(what)}${claude}</span>`;
+    return `<span class="badge badge-cellar${cellarTone(m.source)}">In ${esc(m.source)}${esc(what)}${claude}</span>`;
   });
 }
 function familyLinksHtml(w) {
   const summary = w.kind !== "cellar";
-  const badges = summary ? cellarSummaryHtml(w) : cellarMatches(w).map((m) => `<span class="badge badge-cellar">Also in ${esc(m.source)}` +
+  const badges = summary ? cellarSummaryHtml(w) : cellarMatches(w).map((m) => `<span class="badge badge-cellar${cellarTone(m.source)}">Also in ${esc(m.source)}` +
     `${m.vintages.length ? ` (${esc(m.vintages.join(", "))})` : ""}</span>`);
   const rel = relatedRatings(w).filter((r) => !(summary && r.cellar)).map(({ f, id, label }) => {
     const c = f.claude, fam = f.family;
@@ -3825,7 +3832,7 @@ function familyHitsHtml(q) {
     ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>`;
   const rows = [
     ...cellar.slice(0, 6).map((w) => `<li class="ew-hit"><div><div class="sl-name">${esc(w.name)}</div>
-        <div><span class="badge badge-cellar">In ${esc(w.source)}</span></div>${ratingsHtml(w)}${soldAtHtml(w)}</div>
+        <div><span class="badge badge-cellar${cellarTone(w.source)}">In ${esc(w.source)}</span></div>${ratingsHtml(w)}${soldAtHtml(w)}</div>
         <div class="hit-buttons">${researchButton(w)}${addBtn(`data-add="${esc(w.id)}"`, isOnList(w.id))}</div></li>`),
     ...typed.map((t) => `<li class="ew-hit"><div><div class="sl-name">${esc(t.name)}</div>
         <div class="hint">Already researched by the family</div>${ratingsHtml({ id: t.id })}</div>
