@@ -417,6 +417,57 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .compare-cellars .tap { text-align: left; }
 .cellar-research { border: 2px solid var(--claude); border-radius: 0.5rem; background: #fff; padding: 0.5rem 0.75rem; margin: 0.5rem 0; }
 .cellar-research p { margin: 0 0 0.4rem; }
+.somm-cellars { margin-bottom: 0.5rem; }
+.somm-step { display: flex; align-items: center; gap: 0.5rem; margin: 1rem 0 0.4rem; font-size: 1.2rem; }
+.drink-tag { display: inline-block; padding: 0.05rem 0.5rem; border: 2px solid; border-radius: 0.4rem; font-weight: 700; white-space: nowrap; }
+.drink-first { background: #fbe3e3; border-color: #a3141c; color: #7a0f15; }
+.drink-soon { background: #ffe8cc; border-color: #8a4b00; color: #5e3300; }
+.drink-ready { background: #dff1e1; border-color: #1f6a2e; color: #154a20; }
+.drink-wait { background: #e2eaf6; border-color: #1d3f73; color: #1d3f73; }
+.somm-answer { margin-bottom: 0.5rem; }
+.somm-moods { margin-top: 0.5rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
+.somm-tab[hidden] { display: none; }
+.somm-source-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+.somm-choosing { margin: 0 0 0.5rem; }
+.somm-next { font-weight: 700; margin: 0 0 0.4rem; }
+.somm-match { white-space: nowrap; color: #8a6100; }
+.somm-adv-out:not(:empty) { margin-top: 0.3rem; }
+.somm-selection { border: 3px solid var(--plum); border-radius: 0.5rem; background: var(--plum-tint); padding: 0.6rem 0.9rem; margin-bottom: 0.7rem; }
+.somm-selection p { margin: 0 0 0.3rem; }
+.somm-sel-head { font-size: 1.4rem; font-weight: 700; color: var(--plum); }
+.somm-sel-count { font-size: 1.15rem; font-weight: 700; }
+.somm-top .somm-bottles { counter-reset: top; }
+.somm-top .somm-bottle { counter-increment: top; }
+.somm-top .sl-name::before { content: counter(top) ". "; font-weight: 700; }
+.somm-bottle { align-items: flex-start; }
+.somm-fold { margin: 0.3rem 0; border: 1px solid var(--line); border-radius: 0.4rem; padding: 0.3rem 0.6rem; background: #fff; }
+.somm-fold > summary { cursor: pointer; font-weight: 700; }
+#somm-cook-filters[hidden] { display: none; }
+.somm-table-wrap { overflow-x: auto; }
+.somm-table { width: 100%; border-collapse: collapse; background: #fff; }
+.somm-table th, .somm-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.somm-table th button { font-weight: 700; white-space: nowrap; }
+.somm-table td button { text-align: left; }
+button.somm-food { font: inherit; font-size: 1.05rem; cursor: pointer; color: inherit; }
+button.somm-food[aria-pressed="true"] { background: #1b1712; color: #e8c766; border-color: #1b1712; }
+.tile-rate { font-size: 0.9em; color: #8a6100; }
+button.somm-food[aria-pressed="true"] .tile-rate { color: #e8c766; }
+.somm-trail { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 1.15rem; margin: 0 0 0.4rem; }
+#somm-fridge { flex: 1 1 14rem; }
+.somm-daring[hidden] { display: none; }
+.somm-daring { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.6rem; }
+.btn-mood { font-size: 1.05rem; padding: 0.3rem 0.8rem; }
+.somm-narrow { flex-wrap: wrap; gap: 0.5rem; }
+.somm-group-first { border-left: 0.5rem solid #a3141c; }
+.somm-group-soon { border-left: 0.5rem solid #8a4b00; }
+.somm-group-ready { border-left: 0.5rem solid #1f6a2e; }
+.somm-group-wait { border-left: 0.5rem solid #1d3f73; }
+.somm-top { border: 3px solid var(--gold); }
+.somm-detail p { margin: 0.25rem 0; }
+.somm-reason { font-weight: 700; }
+.somm-pick-nav { flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.3rem; }
+.somm-adv { border-left: 4px solid var(--plum); padding-left: 0.5rem; }
+@media print { .print-area .pa-big { font-size: 14pt; } .print-area .pa-big ul { list-style: none; padding-left: 0; } }
 .sold-at a { color: var(--blue); font-weight: 600; }
 .not-sold { color: #6b6b6b; }
 

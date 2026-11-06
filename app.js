@@ -902,11 +902,213 @@ const ADV_RULES = [
   { food: "Dessert", when: (c) => c.white && c.dry && c.body === "full" && c.has(["Chardonnay"]), dish: () => "cheesecake",
     why: "“With cheesecake, you want a big, buttery California Chardonnay” (David Rosengarten)", warn: "", src: "D&P ch. 5, “Cheesecake”" },
 ];
+// More adventurous matches from Evan Goldstein's Daring Pairings, read in full: [food, grapes,
+// style, dish, why, warning, printed page], in our own words.
+const DARING = [
+  ["Cheese", ["Chenin Blanc"], "dry", "warm goat cheese toasts with mushroom salad", "The wine's acidity seeks more acidity and sharp goat cheese supplies it; mushrooms echo chalky minerality", "with a New World Chenin, skip the garlic and downplay the herbs", 57],
+  ["Cheese", ["Chenin Blanc"], "offdry", "fresh mild goat cheese or ricotta toast with mushrooms", "The author calls it a daring match that works with a fresh, mild cheese", "keep the cheese fresh and mild, leave garlic off; some will not enjoy it", 57],
+  ["Cheese", ["Cabernet Franc"], "dry", "dishes with mild goat cheese, such as pasta with greens or a phyllo pie", "Suits the higher acidity and slight piquancy of mild goat cheese", "", 176],
+  ["Cheese", ["Carignan"], "dry", "composed salads with cheese and peppery greens", "Medium-weight, higher-acid versions suit salads with protein, peppery greens and gentle dressings", "use a medium-weight version; dressing must not be too sharp; very tannic dense blends do not suit", 184],
+  ["Cheese", ["Malbec"], "dry", "blue cheese: Roquefort with Cahors, Gorgonzola dolcelatte with ripe Argentinean Malbec", "These wines break the rule that powerful wine is not good with powerful cheese", "still not great with strong washed-rind cheeses like Epoisses or Munster", 233],
+  ["Cheese", ["Petite Sirah"], "dry", "mild blues and semi-hard cheeses", "Ripe fruit and sweetish tones make this big red flexible with cheese", "riper-fruit styles; drier versions may not work", 263],
+  ["Cheese", ["Tempranillo"], "dry", "mild blue cheeses such as Cambozola, Castello, Montbriac", "Blues hurt most Tempranillo, but mild, less salty ones work with lighter wines", "only mild, less salty blues, and only light red or rosado", 289],
+  ["Cheese", ["Xinomavro"], "dry", "sharp feta", "Feta's sharpness upsets most wines, but Xinomavro's acidity stands up to it", "avoid stronger blues and washed-rind cheeses", 302],
+  ["Chicken", ["Glera (Prosecco)"], "sparkling", "fried chicken", "Goes well with salty, greasy, deep-fried foods", "", 100],
+  ["Chicken", ["Sémillon"], "sweet", "savory roast chicken salad with mango and coconut rice", "Tropical fruit in a savory dish bridges to a sweet wine", "the wine should be sweet but not overly sweet", 115],
+  ["Chicken", ["Barbera"], "dry", "chicken liver pate on toast", "Acidity cuts the richness; the meatiness calls for a red's dense fruit and tannin", "", 172],
+  ["Chicken", ["Cabernet Franc"], "dry", "chicken mole", "A ripe, oaky example has the fruit for mole", "use a ripe and oaky example", 176],
+  ["Chicken", ["Carmenère"], "dry", "smoked chicken", "Smokiness is a hallmark flavor of the grape, so smoked food matches it", "", 190],
+  ["Chicken", ["Cinsaut"], "rose", "yakitori, Singaporean chicken rice, Jamaican jerk chicken", "Good dry rose suits Asian and Caribbean dishes; it has white structure and light red flavor", "not with overly spicy food: Cinsaut's alcohol clashes", 196],
+  ["Chicken", ["Grenache / Garnacha"], "dry", "mild birds such as poussin, game hen, turkey or quail; roast chicken", "Soft, velvety unblended Grenache is magnificent with milder poultry", "gamier birds need a blend", 222],
+  ["Chicken", ["Mourvèdre / Monastrell"], "rose", "simply prepared chicken breast on the bone, turkey kebabs", "The blush styles are flexible with light poultry the bigger reds would steamroller", "", 246],
+  ["Chicken", ["Mourvèdre / Monastrell"], "dry", "barbecued turkey skewers with a tangy pomegranate sauce", "Brine, a tangy sauce and smoke bring robust and lighter styles alike to the bird", "turkey, not chicken. Avoid vinegar-sharp sauces, which would destroy the wine's flavor", 250],
+  ["Chicken", ["Petite Sirah"], "dry", "mixed grill of meats and chicken over dressed salad", "Meat juices cut the dressing's vinegar; the varied proteins stand up to the tannins", "keep the dressing milder than the wine and seasonings simple", 267],
+  ["Chicken", ["Pinotage"], "dry", "butter chicken, chicken tikka masala, milder curries", "Richer styles are super with milder curries", "plain mild chicken is too delicate for Pinotage", 271],
+  ["Chicken", ["Tannat"], "dry", "roast chicken", "Tamer, often blended Uruguayan Tannat won't overwhelm roast chicken the way French examples would", "uruguayan examples only, not most French wines", 279],
+  ["Chicken", ["Touriga Nacional"], "dry", "dark-meat chicken with mole sauce", "Mole plays up the deep, almost sweet mocha note from strong oak", "for wines with strong oak and a mocha or chocolate note", 294],
+  ["Chicken", ["Touriga Nacional"], "dry", "quail", "The bird's slight gaminess meets the wine's rustic personality", "", 299],
+  ["Dessert", ["Glera (Prosecco)"], "sparkling", "fruit and nut desserts such as an apple galette", "Its often-sweet nature makes it dynamite with fruit and nut desserts", "the dessert must not be far sweeter than the wine; no rich buttercream", 100],
+  ["Dessert", ["Cinsaut"], "rose", "tart fruit: out-of-season strawberries, pomegranate seeds, red plums", "Dry rose works better with underripe to tart fruit than with ripe red fruit", "ripe red fruit makes dry rose taste tart", 198],
+  ["Dessert", ["Gamay"], "dry", "a bowl of ripe strawberries, alone or with creme fraiche", "The one dessert this dry red is allowed", "otherwise not good with dessert; leave out the brown sugar", 215],
+  ["Dessert", ["Petite Sirah"], "dry", "dark-chocolate desserts", "Modern round styles can pair with bitter-chocolate preparations", "modern round styles only; dessert must not be overly sweet", 263],
+  ["Fish", ["Chenin Blanc"], "offdry", "white fish fillet with fresh fruit salsa", "The wine's slight sweetness complements the slight sweetness in the food", "", 13],
+  ["Fish", ["Marsanne / Roussanne"], "dry", "salt cod and potato puree (brandade)", "The wine handles the cod's salt without tasting too alcoholic", "hedge by choosing a less alcoholic example", 73],
+  ["Fish", ["Marsanne / Roussanne"], "dry", "hamachi sashimi", "The fish's creamy texture and light nuttiness suit the rich wine", "", 74],
+  ["Fish", ["Sémillon"], "offdry", "sweet and sour whole fish", "A slightly sweeter Semillon is the version chosen to meet sweet-sour fish", "", 116],
+  ["Fish", ["Torrontés"], "dry", "coconut-based Brazilian fish stew", "The wine's viscous, almost fatty texture suits rich dishes featuring coconut milk", "", 123],
+  ["Fish", ["Barbera"], "dry", "grilled tuna, swordfish or shark, with a tomato vinaigrette, puttanesca or tapenade", "High acid, low tannin and balanced flavors suit mild, meaty fish", "not with strong-flavored fish such as Chilean sea bass or sturgeon; avoid most shellfish", 169],
+  ["Fish", ["Cabernet Franc"], "dry", "seared tuna or similarly textured fish, with sauteed spinach", "Works with cooked tuna, especially Loire examples; greens are the bridge to the wine", "not with sashimi, sushi or tuna tartare, nor strongly flavored fish", 176],
+  ["Fish", ["Carmenère"], "dry", "tuna and swordfish", "Lighter, less oaky versions partner these fish well, much as Cabernet Franc does", "lighter, less oaky versions only; most simple fish, oily fish and white-fleshed fish do not work", 190],
+  ["Fish", ["Dolcetto"], "dry", "sweeter, milder fish such as halibut, black cod, salmon or trout, with tomato, olives or a little meat", "A light red can break the rule when the fish is mild and prepared in a red-wine vein", "keep the fish mild and simply prepared; no marinated fish", 205],
+  ["Fish", ["Dolcetto"], "dry", "pan-roasted salmon or Arctic char with a red wine sauce and wild mushrooms", "A wine sauce links fish and red; porcini and chanterelles bridge to the wine", "with an oaky modern Dolcetto, choose very mild-fleshed salmon", 209],
+  ["Fish", ["Mencía"], "dry", "seared tuna with braised cabbage and mushrooms", "Tuna is meaty enough for red; mushrooms, bacon and cabbage link to the wine", "avoid briny seafood such as oysters, mussels and clams", 241],
+  ["Fish", ["Pinotage"], "dry", "strong-flavored fish such as herring, sardines, sturgeon, snoek", "Softer tannin and a gamy edge let it meet strong fish without tasting metallic", "best in traditional styles: less oak, balanced alcohol, fruit not overripe. Not for sushi or bivalves", 271],
+  ["Fish", ["Tempranillo"], "dry", "mild fish", "Gentle, less tannic bottlings suit mild fish", "avoid strongly flavored fish and shellfish", 289],
+  ["Lamb", ["Assyrtiko"], "dry", "Greek roast lamb with egg and lemon sauce", "With this lemon sauce the book calls the match sublime", "fails with most traditional red meat, such as prime rib or grilled venison", 48],
+  ["Lamb", ["Trebbiano"], "dry", "herb-marinated lamb loin at room temperature with green herb sauce", "The preparation is geared to white wine, so it could work", "needs a bold example; most red meat with Trebbiano is a stretch", 131],
+  ["Lamb", ["Verdejo"], "dry", "lamb brochette with an herbal marinade", "Spices or herbs play down the meatiness", "not rich red meats such as prime rib or big steaks", 144],
+  ["Lamb", ["Barbera"], "dry", "lamb stew", "A full-flavored Barbera holds its own against big meat dishes usually given to Barolo", "choose a full-flavored or modern oak-aged Barbera, not a light one", 170],
+  ["Lamb", ["Carignan"], "dry", "sausage and lamb with apricots and North African spices", "Dried-fruit meat dishes gave the best combinations through texture, sweetness and richness", "", 183],
+  ["Lamb", ["Cinsaut"], "dry", "braised lamb shanks", "A red blend containing Cinsaut matches the rich texture of rib-sticking braises", "", 197],
+  ["Lamb", ["Mencía"], "dry", "lamb with a jus and red-wine reduction", "This medium red is great with dishes cooked in wine", "", 238],
+  ["Lamb", ["Tempranillo"], "dry", "lamb burger", "An easy-drinking style suits a casual lunch of lamb; Tempranillo and lamb have a natural synergy", "unoaked easy styles are wrong for a roast leg of lamb", 288],
+  ["Lamb", ["Xinomavro"], "dry", "Greek lamb with lemon, yogurt, olives and feta", "Gamy lamb handles the tannin; the sharp ingredients match the wine's acidity", "", 302],
+  ["Pasta and pizza", ["Aglianico"], "dry", "full-flavoured lasagna", "A rich barrel-aged red has the weight to equal a full-flavoured dish", "", 16],
+  ["Pasta and pizza", ["Trebbiano"], "dry", "pasta primavera", "A good light Italian example is excellent with pasta, perhaps through the Italian connection", "keep it simple; strong flavoring blows the wine away", 131],
+  ["Pasta and pizza", ["Txakoli"], "dry", "pizza", "Light, effervescent and refreshing, it stands in for lager or pilsner", "", 138],
+  ["Pasta and pizza", ["Nebbiolo"], "dry", "rich pasta with braised meat sauce, pancetta or sausage", "Protein in the dish latches onto the wine's tannins", "the dish needs protein: braised meat, pancetta, sausage, melted cheese or cream", 255],
+  ["Pork", ["Albariño"], "dry", "rich pork and sausage casseroles and braises with garlic and olives", "The delicate-seeming wine cuts through richness and refreshes the palate", "", 35],
+  ["Pork", ["Albariño"], "dry", "dry chorizo", "The grape's natural sharpness and spritz cut salty food", "", 35],
+  ["Pork", ["Arneis"], "dry", "pork loin with a mustard and breadcrumb crust", "Mustard on white meat shows this wine well", "", 41],
+  ["Pork", ["Arneis"], "dry", "prosciutto and other mild charcuterie with not-too-sweet melon", "Works with milder cured meats when the fruit served isn't overly sweet", "keep the fruit from being too sweet", 41],
+  ["Pork", ["Grüner Veltliner"], "any", "lentil stew with pork and sausage", "The wine shares personality traits with legumes", "", 66],
+  ["Pork", ["Grüner Veltliner"], "offdry", "sweet-and-sour pork", "Off-dry Gruner plays especially well with sweet and sour flavors", "if the dish is too sweet, even off-dry Gruner struggles", 66],
+  ["Pork", ["Muscat / Moscato"], "sparkling", "prosciutto and melon", "Drier fizzy Muscats pair well with salt-and-sweet combinations", "most lean sweet and taste out of place with dishes lacking sweetness", 83],
+  ["Pork", ["Glera (Prosecco)"], "sparkling", "cured slow-cooked pork belly", "It suits sweet treatments of white meat", "", 100],
+  ["Pork", ["Txakoli"], "dry", "dry chorizo as tapas", "Slight effervescence refreshes the palate and suits a wide range of tapas", "not long-smoked meats or thick, rich dishes", 137],
+  ["Pork", ["Barbera"], "sparkling", "salumi and other rich cured meats", "The slightly sparkling style is a counterbalance to rich food", "", 168],
+  ["Pork", ["Cinsaut"], "rose", "Cuban pressed-pork sandwich", "Dry rose is very good with many Caribbean dishes", "", 196],
+  ["Pork", ["Grenache / Garnacha"], "rose", "roast pork including char siu; charcuterie and chorizo-stuffed dates", "The book finds blush Grenache as delightful with roast pork as with seafood", "", 222],
+  ["Pork", ["Petite Sirah"], "dry", "slow-smoked peppery pork shoulder", "The dish picks up the grape's peppery character and ripe fruit", "peppery, but not fiery hot", 262],
+  ["Pork", ["Touriga Nacional"], "dry", "grilled pork chops with sweet spice and a dried-fruit onion conserve", "Sweet spice, smoky grilling and fruity conserve echo the wine's plum, cherry and smoke", "keep the sweetness of the dish in check", 299],
+  ["Red meat", ["Albariño"], "dry", "beef carpaccio with olive oil, lemon and pepper", "A lemon dressing on raw beef suits this bright, pure wine", "", 36],
+  ["Red meat", ["Albariño"], "dry", "steak drizzled with lemon juice, Tuscan style", "The lemon lets a bright wine work reasonably well with steak", "avoid with most red meat unless the recipe is designed for white wine", 36],
+  ["Red meat", ["Pinot Blanc"], "dry", "smoked beef tenderloin", "A rich Alsace example once made a very nice match with smoked beef", "an exception: generally not a wine for lamb, venison or beef", 92],
+  ["Red meat", ["Glera (Prosecco)"], "sparkling", "roasted wild game or game stews with polenta", "Prosecco harmonizes with the food of its home region, the Veneto", "", 99],
+  ["Red meat", ["Glera (Prosecco)"], "sparkling", "hamburger with ketchup", "The wine picks up on the sweetness in the condiment", "", 100],
+  ["Red meat", ["Glera (Prosecco)"], "sparkling", "filet mignon with a port reduction, sweet onions and potato gratin", "Works when sauce and sides have personalities that overshadow the meat", "with rich red meat, usually unsuccessful unless sauce or sides dominate", 100],
+  ["Red meat", ["Torrontés"], "dry", "sauerbraten or short ribs with a sweet-sour glaze", "The play between acid and fruit suits sweet and sour dishes", "not if the dish is overly sweet, or heavily grilled or blackened", 123],
+  ["Red meat", ["Barbera"], "dry", "steak au poivre", "A full-flavored Barbera stands up to rich meat dishes; modern oak-aged styles feel serious", "choose a full-flavored or modern oak-aged Barbera", 170],
+  ["Red meat", ["Cabernet Franc"], "offdry", "burger with ketchup and pickle relish", "Ripe red fruit with a little sweetness brings out the best in it", "off-dry styles can be hard to find", 176],
+  ["Red meat", ["Gamay"], "dry", "a good steak, or steak tartare", "Gutsy crus suit it, and Charolais beef comes from the land of Beaujolais", "use a gutsy cru, not a basic Beaujolais", 214],
+  ["Red meat", ["Gamay"], "dry", "cold sliced flank steak on arugula, cold meat plates and leftovers", "Bright acid and low tannin make it wonderful with cold meats", "", 214],
+  ["Red meat", ["Grenache / Garnacha"], "rose", "burgers and barbecue at a picnic", "Served with a slight chill, a crisp rose is excellent with anything from the grill", "serve with a slight chill", 222],
+  ["Red meat", ["Nebbiolo"], "dry", "milk-fed veal", "A surprise, given veal's subtle flavour, but easy-drinking styles suit it", "use an easy-drinking bottling", 255],
+  ["Red meat", ["Pinotage"], "dry", "beef jerky and dried salted meats", "South Africans drink it with biltong, and beef jerky stands in well", "", 270],
+  ["Red meat", ["Pinotage"], "dry", "quickly sauteed calves' liver", "Rustic versions work with strongly flavored foods where other wines fail", "", 271],
+  ["Red meat", ["Tempranillo"], "dry", "rare, simply prepared cuts of meat", "The meat's juices supplement what time has taken from the wine", "keep the meat simple; serve young joven or crianza with stews and long-cooked cuts", 288],
+  ["Seafood", ["Albariño"], "dry", "clams with noodles in a seaweed and bonito broth", "Salty broth calls for the wine's acid; seaweed and bonito echo its minerality", "", 38],
+  ["Seafood", ["Assyrtiko"], "dry", "lobster, scallops or shrimp in a rich cream or butter sauce", "Richer oak-aged styles behave like Chardonnay and suit rich sauced shellfish", "use the oak-aged style; crisp and oaky styles aren't interchangeable", 47],
+  ["Seafood", ["Chenin Blanc"], "offdry", "deep-fried coconut shrimp", "The off-dry wine mimics the sweetness in the dish", "", 54],
+  ["Seafood", ["Marsanne / Roussanne"], "dry", "scallops in brown butter with toasted breadcrumbs", "Richer cooking picks up the nutty character of aged wines", "best with aged wines", 74],
+  ["Seafood", ["Muscat / Moscato"], "sparkling", "tandoori shrimp", "The sweet sparkling Muscat acts as a savory foil to aromatic heat", "", 82],
+  ["Seafood", ["Glera (Prosecco)"], "sparkling", "spiced crab salad with coconut and a little chile", "Crab and coconut echo the wine's sweetness; slight heat foils it; plays with earthy spice", "go easy with coconut if the Prosecco is on the dry side", 103],
+  ["Seafood", ["Marsanne / Roussanne"], "dry", "crab cakes and other rich shellfish", "Its texture and ripe fruit bring out the sweet flavors of rich shellfish", "", 107],
+  ["Seafood", ["Carmenère"], "dry", "prawns or scallops wrapped in bacon or prosciutto, or with sun-dried tomatoes", "Unlike Cabernet Franc, it works with these when bacon or tomato is involved", "oysters, clams, mussels and sea snails are awful with it", 190],
+  ["Seafood", ["Dolcetto"], "dry", "shrimp or scallops with tomato, a little meat, mushrooms or black olives", "Sweeter, milder shellfish suits it when prepared simply and in a red-wine vein", "prepare simply, with red-wine-friendly ingredients", 205],
+  ["Seafood", ["Gamay"], "dry", "steamed clams with sausage, mussel-and-potato salad", "Minimal tannin lets this red handle strong-flavored seafood enjoyably", "select a minimally tannic cru or a rose", 214],
+  ["Seafood", ["Grenache / Garnacha"], "dry", "seafood paella, cioppino, even bouillabaisse", "Less tannic, light Grenache-based reds can be a delightful match with seafood", "use light, less tannic styles", 222],
+  ["Seafood", ["Xinomavro"], "dry", "octopus", "Octopus's sweet, fleshy, chewy character pairs well with the lighter reds", "", 302],
+  ["Seafood", ["Xinomavro"], "dry", "shrimp, scallops, squid", "Medium body and high acid let this red work with shellfish", "if very tannic, avoid assertive mussels and clams; rose, white or sparkling is safest", 302],
+  ["Spicy food", ["Albariño"], "dry", "milder kung pao chicken", "The clean nature of northern Asian food suits the pure wine", "very spicy dishes, bold chiles and full curries overwhelm it", 36],
+  ["Spicy food", ["Arneis"], "dry", "piquant dishes such as salt-and-pepper shrimp or spaghetti puttanesca", "Relatively low alcohol lets it handle piquant, often-problematic dishes", "it gets lost behind chiles and strong Asian spices", 40],
+  ["Spicy food", ["Assyrtiko"], "dry", "spicier Indian tandoori dishes and fish curries", "Bright acidity and lower alcohol cleanse and refresh the palate", "moderately hot dishes only; very bold dishes can drown its flavours", 47],
+  ["Spicy food", ["Chenin Blanc"], "sparkling", "dishes with fiery chile or black pepper heat", "Heat overpowers most dry Chenin, but lower-alcohol sparkling versions cope better", "choose lower-alcohol sparkling, not dry still Chenin", 55],
+  ["Spicy food", ["Grüner Veltliner"], "any", "Indian, Vietnamese and Indonesian dishes rich in spice", "The region's herbs and spices meet the wine's own spicy, aromatic nature", "not with overtly sweet dishes", 66],
+  ["Spicy food", ["Marsanne / Roussanne"], "dry", "mild coconut curry and exotically spiced dishes", "Its ripe fruit is a fairly neutral backdrop for curry, cinnamon, cumin and mace", "keep heat low; choose nearer 13 percent alcohol; never hot Asian dishes", 73],
+  ["Spicy food", ["Muscat / Moscato"], "dry", "lightly hot dishes", "A little heat sets off the wine's fruit", "if the dish is too hot the wine's charm is destroyed; avoid hot sauces", 84],
+  ["Spicy food", ["Glera (Prosecco)"], "sparkling", "Indian curries and biryanis, some coconut curries", "Fruit-forward, off-dry character makes a natural match with many Asian cuisines", "dishes that are too spicy take the middle out of the wine", 100],
+  ["Spicy food", ["Glera (Prosecco)"], "sparkling", "Hawaiian raw-fish poke with a kick of heat", "A little spice is no problem and the pairing is refreshing", "dishes that are too spicy take the middle out of the wine", 100],
+  ["Spicy food", ["Marsanne / Roussanne"], "dry", "Thai curries, Indonesian satays, mild jerk chicken", "Roussanne and its blends sit easily with exotic spices", "too much heat makes the wine seem more alcoholic and crushes its flavors", 107],
+  ["Spicy food", ["Torrontés"], "dry", "mild Indian or Southeast Asian curries", "Its exuberant fruit suits dishes with real or implied sweetness", "hot spices mute the wine, so keep them mild", 123],
+  ["Spicy food", ["Torrontés"], "dry", "Peruvian shrimp chowder with a little chile", "Enough heat brings out the wine's fruit; corn and shrimp sweetness and texture help", "keep the heat moderate", 127],
+  ["Spicy food", ["Verdejo"], "dry", "spicy, hot dishes", "Bright acidity and low alcohol cleanse and refresh the palate", "better still with ripe fruit and a hint of sweetness", 144],
+  ["Spicy food", ["Vermentino"], "dry", "light, mild coconut curry", "Coconut works when used in moderation and without too much sweetness", "pungent curries, flavorful spices and heavy heat overwhelm it", 151],
+  ["Spicy food", ["Cabernet Franc"], "dry", "enchiladas in red or green chile sauce", "Chile, garlic and tomato tie the sauce to the wine", "", 176],
+  ["Spicy food", ["Petite Sirah"], "dry", "coconut curry", "Boldly flavored dishes pick up the grape's peppery character and ripe fruit", "curry must not be too sweet or hot; fiery food is painful with this wine", 262],
+  ["Spicy food", ["Pinotage"], "dry", "vindaloo and other powerful Indian dishes", "Lighter versions, served slightly chilled, handle powerful Indian dishes", "lighter versions only, slightly chilled", 271],
+  ["Spicy food", ["Tempranillo"], "dry", "savory curries", "The right recipe brings out the grape's exotic side", "", 288]
+];
+// The same from his Perfect Pairings, for the mainstream grapes. No grapes: any wine of that style.
+const PERFECT = [
+  ["Cheese", [], "sparkling", "Parmesan, triple-cream and salty feta-style cheeses", "Sharp acidity is a foil for salty, rich, thick foods, including soft cheeses", "", 39],
+  ["Cheese", [], "sparkling", "fried mozzarella and anchovy sandwiches", "Anchovies and crackly fried bread suit bubbly; anchovies call for a less refined one", "champagne works too, but earthier wines were the tasting favorites", 45],
+  ["Cheese", ["Chardonnay"], "dry", "warm baked ricotta on toast", "Ricotta's savory sweetness enlivens older wine; toast picks up oaky, nutty notes", "let it cool a few minutes first", 65],
+  ["Cheese", ["Sauvignon Blanc"], "dry", "feta, ricotta salata, Jarlsberg and any goat cheese", "Sharp, soft-rind cheeses are lovely partners", "", 69],
+  ["Cheese", ["Riesling"], "any", "mild blue cheese such as Gorgonzola dolcelatte", "It balances mild saltiness", "only mildly salty, mildly pungent blues", 83],
+  ["Cheese", ["Gewürztraminer"], "any", "aged, pungent cheese", "One of the few wines able to hold its own against strong cheese", "", 110],
+  ["Cheese", ["Gewürztraminer"], "any", "cheese fondue", "Preferred over the usual Riesling: its texture and flavor complement the cheese", "stick to New World versions for fonduta, unless truffles are added", 112],
+  ["Cheese", ["Viognier"], "dry", "a cheese course or mixed cheese platter", "Its ripeness and texture suit a mixed cheese plate", "", 122],
+  ["Cheese", ["Cabernet Sauvignon"], "any", "mild to moderate cheeses such as Brie, young Camembert, Monterey Jack, fresh mozzarella", "Milder cheeses pair with the wine rather than compete; big cheese with big wine usually fails", "avoid Roquefort and other blue-veined cheeses", 138],
+  ["Cheese", ["Pinot Noir"], "dry", "mild and creamy cheeses such as Brie or Taleggio", "Pinot stands up to many cheese styles: aged and fresh, hard and creamy", "best with mild, creamy cheeses (p. 167). Avoid blue-veined; Époisses with red Burgundy is among the worst matches", 166],
+  ["Cheese", ["Sangiovese"], "dry", "milder blue cheeses such as Gorgonzola", "Its rustic personality and racy acidity let it pair with more cheeses than most reds", "milder blues only", 180],
+  ["Cheese", ["Zinfandel / Primitivo"], "dry", "creamy and blue-veined cheeses", "A hint of real sweetness and port-like character lets Zin pair nicely with these cheeses", "needs a Zin with port-like character and a hint of real sweetness", 207],
+  ["Chicken", ["Merlot"], "dry", "roast chicken", "A medium-bodied red matches a medium-weight dish", "", 20],
+  ["Chicken", [], "sparkling", "Southern fried chicken", "The crackle of crunchy fried food plays against the wine's effervescence", "", 39],
+  ["Chicken", ["Cabernet Sauvignon"], "soft", "chicken, Cornish game hen or quail", "Softer, lighter-bodied Cabernets open up lighter fowl as an option", "only with softer, lighter-bodied Cabernet, not big tannic ones", 138],
+  ["Chicken", ["Merlot"], "dry", "small roast birds with pork and prune stuffing", "Prunes meld with the wine's fruit, so the red doesn't dominate the mild white meat", "", 154],
+  ["Chicken", ["Syrah / Shiraz"], "dry", "duck with sausage and lentils", "The meat's sweetness calls for fruit-forward wine; sausage and lentils bring out its rustic side", "duck, not chicken. Use green lentils if the Syrah has a minty edge", 198],
+  ["Dessert", ["Gewürztraminer"], "offdry", "less-sweet desserts", "Treated like off-dry Riesling, it suits sweet dishes and can be exceptional with less-sweet desserts", "tastes harsh with anything too sweet unless the wine is sweeter", 110],
+  ["Dessert", ["Cabernet Sauvignon"], "newworld", "bitter or semisweet chocolate, as in a not-too-sweet mole", "Bitter and semisweet chocolate can work with a ripe American or Australian Cabernet", "most chocolate is too sweet for dry red; never with austere Bordeaux", 139],
+  ["Dessert", ["Zinfandel / Primitivo"], "dry", "chocolate-covered almonds, coconut macaroons, less sugary nut or chocolate sweets", "Zin's fruit-forward nature lets it match desserts stressing nuts and coconut, or less sugary chocolate", "the dessert must be more bitter than sweet", 207],
+  ["Fish", ["Chardonnay"], "dry", "grilled, herb-marinated fish on creamy white beans", "The beans' rich texture lets a richer, oak-touched Chardonnay balance the dish", "if the wine is mild, use fewer herbs and avoid pungent charcoal grilling", 59],
+  ["Fish", ["Chardonnay"], "dry", "smoked trout or salmon on polenta with crème fraîche", "Smoke, toast, cream and caramelized onion all highlight the oaky wine", "choose mild smoked fish; pungent or heavily smoked fish can dominate the wine", 63],
+  ["Fish", ["Sauvignon Blanc"], "dry", "slightly more pungent fish", "Age brings nutty, sherry-like notes that suit stronger fish", "an acquired taste", 69],
+  ["Fish", ["Riesling"], "offdry", "white fish with fruit salsa", "The off-dry wine mimics the sweetness of the fruit", "", 83],
+  ["Fish", ["Riesling"], "offdry", "smoked salmon or trout", "Off-dry Riesling has a real affinity for smoked foods", "", 83],
+  ["Fish", ["Riesling"], "dry", "baked white fish in a spicy peanut and coconut sauce", "Sugar and coconut add mouth richness that calls for a fuller, richer New World Riesling", "play down the heat if the wine is over 13 percent alcohol", 92],
+  ["Fish", ["Gewürztraminer"], "dry", "salmon with slow-cooked onions, sweet spices and brandied currants", "The earthy sweetness of slowly cooked onions is what the wine craves", "cook the onions slowly over low heat", 116],
+  ["Fish", ["Viognier"], "dry", "fleshy fish such as halibut with an orange and mint sauce", "Orange and mint link the fish to the wine", "use Old World-style wines; very ripe New World ones can taste sour here", 127],
+  ["Fish", ["Cabernet Sauvignon"], "soft", "meaty fish such as shark or swordfish", "Softer, lighter-bodied Cabernets make meatier fish an option", "only softer, lighter-bodied Cabernet; it does not work with most fish", 138],
+  ["Fish", ["Cabernet Sauvignon"], "any", "tuna with a black pepper crust", "Black pepper tames Cabernet's tannic bite", "works best with younger wines", 139],
+  ["Fish", ["Merlot"], "soft", "salmon", "Truly soft Merlots can be treated like Pinot Noir, including their compatibility with fish", "ample, Cabernet-style Merlots should be matched as Cabernet instead", 151],
+  ["Fish", ["Merlot"], "dry", "grilled tuna with olive, rosemary and citrus sauce", "The wine's high acidity handles citrus; olives, garlic and rosemary make herbal Merlot shine", "if the wine is less tart, play down the lemon juice. Swordfish, shark or tilapia also work", 156],
+  ["Fish", ["Pinot Noir"], "dry", "simply grilled or seared tuna, swordfish or salmon", "Pinot has white-wine qualities in a red; less strong fish suits it when minimally dressed", "avoid stronger seafood: mussels, sea bass, anchovies, sardines and mackerel (p. 167)", 166],
+  ["Fish", ["Pinot Noir"], "dry", "grilled salmon with a soy, ginger and sake sauce", "The Asian sake, soy and ginger combination ties the dish together and plays to the wine's oak", "best grilled over charcoal, with the sauce reduced until almost syrupy", 173],
+  ["Fish", ["Sangiovese"], "dry", "tuna, swordfish or shark in tomato-based sauces", "Sangiovese's balanced acidity suits these fish, especially with Italian or Provençal tomato sauces", "outside tuna, swordfish and salmon, it is not a sure bet with fish or shellfish (p. 180)", 179],
+  ["Fish", ["Syrah / Shiraz"], "soft", "robust, spicy fish stew such as bouillabaisse or cioppino", "A softer, less alcoholic Syrah rewards the adventurous with a robust fish stew", "only if the wine is softer and less alcoholic", 193],
+  ["Fish", ["Syrah / Shiraz"], "soft", "peppercorn-crusted grilled tuna", "Grilling shows off Syrah, and pepper plays to the wine's own peppery character", "generally too much for most seafood; only some tuna and salmon dishes, with lighter styles", 193],
+  ["Fish", ["Zinfandel / Primitivo"], "soft", "seared tuna with rosemary, garlic and hot pepper sauce", "The sauce's inherent sweetness brings out the wine's fruit, and hot pepper jazzes it up", "needs soft tannins and about 12 percent alcohol; chill the wine slightly", 210],
+  ["Lamb", ["Riesling"], "any", "long-braised or well-sauced lamb, beef or venison", "A sauce or a long braise can steer red meat towards the wine", "not with simply sautéed or roasted lamb, beef or venison", 84],
+  ["Lamb", ["Viognier"], "dry", "North African lamb tagine with dried fruit, nuts, honey and sweet spice", "Honey, almond, sweet spice and dried fruit echo what develops in Viognier as it matures", "use a mature, developed wine", 131],
+  ["Lamb", ["Merlot"], "dry", "lamb ragout with black olives and thyme", "Merlot's signature green, herbal, earthy flavours suit dishes built on olives and herbs", "", 151],
+  ["Lamb", ["Pinot Noir"], "dry", "lightly spiced grilled lamb kebabs", "Subtle spice mirrors the wine's spiciness; grilled vegetables bring out its oak and earthiness", "keep the lamb rare or pink so it is juicy enough for the mature fruit", 175],
+  ["Pasta and pizza", ["Sauvignon Blanc"], "dry", "vegetarian lasagna", "Developed nutty, sherry-like flavors suit flavorful, textured vegetarian dishes", "an acquired taste", 69],
+  ["Pasta and pizza", ["Sauvignon Blanc"], "dry", "pasta with bitter greens, anchovy, chile and lemon zest", "Lemon echoes the wine's tart fruit; zestiness cuts rich breadcrumbs and tempers the heat", "heat works only if it is not over the top", 73],
+  ["Pasta and pizza", ["Riesling"], "offdry", "pasta made with smoked salmon, trout or pork", "Off-dry Riesling's affinity for smoked foods carries over to pasta dishes using them", "", 83],
+  ["Pasta and pizza", ["Cabernet Sauvignon"], "any", "pasta or risotto enriched with butter or dairy", "Starch's body and texture meld with Cabernet's weight; fat is what lessens tannin", "starch alone does not cut tannin; plain risotto can make the wine bitter", 138],
+  ["Pasta and pizza", ["Zinfandel / Primitivo"], "dry", "pasta with sautéed artichokes, pancetta, mushrooms and peas", "Sautéed as a supporting ingredient, artichoke adds nuttiness and complexity rather than distorting the wine", "fails if artichoke is the focal point", 212],
+  ["Pork", ["Riesling"], "offdry", "pork tenderloin with a fruit chutney", "The chutney's sweetness complements the wine's slight sweetness", "", 15],
+  ["Pork", ["Sauvignon Blanc"], "dry", "pork spiked with citrus, capers, garlic, olives or ginger", "Sharp seasonings let this tangy, unoaked style show beautifully with white meat", "depends on the preparation spiking the flavors", 69],
+  ["Pork", ["Riesling"], "dry", "pork or veal scaloppine", "Bone-dry Riesling stands in wherever a squeeze of lemon or lime would lift the dish", "match the wine's alcohol to the richness of the food", 82],
+  ["Pork", ["Riesling"], "offdry", "pork roast with a tamarind or pomegranate glaze", "The off-dry wine mimics the sweetness in the glaze", "", 83],
+  ["Pork", ["Riesling"], "any", "ham, sausage and charcuterie", "The wine works as a counterbalance to rich, salty meats", "", 83],
+  ["Pork", ["Syrah / Shiraz"], "dry", "pork roast with fruit chutney or spiced tomato conserve", "A chosen condiment on the roast plays off the wine's generous fruit", "", 193],
+  ["Pork", ["Syrah / Shiraz"], "dry", "Mexican green pork chili with tomatillos", "Higher acidity meets the tomatillos' sharpness; the wine's mint echoes their green piquancy and cilantro", "sour cream demands a wine that keeps an acidic edge, or it can taste metallic", 200],
+  ["Pork", ["Zinfandel / Primitivo"], "dry", "Brazilian black bean stew with pork and sausages", "Few wines can hold their own against this thick, rich stew; chewy Zin adds another layer", "", 215],
+  ["Red meat", ["Sangiovese"], "soft", "meatball and vegetable soup", "A big wine would lose the subtlety; the wine's acidity answers the broth, usually a challenge", "if the wine lacks sharpness, add pasta for texture", 182],
+  ["Red meat", ["Syrah / Shiraz"], "dry", "Korean-style grilled short ribs", "Mature Syrah adds flavour layers to sesame, soy, sugar and the caramelized meat", "keep the red pepper in check, and perhaps pass on the kimchi", 202],
+  ["Seafood", [], "sparkling", "spicy, sweet and tart shrimp salad with tropical fruit", "Slight sweetness answers the mild heat and the sweet fruit", "riper fruit or more heat needs a sweeter wine; with cucumber instead, a dry New World bubbly works", 47],
+  ["Seafood", ["Chardonnay"], "dry", "lobster in vanilla sauce", "The chef reportedly devised the sauce to match white Burgundies", "", 54],
+  ["Seafood", ["Chardonnay"], "dry", "prawns with cashews", "Nuts mirror the almond and hazelnut flavors of a developed Chardonnay", "age lessens the wine's acidity, so it cuts heavy dishes less well", 55],
+  ["Seafood", ["Sauvignon Blanc"], "dry", "squid with peas in a tomato sauce thickened with garlic, almonds and bread", "Peas and the thickener call for a richer, more rustic wine than classic Sauvignon", "", 75],
+  ["Seafood", ["Gewürztraminer"], "dry", "crab, prawns and other sweet shellfish", "A good partner for this rich, dry wine", "scallops depend on how they are treated", 109],
+  ["Seafood", ["Viognier"], "dry", "scallops, crab or lobster, even with butter and cream", "Texture and ripe fruit bring out shellfish sweetness; acidity cuts through butter and cream", "", 122],
+  ["Seafood", ["Viognier"], "dry", "Brazilian-style fish and shellfish stew with coconut and chile", "Oak's soft toastiness and the wine's weight let it stand up to the stew", "keep the jalapeño heat in check if the wine is high in alcohol", 129],
+  ["Seafood", ["Merlot"], "dry", "prawns or scallops wrapped in bacon or cured ham", "Merlot's lighter weight and higher acidity give it more flexibility at the table than Cabernet", "works especially when the shellfish is prepared with pancetta, prosciutto or jamón", 152],
+  ["Seafood", ["Sangiovese"], "dry", "rustic paella with chicken, clams and mussels", "It shares Tempranillo's tart red fruit, medium weight and moderate tannins; saffron and paprika frame it", "if clams and mussels taste too strong, eat them with rice, then sip", 188],
+  ["Spicy food", [], "sparkling", "relatively spicy dishes with peppers", "The bubbles counterbalance spicy heat", "too much heat eviscerates the wine; off-dry styles help tame relatively spicy dishes", 38],
+  ["Spicy food", [], "sparkling", "Thai and Indian dishes, some coconut-milk curries", "Fruit-driven bubblies are very compatible with exotic and Asian cuisines", "new World fruit-driven styles work best here", 38],
+  ["Spicy food", ["Sauvignon Blanc"], "dry", "spicy, hot dishes", "Bright acidity and generally lower alcohol cleanse and refresh the palate", "", 70],
+  ["Spicy food", ["Pinot Grigio / Gris"], "any", "coconut-milk curries and other textured Asian dishes", "Richer Pinot Gris does well against flavorful, textured dishes", "use the richer styles, not the austere ones", 95],
+  ["Spicy food", ["Gewürztraminer"], "dry", "aromatic dishes with curry, ginger, clove, cinnamon, allspice and cardamom", "Exotic cuisines built on these aromatic spices are happy tablemates for the wine", "watch the heat: very spicy capsaicin food clashes with the wine's high alcohol", 110],
+  ["Spicy food", ["Viognier"], "dry", "Thai, Indian, Malaysian or Caribbean curries", "It pairs easily with curried dishes of any origin", "not if the dish is overly piquant; fiery heat makes the wine taste hot", 122],
+  ["Spicy food", ["Pinot Noir"], "dry", "Asian dishes with sweet-salt flavours, such as tandoori chicken or Peking duck", "Sweet-salt flavour combinations and texture work well with Pinot across many Asian cuisines", "fiery heat burns out the wine", 167],
+  ["Spicy food", ["Zinfandel / Primitivo"], "dry", "strongly flavoured Mexican, Indian, Pakistani and North African dishes", "Zinfandel suits strong-flavoured foods from these cuisines", "a hearty Zin may overwhelm the more delicate dishes, and fiery heat can be painful (p. 208)", 207]
+];
+const DARING_STYLE = { any: () => true, dry: (c) => c.dry && !c.sparkling && !c.rosé, offdry: (c) => c.offdry,
+  soft: (c) => c.dry && c.body !== "full" && c.tannin !== "firm", newworld: (c) => c.dry && c.newWorld, sweet: (c) => c.sweetish,
+  sparkling: (c) => c.sparkling, rose: (c) => c.rosé || c.rose };
+const bookRules = (list, book) => list.map(([food, grapes, style, dish, why, warn, page]) => ({ food, when: (c) => (!grapes.length || c.has(grapes)) && DARING_STYLE[style](c),
+  dish: () => dish, why, warn, src: `Evan Goldstein, ${book}, p. ${page}` }));
+ADV_RULES.push(...bookRules(DARING, "Daring Pairings"), ...bookRules(PERFECT, "Perfect Pairings"));
 function advContext(w) {
-  const s = wineStyle(w), gs = grapesOf(w).filter((g) => grapeFits(w, g)), sweet = s.sweet.v, t = w.type;
+  const s = wineStyle(w), sweet = s.sweet.v, t = w.type;
+  let gs = grapesOf(w).filter((g) => grapeFits(w, g));
+  if (!gs.length && w.kind === "cellar") gs = sommKeys(w); // a blend named by CellarTracker, such as Red Bordeaux Blend
   const name = fold([w.name, w.region_or_grape].filter(Boolean).join(" "));
   return {
-    body: s.body.v, tannin: s.tannin.v, abv: w.abv || 0, sweetish: sweet === "sweet" || sweet === "medium-sweet", dry: sweet !== "sweet" && sweet !== "medium-sweet",
+    body: s.body.v, tannin: s.tannin.v, abv: w.abv || 0, sweetish: sweet === "sweet" || sweet === "medium-sweet", offdry: sweet === "off-dry" || sweet === "medium-sweet", newWorld: NEW_WORLD.has(w.country), dry: sweet !== "sweet" && sweet !== "medium-sweet",
     red: t === "Red", white: t === "White", rosé: t === "Rosé", sparkling: t === "Sparkling", fortified: t === "Fortified",
     rose: /\bros(e|é)\b/.test(name), tannic: gs.some((g) => TANNIC_GRAPES.includes(g)),
     has: (list) => gs.some((g) => list.includes(g)), pick: (map) => { const g = gs.find((x) => map[x]); return g ? map[g] : null; },
@@ -916,6 +1118,11 @@ function advAdvice(w, rule) {
   const c = advContext(w);
   const dish = ruleDish(w, rule.food) || rule.dish(c);
   return `${pairSentence(w, rule.food, dish)} ${rule.why}${rule.warn ? `; ${rule.warn}` : ""}. (${rule.src})`;
+}
+// Every adventurous idea for a wine, where boldFoodsOf keeps one per food.
+function advIdeasOf(w) {
+  const c = advContext(w), classic = foodsOf(w);
+  return ADV_RULES.filter((rule) => !classic.includes(rule.food) && !(sweetOnly(w, rule.food) && rule.food !== "Dessert") && rule.when(c) && rule.dish(c));
 }
 function boldFoodsOf(w) {
   const k = `${ratingsVer}|${ratedNamesVer}|${storeListsKey()}`;
@@ -1802,9 +2009,9 @@ function pairingsFoldBody(w) {
     return `<li><span class="food-star tier-${t}">${STARS(t)}</span> <strong>${esc(f)}:</strong> ${esc(capFirst(dish))}${fact ? `; ${esc(fact)}` : ""}.` +
       (b ? ` <span class="pair-fold-book">Dornenburg & Page also list ${esc(b.list.map((x) => x.d).join(", "))}.</span>` : "") + `</li>`;
   }).join("")}</ul><p class="quick-src">★★★ the go-to · ★★ a common match · ★ pairs, but less often chosen (Dornenburg & Page's pairing guide).</p>`);
-  const adv = boldFoodsOf(w);
-  if (adv.length) parts.push(`<h4>Adventurous pairings</h4><ul class="pair-fold-list">${adv.map((x) =>
-    `<li>🍷 <strong>${esc(x.food)}:</strong> ${esc(capFirst(x.rule.dish(advContext(w)) || ""))}. ${esc(x.rule.why)}${x.rule.warn ? `; ${esc(x.rule.warn)}` : ""}. <span class="quick-src">(${esc(x.rule.src)})</span></li>`).join("")}</ul>`);
+  const adv = advIdeasOf(w), ctx = advContext(w);
+  if (adv.length) parts.push(`<h4>Adventurous pairings</h4><ul class="pair-fold-list">${adv.slice(0, 8).map((rule) =>
+    `<li>🍷 <strong>${esc(rule.food)}:</strong> ${esc(capFirst(rule.dish(ctx) || ""))}. ${esc(rule.why)}${rule.warn ? `; ${esc(rule.warn)}` : ""}. <span class="quick-src">(${esc(rule.src)})</span></li>`).join("")}</ul>`);
   if (!classic.length && !adv.length && !pick && !note) parts.push(`<p>Not enough is known about this wine's style to suggest food. Claude's quick score or research would add it.</p>`);
   return parts.join("");
 }
@@ -1812,7 +2019,7 @@ document.addEventListener("toggle", (e) => { // fill a pairings fold the first t
   const d = e.target;
   if (!d.matches?.("details.pair-fold") || !d.open) return;
   const body = d.querySelector(".pair-fold-body");
-  if (body && !body.dataset.done) { body.innerHTML = pairingsFoldBody(findWine(d.dataset.pairFold) || shopping.find((x) => x.id === d.dataset.pairFold) || {}); body.dataset.done = "1"; }
+  if (body && !body.dataset.done) { body.innerHTML = pairingsFoldBody(findWine(d.dataset.pairFold) || shopping.find((x) => x.id === d.dataset.pairFold) || {}); body.dataset.done = "1"; loadSomm().then(() => body.insertAdjacentHTML("beforeend", cardRecipesHtml(findWine(d.dataset.pairFold) || shopping.find((x) => x.id === d.dataset.pairFold) || {}))); }
 }, true);
 
 // ---- Comparison List: wines to compare, kept in this browser -------------------------------

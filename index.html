@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-11-06.6">
+<link rel="stylesheet" href="app.css?v=2026-11-06.36">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -413,11 +413,12 @@
     <h3>Master Sommelier: wine and food</h3>
     <p>Press <strong>Sommelier</strong> (black and gold) at the top. It matches wine and food from six pairing books: Evan Goldstein's <em>Perfect Pairings</em> and <em>Daring Pairings</em>, Sid Goldstein's <em>The Wine Lover's Cookbook</em>, Dornenburg &amp; Page's <em>What to Drink with What You Eat</em>, Robert Harrington's <em>Food and Wine Pairing</em> and <em>The Food &amp; Wine Guide to Perfect Pairings</em>. Every suggestion says which book it's from, with the page. Recipes are given by title and page: the recipes themselves are in the books. First tick where you're buying under <strong>Buying from</strong> (the LCBO shows there once it's unlocked). Then choose one of three ways in:</p>
     <ul>
-      <li><strong>🍷 I have the wine.</strong> Type or paste a wine's name (or just its grape, such as Saperavi) and tap the wine when it's found, or tap <strong>Pair “…” as typed</strong>. Or choose a <strong>country</strong> (for example Georgia, or Portugal up to $25) to see its wines grouped by grape, each with its dishes and its bottles. You get the main dishes by what's on the plate (beef, lamb, pork, chicken, fish…), what the books warn against, cheeses, desserts and recipes.</li>
+      <li><strong>🍷 I have a bottle.</strong> Pick a wine from a ticked cellar, type or paste a name (or just a grape, such as Saperavi), or choose a <strong>country</strong> to see its wines grouped by grape. Then <strong>What have you got?</strong> asks what you're cooking: tap a food (★ is a classic match, ⚡ an adventurous one) or type what's in the fridge, and you get that wine with that food, with every recipe. <strong>More about this wine and its pairings</strong> holds the rest.</li>
       <li><strong>⚖️ Wines on my Comparison List.</strong> The wines on your Comparison List, with country, price, store and grape. Tick some and press <strong>Pair the ticked wines</strong>, or <strong>Build the menu</strong> to send each bottle to the course it suits best.</li>
-      <li><strong>🍖 I'm cooking…</strong> Tap what's on the plate (pork, lamb, fish…), and if you like type the dish (“pork tenderloin with apples”). Narrow by country, colour and price if you want. You get the grapes the books pour with it, the recipes, and real bottles you can buy, best match first. <strong>See all in Find wines</strong> opens the full list there.</li>
-      <li><strong>🧀 Build me a menu.</strong> Choose a country (for example Moldova), how many wines, the courses (starter, main, cheese, dessert) and, if you like, the main course. It picks a bottle from that country for each course, says what to serve, and lists recipes. If the country has no dessert wine in the stores, it suggests one from elsewhere and says so. <strong>Ask Claude to polish this menu</strong> sends the menu to Claude for dishes and serving tips; <strong>Add all to the Comparison List</strong> keeps the bottles.</li>
+      <li><strong>🍖 I have some food.</strong> Tap what's on the plate and choose how adventurous to be. With a cellar ticked, its wines appear at once in a table, what to open first at the top: click a heading to sort, or a wine to open it on that food. With a store ticked, you also get real bottles to buy, and <strong>See all in Find wines</strong> opens the full list.</li>
+      <li><strong>🧀 Plan a dinner.</strong> Leave the country on Any to choose from everything ticked, or choose one (for example Moldova). Say how many wines, which courses and, if you like, the main course. It picks a bottle for each course, says what to serve, and gives a recipe with <strong>Show all</strong>. <strong>Print this menu</strong> prints it; <strong>Ask Claude to polish this menu</strong> sends it to Claude for dishes and serving tips.</li>
     </ul>
+    <p><strong>In our cellars.</strong> Step 1 says where the bottles are: tick cellars and stores, and this computer remembers them. Ticking a cellar adds a <strong>Pick from the cellar</strong> tab: All the wines, Drink first, At their peak, The treasures, Old and wise, Light and easy, Big and bold, A touch of sweetness and Something adventurous, each a table you can sort and narrow, plus <strong>Surprise me</strong>. The tags 🔴 Drink first, 🟠 Drink soon, 🟢 Ready and ⏳ Not yet go by the owner's own drinking dates.</p>
     <p><strong>Other wines for this dish.</strong> Open any recipe and, under the method, you'll find the bottles in the stores ticked that carry the grape the book pours with it, then bottles of grapes of the same style (marked as Claude's judgement, not the books'). Choose a country or a top price to narrow them; best rated first.</p>
     <p>The matches are a guide from the books, not a tasting: a wine's grape decides most of it. Blends and local grapes the books don't name are matched by the wine's style (body, tannin, sweetness).</p>
     <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
@@ -651,24 +652,33 @@
 <main id="view-somm" hidden>
   <section class="somm-box" id="somm" aria-labelledby="somm-h">
     <h3 id="somm-h"><svg class="somm-icon" aria-hidden="true"><use href="#i-somm"/></svg> Master Sommelier</h3>
-    <p class="somm-intro">Wine and food matched from six pairing books: what to cook with a wine, which wine to pour with a dish, or a whole menu, with the books' recipes by page. Choose how you'd like to start:</p>
-    <div class="somm-tabs" role="tablist">
-      <button type="button" role="tab" class="somm-tab" data-somm-tab="wine" aria-selected="true">🍷 I have the wine</button>
-      <button type="button" role="tab" class="somm-tab" data-somm-tab="cmp" aria-selected="false">⚖️ Wines on my Comparison List</button>
-      <button type="button" role="tab" class="somm-tab" data-somm-tab="cook" aria-selected="false">🍖 I'm cooking…</button>
-      <button type="button" role="tab" class="somm-tab" data-somm-tab="menu" aria-selected="false">🧀 Build me a menu</button>
-    </div>
+    <p class="somm-intro">Wine and food matched from six pairing books, with the books' recipes by page.</p>
+    <h4 class="somm-step"><span class="zone-num">1</span> Where are the bottles?</h4>
     <div class="somm-stores" id="somm-stores"></div>
+    <h4 class="somm-step"><span class="zone-num">2</span> What would you like to do?</h4>
+    <div class="somm-tabs" role="tablist">
+      <button type="button" role="tab" class="somm-tab" data-somm-tab="wine" aria-selected="true">🍷 I have a bottle</button>
+      <button type="button" role="tab" class="somm-tab" data-somm-tab="cmp" aria-selected="false">⚖️ Wines on my Comparison List</button>
+      <button type="button" role="tab" class="somm-tab" data-somm-tab="cook" aria-selected="false">🍖 I have some food</button>
+      <button type="button" role="tab" class="somm-tab" data-somm-tab="menu" aria-selected="false">🧀 Plan a dinner</button>
+      <button type="button" role="tab" class="somm-tab" id="somm-tab-pick" data-somm-tab="pick" aria-selected="false" hidden>🍾 Pick from the cellar</button>
+    </div>
+    <p id="somm-choosing" class="somm-choosing"></p>
 
     <div class="somm-pane" id="somm-wine">
+      <p class="somm-next">Start here: pick or type a wine, or choose a country below.</p>
+      <p class="hint" id="somm-cellar-hint" hidden>Tick a cellar above to choose from your own wines.</p>
+      <div class="somm-way" id="somm-cellar-list" hidden></div>
       <div class="somm-way"><h4>Type or paste a wine</h4>
+        <p class="hint">Searches every store list and cellar, whatever is ticked above.</p>
         <input type="text" id="somm-q" autocomplete="off" spellcheck="false" placeholder="for example Teliani Valley Saperavi, or just Saperavi">
         <div id="somm-hits" aria-live="polite"></div></div>
       <div class="somm-way"><h4>All the wines of a country</h4>
         <div class="somm-row"><select id="somm-country" data-somm-country="pick" aria-label="Country"></select>
           <select id="somm-colour" aria-label="Colour"><option value="">Any colour</option><option>Red</option><option>White</option><option>Rosé</option><option>Sparkling</option></select>
           <label class="somm-price">Up to $<input type="number" id="somm-price" min="0" step="1" inputmode="numeric" placeholder="any"></label>
-          <button type="button" class="btn btn-somm" data-somm="pair-country">Show the pairings</button></div></div>
+          <button type="button" class="btn btn-somm" data-somm="pair-country">Show the pairings</button></div>
+        <p id="somm-country-msg" class="status" role="status"></p></div>
     </div>
 
     <div class="somm-pane" id="somm-cmp" hidden>
@@ -688,18 +698,31 @@
 
     <div class="somm-pane" id="somm-cook" hidden>
       <div class="somm-way"><h4>What's on the plate?</h4><div class="somm-foods-pick"><label class="somm-food"><input type="radio" name="somm-food" value="Red meat"> 🥩 Red meat</label><label class="somm-food"><input type="radio" name="somm-food" value="Lamb"> 🐑 Lamb</label><label class="somm-food"><input type="radio" name="somm-food" value="Pork"> 🐖 Pork</label><label class="somm-food"><input type="radio" name="somm-food" value="Chicken"> 🍗 Chicken</label><label class="somm-food"><input type="radio" name="somm-food" value="Fish"> 🐟 Fish</label><label class="somm-food"><input type="radio" name="somm-food" value="Seafood"> 🦐 Seafood</label><label class="somm-food"><input type="radio" name="somm-food" value="Pasta and pizza"> 🍝 Pasta and pizza</label><label class="somm-food"><input type="radio" name="somm-food" value="Cheese"> 🧀 Cheese</label><label class="somm-food"><input type="radio" name="somm-food" value="Spicy food"> 🌶️ Spicy food</label><label class="somm-food"><input type="radio" name="somm-food" value="Dessert"> 🍰 Dessert</label></div>
-        <label class="somm-label" for="somm-dish">The dish, if you know it <span class="hint-inline">(optional, for example “pork tenderloin with apples”)</span></label>
+        <div class="somm-daring" id="somm-daring" hidden role="radiogroup" aria-label="How adventurous?"><span class="somm-label">How adventurous?</span>
+          <label class="somm-food"><input type="radio" name="somm-daring" value="classic" checked> Classic matches</label>
+          <label class="somm-food"><input type="radio" name="somm-daring" value="bold"> ⚡ Classic and adventurous</label>
+          <label class="somm-food"><input type="radio" name="somm-daring" value="only"> ⚡ Adventurous only</label></div>
+        <p class="hint" id="somm-cook-next" hidden>Choose a food and your wines appear below straight away, in a table with what to open first at the top.</p>
+      </div>
+      <div class="somm-way"><h4>Narrow it down <span class="hint-inline">(optional)</span></h4>
+        <label class="somm-label" for="somm-dish">The dish, if you know it <span class="hint-inline">(for example “pork tenderloin with apples”)</span></label>
         <input type="text" id="somm-dish" autocomplete="off" placeholder="optional">
-        <div class="somm-row"><select id="somm-cook-country" data-somm-country="any" aria-label="Country"></select>
-          <select id="somm-cook-colour" aria-label="Colour"><option value="">Any colour</option><option>Red</option><option>White</option><option>Rosé</option><option>Sparkling</option></select>
-          <label class="somm-price">Up to $<input type="number" id="somm-cook-price" min="0" step="1" inputmode="numeric" placeholder="any"></label>
-          <button type="button" class="btn btn-somm" data-somm="cook">Find the wine</button></div>
+        <div class="somm-row"><span id="somm-cook-filters"><select id="somm-cook-country" data-somm-country="any" aria-label="Country"></select>
+          <select id="somm-cook-colour" aria-label="Colour"><option value="">Any colour</option><option>Red</option><option>White</option><option>Rosé</option><option>Sparkling</option></select></span>
+          <label class="somm-price">Up to $<input type="number" id="somm-cook-price" min="0" step="1" inputmode="numeric" placeholder="any"></label></div>
+        <button type="button" class="btn btn-somm btn-big" data-somm="cook">Update my wines</button>
         <p id="somm-cook-msg" class="status" role="status"></p></div>
     </div>
 
+    <div class="somm-pane" id="somm-pick" hidden>
+      <div class="somm-way"><h4>What are you in the mood for?</h4>
+        <p class="hint">Each button lists wines from the cellars ticked above.</p>
+        <div id="somm-moods" class="somm-moods"></div></div>
+    </div>
+
     <div class="somm-pane" id="somm-menu" hidden>
-      <div class="somm-way"><h4>Show off the wines of…</h4>
-        <div class="somm-row"><select id="somm-menu-country" data-somm-country="pick" aria-label="Country"></select>
+      <div class="somm-way"><h4>Plan your dinner</h4>
+        <div class="somm-row"><select id="somm-menu-country" data-somm-country="any" aria-label="Country"></select>
           <label>Wines <select id="somm-nwines"><option>2</option><option selected>3</option><option>4</option></select></label>
           <label class="somm-price">Up to $<input type="number" id="somm-menu-price" min="0" step="1" inputmode="numeric" placeholder="any"> a bottle</label></div>
         <div class="somm-row"><span class="somm-label">Courses:</span>
@@ -709,8 +732,9 @@
           <label class="somm-check"><input type="checkbox" data-somm-course value="dessert" checked> Dessert</label>
           <label>Main course <select id="somm-protein"><option value="">Let the wine decide</option><option value="Red meat">Red meat</option><option value="Lamb">Lamb</option><option value="Pork">Pork</option><option value="Chicken">Chicken</option><option value="Fish">Fish</option><option value="Seafood">Seafood</option><option value="Pasta and pizza">Pasta and pizza</option><option value="Spicy food">Spicy food</option></select></label></div>
         <button type="button" class="btn btn-somm btn-big" data-somm="menu">Build my menu</button>
-        <p class="hint">If the country has no dessert wine in the stores ticked, one from elsewhere is suggested and marked.</p></div>
+        <p class="hint">Leave the country on Any to choose from everything ticked above. If a country has no dessert wine, one from elsewhere is suggested and marked.</p></div>
     </div>
+    <h4 class="somm-step" id="somm-step3" hidden><span class="zone-num">3</span> Your answer <button type="button" class="btn btn-mini" data-somm="start-again">Start again</button></h4>
     <div id="somm-out" class="somm-out" aria-live="polite"></div>
   </section>
 </main>
@@ -825,7 +849,7 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-11-06.6"></script>
-<script src="somm.js?v=2026-11-06.6"></script>
+<script src="app.js?v=2026-11-06.36"></script>
+<script src="somm.js?v=2026-11-06.36"></script>
 </body>
 </html>
