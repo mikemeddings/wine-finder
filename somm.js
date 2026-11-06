@@ -427,7 +427,8 @@ function recipePickHtml(w, food = null, n = 1, at = null, course = "") {
       ${courses.length > 1 ? `<select data-pick-course-choice aria-label="Course"><option value="">Any course</option>${courses.map((c) => `<option value="${esc(c)}"${c === course ? " selected" : ""}>${esc(COURSES[c])}</option>`).join("")}</select>` : ""}</div>` : ""}</div>`;
 }
 function redrawPick(box, at, course, n = +box.dataset.pickN) {
-  const w = findWine(box.dataset.pickWine) || shopping.find((x) => x.id === box.dataset.pickWine);
+  const id = box.dataset.pickWine; // a wine typed by hand is on no list
+  const w = findWine(id) || shopping.find((x) => x.id === id) || (wineNow?.w.id === id ? wineNow.w : null);
   if (w) box.outerHTML = recipePickHtml(w, box.dataset.pickFood || null, n, at, course);
 }
 document.addEventListener("click", (e) => {
@@ -1159,7 +1160,7 @@ const renderSommHits = debounce(() => {
   const hits = [...cellarFindWines().filter((w) => words.every((t) => w._s.includes(t))), ...listHits(q)].slice(0, 6);
   out.innerHTML = (hits.length ? `<p>Found on our lists: tap one to pair it.</p><ul class="somm-hit-list">${hits.map((w) =>
     `<li><button type="button" class="btn somm-hit" data-somm-wine="${esc(w.id)}">${esc(w.name)}${w.vintage && !w.name.includes(String(w.vintage)) ? ` ${esc(String(w.vintage))}` : ""} · ${w.kind === "cellar" ? "" : `${priceHtml(w)} · `}${esc(sourceLabel(w.source))}</button></li>`).join("")}</ul>` : "") +
-    `<button type="button" class="btn btn-somm" data-somm="pair-typed">Pair “${esc(q)}” as typed</button>`;
+    (hits.some((w) => fold(w.name) === fold(q)) ? "" : `<button type="button" class="btn btn-somm" data-somm="pair-typed">Pair “${esc(q)}” as typed</button>`);
 }, 300);
 
 document.addEventListener("click", async (e) => {
