@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-31",
+ "updated": "2026-11-06",
  "ratings": {
   "bcl-220979": {
    "name": "Cabernet Sauvignon - Haras De Pirque Hussonet Reserva",
@@ -3624,6 +3624,208 @@
     "note": "Traditional Merlot-led Saint-Emilion beside Pomerol",
     "date": "2026-10-31",
     "from": "Mike"
+   }
+  },
+  "cellar-c2-251": {
+   "name": "Quinta do Vale Meão Douro 2011",
+   "type": "Red",
+   "claude": {
+    "points": 95,
+    "vintage": 2011,
+    "note": "Wine Spectator 97, Top 100 of 2014",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "grilled lamb, roast beef, aged cheese",
+    "grapes": "Touriga Nacional Touriga Franca",
+    "drinkFrom": 2025,
+    "drinkTo": 2030,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-7": {
+   "name": "Château Batailley 2025",
+   "type": "Red",
+   "claude": {
+    "points": 95,
+    "vintage": 2025,
+    "note": "Galloni 95-97, Anson 96, Martin 93-95",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast lamb, ribeye steak",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2032,
+    "drinkTo": 2058,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-44": {
+   "name": "Domaine de Chevalier 2025",
+   "type": "Red",
+   "claude": {
+    "points": 95,
+    "vintage": 2025,
+    "note": "Galloni 95-97, Martin 94-96, Anson 94",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast duck, lamb chops",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2029,
+    "drinkTo": 2060,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-252": {
+   "name": "Quinta do Vesuvio Porto Vintage 2011",
+   "type": "Fortified",
+   "claude": {
+    "points": 93,
+    "vintage": 2011,
+    "note": "Neal Martin 92-94+",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "sweet",
+    "fruity": true,
+    "finish": "long",
+    "pair": "Stilton, dark chocolate",
+    "grapes": "Touriga Nacional Touriga Franca",
+    "drinkFrom": 2025,
+    "drinkTo": 2055,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-33": {
+   "name": "Château Calon-Ségur 2016",
+   "type": "Red",
+   "claude": {
+    "points": 97,
+    "vintage": 2016,
+    "note": "Anson 98, Suckling 98, Galloni 97, Martin 96",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast lamb, rib of beef",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2028,
+    "drinkTo": 2055,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-23": {
+   "name": "Albert Boxler Riesling Sommerberg Vendange Tardive 2005",
+   "type": "White",
+   "claude": {
+    "points": null,
+    "vintage": 2005,
+    "note": "No reviews found",
+    "date": "2026-11-06",
+    "quick": true,
+    "sweet": "sweet",
+    "pair": "foie gras, blue cheese, fruit tart",
+    "grapes": "Riesling",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-28": {
+   "name": "Château Brane-Cantenac 2025",
+   "type": "Red",
+   "claude": {
+    "points": 96,
+    "vintage": 2025,
+    "note": "Anson 97, Martin 95-97, Kelley 93-96",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast lamb, duck breast",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2032,
+    "drinkTo": 2060,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-184": {
+   "name": "Château Léoville Barton 2016",
+   "type": "Red",
+   "claude": {
+    "points": 96,
+    "vintage": 2016,
+    "note": "Kelley 97, Anson 97, Perrotti-Brown 96, Martin 95",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast lamb, grilled ribeye",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2026,
+    "drinkTo": 2050,
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-187": {
+   "name": "Château Léoville Poyferré 2019",
+   "type": "Red",
+   "claude": {
+    "points": 96,
+    "vintage": 2019,
+    "note": "Martin 97, Kelley 96, Decanter 96, Suckling 95",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "full",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "beef Wellington, roast lamb",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "from": "Claude (researched for Mike)"
+   }
+  },
+  "cellar-c2-25": {
+   "name": "Château Branaire-Ducru 2025",
+   "type": "Red",
+   "claude": {
+    "points": 95,
+    "vintage": 2025,
+    "note": "Suckling 96-97, Galloni 94-96, Anson 93",
+    "date": "2026-11-06",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast veal, lamb chops",
+    "grapes": "Cabernet Sauvignon Merlot",
+    "drinkFrom": 2029,
+    "drinkTo": 2060,
+    "from": "Claude (researched for Mike)"
    }
   }
  }
