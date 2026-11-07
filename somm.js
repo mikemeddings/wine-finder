@@ -672,18 +672,49 @@ function answerControlsHtml() {
     <select data-somm-narrow="country" aria-label="Country">${opt("", "Any country", country)}${list("country").map((v) => opt(v, v, country)).join("")}</select>
     ${food ? "" : `<label class="somm-check"><input type="checkbox" data-somm-narrow="daring"${daring ? " checked" : ""}> ⚡ Only wines with an adventurous pairing</label>`}</div>`;
 }
-const TABLE_WORDS = { name: "name", type: "colour", country: "country", vintage: "vintage", score: "score", match: "best match", drink: "what to drink first", daring: "adventurous first" };
+const TABLE_WORDS = { name: "name", type: "colour", country: "country", vintage: "vintage", score: "score", match: "best match", drink: "what to drink first", daring: "adventurous first", bottles: "bottles" };
 const matchText = (x) => (x.bold ? "⚡" : x.t ? STARS(x.t) : "");
+// Rows are { w, t, bold }. Each row's sort value is worked out once, not at every comparison.
+function tableSort(rows, col, dir, isDaring) {
+  const order = Object.keys(STAGES);
+  const value = (x) => { const w = x.w;
+    switch (col) {
+      case "name": return w.name;
+      case "type": return w.type || "";
+      case "country": return w.country || "";
+      case "vintage": return w.vintage ?? 9999;
+      case "score": return -(bestScore(w) ?? 0);
+      case "match": return x.bold ? 0.5 : -(x.t || 0);
+      case "bottles": return -(w.quantity || 0);
+      case "daring": return isDaring(x) ? 0 : 1;
+      default: return order.indexOf(drinkStage(w)) * 10000 + (w.drink_to ?? 9999);
+    } };
+  return rows.map((x) => [x, value(x), bestScore(x.w) ?? 0]).sort(([a, p, sa], [b, q, sb]) =>
+    ((typeof p === "string" ? p.localeCompare(q) : p - q) * dir) || (b.t || 0) - (a.t || 0) || sb - sa).map(([x]) => x);
+}
+function wineTableHtml(list, cols, col, dir, isDaring, colAttr = "data-somm-col") {
+  const cell = (k, x) => { const w = x.w;
+    switch (k) {
+      case "name": return `<button type="button" class="linklike" data-somm-pop="${esc(w.id)}">${esc(w.name)}</button>`;
+      case "type": return esc(w.type || "");
+      case "country": return esc(w.country || "");
+      case "vintage": return esc(String(w.vintage ?? "NV"));
+      case "score": return bestScore(w) != null ? `<strong>${Math.round(bestScore(w))}</strong>` : "";
+      case "match": return matchText(x);
+      case "bottles": return w.quantity ? String(w.quantity) : "";
+      case "drink": return drinkTag(w);
+      default: return isDaring(x) ? "⚡" : "";
+    } };
+  return `<div class="somm-table-wrap"><table class="somm-table"><thead><tr>${cols.map(([k, label]) => `<th scope="col"><button type="button" class="linklike" ${colAttr}="${k}" aria-pressed="${col === k}">${esc(label)}${col === k ? (dir > 0 ? " ▲" : " ▼") : ""}</button></th>`).join("")}</tr></thead>
+      <tbody>${list.map((x) => `<tr>${cols.map(([k]) => `<td${k === "match" ? ' class="somm-match"' : ""}>${cell(k, x)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
 // Banner, then a table to scan and sort by hand. A wine's name opens it.
 function answerBodyHtml() {
   const { food, what, moodLine, title } = answerArgs, { colour, country, col, dir, daring } = answerOpts;
-  const names = sommCellars().join(" and "), order = Object.keys(STAGES);
+  const names = sommCellars().join(" and ");
   const isDaring = (x) => (food ? !!x.bold : advIdeasOf(x.w).length > 0);
   const rows = answerArgs.rows.filter((x) => (!colour || x.w.type === colour) && (!country || x.w.country === country) && (!daring || isDaring(x)));
-  const value = (x) => { const w = x.w; return { name: w.name, type: w.type, country: w.country, vintage: w.vintage ?? 9999, score: -(bestScore(w) ?? 0), match: x.bold ? 0.5 : -(x.t || 0),
-    drink: order.indexOf(drinkStage(w)) * 10000 + (w.drink_to ?? 9999), daring: isDaring(x) ? 0 : 1 }[col]; };
-  const list = rows.slice().sort((a, b) => { const p = value(a), q = value(b);
-    return ((typeof p === "string" ? p.localeCompare(q) : p - q) * dir) || (b.t || 0) - (a.t || 0) || (bestScore(b.w) ?? 0) - (bestScore(a.w) ?? 0); });
+  const list = tableSort(rows, col, dir, isDaring);
   const n = list.length, daringN = food ? rows.filter((x) => x.bold).length : 0;
   const urgent = rows.filter((x) => ["first", "soon"].includes(drinkStage(x.w))).length;
   const mode = food ? { classic: "Classic matches", bold: "Classic and adventurous", only: "Adventurous only" }[document.querySelector("#somm [name=somm-daring]:checked")?.value] : "";
@@ -695,9 +726,7 @@ function answerBodyHtml() {
       <p>${moodLine ? `${esc(capFirst(`These wines ${moodLine}`))} ` : ""}Sorted by <strong>${esc(sorted)}</strong>. Click a heading to sort by it, or a wine to see its details.</p>
       <p class="hint">Drinking dates are the cellar owner's own.</p>
       ${answerArgs.rows.length > 1 ? answerControlsHtml() : ""}</div>
-    ${n ? `<div class="somm-table-wrap"><table class="somm-table"><thead><tr>${cols.map(([k, label]) => `<th scope="col"><button type="button" class="linklike" data-somm-col="${k}" aria-pressed="${col === k}">${esc(label)}${col === k ? (dir > 0 ? " ▲" : " ▼") : ""}</button></th>`).join("")}</tr></thead>
-      <tbody>${list.map((x) => { const w = x.w; return `<tr><td><button type="button" class="linklike" data-somm-pop="${esc(w.id)}">${esc(w.name)}</button></td><td>${esc(w.type || "")}</td><td>${esc(w.country || "")}</td><td>${esc(String(w.vintage ?? "NV"))}</td>
-        <td>${bestScore(w) != null ? `<strong>${Math.round(bestScore(w))}</strong>` : ""}</td>${food ? `<td class="somm-match">${matchText(x)}</td>` : ""}<td>${drinkTag(w)}</td><td>${isDaring(x) ? "⚡" : ""}</td></tr>`; }).join("")}</tbody></table></div>` : ""}`;
+    ${n ? wineTableHtml(list, cols, col, dir, isDaring) : ""}`;
 }
 document.addEventListener("change", (e) => {
   if (!e.target.matches?.("#somm-cellar-answer [data-somm-narrow]")) return;
@@ -932,7 +961,7 @@ function showWineFood(html, label) {
 function popWine(id) {
   const w = findWine(id);
   if (!w) return;
-  $("somm-pop-body").innerHTML = wineCard(w);
+  $("somm-pop-body").innerHTML = w.kind === "cellar" ? cellarCardMine(w) : wineCard(w);
   const add = $("somm-pop-add"); // the card's own button gives way to this one, at the foot of the window
   add.dataset.pair = id;
   add.setAttribute("aria-pressed", String(inPairs(id)));
@@ -942,12 +971,13 @@ function popWine(id) {
 // buttons that lead elsewhere shouldn't leave the card open over the page
 document.addEventListener("click", (e) => { if (e.target.closest?.('#somm-pop [data-action="mw-where"], #somm-pop [data-notes]')) $("somm-pop").close(); });
 function renderPairBar() {
-  const box = $("somm-pairbar");
-  if (!box) return;
+  for (const box of [$("somm-pairbar"), $("mc-pairbar")]) {
+  if (!box) continue;
   box.hidden = !pairList.length;
   box.innerHTML = pairList.length ? `<strong>🍽 Food pairings: ${pairList.length} of ${PAIR_MAX} wines</strong>
     ${pairList.map((w) => `<span class="chip">${esc(w.name)}<button type="button" class="chip-x" data-pair="${esc(w.id)}" aria-label="Remove ${esc(w.name)}">✕</button></span>`).join(" ")}
     <button type="button" class="btn btn-somm" data-somm="see-pairs">See pairings</button> <button type="button" class="btn btn-mini" data-somm="clear-pairs">Clear</button>` : "";
+  }
 }
 const backToList = () => (answerArgs && !!$("somm-cellar-answer"));
 function openWine(w, fromList) {
@@ -1254,7 +1284,7 @@ function renderSommComparison() {
     ? `<p><strong>${items.length} ${items.length === 1 ? "wine" : "wines"}</strong> on your Comparison List: <button type="button" class="linklike" data-somm="cmp-all">tick all</button> · <button type="button" class="linklike" data-somm="cmp-none">untick all</button></p>
        <ul class="somm-bottles somm-cmp-list">${items.map(row).join("")}</ul>
        <button type="button" class="btn btn-somm btn-big" data-somm="pair-cmp">Pair the ticked wines</button>`
-    : `<p class="hint">Your Comparison List is empty. Press <strong>⚖️ ＋ Add wine to Comparison List</strong> on any wine in Find wines or My wines, then come back here.</p>`;
+    : `<p class="hint">Your Comparison List is empty. Press <strong>⚖️ ＋ Add wine to Comparison List</strong> on any wine in Find wines or My cellars, then come back here.</p>`;
 }
 function sommTab(name) {
   for (const b of document.querySelectorAll("#somm [data-somm-tab]")) b.setAttribute("aria-selected", String(b.dataset.sommTab === name));
@@ -1288,7 +1318,7 @@ const renderSommHits = debounce(() => {
 
 document.addEventListener("click", async (e) => {
   if ($("somm-country-msg") && !e.target.closest?.('[data-somm="pair-country"]')) $("somm-country-msg").textContent = "";
-  const t = e.target.closest("#somm [data-somm], #somm [data-somm-tab], #somm [data-somm-wine], #somm [data-somm-find], [data-somm-recipe], #somm [data-somm-mood], #somm [data-wine-food], #somm [data-somm-col], #somm [data-somm-pop], #somm [data-pairs-food]");
+  const t = e.target.closest("#somm [data-somm], #somm [data-somm-tab], #somm [data-somm-wine], #somm [data-somm-find], [data-somm-recipe], #somm [data-somm-mood], #somm [data-wine-food], #somm [data-somm-col], #somm [data-somm-pop], #somm [data-pairs-food], #somm-pop [data-somm], #mc-pairbar [data-somm], #mc-panel [data-somm-pop]");
   if (!t) return;
   await loadSomm();
   if (t.dataset.sommMood) return showOut(moodHtml(t.dataset.sommMood));
@@ -1340,7 +1370,7 @@ document.addEventListener("click", async (e) => {
   else if (a === "to-step1") $("somm-stores").scrollIntoView({ block: "center" });
   else if (a === "print-out") printOut(t.dataset.printTitle);
   else if (a === "close-pop") $("somm-pop").close();
-  else if (a === "see-pairs") { if ($("somm-pop").open) $("somm-pop").close(); seePairs(); }
+  else if (a === "see-pairs") { if ($("somm-pop").open) $("somm-pop").close(); if ($("view-somm").hidden) showView("somm"); seePairs(); }
   else if (a === "clear-pairs") {
     for (const w of pairList.slice()) togglePair(w.id);
     renderPairBar();

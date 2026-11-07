@@ -961,3 +961,46 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 .somm-local-inline { margin: 0.5rem 0; padding: 0.4rem 0.8rem; background: #f3f7fc; border-radius: 0.5rem; }
 .somm-local-inline h4 { margin-top: 0; }
 .somm-course > span { display: block; margin-top: 0.4rem; }
+
+/* My cellars */
+.mc-boxes { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.8rem; margin-bottom: 0.8rem; }
+.mc-box { --tone: #8a5a14; --tone-tint: #f6ead0; display: flex; flex-direction: column; gap: 0.15rem; text-align: left; font: inherit; color: var(--text); background: #fff; border: 3px solid var(--tone); border-left-width: 0.7rem; border-radius: 0.75rem; padding: 0.7rem 1rem; cursor: pointer; }
+.mc-box.cellar-c2 { --tone: #1d4f9c; --tone-tint: #dce8fb; }
+.mc-box-hand { --tone: var(--plum); --tone-tint: var(--plum-tint); }
+.mc-box:hover, .mc-box[aria-pressed="true"] { background: var(--tone-tint); }
+.mc-box[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--tone); }
+.mc-box-name { font-size: 1.4rem; font-weight: 700; color: var(--tone); }
+.mc-box-n { font-size: 1.15rem; font-weight: 700; }
+.mc-search { display: block; margin-bottom: 0.8rem; }
+.mc-glance, .mw-tools { background: var(--panel); border: 2px solid #e2d3bc; border-radius: 0.75rem; padding: 0.6rem 1rem; margin-bottom: 1rem; }
+.mc-glance > summary, .mw-tools > summary { cursor: pointer; font-size: 1.3rem; font-weight: 700; color: var(--wine); min-height: 2.4rem; }
+.mw-tools { margin-top: 1.5rem; }
+.mw-tools[open] > summary { margin-bottom: 0.6rem; }
+.mc-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 0.6rem; margin-bottom: 0.7rem; }
+.mc-tile { display: flex; align-items: baseline; gap: 0.5rem; font: inherit; text-align: left; color: var(--text); background: #fff; border: 2px solid var(--line); border-radius: 0.5rem; padding: 0.4rem 0.7rem; cursor: pointer; }
+.mc-tile-n { font-size: 1.8rem; font-weight: 700; color: var(--wine); }
+.mc-tile:disabled { cursor: default; }
+.mc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 0.7rem; }
+.mc-card { background: #fff; border: 1px solid var(--line); border-radius: 0.5rem; padding: 0.5rem 0.7rem; min-width: 0; }
+.mc-card-wide { grid-column: 1 / -1; }
+.mc-card h4 { margin: 0 0 0.3rem; color: var(--wine); font-size: 1.15rem; }
+.mc-card .hint { margin: 0 0 0.3rem; }
+.mc-bar { display: grid; grid-template-columns: minmax(0, 11rem) 1fr 2.6rem; align-items: center; gap: 0.5rem; width: 100%; font: inherit; color: var(--text); text-align: left; background: none; border: 0; border-radius: 0.25rem; padding: 0.2rem; cursor: pointer; }
+.mc-bar-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mc-bar-track { display: block; height: 0.8rem; }
+.mc-bar-fill { display: block; height: 100%; background: var(--wine); border-radius: 0 4px 4px 0; }
+.mc-bar-n { text-align: right; font-weight: 700; }
+.mc-bar:hover, .mc-tile:hover:enabled, .mc-col:hover:enabled, .mc-bar[aria-pressed="true"], .mc-tile[aria-pressed="true"], .mc-col[aria-pressed="true"] { background: var(--wine-tint); }
+.mc-tile[aria-pressed="true"] { border-color: var(--wine); }
+.mc-cols { display: grid; gap: 2px; height: 10rem; }
+.mc-col { position: relative; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; height: 100%; min-width: 0; font: inherit; color: var(--text); background: none; border: 0; padding: 1.5rem 0 1.5rem; cursor: pointer; }
+.mc-col:disabled { cursor: default; }
+.mc-col-fill { display: block; background: var(--wine); border-radius: 4px 4px 0 0; }
+.mc-col-n { position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-weight: 700; font-size: 1rem; }
+.mc-col-lab { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 0.95rem; }
+.mc-best { margin: 0; padding: 0; list-style: none; }
+.mc-best li { padding: 0.15rem 0; }
+.mc-moods { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.4rem 0; }
+.btn-mood[aria-pressed="true"] { background: var(--plum); border-color: var(--plum); color: #fff; }
+.mc-food { margin: 0.5rem 0 0.2rem; }
+#mc-pairbar { margin-bottom: 0.8rem; }

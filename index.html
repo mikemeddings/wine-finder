@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-11-06.48">
+<link rel="stylesheet" href="app.css?v=2026-11-07.1">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -28,7 +28,7 @@
   <h1>Basil's Wine Finder</h1>
   <nav class="views" aria-label="Pages">
     <button type="button" class="nav-btn view-btn" data-view="find" aria-pressed="true"><svg><use href="#i-glass"/></svg><span>Find wines</span></button>
-    <button type="button" class="nav-btn view-btn" data-view="mywines" aria-pressed="false"><svg><use href="#i-rack"/></svg><span>My wines</span></button>
+    <button type="button" class="nav-btn view-btn" data-view="mywines" aria-pressed="false"><svg><use href="#i-rack"/></svg><span>My cellars</span></button>
     <button type="button" class="nav-btn view-btn" data-view="shortlist" aria-pressed="false" aria-label="Short List for Claude"><svg><use href="#i-list"/></svg><span>Short List</span><span class="nav-badge sl-count">0</span></button>
     <button type="button" class="nav-btn view-btn" data-view="shopping" aria-pressed="false" aria-label="Comparison List"><svg><use href="#i-cart"/></svg><span>Comparison List</span><span class="nav-badge shop-count">0</span></button>
     <button type="button" class="nav-btn view-btn" data-view="research" aria-pressed="false" data-focus="sl-add-q"><svg><use href="#i-search"/></svg><span>Research</span></button>
@@ -196,9 +196,42 @@
 </main>
 
 <main id="view-mywines" hidden>
-  <h2>My wines</h2>
-  <p class="sl-keep">Wines from family cellars, and wines you add yourself. They are kept on this computer only,
-    so press “Save a backup file” now and then.</p>
+  <h2>My cellars</h2>
+  <p class="sl-keep">Choose a cellar to see what's in it.</p>
+  <div id="mc-boxes" class="mc-boxes"></div>
+  <label for="mw-q" class="mw-label mc-search" id="mw-q-label">Search all the cellars<input type="search" id="mw-q" autocomplete="off"></label>
+  <div id="mc-pairbar" class="somm-pairbar" hidden></div>
+
+  <section id="mc-panel" aria-label="The cellar that's open">
+    <details id="mc-glance" class="mc-glance" open hidden><summary>At a glance</summary>
+      <p class="hint">Click anything here to list just those wines.</p>
+      <div id="mc-glance-body"></div></details>
+    <div id="mc-answer"></div>
+  </section>
+
+  <section id="mw-hand" aria-labelledby="mw-list-h" hidden>
+    <div class="results-head">
+      <h3 id="mw-list-h" class="mw-count">No wines yet</h3>
+      <button type="button" class="btn" id="mw-add-open">＋ Add a wine by hand</button>
+      <label class="sort">Sort by
+        <select id="mw-sort">
+          <option value="name">Name A to Z</option>
+          <option value="my">Family score: highest first</option>
+          <option value="ct">CellarTracker community score: highest first</option>
+          <option value="vintage">Vintage: oldest first</option>
+          <option value="drink">Drink by: soonest first</option>
+        </select>
+      </label>
+    </div>
+    <ul id="mw-list" class="mw-list"></ul>
+    <button type="button" class="btn more" id="mw-more" hidden>Show more</button>
+  </section>
+
+  <details id="mw-tools" class="mw-tools"><summary>Tools: import a cellar, add a wine, ratings, backup<span id="mw-tools-n"></span></summary>
+  <section class="mw-box" id="mw-cellar-tools" aria-label="Cellar names and sharing" hidden>
+    <h3>Cellar names and sharing</h3>
+    <div id="mw-owners" class="mw-owners"></div>
+  </section>
 
   <section class="mw-box inbox-box" id="inbox-box" aria-labelledby="inbox-h" hidden>
     <h3 id="inbox-h">Family inbox</h3>
@@ -281,37 +314,16 @@
     </form>
   </section>
 
-  <section aria-labelledby="mw-list-h">
-    <div class="results-head">
-      <h3 id="mw-list-h" class="mw-count">No wines yet</h3>
-      <label class="sort">Sort by
-        <select id="mw-sort">
-          <option value="name">Name A to Z</option>
-          <option value="my">Family score: highest first</option>
-          <option value="ct">CellarTracker community score: highest first</option>
-          <option value="vintage">Vintage: oldest first</option>
-          <option value="drink">Drink by: soonest first</option>
-        </select>
-      </label>
-    </div>
-    <div class="mw-filters">
-      <label for="mw-q" class="mw-label">Search my wines<input type="search" id="mw-q" autocomplete="off"></label>
-      <div id="mw-owners" class="mw-owners"></div>
-    </div>
-    <ul id="mw-list" class="mw-list"></ul>
-    <button type="button" class="btn more" id="mw-more" hidden>Show more</button>
-  </section>
-
-
   <section class="mw-box" aria-labelledby="mw-backup-h">
     <h3 id="mw-backup-h">Backup</h3>
-    <p>“My wines” live only in this browser. A backup file keeps them safe, or moves them to another computer.</p>
+    <p>“My cellars” live only in this browser. A backup file keeps them safe, or moves them to another computer.</p>
     <div class="sl-actions">
       <button type="button" class="btn" id="mw-backup">Save a backup file</button>
       <label class="btn">Restore from a backup file…<input type="file" id="mw-restore" accept=".json,application/json" hidden></label>
     </div>
     <p id="mw-status" class="status" role="status"></p>
   </section>
+  </details>
 </main>
 
 <main id="view-help" class="help" hidden>
@@ -335,7 +347,7 @@
       <li><a href="#help-cellars">Family cellars</a></li>
       <li><a href="#help-grapes">Grapes explained</a></li>
       <li><a href="#help-ratings">Ratings explained</a></li>
-      <li><a href="#help-mywines">My wines</a></li>
+      <li><a href="#help-mywines">My cellars</a></li>
       <li class="help-keeper"><a href="#help-keeper">For the website keeper</a></li>
       <li><a href="#help-faq">Questions and fixes</a></li>
     </ol>
@@ -346,7 +358,7 @@
     <p>Each button has its own colour, and the page you're on has a white ring around its button.</p>
     <ul>
       <li><strong>Find wines</strong> (gold): every wine in the stores and the family cellars, to narrow down and sort.</li>
-      <li><strong>My wines</strong> (orange): your own cellar and ratings.</li>
+      <li><strong>My cellars</strong> (orange): your own cellar and ratings.</li>
       <li><strong>Short List</strong> (green): wines you've picked for Claude to research. The number is how many are on it.</li>
       <li><strong>Comparison List</strong> (blue, with the scales): wines you're weighing up to buy, side by side.</li>
       <li><strong>Research</strong> (purple): look a wine up, add one by name, and the <strong>Master Sommelier</strong> for food and wine.</li>
@@ -499,12 +511,15 @@
   </section>
 
   <section id="help-mywines" class="help-topic">
-    <h3>My wines</h3>
+    <h3>My cellars</h3>
     <ul>
       <li><strong>Import a cellar from CellarTracker</strong>: get the file from CellarTracker (the steps are on the page), type whose cellar it is, and choose the file. To share your cellar with the family, just email that file to the website keeper.</li>
       <li><strong>Add a wine by hand</strong>: for a wine from an importer, a private store or someone's cellar.</li>
-      <li>The list appears when you press a cellar's button, or search. Sort it by name, score, vintage or drink-by date.</li>
-      <li><strong>Backup</strong>: My wines and your ratings live in this browser only. “Save a backup file” now and then; “Restore” moves them to another computer.</li>
+      <li><strong>Choose a cellar</strong>: press its box at the top of the page. This computer remembers the one you opened last.</li>
+      <li><strong>At a glance</strong>: what needs drinking, then colours, countries, grapes, vintages and when drinking windows end. Click any of them to list just those wines. Numbers count wines, not bottles.</li>
+      <li><strong>The table</strong>: click a heading to sort by it, or a wine to see its details and add it to your Food Pairings list. “Find food for these wines” carries the wines on screen to the Sommelier.</li>
+      <li><strong>Tools</strong>, at the foot of the page, holds importing, adding a wine by hand, your own ratings and backups.</li>
+      <li><strong>Backup</strong>: My cellars and your ratings live in this browser only. “Save a backup file” now and then; “Restore” moves them to another computer.</li>
     </ul>
     <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
   </section>
@@ -595,7 +610,7 @@
     <h2>Research wines with Claude</h2>
     <p>Claude looks up each wine's reviews, background and history, suggests food to go with it, and gives its own score out of 100.</p>
     <ol class="research-steps">
-      <li><strong>Add wines.</strong> Type a name in the box below, or press “＋ Add to Short List for Claude Research” on any wine in Find wines or My wines.</li>
+      <li><strong>Add wines.</strong> Type a name in the box below, or press “＋ Add to Short List for Claude Research” on any wine in Find wines or My cellars.</li>
       <li><strong>Ask Claude.</strong> Claude opens with the question already written.</li>
       <li><strong>Save the research.</strong> When Claude finishes, press Claude's copy button under its answer (two folders on top of each other, on the far left), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom. The ratings and Claude's write-up are kept, and shared with the family.</li>
     </ol>
@@ -625,7 +640,7 @@
     <h2>Research wines with Claude</h2>
     <p>Claude looks up each wine's reviews, background and history, suggests food to go with it, and gives its own score out of 100.</p>
     <ol class="research-steps">
-      <li><strong>Add wines.</strong> Press “＋ Add to Short List for Claude Research” on any wine in Find wines or My wines, or type a name on the <button type="button" class="linklike" data-view="research">Research</button> page.</li>
+      <li><strong>Add wines.</strong> Press “＋ Add to Short List for Claude Research” on any wine in Find wines or My cellars, or type a name on the <button type="button" class="linklike" data-view="research">Research</button> page.</li>
       <li><strong>Ask Claude.</strong> Claude opens with the question already written.</li>
       <li><strong>Save the research.</strong> When Claude finishes, press Claude's copy button under its answer (two folders on top of each other, on the far left), then click <strong>💾 Save these ratings to my Wine Finder</strong> at the very bottom. The ratings and Claude's write-up are kept, and shared with the family.</li>
     </ol>
@@ -666,12 +681,6 @@
     </div>
     <p id="somm-choosing" class="somm-choosing"></p>
     <div id="somm-pairbar" class="somm-pairbar" hidden></div>
-    <dialog id="somm-pop" class="dialog dialog-wide" aria-label="Wine details">
-      <div id="somm-pop-body"></div>
-      <p class="dialog-actions"><button type="button" class="btn btn-pair" id="somm-pop-add">🍽 Add to Food Pairings list</button>
-        <button type="button" class="btn" data-somm="see-pairs">See my Food Pairings list</button>
-        <button type="button" class="btn" data-somm="close-pop">Close</button></p>
-    </dialog>
 
     <div class="somm-pane" id="somm-wine">
       <p class="somm-next">Start here: pick or type a wine, or choose a country below.</p>
@@ -855,9 +864,17 @@
   </div>
 </dialog>
 
+<dialog id="somm-pop" class="dialog dialog-wide" aria-label="Wine details">
+  <div id="somm-pop-body"></div>
+  <p class="dialog-actions"><button type="button" class="btn btn-pair" id="somm-pop-add">🍽 Add to Food Pairings list</button>
+    <button type="button" class="btn" data-somm="see-pairs">See my Food Pairings list</button>
+    <button type="button" class="btn" data-somm="close-pop">Close</button></p>
+</dialog>
+
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-11-06.48"></script>
-<script src="somm.js?v=2026-11-06.48"></script>
+<script src="app.js?v=2026-11-07.1"></script>
+<script src="somm.js?v=2026-11-07.1"></script>
+<script src="cellar.js?v=2026-11-07.1"></script>
 </body>
 </html>

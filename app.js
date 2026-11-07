@@ -2111,7 +2111,7 @@ function renderShopping() {
   const totals = [...byStore].map(([k, v]) => `${v.n} at ${esc(k)}: <strong>${money(v.sum)}</strong>`).join(" · ");
   $("shop-summary").innerHTML = items.length
     ? `<strong>${items.length} ${items.length === 1 ? "wine" : "wines"}</strong> on your Comparison List${totals ? `. ${totals} (one bottle of each)` : ""}.`
-    : `Your Comparison List is empty. Press <strong>⚖️ ＋ Add wine to Comparison List</strong> on any wine in Find wines or My wines.`;
+    : `Your Comparison List is empty. Press <strong>⚖️ ＋ Add wine to Comparison List</strong> on any wine in Find wines or My cellars.`;
   $("shop-clear").hidden = !items.length;
   $("shop-list").innerHTML = items.map((w, i) => wineCard(w)
     .replace('<h3 class="wine-name">', `<h3 class="wine-name"><span class="wine-seq">${i + 1} of ${items.length}</span>`)
@@ -2498,7 +2498,7 @@ function closeClaudeSteps() {
   $("ask-claude").hidden = $("ask-claude-rank").hidden = false;
 }
 
-// ---- My wines (CellarTracker cellars + wines added by hand) ---------------------------
+// ---- My cellars (CellarTracker cellars + wines added by hand) ---------------------------
 // Kept in this browser only (localStorage), with a backup file. Nothing is published.
 // CellarTracker lets people choose their export columns, so columns are recognised by
 // name; the import shows a preview of what it found before anything is saved.
@@ -2530,7 +2530,7 @@ const MW_PAGE = 50;
 
 let myWines = { cellars: {}, manual: [] };
 let mwPending = null; // parsed import awaiting "Save"
-const mwView = { q: "", owner: "all", sort: "name", shown: MW_PAGE, open: false }; // open: the wine list is showing
+const mwView = { q: "", owner: "", sort: "name", shown: MW_PAGE }; // owner: the cellar that's open, or "manual", or "all" for none
 
 function loadMyWines() {
   const saved = storeGet(STORE.myWines, null);
@@ -2754,7 +2754,7 @@ function saveManual(e) {
   if (i >= 0) myWines.manual[i] = w; else myWines.manual.push(w);
   saveMyWines();
   mwStatus(i >= 0 ? `Updated “${name}”.` : `Added “${name}”.`);
-  if (i < 0) mwView.owner = "all"; // show the new wine, whatever list was being viewed
+  if (i < 0) mwView.owner = "manual"; // show the new wine, whatever list was being viewed
   clearManualForm();
   renderMyWines();
 }
@@ -2771,6 +2771,7 @@ function editManual(id) {
   $("mw-notes").value = w.notes ?? "";
   $("mw-save").textContent = "Save changes";
   $("mw-cancel").hidden = false;
+  openTools();
   $("mw-add-h").scrollIntoView({ block: "start" });
   $("mw-name").focus({ preventScroll: true });
 }
@@ -2784,7 +2785,7 @@ function clearManualForm() {
 
 function deleteManual(id) {
   const w = myWines.manual.find((x) => x.id === id);
-  if (!w || !window.confirm(`Delete “${w.name}” from My wines?`)) return;
+  if (!w || !window.confirm(`Delete “${w.name}” from My cellars?`)) return;
   myWines.manual = myWines.manual.filter((x) => x.id !== id);
   saveMyWines();
   renderMyWines();
@@ -2798,23 +2799,21 @@ const MW_SORTS = {
   drink: (a, b) => (a.drink_to ?? 9999) - (b.drink_to ?? 9999) || a.name.localeCompare(b.name),
 };
 
+// The same card as Find wines, with what only this computer knows.
+function cellarCardMine(w) {
+  const mine = [w.quantity ? `${w.quantity} ${w.quantity === 1 ? "bottle" : "bottles"}` : "", w.location, w.notes].filter(Boolean).map(esc).join(" · ");
+  return cellarCard(w).replace('<div class="wine-actions">', `${mine ? `<p class="wine-detail hint">${mine}</p>` : ""}<div class="wine-actions">`);
+}
 function mwRow(w) {
-  if (w.kind === "cellar") { // the same card as Find wines, with what only this computer knows
-    const mine = [w.quantity ? `${w.quantity} ${w.quantity === 1 ? "bottle" : "bottles"}` : "", w.location, w.notes].filter(Boolean).map(esc).join(" · ");
-    return `<li class="mw-card">${cellarCard(w).replace('<div class="wine-actions">', `${mine ? `<p class="wine-detail hint">${mine}</p>` : ""}<div class="wine-actions">`)}</li>`;
-  }
   const on = shortlist.some((s) => s.id === w.id);
   const facts = [w.country, w.region_or_grape, w.varietal, w.type !== "Other" ? w.type : null,
     w.size_ml && w.size_ml !== 750 ? sizeText(w) : null].filter(Boolean).map(esc).join(" · ");
   const scores = [w.my_score != null ? `${esc(w.owner)}'s score <strong>${w.my_score}</strong>` : null,
     w.ct_score != null ? `CellarTracker community <strong>${+w.ct_score.toFixed(1)}</strong>` : null].filter(Boolean).join(" · ");
   const drink = w.drink_from || w.drink_to ? `Drink ${w.drink_from ?? "now"}–${w.drink_to ?? "?"}` : "";
-  const where = w.kind === "cellar"
-    ? `${esc(w.source)}${w.quantity ? ` · ${w.quantity} ${w.quantity === 1 ? "bottle" : "bottles"}` : ""}${w.location ? ` · ${esc(w.location)}` : ""}`
-    : `${esc(w.source)}${w.price != null ? ` · ${money(w.price)}` : ""}`;
-  const manualButtons = w.kind === "manual"
-    ? `<button type="button" class="btn" data-action="mw-edit" data-id="${esc(w.id)}">Edit</button>
-       <button type="button" class="btn btn-danger" data-action="mw-delete" data-id="${esc(w.id)}">Delete</button>` : "";
+  const where = `${esc(w.source)}${w.price != null ? ` · ${money(w.price)}` : ""}`;
+  const manualButtons = `<button type="button" class="btn" data-action="mw-edit" data-id="${esc(w.id)}">Edit</button>
+       <button type="button" class="btn btn-danger" data-action="mw-delete" data-id="${esc(w.id)}">Delete</button>`;
   const title = w.vintage && !w.name.includes(String(w.vintage)) ? `${w.name} ${w.vintage}` : w.name;
   return `<li class="mw-row">
     <div class="sl-name">${esc(title)}</div>
@@ -2835,41 +2834,29 @@ function mwRow(w) {
 }
 
 function renderMyWines() {
-  const all = allMyWines();
-  const owners = Object.entries(myWines.cellars);
-  const shared = visibleShared();
+  if (!mwView.owner) mwView.owner = storeGet("wf.cellarOpen", "all") || "all"; // the cellar this computer last opened
+  const owners = Object.keys(myWines.cellars), shared = visibleShared();
   const keeper = !!storeGet(STORE.ghKey, "");
-  const chip = (value, label, n) => `<button type="button" class="btn btn-mini" data-action="mw-owner" data-owner="${esc(value)}"
-      aria-pressed="${mwView.owner === value}">${esc(label)} (${n})</button>`;
   const mini = (action, data, label, cls = "") => `<button type="button" class="btn btn-mini ${cls}" data-action="${action}" ${data}>${esc(label)}</button>`;
-  $("mw-owners").innerHTML = all.length ? chip("all", "All", all.length) +
-    owners.map(([o, c]) => chip(o, `${o}'s cellar`, c.wines.length)).join("") +
-    shared.map(([slot, c]) => chip(cellarLabel(slot), `${cellarTitle(slot)} (shared)`, (c.wines || []).length)).join("") +
-    (myWines.manual.length ? chip("manual", "Added by hand", myWines.manual.length) : "") +
-    `<span class="mw-owner-tools">` +
-    (mwView.open ? mini("mw-hide", "", "Hide the wines") : "") +
-    shared.map(([slot]) => mini("mw-name-cellar", `data-slot="${esc(slot)}"`, cellarNames()[slot] ? `Rename ${cellarTitle(slot)}` : `Name ${cellarTitle(slot)}`)).join("") +
-    (keeper ? owners.map(([o]) => mini("mw-share", `data-owner="${esc(o)}"`,
+  const tools = shared.map(([slot]) => mini("mw-name-cellar", `data-slot="${esc(slot)}"`, cellarNames()[slot] ? `Rename ${cellarTitle(slot)}` : `Name ${cellarTitle(slot)}`)).join("") +
+    (keeper ? owners.map((o) => mini("mw-share", `data-owner="${esc(o)}"`,
       slotFor(o) ? `Update the shared copy of ${o}'s cellar` : `Share ${o}'s cellar with the family`, "btn-share")).join("") : "") +
     (keeper ? Object.keys(sharedCellars).map((slot) => mini("mw-unshare", `data-slot="${esc(slot)}"`, `Take ${cellarTitle(slot)} off the website`, "btn-danger")).join("") : "") +
-    owners.map(([o]) => mini("mw-remove", `data-owner="${esc(o)}"`, `Remove my private copy of ${o}'s cellar`, "btn-danger")).join("") +
-    `</span>`
-    : "";
-  const words = fold(mwView.q).split(/\s+/).filter(Boolean);
-  const list = all.filter((w) => {
-    if (mwView.owner === "manual" && w.kind !== "manual") return false;
-    if (mwView.owner !== "all" && mwView.owner !== "manual" && w.owner !== mwView.owner) return false;
-    const s = fold([w.name, w.producer, w.region_or_grape, w.varietal, w.country, w.source].filter(Boolean).join(" "));
-    return words.every((t) => s.includes(t));
-  }).sort(MW_SORTS[mwView.sort]);
-  $("mw-list-h").textContent = all.length ? `${list.length.toLocaleString()} ${list.length === 1 ? "wine" : "wines"}` : "No wines yet";
-  if (all.length && !mwView.open && !mwView.q) { // a cellar can be hundreds of wines: list them only when asked
-    $("mw-list").innerHTML = `<li class="empty">Press a cellar's button above, or search, to see its wines.</li>`;
-    $("mw-more").hidden = true;
-    return;
-  }
+    owners.map((o) => mini("mw-remove", `data-owner="${esc(o)}"`, `Remove my private copy of ${o}'s cellar`, "btn-danger")).join("");
+  $("mw-owners").innerHTML = tools;
+  $("mw-cellar-tools").hidden = !tools;
+  renderCellarBoxes();
+  renderPairBar();
+  if (!allMyWines().length) openTools(); // nothing yet: importing is the place to start
+  const hand = mwView.owner === "manual";
+  $("mc-panel").hidden = hand;
+  $("mw-hand").hidden = !hand;
+  $("mw-q-label").firstChild.textContent = mcOpenCellar() ? `Search ${mcOpenCellar()[1]}` : hand ? "Search the wines added by hand" : "Search all the cellars";
+  if (!hand) return renderCellarPanel();
+  const list = mcSearched(myWines.manual).sort(MW_SORTS[mwView.sort]);
+  $("mw-list-h").textContent = `${list.length.toLocaleString()} ${list.length === 1 ? "wine" : "wines"}`;
   $("mw-list").innerHTML = list.slice(0, mwView.shown).map(mwRow).join("") ||
-    (all.length ? `<li class="empty">No wines match.</li>` : `<li class="empty">Import a cellar or add a wine above.</li>`);
+    `<li class="empty">${myWines.manual.length ? "No wines match." : "No wines added by hand yet."}</li>`;
   $("mw-more").hidden = list.length <= mwView.shown;
   $("mw-more").textContent = `Show more (${(list.length - mwView.shown).toLocaleString()} not shown yet)`;
 }
@@ -2903,7 +2890,7 @@ async function restoreBackup(file) {
     if (!mw || typeof mw.cellars !== "object" || !Array.isArray(mw.manual)) throw new Error("not a backup");
     const n = Object.values(mw.cellars).reduce((k, c) => k + c.wines.length, 0) + mw.manual.length;
     const nr = data.ratings && typeof data.ratings === "object" ? Object.keys(data.ratings).length : 0;
-    if (!window.confirm(`Replace My wines with the ${n} wines${nr ? ` and ${nr} ratings` : ""} in this backup?`)) return;
+    if (!window.confirm(`Replace My cellars with the ${n} wines${nr ? ` and ${nr} ratings` : ""} in this backup?`)) return;
     myWines = { cellars: mw.cellars, manual: mw.manual };
     saveMyWines();
     cellarsChanged();
@@ -2912,7 +2899,7 @@ async function restoreBackup(file) {
     renderMyWines();
     mwStatus(`Restored ${n} wines from the backup.`);
   } catch {
-    mwStatus("That file isn't a My wines backup.");
+    mwStatus("That file isn't a My cellars backup.");
   } finally {
     $("mw-restore").value = "";
   }
@@ -3215,7 +3202,7 @@ async function confirmSavedRatings() {
   refreshRatedViews();
 }
 
-function scrollToFamilyBox() { document.querySelector(".fr-box")?.scrollIntoView({ block: "start" }); }
+function scrollToFamilyBox() { openTools(); document.querySelector(".fr-box")?.scrollIntoView({ block: "start" }); }
 
 // ---- Emailing ratings to the family ----------------------------------------------
 // Anyone can email the ratings on their computer (Claude's and their own) as one link:
@@ -3575,11 +3562,11 @@ function nameCellar(slot) {
   const name = window.prompt(`Whose cellar is ${cellarTitle(slot)}? Type a first name. It's kept on this computer only.`,
     cellarNames()[slot] || "");
   if (name == null) return;
-  const names = cellarNames();
+  const names = cellarNames(), wasOpen = mwView.owner === cellarLabel(slot);
   if (name.trim()) names[slot] = name.trim().slice(0, 30); else delete names[slot];
   storeSet(STORE.cellarNames, names);
   cellarsChanged();
-  mwView.owner = "all";
+  if (wasOpen) { mwView.owner = cellarLabel(slot); storeSet("wf.cellarOpen", mwView.owner); }
   if (!$("view-mywines").hidden) renderMyWines(); else renderResults();
 }
 
@@ -4995,7 +4982,7 @@ function showWriteup(title, meta, text) {
   $("notes-dialog").showModal?.();
 }
 
-// ---- The keeper's inbox (My wines) -------------------------------------------------
+// ---- The keeper's inbox (My cellars) -------------------------------------------------
 let inboxItems = [];
 
 async function loadInbox() {
@@ -5009,6 +4996,8 @@ async function loadInbox() {
     inboxItems = (await inboxCall({ action: "list" })).items || [];
     $("inbox-state").textContent = inboxItems.length
       ? `${inboxItems.length} new from the family, waiting for you to publish.` : "Nothing new from the family.";
+    if (inboxItems.length) openTools();
+    $("mw-tools-n").textContent = inboxItems.length ? `: ${inboxItems.length} new in the family inbox` : "";
     $("inbox-all").hidden = inboxItems.length < 2;
     $("inbox-all").textContent = `Publish all ${inboxItems.length}`;
     $("inbox-list").innerHTML = inboxItems.map((it) => {
@@ -5766,7 +5755,6 @@ function wireEvents() {
     else if (t.id === "inbox-all") inboxPublishAll();
     else if (t.id === "inbox-key-save") saveInboxKey();
     else if (t.id === "stale-reload") location.reload();
-    else if (t.dataset.action === "mw-hide") { mwView.open = false; renderMyWines(); }
     else if (t.id === "fr-email") emailRatings();
     else if (t.id === "sl-email") sendEmail("Wine short list", shortlistText(), setStatus);
     else if (t.dataset.mail) chooseMail(t.dataset.mail);
@@ -5778,7 +5766,7 @@ function wireEvents() {
     else if (t.id === "fr-key-forget") forgetGhKey();
     else if (t.dataset.action === "mw-confirm") confirmImport();
     else if (t.dataset.action === "mw-cancel-import") { mwPending = null; $("mw-preview").hidden = true; $("mw-file").value = ""; }
-    else if (t.dataset.action === "mw-owner") { mwView.owner = t.dataset.owner; mwView.shown = MW_PAGE; mwView.open = true; renderMyWines(); }
+    else if (t.dataset.action === "mw-owner") openCellar(t.dataset.owner);
     else if (t.dataset.action === "mw-remove") removeCellar(t.dataset.owner);
     else if (t.dataset.action === "mw-share") shareCellar(t.dataset.owner);
     else if (t.dataset.action === "mw-unshare") unshareCellar(t.dataset.slot);
