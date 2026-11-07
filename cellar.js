@@ -1,8 +1,8 @@
 // My cellars: a box per cellar, then At a glance and the sortable table for the one that's open.
 // Loaded after app.js and somm.js, in the same global scope. Counts are wines, not bottles.
-const mc = { colour: "", country: "", grape: "", vint: "", ends: "", mood: "all", col: "drink", dir: 1 };
+const mc = { colour: "", country: "", grape: "", region: "", stage: "", score: "", vint: "", ends: "", mood: "all", col: "drink", dir: 1, more: {} };
 let mcTried = false; // somm.json holds the books the ⚡ column and the moods read
-const clearMcFilters = () => Object.assign(mc, { colour: "", country: "", grape: "", vint: "", ends: "", mood: "all" });
+const clearMcFilters = () => Object.assign(mc, { colour: "", country: "", grape: "", region: "", stage: "", score: "", vint: "", ends: "", mood: "all" });
 
 // The cellars on this computer as [value, title, source]; value is what mwView.owner holds.
 function mcCellars() {
@@ -29,66 +29,129 @@ function rangeWords(k, range) {
   if (k === "vint") return a === "" ? `Vintages before ${+b + 1}` : `Vintage ${a}`;
   return a === "" ? `Windows ended before ${+b + 1}` : b === "" ? `Windows ending after ${+a - 1}` : a === b ? `Windows ending ${a}` : `Windows ending ${a} to ${b}`;
 }
+// The cellar files name the appellation; a Grand Cru counts with its region here.
+const regionOf = (w) => { const r = (w.region_or_grape || "").replace(/\s+(Grand Cru|1er Cru)$/, ""); return r === "Unknown" ? "" : r; };
+const SCORE_BANDS = [["95:", "95 and over"], ["90:94", "90 to 94"], ["85:89", "85 to 89"], [":84", "Under 85"], ["none", "Not scored"]];
+const inScoreBand = (w, band) => { const n = bestScore(w); return band === "none" ? n == null : n != null && inRange(Math.round(n), band); };
 function mcPasses(w, skipMood = false) {
   return (skipMood || MOODS[mc.mood].test(w)) && (!mc.colour || w.type === mc.colour) && (!mc.country || w.country === mc.country) &&
-    (!mc.grape || w.varietal === mc.grape) && (!mc.vint || inRange(w.vintage, mc.vint)) && (!mc.ends || inRange(w.drink_to, mc.ends));
+    (!mc.grape || w.varietal === mc.grape) && (!mc.region || regionOf(w) === mc.region) && (!mc.stage || drinkStage(w) === mc.stage) &&
+    (!mc.score || inScoreBand(w, mc.score)) && (!mc.vint || inRange(w.vintage, mc.vint)) && (!mc.ends || inRange(w.drink_to, mc.ends));
 }
-const tally = (wines, get) => { const m = new Map();
-  for (const w of wines) { const v = get(w); if (v && v !== "Country not stated") m.set(v, (m.get(v) || 0) + 1); }
-  return [...m].sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(b[0])); };
+// [value, its wines], biggest first.
+const groupWines = (wines, get) => { const m = new Map();
+  for (const w of wines) { const v = get(w); if (v && v !== "Country not stated") (m.get(v) || m.set(v, []).get(v)).push(w); }
+  return [...m].sort((a, b) => b[1].length - a[1].length || String(a[0]).localeCompare(b[0])); };
 
 // ---- At a glance ----------------------------------------------------------------------
+// Colour means the same on every chart: the wine's colour, or how soon to drink it.
+// Checked for colour-blind separation; every mark also has a number or a label beside it.
+const WINE_TONES = { Red: "#b5203c", White: "#d9a400", "Rosé": "#f07fb3", Sparkling: "#1a7fa8", Dessert: "#e8761a", Fortified: "#9a5a1c" };
+const STAGE_TONES = { first: "#d32f2f", soon: "#f08c00", ready: "#2e9e4f", wait: "#3f74c4" };
+const toneOf = (type) => WINE_TONES[type] || "#6f6a63";
 const wineCount = (n) => `${n.toLocaleString()} ${n === 1 ? "wine" : "wines"}`;
-function barsHtml(title, k, rows) {
-  const top = Math.max(1, ...rows.map((r) => r[1]));
-  return `<div class="mc-card"><h4>${esc(title)}</h4>${rows.map(([v, n]) => `<button type="button" class="mc-bar" data-mc-k="${k}" data-mc-v="${esc(v)}" aria-pressed="${mc[k] === v}" title="${esc(`${v}: ${wineCount(n)}. Click to list them.`)}">
-    <span class="mc-bar-name">${esc(v)}</span><span class="mc-bar-track"><span class="mc-bar-fill" style="width:${Math.max(2, n / top * 100)}%"></span></span><span class="mc-bar-n">${n}</span></button>`).join("")}</div>`;
+function colourParts(wines) {
+  const order = Object.keys(WINE_TONES), at = (t) => { const i = order.indexOf(t); return i < 0 ? 99 : i; };
+  return groupWines(wines, (w) => w.type || "Other").sort((a, b) => at(a[0]) - at(b[0]));
 }
-function columnsHtml(title, note, k, bins) {
-  const top = Math.max(1, ...bins.map((b) => b.n)), peak = bins.findIndex((b) => b.n === top);
-  return `<div class="mc-card mc-card-wide"><h4>${esc(title)}</h4><p class="hint">${esc(note)}</p>
-    <div class="mc-cols" style="grid-template-columns:repeat(${bins.length},minmax(0,1fr))">${bins.map((b, i) => `<button type="button" class="mc-col" data-mc-k="${k}" data-mc-v="${b.v}" aria-pressed="${mc[k] === b.v}" title="${esc(`${b.name}: ${wineCount(b.n)}.${b.n ? " Click to list them." : ""}`)}"${b.n ? "" : " disabled"}>
-      <span class="mc-col-n">${i === peak ? top : ""}</span><span class="mc-col-fill" style="height:${b.n ? Math.max(4, b.n / top * 100) : 0}%"></span><span class="mc-col-lab">${esc(b.tick || "")}</span></button>`).join("")}</div></div>`;
+function tipFor(label, wines, part = "") {
+  const parts = colourParts(wines).map(([t, l]) => `${l.length} ${t.toLowerCase()}`).join(", ");
+  const best = wines.filter((w) => bestScore(w) != null).sort((a, b) => bestScore(b) - bestScore(a))[0];
+  return [`${label}: ${wineCount(wines.length)}`, parts, best ? `Best rated: ${best.name} (${Math.round(bestScore(best))})` : "", part ? `Click to list the ${part}` : "Click to list them"].filter(Boolean).join(". ") + ".";
+}
+const filterAttrs = (k, v, tip, type = "") => `data-mc-k="${k}" data-mc-v="${esc(v)}"${type ? ` data-mc-colour="${esc(type)}"` : ""} data-tip="${esc(tip)}"`;
+const isOn = (k, v, type = "") => mc[k] === v && (!type || mc.colour === type);
+// One piece of a stack per wine colour; each piece lists just those wines.
+function segsHtml(k, v, label, wines, tone = "") {
+  if (tone) return `<button type="button" class="mc-seg" style="flex-grow:${wines.length};background:${tone}" aria-label="${esc(label)}" aria-pressed="${isOn(k, v)}" ${filterAttrs(k, v, tipFor(label, wines))}></button>`;
+  return colourParts(wines).map(([t, l]) => `<button type="button" class="mc-seg" style="flex-grow:${l.length};background:${toneOf(t)}" aria-label="${esc(`${label}: ${l.length} ${t}`)}" aria-pressed="${isOn(k, v, t)}" ${filterAttrs(k, v, tipFor(label, wines, l.length === 1 ? t.toLowerCase() : `${l.length} ${t.toLowerCase()}`), t)}></button>`).join("");
+}
+function barRow(k, v, label, wines, top) {
+  const tip = tipFor(label, wines);
+  return `<div class="mc-bar${isOn(k, v) ? " mc-on" : ""}"><button type="button" class="mc-bar-name" ${filterAttrs(k, v, tip)}>${esc(label)}</button>
+    <span class="mc-bar-track"><span class="mc-stack-h" style="width:${Math.max(2, wines.length / top * 100)}%">${k === "colour" ? segsHtml(k, v, label, wines, toneOf(v)) : segsHtml(k, v, label, wines)}</span></span>
+    <button type="button" class="mc-bar-n" ${filterAttrs(k, v, tip)}>${wines.length}</button></div>`;
+}
+function barsHtml(title, k, groups, limit = 0) {
+  const top = Math.max(1, ...groups.map((g) => g[1].length)), all = !limit || mc.more[k] || groups.length <= limit;
+  return `<div class="mc-card"><h4>${esc(title)}</h4><div class="${mc.more[k] ? "mc-long" : ""}">${(all ? groups : groups.slice(0, limit)).map(([v, l]) => barRow(k, v, v, l, top)).join("")}</div>
+    ${limit && groups.length > limit ? `<button type="button" class="linklike mc-more" data-mc-more="${k}">${mc.more[k] ? "Show fewer" : `Show all ${groups.length}`}</button>` : ""}</div>`;
+}
+function scoresHtml(wines) {
+  const rows = SCORE_BANDS.map(([v, label]) => [v, label, wines.filter((w) => inScoreBand(w, v))]).filter((r) => r[2].length);
+  const top = Math.max(1, ...rows.map((r) => r[2].length));
+  return `<div class="mc-card"><h4>Scores</h4>${rows.map(([v, label, l]) => barRow("score", v, label, l, top)).join("")}</div>`;
+}
+function readyHtml(wines) {
+  const rows = Object.keys(STAGES).map((k) => [k, wines.filter((w) => drinkStage(w) === k)]).filter((r) => r[1].length);
+  return `<div class="mc-card"><h4>Ready to drink</h4><div class="mc-ready">${rows.map(([k, l]) => segsHtml("stage", k, STAGES[k].title, l, STAGE_TONES[k])).join("")}</div>
+    ${rows.map(([k, l]) => `<button type="button" class="mc-ready-row" aria-pressed="${mc.stage === k}" ${filterAttrs("stage", k, tipFor(STAGES[k].title, l))}><span>${STAGES[k].icon} ${esc(STAGES[k].title)}</span><strong>${l.length}</strong></button>`).join("")}</div>`;
+}
+function columnsHtml(title, note, k, bins, key = "") {
+  const top = Math.max(1, ...bins.map((b) => b.wines.length));
+  return `<div class="mc-card mc-card-wide"><h4>${esc(title)}</h4><p class="hint">${esc(note)}</p>${key}
+    <div class="mc-cols" style="grid-template-columns:repeat(${bins.length},minmax(0,1fr))">${bins.map((b) => { const n = b.wines.length;
+      return `<div class="mc-col${isOn(k, b.v) ? " mc-on" : ""}"><div class="mc-plot">${n ? `<div class="mc-stack" style="height:${Math.max(3, n / top * 100)}%"><button type="button" class="mc-col-n" ${filterAttrs(k, b.v, tipFor(b.name, b.wines))}>${n}</button>${segsHtml(k, b.v, b.name, b.wines, b.tone)}</div>` : ""}</div>
+        <span class="mc-col-lab${b.major ? "" : " mc-minor"}">${esc(b.tick)}</span></div>`; }).join("")}</div></div>`;
 }
 function vintageBins(wines) {
-  const years = wines.map((w) => w.vintage).filter(Boolean);
+  const dated = wines.filter((w) => w.vintage), years = dated.map((w) => w.vintage);
   if (!years.length) return [];
   const last = Math.max(...years), first = Math.max(Math.min(...years), last - 24), bins = [];
-  const older = years.filter((y) => y < first).length;
-  if (older) bins.push({ v: `:${first - 1}`, n: older, name: `Before ${first}`, tick: "Older" });
-  for (let y = first; y <= last; y++) bins.push({ v: `${y}:${y}`, n: years.filter((x) => x === y).length, name: String(y), tick: y % 5 === 0 ? String(y) : "" });
+  const older = dated.filter((w) => w.vintage < first);
+  if (older.length) bins.push({ v: `:${first - 1}`, wines: older, name: `Before ${first}`, tick: "Older", major: true });
+  for (let y = first; y <= last; y++) bins.push({ v: `${y}:${y}`, wines: dated.filter((w) => w.vintage === y), name: String(y), tick: String(y), major: y % 5 === 0 });
   return bins;
 }
 function endBins(wines) {
-  const ends = wines.map((w) => w.drink_to).filter(Boolean), far = THIS_YEAR + 14;
-  if (!ends.length) return [];
-  const bins = [{ v: `:${THIS_YEAR - 1}`, n: ends.filter((y) => y < THIS_YEAR).length, name: `Ended before ${THIS_YEAR}`, tick: "Past" }];
-  for (let y = THIS_YEAR; y <= far; y++) bins.push({ v: `${y}:${y}`, n: ends.filter((x) => x === y).length, name: String(y), tick: y === THIS_YEAR || y % 5 === 0 ? String(y) : "" });
-  bins.push({ v: `${far + 1}:`, n: ends.filter((y) => y > far).length, name: `After ${far}`, tick: "Later" });
+  const dated = wines.filter((w) => w.drink_to), far = THIS_YEAR + 14;
+  if (!dated.length) return [];
+  const bins = [{ v: `:${THIS_YEAR - 1}`, wines: dated.filter((w) => w.drink_to < THIS_YEAR), name: `Ended before ${THIS_YEAR}`, tick: "Past", major: true, tone: STAGE_TONES.first }];
+  for (let y = THIS_YEAR; y <= far; y++) bins.push({ v: `${y}:${y}`, wines: dated.filter((w) => w.drink_to === y), name: String(y), tick: String(y), major: y === THIS_YEAR || y % 5 === 0,
+    tone: y === THIS_YEAR ? STAGE_TONES.first : y === THIS_YEAR + 1 ? STAGE_TONES.soon : STAGE_TONES.ready });
+  bins.push({ v: `${far + 1}:`, wines: dated.filter((w) => w.drink_to > far), name: `After ${far}`, tick: "Later", major: true, tone: STAGE_TONES.ready });
   return bins;
 }
+const keyItem = (tone, label) => `<span class="mc-key-item"><span class="mc-swatch" style="background:${tone}"></span>${esc(label)}</span>`;
 function glanceHtml(wines) {
   const ended = wines.filter((w) => w.drink_to && w.drink_to < THIS_YEAR).length;
   const count = (y) => wines.filter((w) => w.drink_to === y).length;
   const tile = (v, n, label) => `<button type="button" class="mc-tile" data-mc-k="ends" data-mc-v="${v}" aria-pressed="${mc.ends === v}"${n ? "" : " disabled"}><span class="mc-tile-n">${n}</span><span>${esc(label)}</span></button>`;
   const best = wines.filter((w) => bestScore(w) != null).sort((a, b) => bestScore(b) - bestScore(a) || a.name.localeCompare(b.name)).slice(0, 5);
-  const vintages = vintageBins(wines), ends = endBins(wines);
+  const vintages = vintageBins(wines), ends = endBins(wines), colours = colourParts(wines);
   return `<div class="mc-tiles">${tile(`:${THIS_YEAR - 1}`, ended, "past their drinking window")}${tile(`${THIS_YEAR}:${THIS_YEAR}`, count(THIS_YEAR), `window ending this year (${THIS_YEAR})`)}${tile(`${THIS_YEAR + 1}:${THIS_YEAR + 1}`, count(THIS_YEAR + 1), `window ending next year (${THIS_YEAR + 1})`)}</div>
-    <div class="mc-grid">${barsHtml("Colours", "colour", tally(wines, (w) => w.type))}
-      ${barsHtml("Top countries", "country", tally(wines, (w) => w.country).slice(0, 6))}
-      ${barsHtml("Top grapes and blends", "grape", tally(wines, (w) => w.varietal).slice(0, 6))}
-      ${best.length ? `<div class="mc-card mc-card-wide"><h4>Best rated</h4><ol class="mc-best">${best.map((w) => `<li><strong>${Math.round(bestScore(w))}</strong> <button type="button" class="linklike" data-somm-pop="${esc(w.id)}">${esc(w.name)}</button></li>`).join("")}</ol></div>` : ""}
-      ${vintages.length ? columnsHtml("Vintages", "How many wines from each year.", "vint", vintages) : ""}
-      ${ends.length ? columnsHtml("When drinking windows end", "How many wines reach the end of their window each year. Dates are the cellar owner's own.", "ends", ends) : ""}</div>`;
+    <p class="mc-key"><strong>Colour key:</strong> ${colours.map(([t]) => keyItem(toneOf(t), t)).join("")}</p>
+    <div class="mc-grid">${barsHtml("Top countries", "country", groupWines(wines, (w) => w.country), 10)}
+      ${barsHtml("Top grapes and blends", "grape", groupWines(wines, (w) => w.varietal), 10)}
+      ${barsHtml("Top regions", "region", groupWines(wines, regionOf), 10)}
+      ${barsHtml("Colours", "colour", colours)}
+      ${readyHtml(wines)}${scoresHtml(wines)}
+      ${best.length ? `<div class="mc-card mc-card-two"><h4>Best rated</h4><ol class="mc-best">${best.map((w) => `<li><strong>${Math.round(bestScore(w))}</strong> <button type="button" class="linklike" data-somm-pop="${esc(w.id)}">${esc(w.name)}</button></li>`).join("")}</ol></div>` : ""}
+      ${vintages.length ? columnsHtml("Vintages", "How many wines from each year, split by colour.", "vint", vintages) : ""}
+      ${ends.length ? columnsHtml("When drinking windows end", "How many wines reach the end of their window each year. Dates are the cellar owner's own.", "ends", ends,
+        `<p class="mc-key">${keyItem(STAGE_TONES.first, "Past, or ending this year")}${keyItem(STAGE_TONES.soon, "Ending next year")}${keyItem(STAGE_TONES.ready, "Later")}</p>`) : ""}</div>`;
 }
+// One small note that follows the pointer, for whatever part of a chart it's on.
+function chartTip(e) {
+  let tip = $("mc-tip");
+  const t = e.target.closest?.("#mc-glance [data-tip]");
+  if (!t) { if (tip) tip.hidden = true; return; }
+  if (!tip) { tip = document.createElement("div"); tip.id = "mc-tip"; tip.setAttribute("role", "tooltip"); document.body.append(tip); }
+  tip.textContent = t.dataset.tip;
+  tip.hidden = false;
+  tip.style.left = `${Math.max(8, Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8))}px`;
+  tip.style.top = `${e.clientY + 18 + tip.offsetHeight > innerHeight ? e.clientY - tip.offsetHeight - 10 : e.clientY + 18}px`;
+}
+document.addEventListener("mousemove", chartTip);
 
 // ---- The banner and table -------------------------------------------------------------
 function mcBannerControls(wines) {
   const pick = (k, label, get) => { const vals = [...new Set(wines.map(get).filter((v) => v && v !== "Country not stated"))].sort();
     return `<select data-mc-narrow="${k}" aria-label="${esc(label)}"><option value="">Any ${esc(label.toLowerCase())}</option>${vals.map((v) => `<option value="${esc(v)}"${v === mc[k] ? " selected" : ""}>${esc(v)}</option>`).join("")}</select>`; };
-  const chips = ["vint", "ends"].filter((k) => mc[k]).map((k) => `<span class="chip">${esc(rangeWords(k, mc[k]))}<button type="button" class="chip-x" data-mc-k="${k}" data-mc-v="${mc[k]}" aria-label="Remove this choice">✕</button></span>`).join(" ");
+  const chipWords = (k) => (k === "region" ? mc.region : k === "stage" ? STAGES[mc.stage].title : k === "score" ? `Score: ${SCORE_BANDS.find(([v]) => v === mc.score)[1]}` : rangeWords(k, mc[k]));
+  const chips = ["region", "stage", "score", "vint", "ends"].filter((k) => mc[k]).map((k) => `<span class="chip">${esc(chipWords(k))}<button type="button" class="chip-x" data-mc-k="${k}" data-mc-v="${mc[k]}" aria-label="Remove this choice">✕</button></span>`).join(" ");
   const moods = Object.entries(MOODS).map(([k, m]) => [k, m, wines.filter(m.test).length]).filter(([k, , n]) => n || k === mc.mood);
-  const narrowed = mc.mood !== "all" || mc.colour || mc.country || mc.grape || mc.vint || mc.ends;
+  const narrowed = mc.mood !== "all" || mc.colour || mc.country || mc.grape || mc.region || mc.stage || mc.score || mc.vint || mc.ends;
   return `<div class="mc-moods">${moods.map(([k, m, n]) => `<button type="button" class="btn btn-mood" data-mc-mood="${k}" aria-pressed="${mc.mood === k}">${m.icon} ${esc(m.label)} <span class="tap-n">${n}</span></button>`).join("")}</div>
     <div class="somm-row somm-narrow">${pick("colour", "Colour", (w) => w.type)}${pick("country", "Country", (w) => w.country)}${pick("grape", "Grape", (w) => w.varietal)}
       ${chips}${narrowed ? `<button type="button" class="btn btn-mini" data-mc-clear>Show all again</button>` : ""}</div>`;
@@ -130,6 +193,7 @@ function openCellar(owner) {
   mwView.owner = owner;
   mwView.shown = MW_PAGE;
   clearMcFilters();
+  mc.more = {};
   storeSet("wf.cellarOpen", owner);
   renderMyWines();
 }
@@ -150,13 +214,19 @@ async function cellarToSomm() {
 
 document.addEventListener("click", (e) => {
   if (e.target.closest?.("#mw-add-open")) { openTools(); $("mw-add-h").scrollIntoView({ block: "start" }); $("mw-name").focus({ preventScroll: true }); return; }
-  const t = e.target.closest?.("#mc-panel [data-mc-k], #mc-panel [data-mc-mood], #mc-panel [data-mc-col], #mc-panel [data-mc-clear], #mc-panel [data-mc-food]");
+  const t = e.target.closest?.("#mc-panel [data-mc-k], #mc-panel [data-mc-mood], #mc-panel [data-mc-col], #mc-panel [data-mc-clear], #mc-panel [data-mc-food], #mc-panel [data-mc-more]");
   if (!t) return;
   if ("mcFood" in t.dataset) return void cellarToSomm();
   if ("mcClear" in t.dataset) clearMcFilters();
   else if (t.dataset.mcMood) mc.mood = t.dataset.mcMood;
   else if (t.dataset.mcCol) { mc.dir = mc.col === t.dataset.mcCol ? -mc.dir : 1; mc.col = t.dataset.mcCol; }
-  else { const k = t.dataset.mcK, v = t.dataset.mcV; mc[k] = mc[k] === v ? "" : v; }
+  else if (t.dataset.mcMore) mc.more[t.dataset.mcMore] = !mc.more[t.dataset.mcMore];
+  else { // a piece of a stack sets its colour too; pressing it again takes both off
+    const k = t.dataset.mcK, v = t.dataset.mcV, type = t.dataset.mcColour, on = isOn(k, v, type);
+    mc[k] = on ? "" : v;
+    if (type) mc.colour = on ? "" : type;
+  }
+  if ($("mc-tip")) $("mc-tip").hidden = true;
   renderCellarPanel();
 });
 document.addEventListener("change", (e) => {

@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-11-07.1">
+<link rel="stylesheet" href="app.css?v=2026-11-07.4">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -32,7 +32,7 @@
     <button type="button" class="nav-btn view-btn" data-view="shortlist" aria-pressed="false" aria-label="Short List for Claude"><svg><use href="#i-list"/></svg><span>Short List</span><span class="nav-badge sl-count">0</span></button>
     <button type="button" class="nav-btn view-btn" data-view="shopping" aria-pressed="false" aria-label="Comparison List"><svg><use href="#i-cart"/></svg><span>Comparison List</span><span class="nav-badge shop-count">0</span></button>
     <button type="button" class="nav-btn view-btn" data-view="research" aria-pressed="false" data-focus="sl-add-q"><svg><use href="#i-search"/></svg><span>Research</span></button>
-    <button type="button" class="nav-btn view-btn btn-somm" data-view="somm" aria-pressed="false" aria-label="Master Sommelier"><svg><use href="#i-somm"/></svg><span>Sommelier</span></button>
+    <button type="button" class="nav-btn view-btn btn-somm" data-view="somm" aria-pressed="false" aria-label="Sommelier &amp; Food Pairing"><svg><use href="#i-somm"/></svg><span>Sommelier &amp; Food Pairing</span></button>
     <button type="button" class="nav-btn view-btn btn-research btn-dine" data-view="dine" aria-pressed="false"><svg><use href="#i-dine"/></svg><span>Restaurant</span></button>
     <button type="button" class="nav-btn btn-research btn-tonight" id="btn-tonight" hidden><svg><use href="#i-star"/></svg><span>Tonight's picks</span></button>
     <button type="button" class="nav-btn btn-research btn-help" data-help="help-top"><svg><use href="#i-help"/></svg><span>Help</span></button>
@@ -339,7 +339,7 @@
       <li><a href="#help-find">Finding wines</a></li>
       <li><a href="#help-pairings">Food pairings on each wine</a></li>
       <li><a href="#help-compare">The Comparison List</a></li>
-      <li><a href="#help-somm">Master Sommelier: wine and food</a></li>
+      <li><a href="#help-somm">Sommelier &amp; Food Pairing: matching wine and food</a></li>
       <li><a href="#help-where">Where can I buy…?</a></li>
       <li><a href="#help-research">Research a wine with Claude</a></li>
       <li><a href="#help-quick">Claude Quick Scores</a></li>
@@ -361,7 +361,7 @@
       <li><strong>My cellars</strong> (orange): your own cellar and ratings.</li>
       <li><strong>Short List</strong> (green): wines you've picked for Claude to research. The number is how many are on it.</li>
       <li><strong>Comparison List</strong> (blue, with the scales): wines you're weighing up to buy, side by side.</li>
-      <li><strong>Research</strong> (purple): look a wine up, add one by name, and the <strong>Master Sommelier</strong> for food and wine.</li>
+      <li><strong>Research</strong> (purple): look a wine up, add one by name, and the <strong>Sommelier &amp; Food Pairing</strong> page for matching the two.</li>
       <li><strong>Restaurant</strong> (teal): help choosing from a wine list when you're out.</li>
       <li><strong>Help</strong> (pale blue): this page. <strong>Start over</strong> (white) clears every choice.</li>
     </ul>
@@ -417,13 +417,13 @@
 
   <section id="help-compare" class="help-topic">
     <h3>The Comparison List</h3>
-    <p>Press <strong>⚖️ ＋ Add wine to Comparison List</strong> on any wine to put it on the list (press it again to take it off). The blue <strong>Comparison List</strong> button at the top shows them all as full cards, with what they'd cost at each store. Remove one with <strong>✕ Remove</strong>, or all of them with <strong>Remove all</strong>. The list stays on your computer. It's separate from the Short List, which is for asking Claude. The Master Sommelier can pair every wine on it at once.</p>
+    <p>Press <strong>⚖️ ＋ Add wine to Comparison List</strong> on any wine to put it on the list (press it again to take it off). The blue <strong>Comparison List</strong> button at the top shows them all as full cards, with what they'd cost at each store. Remove one with <strong>✕ Remove</strong>, or all of them with <strong>Remove all</strong>. The list stays on your computer. It's separate from the Short List, which is for asking Claude. The Sommelier &amp; Food Pairing page can pair every wine on it at once.</p>
     <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
   </section>
 
   <section id="help-somm" class="help-topic">
-    <h3>Master Sommelier: wine and food</h3>
-    <p>Press <strong>Sommelier</strong> (black and gold) at the top. It matches wine and food from six pairing books: Evan Goldstein's <em>Perfect Pairings</em> and <em>Daring Pairings</em>, Sid Goldstein's <em>The Wine Lover's Cookbook</em>, Dornenburg &amp; Page's <em>What to Drink with What You Eat</em>, Robert Harrington's <em>Food and Wine Pairing</em> and <em>The Food &amp; Wine Guide to Perfect Pairings</em>. Every suggestion says which book it's from, with the page. Recipes are given by title and page: the recipes themselves are in the books. First tick where you're buying under <strong>Buying from</strong> (the LCBO shows there once it's unlocked). Then choose one of three ways in:</p>
+    <h3>Sommelier &amp; Food Pairing: matching wine and food</h3>
+    <p>Press <strong>Sommelier &amp; Food Pairing</strong> (black and gold) at the top. It matches wine and food from six pairing books: Evan Goldstein's <em>Perfect Pairings</em> and <em>Daring Pairings</em>, Sid Goldstein's <em>The Wine Lover's Cookbook</em>, Dornenburg &amp; Page's <em>What to Drink with What You Eat</em>, Robert Harrington's <em>Food and Wine Pairing</em> and <em>The Food &amp; Wine Guide to Perfect Pairings</em>. Every suggestion says which book it's from, with the page. Recipes are given by title and page: the recipes themselves are in the books. First tick where you're buying under <strong>Buying from</strong> (the LCBO shows there once it's unlocked). Then choose one of three ways in:</p>
     <ul>
       <li><strong>🍷 I have a bottle.</strong> Pick a wine from a ticked cellar, type or paste a name (or just a grape, such as Saperavi), or choose a <strong>country</strong> to see its wines grouped by grape. Then <strong>What have you got?</strong> asks what you're cooking: tap a food (★ is a classic match, ⚡ an adventurous one) or type what's in the fridge, and you get that wine with that food, with every recipe. <strong>More about this wine and its pairings</strong> holds the rest.</li>
       <li><strong>⚖️ Wines on my Comparison List.</strong> The wines on your Comparison List, with country, price, store and grape. Tick some and press <strong>Pair the ticked wines</strong>, or <strong>Build the menu</strong> to send each bottle to the course it suits best.</li>
@@ -517,7 +517,7 @@
       <li><strong>Add a wine by hand</strong>: for a wine from an importer, a private store or someone's cellar.</li>
       <li><strong>Choose a cellar</strong>: press its box at the top of the page. This computer remembers the one you opened last.</li>
       <li><strong>At a glance</strong>: what needs drinking, then colours, countries, grapes, vintages and when drinking windows end. Click any of them to list just those wines. Numbers count wines, not bottles.</li>
-      <li><strong>The table</strong>: click a heading to sort by it, or a wine to see its details and add it to your Food Pairings list. “Find food for these wines” carries the wines on screen to the Sommelier.</li>
+      <li><strong>The table</strong>: click a heading to sort by it, or a wine to see its details and add it to your Food Pairings list. “Find food for these wines” carries the wines on screen to the Sommelier &amp; Food Pairing page.</li>
       <li><strong>Tools</strong>, at the foot of the page, holds importing, adding a wine by hand, your own ratings and backups.</li>
       <li><strong>Backup</strong>: My cellars and your ratings live in this browser only. “Save a backup file” now and then; “Restore” moves them to another computer.</li>
     </ul>
@@ -667,7 +667,7 @@
 
 <main id="view-somm" hidden>
   <section class="somm-box" id="somm" aria-labelledby="somm-h">
-    <h3 id="somm-h"><svg class="somm-icon" aria-hidden="true"><use href="#i-somm"/></svg> Master Sommelier</h3>
+    <h3 id="somm-h"><svg class="somm-icon" aria-hidden="true"><use href="#i-somm"/></svg> Master Sommelier &amp; Food Pairing</h3>
     <p class="somm-intro">Wine and food matched from six pairing books, with the books' recipes by page.</p>
     <h4 class="somm-step"><span class="zone-num">1</span> Where are the bottles?</h4>
     <div class="somm-stores" id="somm-stores"></div>
@@ -873,8 +873,8 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-11-07.1"></script>
-<script src="somm.js?v=2026-11-07.1"></script>
-<script src="cellar.js?v=2026-11-07.1"></script>
+<script src="app.js?v=2026-11-07.4"></script>
+<script src="somm.js?v=2026-11-07.4"></script>
+<script src="cellar.js?v=2026-11-07.4"></script>
 </body>
 </html>
