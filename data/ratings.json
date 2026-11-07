@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-06",
+ "updated": "2026-11-07",
  "ratings": {
   "bcl-220979": {
    "name": "Cabernet Sauvignon - Haras De Pirque Hussonet Reserva",
@@ -1895,8 +1895,7 @@
     "pair": "lamb chops with rosemary",
     "grapes": "Touriga Nacional",
     "drinkFrom": 2024,
-    "drinkTo": 2035,
-    "from": "Mike"
+    "drinkTo": 2035
    },
    "type": "Red",
    "upc": "05604123006175"
@@ -1917,8 +1916,7 @@
     "pair": "roast beef venison",
     "grapes": "old-vine field blend",
     "drinkFrom": 2020,
-    "drinkTo": 2035,
-    "from": "Mike"
+    "drinkTo": 2035
    },
    "type": "Red",
    "upc": "05601109214975"
@@ -1939,8 +1937,7 @@
     "pair": "beef tenderloin roast lamb",
     "grapes": "Touriga Franca Touriga Nacional",
     "drinkFrom": 2024,
-    "drinkTo": 2036,
-    "from": "Mike"
+    "drinkTo": 2036
    },
    "type": "Red",
    "upc": "05601007476505"
@@ -1961,8 +1958,7 @@
     "pair": "lamb shoulder peppered steak",
     "grapes": "Syrah Touriga Nacional",
     "drinkFrom": 2024,
-    "drinkTo": 2033,
-    "from": "Mike"
+    "drinkTo": 2033
    },
    "type": "Red",
    "upc": "05605462115818"
@@ -1983,8 +1979,7 @@
     "pair": "roast lamb mushroom risotto",
     "grapes": "Dao old-vine field blend",
     "drinkFrom": 2025,
-    "drinkTo": 2031,
-    "from": "Mike"
+    "drinkTo": 2031
    },
    "type": "Red",
    "upc": "05600102798963"
@@ -2005,8 +2000,7 @@
     "pair": "grilled flank steak",
     "grapes": "Tinta Roriz Touriga Franca",
     "drinkFrom": 2024,
-    "drinkTo": 2034,
-    "from": "Mike"
+    "drinkTo": 2034
    },
    "type": "Red",
    "upc": "05604823007489"
@@ -2039,8 +2033,7 @@
     "pair": "venison spiced lamb",
     "grapes": "Touriga Nacional",
     "drinkFrom": 2025,
-    "drinkTo": 2033,
-    "from": "Mike"
+    "drinkTo": 2033
    },
    "type": "Red",
    "upc": "05600789937198"
@@ -2061,8 +2054,7 @@
     "pair": "beef brisket grilled steak",
     "grapes": "Touriga Alicante Cabernet",
     "drinkFrom": 2023,
-    "drinkTo": 2032,
-    "from": "Mike"
+    "drinkTo": 2032
    },
    "type": "Red",
    "upc": "05603802400853"
@@ -2083,8 +2075,7 @@
     "pair": "braised beef cheeks",
     "grapes": "old-vine field blend",
     "drinkFrom": 2024,
-    "drinkTo": 2032,
-    "from": "Mike"
+    "drinkTo": 2032
    },
    "type": "Red",
    "upc": "05607248100131"
@@ -2117,8 +2108,7 @@
     "pair": "roast lamb game",
     "grapes": "Touriga Nacional",
     "drinkFrom": 2022,
-    "drinkTo": 2035,
-    "from": "Mike"
+    "drinkTo": 2035
    },
    "type": "Red",
    "upc": "05607897006150"
@@ -2139,8 +2129,7 @@
     "pair": "duck breast wild mushroom dishes",
     "grapes": "old-vine field blend",
     "drinkFrom": 2025,
-    "drinkTo": 2033,
-    "from": "Mike"
+    "drinkTo": 2033
    },
    "type": "Red",
    "upc": "05600789937228"
@@ -2161,8 +2150,7 @@
     "pair": "roast pork venison sausage",
     "grapes": "Sousao",
     "drinkFrom": 2023,
-    "drinkTo": 2032,
-    "from": "Mike"
+    "drinkTo": 2032
    },
    "type": "Red",
    "upc": "05604823004938"
@@ -2180,8 +2168,7 @@
     "sweet": "dry",
     "fruity": false,
     "pair": "roast beef",
-    "grapes": "Touriga Roriz Alfrocheiro Jaen",
-    "from": "Mike"
+    "grapes": "Touriga Roriz Alfrocheiro Jaen"
    },
    "type": "Red",
    "upc": "05600289382320"
@@ -2202,8 +2189,7 @@
     "pair": "grilled lamb beef stew",
     "grapes": "Syrah Touriga Franca",
     "drinkFrom": 2024,
-    "drinkTo": 2030,
-    "from": "Mike"
+    "drinkTo": 2030
    },
    "type": "Red",
    "upc": "05602182059132"
@@ -2224,8 +2210,7 @@
     "pair": "barbecue pork ribs",
     "grapes": "Touriga Alicante Cabernet Trincadeira",
     "drinkFrom": 2025,
-    "drinkTo": 2030,
-    "from": "Mike"
+    "drinkTo": 2030
    },
    "type": "Red",
    "upc": "05600391232643"
@@ -2246,8 +2231,7 @@
     "pair": "grilled beef mushroom dishes",
     "grapes": "Dao old-vine field blend",
     "drinkFrom": 2021,
-    "drinkTo": 2030,
-    "from": "Mike"
+    "drinkTo": 2030
    },
    "type": "Red",
    "upc": "05600763533415"
@@ -2280,8 +2264,7 @@
     "pair": "ribeye steak braised short ribs",
     "grapes": "old-vine field blend",
     "drinkFrom": 2020,
-    "drinkTo": 2030,
-    "from": "Mike"
+    "drinkTo": 2030
    },
    "type": "Red",
    "upc": "05604123004843"
@@ -2314,8 +2297,7 @@
     "pair": "braised brisket prime rib",
     "grapes": "Touriga Roriz Sousao",
     "drinkFrom": 2025,
-    "drinkTo": 2030,
-    "from": "Mike"
+    "drinkTo": 2030
    },
    "type": "Red",
    "upc": "05606710580112"
@@ -2336,8 +2318,7 @@
     "pair": "grilled tuna charcuterie",
     "grapes": "red white field blend",
     "drinkFrom": 2025,
-    "drinkTo": 2030,
-    "from": "Mike"
+    "drinkTo": 2030
    },
    "type": "Red",
    "upc": "05600789937235"
@@ -2358,8 +2339,7 @@
     "pair": "grilled pork chops roast chicken",
     "grapes": "Touriga Nacional Touriga Franca",
     "drinkFrom": 2025,
-    "drinkTo": 2031,
-    "from": "Mike"
+    "drinkTo": 2031
    },
    "type": "Red",
    "upc": "05608309009974"
@@ -2380,8 +2360,7 @@
     "pair": "spit-roasted pork",
     "grapes": "Touriga Jaen Sousao",
     "drinkFrom": 2021,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05609851523055"
@@ -2414,8 +2393,7 @@
     "pair": "grilled sausages burgers",
     "grapes": "Moreto Castelao Trincadeira",
     "drinkFrom": 2025,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05601989001818"
@@ -2435,8 +2413,7 @@
     "finish": "short",
     "pair": "grilled sardines charcuterie",
     "drinkFrom": 2025,
-    "drinkTo": 2026,
-    "from": "Mike"
+    "drinkTo": 2026
    },
    "type": "Red",
    "upc": "05602281907525"
@@ -2457,8 +2434,7 @@
     "pair": "lamb chops beef stew",
     "grapes": "Tinta Roriz Touriga Franca",
     "drinkFrom": 2024,
-    "drinkTo": 2028,
-    "from": "Mike"
+    "drinkTo": 2028
    },
    "type": "Red",
    "upc": "05604242009477"
@@ -2478,8 +2454,7 @@
     "finish": "medium",
     "pair": "grilled red meats mature cheese",
     "drinkFrom": 2025,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05601970222840"
@@ -2497,8 +2472,7 @@
     "sweet": "off-dry",
     "fruity": true,
     "finish": "short",
-    "pair": "pizza burgers",
-    "from": "Mike"
+    "pair": "pizza burgers"
    },
    "type": "Red",
    "upc": "05604424429017"
@@ -2519,8 +2493,7 @@
     "pair": "barbecue ribs pizza tomato pasta",
     "grapes": "Aragonez Trincadeira Castelao",
     "drinkFrom": 2025,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05604135001144"
@@ -2534,8 +2507,7 @@
     "date": "2026-10-28",
     "quick": true,
     "pair": "grilled steak burgers",
-    "grapes": "Touriga Syrah Alicante Bouschet",
-    "from": "Mike"
+    "grapes": "Touriga Syrah Alicante Bouschet"
    },
    "type": "Red",
    "upc": "00628288540010"
@@ -2547,8 +2519,7 @@
     "vintage": 2021,
     "note": "No reviews found",
     "date": "2026-10-28",
-    "quick": true,
-    "from": "Mike"
+    "quick": true
    },
    "type": "Red",
    "upc": "05605361101462"
@@ -2569,8 +2540,7 @@
     "pair": "burgers lamb kebabs",
     "grapes": "Castelao Syrah Tinta Roriz",
     "drinkFrom": 2025,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05604424260009"
@@ -2591,8 +2561,7 @@
     "pair": "burgers meat casseroles",
     "grapes": "Castelao Tinta Roriz Trincadeira",
     "drinkFrom": 2025,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05601996273895"
@@ -2613,8 +2582,7 @@
     "pair": "grilled chorizo margherita pizza",
     "grapes": "Tinta Roriz Castelao",
     "drinkFrom": 2025,
-    "drinkTo": 2028,
-    "from": "Mike"
+    "drinkTo": 2028
    },
    "type": "Red",
    "upc": "05601815621913"
@@ -2635,8 +2603,7 @@
     "pair": "grilled piri-piri chicken",
     "grapes": "Touriga Roriz Franca Barroca",
     "drinkFrom": 2025,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05601012414509"
@@ -2657,8 +2624,7 @@
     "pair": "lasagna pizza",
     "grapes": "Tinta Roriz blend",
     "drinkFrom": 2025,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05601213011682"
@@ -2678,8 +2644,7 @@
     "finish": "short",
     "pair": "pepperoni pizza grilled sausages",
     "drinkFrom": 2025,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05604424250000"
@@ -2700,8 +2665,7 @@
     "pair": "hamburgers prime rib",
     "grapes": "Cabernet Sauvignon Tinta Roriz",
     "drinkFrom": 2025,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05600312190113"
@@ -2722,8 +2686,7 @@
     "pair": "grilled sausages and tomato pasta",
     "grapes": "Castelao Aragonez Touriga Cabernet",
     "drinkFrom": 2024,
-    "drinkTo": 2026,
-    "from": "Mike"
+    "drinkTo": 2026
    },
    "type": "Red",
    "upc": "05602507020304"
@@ -2744,8 +2707,7 @@
     "pair": "roast chicken bacalhau mild cheeses",
     "grapes": "Tinta Roriz Touriga Alfrocheiro",
     "drinkFrom": 2024,
-    "drinkTo": 2026,
-    "from": "Mike"
+    "drinkTo": 2026
    },
    "type": "Red",
    "upc": "05601078005017"
@@ -2766,8 +2728,7 @@
     "pair": "grilled chorizo braised beef tomato pasta",
     "grapes": "Aragonez Syrah Trincadeira",
     "drinkFrom": 2024,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05602182310134"
@@ -2788,8 +2749,7 @@
     "pair": "pork kebabs pizza grilled sausages",
     "grapes": "Castelao Aragonez Syrah",
     "drinkFrom": 2025,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05601237241225"
@@ -2810,8 +2770,7 @@
     "pair": "roast beef grilled steak",
     "grapes": "Tinta Roriz Touriga Franca",
     "drinkFrom": 2025,
-    "drinkTo": 2028,
-    "from": "Mike"
+    "drinkTo": 2028
    },
    "type": "Red",
    "upc": "05601213181651"
@@ -2823,8 +2782,7 @@
     "vintage": 2021,
     "note": "No reviews found",
     "date": "2026-10-28",
-    "quick": true,
-    "from": "Mike"
+    "quick": true
    },
    "type": "Red",
    "upc": "05602182550134"
@@ -2845,8 +2803,7 @@
     "pair": "grilled pork chops charcuterie barbecue",
     "grapes": "Aragonez Trincadeira Touriga Syrah",
     "drinkFrom": 2024,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "00858666003107"
@@ -2867,8 +2824,7 @@
     "pair": "roast suckling pig lamb stew",
     "grapes": "Baga Tinta Roriz",
     "drinkFrom": 2024,
-    "drinkTo": 2028,
-    "from": "Mike"
+    "drinkTo": 2028
    },
    "type": "Red",
    "upc": "05601213178231"
@@ -2889,8 +2845,7 @@
     "pair": "pork sausages lamb chops",
     "grapes": "Touriga Jaen Trincadeira",
     "drinkFrom": 2021,
-    "drinkTo": 2025,
-    "from": "Mike"
+    "drinkTo": 2025
    },
    "type": "Red",
    "upc": "05605567728715"
@@ -2921,8 +2876,7 @@
     "pair": "grilled fish seafood white meats",
     "grapes": "Fernao Pires Arinto Moscatel",
     "drinkFrom": 2025,
-    "drinkTo": 2026,
-    "from": "Mike"
+    "drinkTo": 2026
    },
    "type": "White",
    "upc": "05604424260108"
@@ -2942,8 +2896,7 @@
     "pair": "shrimp grilled white fish",
     "grapes": "Fernao Pires blend",
     "drinkFrom": 2025,
-    "drinkTo": 2026,
-    "from": "Mike"
+    "drinkTo": 2026
    },
    "type": "White",
    "upc": "05601996513687"
@@ -2962,8 +2915,7 @@
     "finish": "short",
     "pair": "grilled shrimp chicken salad",
     "drinkFrom": 2024,
-    "drinkTo": 2026,
-    "from": "Mike"
+    "drinkTo": 2026
    },
    "type": "White",
    "upc": "05604242009316"
@@ -2982,8 +2934,7 @@
     "finish": "short",
     "pair": "salads grilled shrimp",
     "drinkFrom": 2025,
-    "drinkTo": 2026,
-    "from": "Mike"
+    "drinkTo": 2026
    },
    "type": "Rosé",
    "upc": "05601996966988"
@@ -3003,8 +2954,7 @@
     "pair": "grilled white fish seafood",
     "grapes": "Roupeiro Arinto blend",
     "drinkFrom": 2025,
-    "drinkTo": 2026,
-    "from": "Mike"
+    "drinkTo": 2026
    },
    "type": "White",
    "upc": "05601356021524"
@@ -3024,8 +2974,7 @@
     "pair": "antipasti grilled white fish",
     "grapes": "Roupeiro Rabo de Ovelha",
     "drinkFrom": 2025,
-    "drinkTo": 2026,
-    "from": "Mike"
+    "drinkTo": 2026
    },
    "type": "White",
    "upc": "05604135001243"
@@ -3044,8 +2993,7 @@
     "finish": "short",
     "pair": "grilled fish tapas",
     "drinkFrom": 2021,
-    "drinkTo": 2023,
-    "from": "Mike"
+    "drinkTo": 2023
    },
    "type": "White",
    "upc": "05601356013161"
@@ -3066,8 +3014,7 @@
     "pair": "grilled pork and lamb kebabs",
     "grapes": "Aragonez Syrah Touriga Nacional",
     "drinkFrom": 2023,
-    "drinkTo": 2026,
-    "from": "Mike"
+    "drinkTo": 2026
    },
    "type": "Red",
    "upc": "05601989952929"
@@ -3088,8 +3035,7 @@
     "pair": "roast leg of lamb and grilled ribeye",
     "grapes": "Aragonez Alfrocheiro Alicante Bouschet",
     "drinkFrom": 2023,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05600291427217"
@@ -3109,8 +3055,7 @@
     "finish": "short",
     "pair": "pizza and burgers",
     "drinkFrom": 2024,
-    "drinkTo": 2026,
-    "from": "Mike"
+    "drinkTo": 2026
    },
    "type": "Red",
    "upc": "05601096021075"
@@ -3131,8 +3076,7 @@
     "pair": "roast chicken and pasta bolognese",
     "grapes": "Tinta Roriz Castelao Touriga",
     "drinkFrom": 2022,
-    "drinkTo": 2025,
-    "from": "Mike"
+    "drinkTo": 2025
    },
    "type": "Red",
    "upc": "05601996547897"
@@ -3153,8 +3097,7 @@
     "pair": "grilled pork chops and beef stew",
     "grapes": "Aragonez Alicante Trincadeira",
     "drinkFrom": 2024,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05601237172291"
@@ -3175,8 +3118,7 @@
     "pair": "BBQ ribs and pasta",
     "grapes": "Castelao Trincadeira Touriga Nacional",
     "drinkFrom": 2024,
-    "drinkTo": 2026,
-    "from": "Mike"
+    "drinkTo": 2026
    },
    "type": "Red",
    "upc": "05601174800004"
@@ -3188,8 +3130,7 @@
     "vintage": 2020,
     "note": "No reviews found",
     "date": "2026-10-28",
-    "quick": true,
-    "from": "Mike"
+    "quick": true
    },
    "type": "Red",
    "upc": "05602182500511"
@@ -3210,8 +3151,7 @@
     "pair": "grilled lamb chops and tomato pasta",
     "grapes": "Touriga Nacional Roriz Barroca",
     "drinkFrom": 2023,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05601752400336"
@@ -3232,8 +3172,7 @@
     "pair": "grilled lamb chops and sausage pasta",
     "grapes": "Touriga Franca Roriz Nacional",
     "drinkFrom": 2025,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05601815421216"
@@ -3254,8 +3193,7 @@
     "pair": "grilled sirloin and BBQ ribs",
     "grapes": "Castelao Aragonez",
     "drinkFrom": 2025,
-    "drinkTo": 2029,
-    "from": "Mike"
+    "drinkTo": 2029
    },
    "type": "Red",
    "upc": "05601174910000"
@@ -3276,8 +3214,7 @@
     "pair": "roast beef and pepperoni pizza",
     "grapes": "Touriga Franca Roriz Nacional",
     "drinkFrom": 2022,
-    "drinkTo": 2025,
-    "from": "Mike"
+    "drinkTo": 2025
    },
    "type": "Red",
    "upc": "05600442300093"
@@ -3292,8 +3229,7 @@
     "quick": true,
     "sweet": "dry",
     "drinkFrom": 2025,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05603802400648"
@@ -3313,8 +3249,7 @@
     "finish": "medium",
     "pair": "braised short ribs and aged cheddar",
     "drinkFrom": 2024,
-    "drinkTo": 2028,
-    "from": "Mike"
+    "drinkTo": 2028
    },
    "type": "Red",
    "upc": "05600233181320"
@@ -3335,8 +3270,7 @@
     "pair": "roast lamb shoulder and mushroom stew",
     "grapes": "Castelao Camarate Tinta Miuda",
     "drinkFrom": 2025,
-    "drinkTo": 2028,
-    "from": "Mike"
+    "drinkTo": 2028
    },
    "type": "Red",
    "upc": "05604424104037"
@@ -3357,8 +3291,7 @@
     "pair": "burgers and grilled sausages",
     "grapes": "Tinta Roriz Syrah",
     "drinkFrom": 2025,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05600206949292"
@@ -3379,8 +3312,7 @@
     "pair": "BBQ ribs and beef burgers",
     "grapes": "Touriga Alicante Baga",
     "drinkFrom": 2024,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05601012837636"
@@ -3401,8 +3333,7 @@
     "pair": "grilled lamb and venison burgers",
     "grapes": "Alicante Syrah Touriga Nacional",
     "drinkFrom": 2026,
-    "drinkTo": 2029,
-    "from": "Mike"
+    "drinkTo": 2029
    },
    "type": "Red",
    "upc": "05601012008579"
@@ -3423,8 +3354,7 @@
     "pair": "roast pork and duck rice",
     "grapes": "Touriga Nacional",
     "drinkFrom": 2022,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05601831206965"
@@ -3443,8 +3373,7 @@
     "fruity": false,
     "finish": "medium",
     "pair": "grilled chicken and roast pork",
-    "grapes": "Touriga Roriz Alfrocheiro",
-    "from": "Mike"
+    "grapes": "Touriga Roriz Alfrocheiro"
    },
    "type": "Red",
    "upc": "05601157210714"
@@ -3465,8 +3394,7 @@
     "pair": "grilled ribeye steak",
     "grapes": "Touriga Nacional Syrah Alicante",
     "drinkFrom": 2023,
-    "drinkTo": 2026,
-    "from": "Mike"
+    "drinkTo": 2026
    },
    "type": "Red",
    "upc": "05601356013918"
@@ -3487,8 +3415,7 @@
     "pair": "venison stew and grilled steak",
     "grapes": "Touriga Nacional Franca Barroca",
     "drinkFrom": 2023,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05604461000507"
@@ -3509,8 +3436,7 @@
     "pair": "bison burgers and barbecued beef roast",
     "grapes": "Touriga Aragonez Alfrocheiro",
     "drinkFrom": 2024,
-    "drinkTo": 2027,
-    "from": "Mike"
+    "drinkTo": 2027
    },
    "type": "Red",
    "upc": "05604575110024"
@@ -3622,8 +3548,7 @@
     "points": 89,
     "vintage": 2018,
     "note": "Traditional Merlot-led Saint-Emilion beside Pomerol",
-    "date": "2026-10-31",
-    "from": "Mike"
+    "date": "2026-10-31"
    }
   },
   "cellar-c2-251": {
