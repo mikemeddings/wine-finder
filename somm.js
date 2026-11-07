@@ -833,6 +833,15 @@ function foodRating(w, typed, f) {
   return advIdeasOf(w).some((r) => r.food === f) ? { bold: true } : { stretch: true };
 }
 const ratingText = (r) => (r.t ? STARS(r.t) : r.bold ? "⚡" : r.stretch ? "a stretch" : "");
+// The answer to "what suits this wine best?", before any question is asked.
+function bestWithHtml(w, typed) {
+  const keys = bookKeys(sommKeys(w), !typed && isSweetWine(w));
+  const best = FOODS.map((f) => ({ f, t: foodRating(w, typed, f).t || 0 })).filter((x) => x.t > 1).sort((a, b) => b.t - a.t);
+  if (!best.length) return "";
+  const line = ({ f }) => { const { ds } = wineDishes(w, f, keys), dishes = ds.length ? ds.map((d) => d.dish).join(", ") : typed ? "" : pairDish(w, f);
+    return `<li><button type="button" class="linklike" data-wine-food="${esc(f)}">${esc(f)}</button>${dishes ? `: ${esc(dishes)}` : ""}</li>`; };
+  return `<div class="somm-best"><h4>Best with</h4><ul>${best.slice(0, 3).map(line).join("")}</ul>${best.length > 3 ? `<p class="hint">And ${best.length - 3} more below. Click a food for why it works and its recipes.</p>` : `<p class="hint">Click a food for why it works and its recipes.</p>`}</div>`;
+}
 function wineStartHtml(w, typed = false, fromList = false) {
   wineNow = { w, typed };
   const order = (x) => { const r = foodRating(w, typed, x); return r.t ? 4 - r.t : r.bold ? 4 : 5; };
@@ -843,6 +852,7 @@ function wineStartHtml(w, typed = false, fromList = false) {
       <button type="button" class="btn btn-mini" data-somm="other-food" id="somm-other-food" hidden>Choose another food</button>
       ${fromList ? `<button type="button" class="btn btn-mini" data-somm="back-list">Back to the list</button>` : `<button type="button" class="btn btn-mini" data-somm="other-wine">Choose another wine</button>`}</p>
     ${typed ? "" : `<p>${typePill(w.type)} ${esc([w.country, w.vintage].filter(Boolean).join(" · "))} · ${bottleWhere(w)}${familyScore(w) ? ` · <strong>${familyScore(w)}</strong> points` : ""}</p><div class="hit-buttons">${shoppingButton(w)}${researchButton(w)}</div>`}
+    ${bestWithHtml(w, typed)}
     <div class="somm-way"><h4>What have you got?</h4>
       <p class="hint">★ a classic match · ⚡ an adventurous one. Tap what you're cooking.</p>
       <div class="somm-foods-pick">${tiles}</div>
@@ -1155,15 +1165,17 @@ const showOut = (html) => { $("somm-out").innerHTML = html; $("somm-step3").hidd
 
 const renderSommHits = debounce(() => {
   const q = $("somm-q").value.trim(), out = $("somm-hits");
+  $("somm-country-msg").textContent = "";
   if (q.length < 3) { out.innerHTML = ""; return; }
   const words = fold(q).split(/\s+/).filter(Boolean);
   const hits = [...cellarFindWines().filter((w) => words.every((t) => w._s.includes(t))), ...listHits(q)].slice(0, 6);
-  out.innerHTML = (hits.length ? `<p>Found on our lists: tap one to pair it.</p><ul class="somm-hit-list">${hits.map((w) =>
-    `<li><button type="button" class="btn somm-hit" data-somm-wine="${esc(w.id)}">${esc(w.name)}${w.vintage && !w.name.includes(String(w.vintage)) ? ` ${esc(String(w.vintage))}` : ""} · ${w.kind === "cellar" ? "" : `${priceHtml(w)} · `}${esc(sourceLabel(w.source))}</button></li>`).join("")}</ul>` : "") +
+  out.innerHTML = (hits.length ? `<p>Click a wine to see its food pairings.</p><ul class="somm-hit-list">${hits.map((w) =>
+    `<li><button type="button" class="btn btn-somm somm-hit" data-somm-wine="${esc(w.id)}">Show food pairings for ${esc(w.name)}${w.vintage && !w.name.includes(String(w.vintage)) ? ` ${esc(String(w.vintage))}` : ""} · ${w.kind === "cellar" ? "" : `${priceHtml(w)} · `}${esc(sourceLabel(w.source))} →</button></li>`).join("")}</ul>` : "") +
     (hits.some((w) => fold(w.name) === fold(q)) ? "" : `<button type="button" class="btn btn-somm" data-somm="pair-typed">Pair “${esc(q)}” as typed</button>`);
 }, 300);
 
 document.addEventListener("click", async (e) => {
+  if ($("somm-country-msg") && !e.target.closest?.('[data-somm="pair-country"]')) $("somm-country-msg").textContent = "";
   const t = e.target.closest("#somm [data-somm], #somm [data-somm-tab], #somm [data-somm-wine], #somm [data-somm-find], [data-somm-recipe], #somm [data-somm-mood], #somm [data-wine-food], #somm [data-somm-col]");
   if (!t) return;
   await loadSomm();
@@ -1193,7 +1205,7 @@ document.addEventListener("click", async (e) => {
     return;
   }
   if (t.dataset.wineFood && wineNow) {
-    for (const b of document.querySelectorAll("#somm [data-wine-food]")) b.setAttribute("aria-pressed", String(b === t));
+    for (const b of document.querySelectorAll("#somm button.somm-food[data-wine-food]")) b.setAttribute("aria-pressed", String(b.dataset.wineFood === t.dataset.wineFood));
     return showWineFood(wineFoodHtml(wineNow.w, wineNow.typed, t.dataset.wineFood), t.dataset.wineFood);
   }
   if (t.dataset.sommRecipe) { // Claude writes a recipe for a dish the books don't give one for

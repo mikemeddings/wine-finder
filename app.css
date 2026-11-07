@@ -430,6 +430,9 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .somm-source-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
 .somm-choosing { margin: 0 0 0.5rem; }
 .somm-next { font-weight: 700; margin: 0 0 0.4rem; }
+.somm-best { border: 3px solid var(--gold); border-radius: 0.5rem; background: #fff; padding: 0.5rem 0.9rem; margin: 0.5rem 0; }
+.somm-best h4 { margin: 0 0 0.2rem; }
+.somm-best ul { margin: 0 0 0.3rem; padding-left: 1.2rem; }
 .somm-match { white-space: nowrap; color: #8a6100; }
 .somm-adv-out:not(:empty) { margin-top: 0.3rem; }
 .somm-selection { border: 3px solid var(--plum); border-radius: 0.5rem; background: var(--plum-tint); padding: 0.6rem 0.9rem; margin-bottom: 0.7rem; }
