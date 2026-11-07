@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-11-06.40">
+<link rel="stylesheet" href="app.css?v=2026-11-06.48">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -418,7 +418,8 @@
       <li><strong>🍖 I have some food.</strong> Tap what's on the plate and choose how adventurous to be. With a cellar ticked, its wines appear at once in a table, what to open first at the top: click a heading to sort, or a wine to open it on that food. With a store ticked, you also get real bottles to buy, and <strong>See all in Find wines</strong> opens the full list.</li>
       <li><strong>🧀 Plan a dinner.</strong> Leave the country on Any to choose from everything ticked, or choose one (for example Moldova). Say how many wines, which courses and, if you like, the main course. It picks a bottle for each course, says what to serve, and gives a recipe with <strong>Show all</strong>. <strong>Print this menu</strong> prints it; <strong>Ask Claude to polish this menu</strong> sends it to Claude for dishes and serving tips.</li>
     </ul>
-    <p><strong>In our cellars.</strong> Step 1 says where the bottles are: tick cellars and stores, and this computer remembers them. Ticking a cellar adds a <strong>Pick from the cellar</strong> tab: All the wines, Drink first, At their peak, The treasures, Old and wise, Light and easy, Big and bold, A touch of sweetness and Something adventurous, each a table you can sort and narrow, plus <strong>Surprise me</strong>. The tags 🔴 Drink first, 🟠 Drink soon, 🟢 Ready and ⏳ Not yet go by the owner's own drinking dates.</p>
+    <p><strong>In our cellars.</strong> Step 1 says where the bottles are: tick cellars and stores, and this computer remembers them. Ticking a cellar adds a <strong>Pick from the cellar</strong> tab: All the wines, Drink first, At their peak, The treasures, Old and wise, Light and easy, Big and bold, A touch of sweetness and Something adventurous, each a table you can sort and narrow (click a wine for its card), plus <strong>Surprise me</strong>. The tags 🔴 Drink first, 🟠 Drink soon, 🟢 Ready and ⏳ Not yet go by the owner's own drinking dates.</p>
+    <p><strong>Food Pairings list.</strong> Click a wine in a table and its card pops out. <strong>Add to Food Pairings list</strong> collects up to five wines, from any page, and <strong>See pairings</strong> shows what to cook with them together: a section for each wine, with the book's own recipes and same-style ones kept apart. ★ rates a wine with a food; the books don't rate recipes.</p>
     <p><strong>Other wines for this dish.</strong> Open any recipe and, under the method, you'll find the bottles in the stores ticked that carry the grape the book pours with it, then bottles of grapes of the same style (marked as Claude's judgement, not the books'). Choose a country or a top price to narrow them; best rated first.</p>
     <p>The matches are a guide from the books, not a tasting: a wine's grape decides most of it. Blends and local grapes the books don't name are matched by the wine's style (body, tannin, sweetness).</p>
     <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
@@ -664,6 +665,13 @@
       <button type="button" role="tab" class="somm-tab" id="somm-tab-pick" data-somm-tab="pick" aria-selected="false" hidden>🍾 Pick from the cellar</button>
     </div>
     <p id="somm-choosing" class="somm-choosing"></p>
+    <div id="somm-pairbar" class="somm-pairbar" hidden></div>
+    <dialog id="somm-pop" class="dialog dialog-wide" aria-label="Wine details">
+      <div id="somm-pop-body"></div>
+      <p class="dialog-actions"><button type="button" class="btn btn-pair" id="somm-pop-add">🍽 Add to Food Pairings list</button>
+        <button type="button" class="btn" data-somm="see-pairs">See my Food Pairings list</button>
+        <button type="button" class="btn" data-somm="close-pop">Close</button></p>
+    </dialog>
 
     <div class="somm-pane" id="somm-wine">
       <p class="somm-next">Start here: pick or type a wine, or choose a country below.</p>
@@ -849,7 +857,7 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-11-06.40"></script>
-<script src="somm.js?v=2026-11-06.40"></script>
+<script src="app.js?v=2026-11-06.48"></script>
+<script src="somm.js?v=2026-11-06.48"></script>
 </body>
 </html>

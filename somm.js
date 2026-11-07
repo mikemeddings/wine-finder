@@ -470,7 +470,7 @@ const bottleWhere = (w) => (w.kind === "cellar"
   ? `<span class="badge badge-cellar${cellarTone(w.source)}">In ${esc(w.source)}</span> ${drinkTag(w)}`
   : `<strong>${priceHtml(w)}</strong> at ${sourceBadge(w.source)}`);
 function sommRow(w, extra = "") {
-  const s = familyScore(w);
+  const s = familyScore(w) && Math.round(familyScore(w));
   return `<li class="somm-bottle">
     <div class="somm-bottle-main"><div class="sl-name">${esc(w.name)}</div>
       <div>${typePill(w.type)} ${esc([w.country, w.vintage, sizeText(w)].filter(Boolean).join(" · "))}</div>
@@ -692,11 +692,11 @@ function answerBodyHtml() {
   const cols = [["name", "Wine"], ["type", "Colour"], ["country", "Country"], ["vintage", "Vintage"], ["score", "Score"], ...(food ? [["match", "Match"]] : []), ["drink", "Drink"], ["daring", "⚡"]];
   const sorted = col === "drink" && dir > 0 ? `what to drink first${food ? ", then best match, then best rated" : ""}. Start at the top of the list` : `${TABLE_WORDS[col]}${dir < 0 ? ", reversed" : ""}`;
   return `<div class="somm-selection"><p class="somm-sel-head">${esc(head)}</p><p class="somm-sel-count">${esc(count)}</p>
-      <p>${moodLine ? `${esc(capFirst(`These wines ${moodLine}`))} ` : ""}Sorted by <strong>${esc(sorted)}</strong>. Click a heading to sort by it, or a wine to see ${food ? "more" : "what goes with it"}.</p>
+      <p>${moodLine ? `${esc(capFirst(`These wines ${moodLine}`))} ` : ""}Sorted by <strong>${esc(sorted)}</strong>. Click a heading to sort by it, or a wine to see its details.</p>
       <p class="hint">Drinking dates are the cellar owner's own.</p>
       ${answerArgs.rows.length > 1 ? answerControlsHtml() : ""}</div>
     ${n ? `<div class="somm-table-wrap"><table class="somm-table"><thead><tr>${cols.map(([k, label]) => `<th scope="col"><button type="button" class="linklike" data-somm-col="${k}" aria-pressed="${col === k}">${esc(label)}${col === k ? (dir > 0 ? " ▲" : " ▼") : ""}</button></th>`).join("")}</tr></thead>
-      <tbody>${list.map((x) => { const w = x.w; return `<tr><td><button type="button" class="linklike" data-somm-wine="${esc(w.id)}">${esc(w.name)}</button></td><td>${esc(w.type || "")}</td><td>${esc(w.country || "")}</td><td>${esc(String(w.vintage ?? "NV"))}</td>
+      <tbody>${list.map((x) => { const w = x.w; return `<tr><td><button type="button" class="linklike" data-somm-pop="${esc(w.id)}">${esc(w.name)}</button></td><td>${esc(w.type || "")}</td><td>${esc(w.country || "")}</td><td>${esc(String(w.vintage ?? "NV"))}</td>
         <td>${bestScore(w) != null ? `<strong>${Math.round(bestScore(w))}</strong>` : ""}</td>${food ? `<td class="somm-match">${matchText(x)}</td>` : ""}<td>${drinkTag(w)}</td><td>${isDaring(x) ? "⚡" : ""}</td></tr>`; }).join("")}</tbody></table></div>` : ""}`;
 }
 document.addEventListener("change", (e) => {
@@ -789,7 +789,7 @@ document.addEventListener("change", async (e) => {
 });
 function runFridge() {
   const text = $("somm-fridge").value.trim();
-  if (!wineNow) return;
+  if (!wineNow) return showWineFood(pairsFridgeHtml(text), text ? `the fridge: ${text}` : "");
   for (const b of document.querySelectorAll("#somm [data-wine-food]")) b.setAttribute("aria-pressed", "false");
   showWineFood(fridgeHtml(wineNow.w, text), text ? `the fridge: ${text}` : "");
 }
@@ -854,7 +854,7 @@ function wineStartHtml(w, typed = false, fromList = false) {
     <p class="somm-trail"><strong>${esc(w.name)}</strong> <span id="somm-trail-food"></span>
       <button type="button" class="btn btn-mini" data-somm="other-food" id="somm-other-food" hidden>Choose another food</button>
       ${fromList ? `<button type="button" class="btn btn-mini" data-somm="back-list">Back to the list</button>` : `<button type="button" class="btn btn-mini" data-somm="other-wine">Choose another wine</button>`}</p>
-    ${typed ? "" : `<p>${typePill(w.type)} ${esc([w.country, w.vintage].filter(Boolean).join(" · "))} · ${bottleWhere(w)}${familyScore(w) ? ` · <strong>${familyScore(w)}</strong> points` : ""}</p><div class="hit-buttons">${shoppingButton(w)}${researchButton(w)}</div>`}
+    ${typed ? "" : `<p>${typePill(w.type)} ${esc([w.country, w.vintage].filter(Boolean).join(" · "))} · ${bottleWhere(w)}${familyScore(w) ? ` · <strong>${Math.round(familyScore(w))}</strong> points` : ""}</p><div class="hit-buttons">${pairButton(w)}${shoppingButton(w)}${researchButton(w)}</div>`}
     ${bestWithHtml(w, typed)}
     <div class="somm-way"><h4>What have you got?</h4>
       <p class="hint">★ a classic match · ⚡ an adventurous one. Tap what you're cooking.</p>
@@ -924,6 +924,114 @@ function showWineFood(html, label) {
   $("somm-trail-food").textContent = label ? `› ${label}` : "";
   $("somm-other-food").hidden = !label;
   if (label) jumpTo($("somm-wine-food"));
+}
+
+// ---- Several wines at once: the food pairings list ----------------------------------------
+// The wine's card pops out over the list, and "Add to food pairings" collects up to five wines
+// for "What have you got?" across all of them.
+function popWine(id) {
+  const w = findWine(id);
+  if (!w) return;
+  $("somm-pop-body").innerHTML = wineCard(w);
+  const add = $("somm-pop-add"); // the card's own button gives way to this one, at the foot of the window
+  add.dataset.pair = id;
+  add.setAttribute("aria-pressed", String(inPairs(id)));
+  add.textContent = pairWords(inPairs(id));
+  $("somm-pop").showModal?.();
+}
+// buttons that lead elsewhere shouldn't leave the card open over the page
+document.addEventListener("click", (e) => { if (e.target.closest?.('#somm-pop [data-action="mw-where"], #somm-pop [data-notes]')) $("somm-pop").close(); });
+function renderPairBar() {
+  const box = $("somm-pairbar");
+  if (!box) return;
+  box.hidden = !pairList.length;
+  box.innerHTML = pairList.length ? `<strong>🍽 Food pairings: ${pairList.length} of ${PAIR_MAX} wines</strong>
+    ${pairList.map((w) => `<span class="chip">${esc(w.name)}<button type="button" class="chip-x" data-pair="${esc(w.id)}" aria-label="Remove ${esc(w.name)}">✕</button></span>`).join(" ")}
+    <button type="button" class="btn btn-somm" data-somm="see-pairs">See pairings</button> <button type="button" class="btn btn-mini" data-somm="clear-pairs">Clear</button>` : "";
+}
+const backToList = () => (answerArgs && !!$("somm-cellar-answer"));
+function openWine(w, fromList) {
+  const food = fromList && answerArgs?.food;
+  showOut(wineStartHtml(w, false, fromList));
+  fillStory(w);
+  if (food) {
+    document.querySelector(`#somm button.somm-food[data-wine-food="${food}"]`)?.setAttribute("aria-pressed", "true");
+    $("somm-wine-food").innerHTML = wineFoodHtml(w, false, food);
+    $("somm-trail-food").textContent = `› ${food}`;
+    $("somm-other-food").hidden = false;
+  }
+}
+function seePairs() {
+  if (!pairList.length) return;
+  const fromList = backToList();
+  if (pairList.length === 1) return openWine(findWine(pairList[0].id) || pairList[0], fromList);
+  wineNow = null;
+  showOut(pairsStartHtml(fromList));
+}
+const pairWines = () => pairList.map((x) => findWine(x.id) || x);
+const suits = (w, f) => { const r = foodRating(w, false, f); return r.t ? "classic" : r.bold ? "bold" : ""; };
+function pairsStartHtml(fromList) {
+  const wines = pairWines(), n = wines.length;
+  const score = (f) => wines.reduce((k, w) => k + (foodRating(w, false, f).t || (foodRating(w, false, f).bold ? 0.5 : 0)), 0);
+  const tiles = FOODS.slice().sort((a, b) => score(b) - score(a)).map((f) => {
+    const k = wines.filter((w) => suits(w, f)).length;
+    return `<button type="button" class="somm-food" data-pairs-food="${esc(f)}" aria-pressed="false">${esc(f)} <span class="tile-rate">${k} of ${n}</span></button>`;
+  }).join("");
+  return `<div id="somm-wine-answer">
+    <p class="somm-trail"><strong>${n} wines together</strong> <span id="somm-trail-food"></span>
+      <button type="button" class="btn btn-mini" data-somm="other-food" id="somm-other-food" hidden>Choose another food</button>
+      ${fromList ? `<button type="button" class="btn btn-mini" data-somm="back-list">Back to the list</button>` : ""}</p>
+    <div class="somm-way"><h4>What have you got?</h4>
+      <p class="hint">Each food shows how many of your wines suit it, classic or adventurous. Tap what you're cooking.</p>
+      <div class="somm-foods-pick">${tiles}</div>
+      <label class="somm-label" for="somm-fridge">Or type what's in the fridge <span class="hint-inline">(for example pork, apples)</span></label>
+      <div class="somm-row"><input type="text" id="somm-fridge" autocomplete="off"> <button type="button" class="btn btn-somm" data-somm="fridge">Find recipes</button></div></div>
+    <div id="somm-wine-food"></div></div>`;
+}
+// How a recipe stands with a wine: the book pours its grape ("exact"), or a grape of the same style.
+// The books don't rate recipes, so this is the only strength a recipe has.
+function recipeTierFor(w, r) {
+  const keys = bookKeys(w), alike = sameStyleAs(keys), want = expandKeys(r[6] || []);
+  return want.some((k) => keys.includes(k)) ? "exact" : want.some((k) => alike.has(k)) ? "style" : "";
+}
+const recipeFold = (label, list, open = false) => (list.length
+  ? `<details class="somm-fold"${open ? " open" : ""}><summary>${esc(label)} (${list.length})</summary>${list.map(recipeHtml).join("")}</details>` : "");
+// One section per wine with its recipes, and first any that are the books' own match for every wine.
+function pairSectionsHtml(wines, recipes, head) {
+  const tiers = new Map(recipes.map((r) => [r, wines.map((w) => recipeTierFor(w, r))]));
+  const shared = recipes.filter((r) => tiers.get(r).every((t) => t === "exact"));
+  const other = recipes.filter((r) => tiers.get(r).every((t) => !t));
+  const section = (w, k) => { const of = (t) => recipes.filter((r) => tiers.get(r)[k] === t), exact = of("exact");
+    return `<div class="somm-pair-wine">${head(w)}${recipeFold("The book's own match", exact, exact.length <= 3)}${recipeFold("Same style of wine (Claude's judgement)", of("style"))}</div>`; };
+  return `${shared.length ? `<div class="somm-pair-wine somm-pair-all"><h4>Good for all your wines</h4><p class="hint">The book's own match for every wine here.</p>${shared.map(recipeHtml).join("")}</div>` : ""}
+    ${wines.map(section).join("")}${recipeFold("Other recipes using this", other)}`;
+}
+const pairName = (w) => `<button type="button" class="linklike somm-pair-name" data-somm-pop="${esc(w.id)}">${esc(w.name)}</button>`;
+function pairsFoodHtml(f) {
+  const order = Object.keys(STAGES), strength = (w) => { const r = foodRating(w, false, f); return r.t || (r.bold ? 0.5 : 0); };
+  const wines = pairWines().sort((a, b) => strength(b) - strength(a) || order.indexOf(drinkStage(a)) - order.indexOf(drinkStage(b)));
+  const food = f.toLowerCase();
+  const head = (w) => {
+    const r = foodRating(w, false, f), { ds, why } = wineDishes(w, f, bookKeys(sommKeys(w), isSweetWine(w)));
+    const label = r.t ? `${STARS(r.t)} with ${food}` : r.bold ? `⚡ an adventurous match with ${food}` : `not a natural match with ${food}`;
+    const dishes = ds.length ? ds.map((d) => d.dish).join(", ") : r.bold ? "" : pairDish(w, f);
+    return `<p class="somm-pair-head">${pairName(w)}</p><p><strong>${esc(label)}</strong> ${w.kind === "cellar" ? drinkTag(w) : ""}</p>
+      ${why ? `<p>${esc(capFirst(why.why))}${srcSpan(why.b, why.p)}</p>` : ""}${dishes ? `<p><strong>Dishes the books suggest:</strong> ${esc(dishes)}.</p>` : ""}${r.bold ? advIdeaHtml(w, f, false) : ""}`;
+  };
+  const recipes = (SOMM?.recipes || []).filter((r) => r[3] === f && r[4] !== "side" && wines.some((w) => recipeTierFor(w, r)));
+  return `<div class="somm-card"><h3 class="somm-wine-h">Your wines with ${esc(food)}</h3>
+    <p class="hint">★ rates the wine with this food, not the recipes. The books don't rate recipes.</p>
+    ${pairSectionsHtml(wines, recipes, head)}</div>`;
+}
+function pairsFridgeHtml(text) {
+  const wanted = fold(text).split(/[^a-z]+/).filter((t) => t.length > 2).map((t) => t.replace(/s$/, ""));
+  if (!wanted.length) return `<div class="somm-card"><p>Type something from the fridge first, such as pork.</p></div>`;
+  const rows = (SOMM?.recipes || []).map((r) => { const x = RECIPES[recipeKey(r)]; if (!x) return null;
+    const hay = fold(`${r[0]} ${(x.i || []).join(" ")}`), found = wanted.filter((t) => hay.includes(t)).length;
+    return found ? { r, found } : null; }).filter(Boolean).sort((a, b) => b.found - a.found).map((x) => x.r);
+  if (!rows.length) return `<div class="somm-card"><p>No recipe in the books uses ${esc(text)}.</p></div>`;
+  const head = (w) => `<p class="somm-pair-head">${pairName(w)}</p><p>${w.kind === "cellar" ? drinkTag(w) : ""}</p>`;
+  return `<div class="somm-card"><h3 class="somm-wine-h">Recipes with ${esc(text)}</h3>${pairSectionsHtml(pairWines(), rows, head)}</div>`;
 }
 
 // ---- Route 2: I have some food -----------------------------------------------------------------
@@ -1131,6 +1239,7 @@ function renderSommStores() {
     <button type="button" class="btn btn-mini" data-somm="all-sources">Select all</button> <span id="somm-using"></span></div>`;
   renderMoods();
   renderUsing();
+  renderPairBar();
 }
 // The Comparison List as its own way in: each wine with its details, a tick box each.
 function renderSommComparison() {
@@ -1179,7 +1288,7 @@ const renderSommHits = debounce(() => {
 
 document.addEventListener("click", async (e) => {
   if ($("somm-country-msg") && !e.target.closest?.('[data-somm="pair-country"]')) $("somm-country-msg").textContent = "";
-  const t = e.target.closest("#somm [data-somm], #somm [data-somm-tab], #somm [data-somm-wine], #somm [data-somm-find], [data-somm-recipe], #somm [data-somm-mood], #somm [data-wine-food], #somm [data-somm-col]");
+  const t = e.target.closest("#somm [data-somm], #somm [data-somm-tab], #somm [data-somm-wine], #somm [data-somm-find], [data-somm-recipe], #somm [data-somm-mood], #somm [data-wine-food], #somm [data-somm-col], #somm [data-somm-pop], #somm [data-pairs-food]");
   if (!t) return;
   await loadSomm();
   if (t.dataset.sommMood) return showOut(moodHtml(t.dataset.sommMood));
@@ -1188,18 +1297,11 @@ document.addEventListener("click", async (e) => {
     if (t.dataset.sommTab === "wine") $("somm-q").focus(); // the tab may be open already: show where to start
     return;
   }
-  if (t.dataset.sommWine) {
-    const w = findWine(t.dataset.sommWine), fromList = !!t.closest("#somm-cellar-answer"), food = fromList && answerArgs?.food;
-    if (!w) return;
-    showOut(wineStartHtml(w, false, fromList));
-    fillStory(w);
-    if (food) {
-      document.querySelector(`#somm [data-wine-food="${food}"]`)?.setAttribute("aria-pressed", "true");
-      $("somm-wine-food").innerHTML = wineFoodHtml(w, false, food);
-      $("somm-trail-food").textContent = `› ${food}`;
-      $("somm-other-food").hidden = false;
-    }
-    return;
+  if (t.dataset.sommWine) { const w = findWine(t.dataset.sommWine); if (w) openWine(w, false); return; }
+  if (t.dataset.sommPop) return popWine(t.dataset.sommPop);
+  if (t.dataset.pairsFood) {
+    for (const b of document.querySelectorAll("#somm [data-pairs-food]")) b.setAttribute("aria-pressed", String(b === t));
+    return showWineFood(pairsFoodHtml(t.dataset.pairsFood), t.dataset.pairsFood);
   }
   if (t.dataset.sommCol) {
     answerOpts.dir = answerOpts.col === t.dataset.sommCol ? -answerOpts.dir : 1;
@@ -1237,9 +1339,15 @@ document.addEventListener("click", async (e) => {
   } else if (a === "start-again") startAgain();
   else if (a === "to-step1") $("somm-stores").scrollIntoView({ block: "center" });
   else if (a === "print-out") printOut(t.dataset.printTitle);
+  else if (a === "close-pop") $("somm-pop").close();
+  else if (a === "see-pairs") { if ($("somm-pop").open) $("somm-pop").close(); seePairs(); }
+  else if (a === "clear-pairs") {
+    for (const w of pairList.slice()) togglePair(w.id);
+    renderPairBar();
+  }
   else if (a === "fridge") runFridge();
   else if (a === "other-food") {
-    for (const b of document.querySelectorAll("#somm [data-wine-food]")) b.setAttribute("aria-pressed", "false");
+    for (const b of document.querySelectorAll("#somm [data-wine-food], #somm [data-pairs-food]")) b.setAttribute("aria-pressed", "false");
     showWineFood("", "");
     $("somm-wine-answer").scrollIntoView({ block: "start" });
   } else if (a === "other-wine") startAgain();

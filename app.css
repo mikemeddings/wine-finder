@@ -183,6 +183,16 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .wine-Sake { border-left-color: #a8a29a; }
 .wine-Other { border-left-color: #8c8c8c; }
 .wine.on-list { background: #f3faf3; border-color: var(--green); border-left-color: var(--green); }
+/* A cellar wine: the outer edge is the cellar, the inner edge the kind of wine */
+.wine-cellar.wine-Red { box-shadow: inset 0.5rem 0 0 #7a1f2b; }
+.wine-cellar.wine-White { box-shadow: inset 0.5rem 0 0 #c9ad3e; }
+.wine-cellar.wine-Rosé { box-shadow: inset 0.5rem 0 0 #e58aa0; }
+.wine-cellar.wine-Sparkling { box-shadow: inset 0.5rem 0 0 #6f9fcf; }
+.wine-cellar.wine-Fortified { box-shadow: inset 0.5rem 0 0 #6b3a12; }
+.wine-cellar.wine-Dessert { box-shadow: inset 0.5rem 0 0 #d9a33b; }
+.wine.wine-cellar { padding-left: 1.4rem; }
+.mw-card { list-style: none; margin-bottom: 0.75rem; }
+.where-is { margin: 0.5rem 0 0.3rem; }
 .wine-name { margin: 0; font-size: 1.35rem; }
 .wine-price { font-size: 1.5rem; font-weight: 700; text-align: right; white-space: nowrap; color: var(--wine); }
 .wine-facts, .wine-detail { margin: 0; grid-column: 1 / -1; }
@@ -430,6 +440,16 @@ legend { font-weight: 700; font-size: 1.3rem; padding: 0 0.4rem 0 0; color: var(
 .somm-source-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
 .somm-choosing { margin: 0 0 0.5rem; }
 .somm-next { font-weight: 700; margin: 0 0 0.4rem; }
+.somm-pair-wine { border-top: 2px solid var(--line); padding: 0.5rem 0; }
+.somm-pair-wine p { margin: 0.2rem 0; }
+.somm-pair-all { border: 3px solid var(--green); border-radius: 0.5rem; padding: 0.5rem 0.7rem; margin-bottom: 0.5rem; }
+.somm-pair-head { font-size: 1.2rem; font-weight: 700; }
+.somm-pair-name { font-weight: 700; text-align: left; }
+.somm-pairbar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; border: 3px solid var(--green); border-radius: 0.5rem; background: var(--green-tint); padding: 0.4rem 0.7rem; margin-bottom: 0.6rem; }
+.somm-pairbar[hidden] { display: none; }
+.btn-pair { background: #fff; border-color: var(--green); color: var(--green); }
+.btn-pair[aria-pressed="true"] { background: var(--green); color: #fff; }
+#somm-pop-body .btn-pair { display: none; }
 .somm-best { border: 3px solid var(--gold); border-radius: 0.5rem; background: #fff; padding: 0.5rem 0.9rem; margin: 0.5rem 0; }
 .somm-best h4 { margin: 0 0 0.2rem; }
 .somm-best ul { margin: 0 0 0.3rem; padding-left: 1.2rem; }

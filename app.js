@@ -1708,6 +1708,7 @@ function cellarCard(w) {
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
       ${quickMarkButton(w)}
       ${shoppingButton(w)}
+      ${pairButton(w)}
       <button type="button" class="btn btn-ew" data-action="mw-where" data-id="${esc(w.id)}">Where can I buy it?</button>
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
       <a class="btn ext btn-we" href="${wineEnthusiastUrl(w)}" target="_blank" rel="noopener">Wine Enthusiast</a>
@@ -1739,6 +1740,7 @@ function wineCard(w) {
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
       ${quickMarkButton(w)}
       ${shoppingButton(w)}
+      ${pairButton(w)}
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
       <a class="btn ext btn-we" href="${wineEnthusiastUrl(w)}" target="_blank" rel="noopener">Wine Enthusiast</a>
       <a class="btn ext btn-vivino" href="${vivinoUrl(w)}" target="_blank" rel="noopener">Vivino</a>
@@ -1770,6 +1772,19 @@ function countHeadingHtml(n) {
     (n !== sold ? ` · ${n.toLocaleString()} with your choices` : "");
 }
 
+// Nothing to show for the search words: look everywhere, whatever is ticked, and say where the wine is.
+function outsideHits() {
+  const wanted = fold(state.q).split(/\s+/).filter(Boolean);
+  if (!wanted.length) return [];
+  return [...cellarFindWines(), ...WINES].filter((w) => wanted.every((t) => w._s.includes(t))).slice(0, 6);
+}
+function whereIsHtml(w) {
+  const ticked = state.sources.has(w.source), name = esc(w.name);
+  if (w.kind !== "cellar") return `<strong>${name}</strong> is sold by ${esc(sourceLabel(w.source))}${ticked ? ", but doesn't fit your other choices." : ", which isn't ticked."}`;
+  const sold = [...new Set(storeMatchesOf(w.id).map((x) => sourceLabel(x.source)))];
+  return `<strong>${name}</strong> is in ${esc(w.source)}${ticked ? ", but doesn't fit your other choices." : ", which isn't ticked."} ${sold.length ? `Also sold by ${esc(sold.join(", "))}.` : "Not sold by any of our stores."}`;
+}
+let searchedAll = false;
 function renderResults() {
   lastResults = findPool().filter((w) => matches(w)).sort(currentSort());
   const n = lastResults.length;
@@ -1783,7 +1798,11 @@ function renderResults() {
   renderSortStatus();
   renderCellarResearch();
 
-  if (!n) {
+  const outside = !n ? outsideHits() : [];
+  if (!n && state.q && !allLoaded() && !searchedAll) { searchedAll = true; loadAllSources().then(renderResults); } // the search covers every list, once
+  if (outside.length) {
+    $("result-list").innerHTML = outside.map((w) => `<p class="notice where-is">${whereIsHtml(w)}</p>${wineCard(w)}`).join("");
+  } else if (!n) {
     const newHint = state.newOnly && !WINES.some((w) => w.new_since_last)
       ? "<p>“New” wines appear once a second BC price list has come out, so they can be compared.</p>" : "";
     $("result-list").innerHTML = !state.sources.size
@@ -2027,6 +2046,36 @@ document.addEventListener("toggle", (e) => { // fill a pairings fold the first t
 // added, and shown with today's details when the store list still has it.
 let shopping = (() => { const v = storeGet(STORE.shopping, []); return Array.isArray(v) ? v : []; })();
 const onShopping = (id) => shopping.some((s) => s.id === id);
+// Food pairings list: up to five wines to pair together on the Sommelier page, kept on this computer.
+const PAIR_MAX = 5;
+let pairList = (() => { const v = storeGet("wf.pairList", []); return Array.isArray(v) ? v : []; })();
+const inPairs = (id) => pairList.some((x) => x.id === id);
+const pairWords = (on) => (on ? "✓ On Food Pairings list (tap to remove)" : "🍽 Add to Food Pairings list");
+function pairButton(w) {
+  if (w.kind === "typed") return "";
+  const on = inPairs(w.id);
+  return `<button type="button" class="btn btn-pair" data-pair="${esc(w.id)}" aria-pressed="${on}">${pairWords(on)}</button>`;
+}
+function togglePair(id) {
+  if (inPairs(id)) pairList = pairList.filter((x) => x.id !== id);
+  else {
+    const w = findWine(id);
+    if (!w) return;
+    if (pairList.length >= PAIR_MAX) {
+      for (const b of document.querySelectorAll(`[data-pair="${CSS.escape(id)}"]`)) b.textContent = `Only ${PAIR_MAX} at a time: remove one first`;
+      return;
+    }
+    const { _s, _w, _bold, _boldKey, ...copy } = w;
+    pairList = [...pairList, copy];
+  }
+  storeSet("wf.pairList", pairList);
+  for (const b of document.querySelectorAll(`[data-pair="${CSS.escape(id)}"]`)) {
+    const on = inPairs(id);
+    b.setAttribute("aria-pressed", String(on));
+    b.textContent = pairWords(on);
+  }
+  renderPairBar();
+}
 function shoppingButton(w) {
   if (w.kind === "typed") return "";
   const on = onShopping(w.id);
@@ -2750,6 +2799,10 @@ const MW_SORTS = {
 };
 
 function mwRow(w) {
+  if (w.kind === "cellar") { // the same card as Find wines, with what only this computer knows
+    const mine = [w.quantity ? `${w.quantity} ${w.quantity === 1 ? "bottle" : "bottles"}` : "", w.location, w.notes].filter(Boolean).map(esc).join(" · ");
+    return `<li class="mw-card">${cellarCard(w).replace('<div class="wine-actions">', `${mine ? `<p class="wine-detail hint">${mine}</p>` : ""}<div class="wine-actions">`)}</li>`;
+  }
   const on = shortlist.some((s) => s.id === w.id);
   const facts = [w.country, w.region_or_grape, w.varietal, w.type !== "Other" ? w.type : null,
     w.size_ml && w.size_ml !== 750 ? sizeText(w) : null].filter(Boolean).map(esc).join(" · ");
@@ -2773,6 +2826,7 @@ function mwRow(w) {
     <div class="wine-actions">
       <button type="button" class="btn btn-add" data-add="${esc(w.id)}" aria-pressed="${on}">${on ? "✓ On Short List (tap to remove)" : "＋ Add to Short List for Claude Research"}</button>
       ${shoppingButton(w)}
+      ${pairButton(w)}
       <button type="button" class="btn btn-ew" data-action="mw-where" data-id="${esc(w.id)}">Where can I buy it?</button>
       <a class="btn ext btn-ct" href="${cellarTrackerUrl(w)}" target="_blank" rel="noopener">CellarTracker</a>
       ${manualButtons}
@@ -3197,11 +3251,13 @@ function sharedIdOf(id) {
   return out;
 }
 
+// Publishing never replaces a rating with an older one, so an older one here isn't waiting to go.
+const notOlder = (a, b) => !b || (a.date || "") >= (b.date || "");
 function unpublishedIds() {
   return Object.keys(ratings).filter((id) => !privateId(id) || sharedIdOf(id)).filter((id) => {
     const r = ratings[id], f = frOf(id);
-    return (r.claude && JSON.stringify(r.claude) !== JSON.stringify(f.claude)) ||
-      (r.mine && JSON.stringify(r.mine) !== JSON.stringify(f.family));
+    return (r.claude && JSON.stringify(r.claude) !== JSON.stringify(f.claude) && notOlder(r.claude, f.claude)) ||
+      (r.mine && JSON.stringify(r.mine) !== JSON.stringify(f.family) && notOlder(r.mine, f.family));
   });
 }
 
@@ -3297,14 +3353,13 @@ function frHtml(w) {
 // nothing already published is removed.
 function mergedForPublish(base) {
   const out = JSON.parse(JSON.stringify(base || {}));
-  const newer = (a, b) => !b || (a.date || "") >= (b.date || "");
   for (const [own, r] of Object.entries(ratings)) {
     const id = sharedIdOf(own); // private cellar codes go out under the shared copy's code
     if (!id) continue;
     const e = out[id] || {};
     if (r.name) e.name = r.name;
-    if (r.claude && newer(r.claude, e.claude)) e.claude = { ...r.claude };
-    if (r.mine && newer(r.mine, e.family)) e.family = { ...r.mine };
+    if (r.claude && notOlder(r.claude, e.claude)) e.claude = { ...r.claude };
+    if (r.mine && notOlder(r.mine, e.family)) e.family = { ...r.mine };
     if (e.claude || e.family) out[id] = e;
   }
   return out;
@@ -5657,6 +5712,7 @@ function wireEvents() {
       if (!$("view-shortlist").hidden) renderShortlist(); // added from the Short List page's own box
     } else if (t.dataset.remove) { toggleShortlist(t.dataset.remove); renderShortlist(); }
     else if (t.dataset.shop) toggleShopping(t.dataset.shop);
+    else if (t.dataset.pair) togglePair(t.dataset.pair);
     else if (t.dataset.shopRemove) toggleShopping(t.dataset.shopRemove);
     else if (t.dataset.action === "shop-clear") {
       if (shopping.length && confirm(`Remove all ${shopping.length} wines from your Comparison List?`)) { shopping = []; saveShopping(); renderShopping(); refresh(); }
