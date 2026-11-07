@@ -234,6 +234,9 @@ function grapeDishes(g, f) {
   const seen = new Set();
   return out.sort((a, b) => b.s - a.s).filter((x) => { const k = fold(x.dish); if (seen.has(k)) return false; seen.add(k); return true; });
 }
+// The books mark some of a grape's dishes "(rosé)": those are for its rosé, not its red or white.
+const dishForWine = (w, d) => (!w.type || w.type === "Rosé" ? d
+  : { ...d, dish: d.dish.split(/,\s*/).filter((x) => !/\(ros[eé]\)/i.test(x)).join(", ") });
 // several grapes' dishes for one food, best first, no dish twice
 function dishesFor(keys, f, n = 5) {
   const all = keys.flatMap((g) => grapeDishes(g, f)).sort((a, b) => b.s - a.s || (b.why ? 1 : 0) - (a.why ? 1 : 0));
@@ -495,7 +498,7 @@ function winePairingHtml(w, typed = false) {
   const localHtml = local.length ? `<div class="somm-local-inline"><h4>🍽 From ${esc(w.country)}'s own table ${CLAUDE_TAG}</h4><ul>${local.map((r) => `<li>${esc(capFirst(r.dishes))}.</li>`).join("")}</ul></div>` : "";
   if (!foods.length) return `<div class="somm-card">${head}${localHtml}<p>${keys.length ? `The pairing books don't cover ${esc(keys.join(" or "))}` : "The grape or style can't be told from the name"}, so there's little to go on.${keys.length ? "" : " Try adding the grape (for example “Saperavi”)."} Claude can help: add the wine to the Short List and ask.</p></div>`;
   const rows = foods.map(({ f, t }) => {
-    const ds = dishesFor(grapes, f, 5);
+    const ds = dishesFor(grapes, f, 8).map((d) => dishForWine(w, d)).filter((d) => d.dish).slice(0, 5);
     const whys = ds.filter((d) => d.why).slice(0, 2).map((d) => `${esc(capFirst(d.why))}${srcSpan(d.b, d.p)}`);
     const src = [...new Set(ds.map((d) => bookName(d.b)))].join(", ");
     return `<li><span class="food-star tier-${t}">${STARS(t)}</span> <strong>${esc(f)}:</strong> ${ds.length
@@ -609,7 +612,7 @@ function advIdeaHtml(w, food, bold) {
 // The books' dishes for a bottle; their advice for an off-dry style doesn't fit a dry bottle of the same grape.
 function wineDishes(w, f, keys) {
   const offDry = (x) => w.type && sweetV(w) === "dry" && /off.dry|spatlese|spätlese|kabinett/i.test(x);
-  const ds = dishesFor(keys, f, 8).filter((d) => !offDry(d.dish)).slice(0, 3);
+  const ds = dishesFor(keys, f, 8).map((d) => dishForWine(w, d)).filter((d) => d.dish && !offDry(d.dish)).slice(0, 3);
   return { ds, why: ds.find((d) => d.why && !offDry(d.why)) };
 }
 function advListHtml(w) {
@@ -1050,7 +1053,7 @@ function courseHtml(p, country) {
   } else {
     const local = n ? localRows(p.w.country, p.w) : [];
     if (local.length) parts.push(`<p class="somm-dish"><strong>From ${esc(p.w.country)}'s table:</strong> ${esc(capFirst(local[0].dishes))}. ${CLAUDE_TAG}</p>`);
-    const ds = dishesFor(grapes, p.food, 4);
+    const ds = dishesFor(grapes, p.food, 8).map((d) => dishForWine(p.w, d)).filter((d) => d.dish).slice(0, 4);
     if (ds.length) parts.push(`<p class="somm-dish"><strong>${local.length ? "What the books pour this style with" : "Serve"}:</strong></p><ul class="somm-foods">${ds.map((d) =>
       `<li>${esc(capFirst(d.dish))}${d.why ? `. ${esc(capFirst(d.why))}` : ""}${srcSpan(d.b, d.p)}${keys.includes(d.g) ? "" : ` <span class="hint-inline">(said of ${esc(d.g)})</span>`}</li>`).join("")}</ul>`);
     else parts.push(`<p class="somm-dish"><strong>Serve:</strong> ${esc(capFirst(pairDish(p.w, p.food) || ""))}.</p>`);
