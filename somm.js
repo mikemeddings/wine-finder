@@ -692,7 +692,7 @@ function tableSort(rows, col, dir, isDaring) {
   return rows.map((x) => [x, value(x), bestScore(x.w) ?? 0]).sort(([a, p, sa], [b, q, sb]) =>
     ((typeof p === "string" ? p.localeCompare(q) : p - q) * dir) || (b.t || 0) - (a.t || 0) || sb - sa).map(([x]) => x);
 }
-function wineTableHtml(list, cols, col, dir, isDaring, colAttr = "data-somm-col") {
+function wineTableHtml(list, cols, col, dir, isDaring, colAttr = "data-somm-col", headExtra = {}) {
   const cell = (k, x) => { const w = x.w;
     switch (k) {
       case "name": return `<button type="button" class="linklike" data-somm-pop="${esc(w.id)}">${esc(w.name)}</button>`;
@@ -705,7 +705,7 @@ function wineTableHtml(list, cols, col, dir, isDaring, colAttr = "data-somm-col"
       case "drink": return drinkTag(w);
       default: return isDaring(x) ? "⚡" : "";
     } };
-  return `<div class="somm-table-wrap"><table class="somm-table"><thead><tr>${cols.map(([k, label]) => `<th scope="col"><button type="button" class="linklike" ${colAttr}="${k}" aria-pressed="${col === k}">${esc(label)}${col === k ? (dir > 0 ? " ▲" : " ▼") : ""}</button></th>`).join("")}</tr></thead>
+  return `<div class="somm-table-wrap"><table class="somm-table"><thead><tr>${cols.map(([k, label]) => `<th scope="col"><button type="button" class="linklike" ${colAttr}="${k}" aria-pressed="${col === k}">${esc(label)}${col === k ? (dir > 0 ? " ▲" : " ▼") : ""}</button>${headExtra[k] || ""}</th>`).join("")}</tr></thead>
       <tbody>${list.map((x) => `<tr>${cols.map(([k]) => `<td${k === "match" ? ' class="somm-match"' : ""}>${cell(k, x)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
 }
 // Banner, then a table to scan and sort by hand. A wine's name opens it.

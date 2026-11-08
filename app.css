@@ -1026,3 +1026,15 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 @media (max-width: 800px) { .mc-col-lab.mc-minor { visibility: hidden; } }
 #mc-tip { position: fixed; z-index: 50; max-width: 24rem; background: var(--text); color: #fff; border-radius: 0.4rem; padding: 0.4rem 0.6rem; font-size: 1rem; pointer-events: none; }
 #mc-tip[hidden] { display: none; }
+/* About a region */
+.mc-region { font-weight: 700; }
+.region-country { font-weight: 400; }
+.region-wiki { overflow: hidden; }
+.region-wiki p { font-size: 1.1rem; line-height: 1.55; }
+.region-pic { float: right; max-width: 40%; max-height: 16rem; margin: 0 0 0.6rem 1rem; border-radius: 0.5rem; }
+.region-art { color: var(--muted, #6f6a63); margin-top: 0; }
+.region-credit { clear: both; font-size: 0.95rem; }
+.region-links { display: flex; flex-wrap: wrap; gap: 1.2rem; font-size: 1.15rem; font-weight: 700; }
+.region-cellar { border-top: 2px solid var(--line); margin-top: 0.8rem; padding-top: 0.4rem; }
+.region-cellar h3 { margin: 0.3rem 0; }
+@media (max-width: 600px) { .region-pic { float: none; max-width: 100%; margin: 0 0 0.6rem; } }

@@ -149,7 +149,7 @@ function mcBannerControls(wines) {
   const pick = (k, label, get) => { const vals = [...new Set(wines.map(get).filter((v) => v && v !== "Country not stated"))].sort();
     return `<select data-mc-narrow="${k}" aria-label="${esc(label)}"><option value="">Any ${esc(label.toLowerCase())}</option>${vals.map((v) => `<option value="${esc(v)}"${v === mc[k] ? " selected" : ""}>${esc(v)}</option>`).join("")}</select>`; };
   const chipWords = (k) => (k === "region" ? mc.region : k === "stage" ? STAGES[mc.stage].title : k === "score" ? `Score: ${SCORE_BANDS.find(([v]) => v === mc.score)[1]}` : rangeWords(k, mc[k]));
-  const chips = ["region", "stage", "score", "vint", "ends"].filter((k) => mc[k]).map((k) => `<span class="chip">${esc(chipWords(k))}<button type="button" class="chip-x" data-mc-k="${k}" data-mc-v="${mc[k]}" aria-label="Remove this choice">✕</button></span>`).join(" ");
+  const chips = ["region", "stage", "score", "vint", "ends"].filter((k) => mc[k]).map((k) => `<span class="chip">${k === "region" ? regionLink(mc.region) : esc(chipWords(k))}<button type="button" class="chip-x" data-mc-k="${k}" data-mc-v="${mc[k]}" aria-label="Remove this choice">✕</button></span>`).join(" ");
   const moods = Object.entries(MOODS).map(([k, m]) => [k, m, wines.filter(m.test).length]).filter(([k, , n]) => n || k === mc.mood);
   const narrowed = mc.mood !== "all" || mc.colour || mc.country || mc.grape || mc.region || mc.stage || mc.score || mc.vint || mc.ends;
   return `<div class="mc-moods">${moods.map(([k, m, n]) => `<button type="button" class="btn btn-mood" data-mc-mood="${k}" aria-pressed="${mc.mood === k}">${m.icon} ${esc(m.label)} <span class="tap-n">${n}</span></button>`).join("")}</div>
@@ -165,11 +165,11 @@ function mcAnswerHtml(all, name) {
   if (all.some((w) => w.quantity)) cols.splice(6, 0, ["bottles", "Bottles"]); // a private copy on this computer only
   const sorted = mc.col === "drink" && mc.dir > 0 ? "what to drink first" : `${TABLE_WORDS[mc.col]}${mc.dir < 0 ? ", reversed" : ""}`;
   return `<div class="somm-selection"><p class="somm-sel-head">${esc([name, mc.mood === "all" ? "" : m.label].filter(Boolean).join(" · "))}</p>
-      <p class="somm-sel-count">${n === all.length ? wineCount(n) : `${n.toLocaleString()} of ${wineCount(all.length)}`}</p>
+      <p class="somm-sel-count">${n === all.length ? wineCount(n) : `${n.toLocaleString()} of ${wineCount(all.length)}`}${mc.region ? ` from ${regionLink(mc.region)}${regionCountry(all) ? `, ${esc(regionCountry(all))}` : ""}` : ""}</p>
       <p>${mc.mood === "all" ? "" : `${esc(capFirst(`These wines ${m.line}`))} `}Sorted by <strong>${esc(sorted)}</strong>. Click a heading to sort by it, or a wine to see its details.</p>
       ${mcBannerControls(all)}
       ${n ? `<p class="mc-food"><button type="button" class="btn btn-somm" data-mc-food>🍽 Find food for ${n === 1 ? "this wine" : `these ${n.toLocaleString()} wines`}</button></p>` : ""}</div>
-    ${n ? wineTableHtml(rows, cols, mc.col, mc.dir, isDaring, "data-mc-col") : `<p class="empty">No wines match. Press “Show all again” above.</p>`}`;
+    ${n ? wineTableHtml(rows, cols, mc.col, mc.dir, isDaring, "data-mc-col", mc.region ? { name: ` from ${regionLink(mc.region)}` } : {}) : `<p class="empty">No wines match. Press “Show all again” above.</p>`}`;
 }
 // Everything below the boxes. With no cellar open, a search looks through all of them.
 function mcSearched(wines) {
@@ -233,4 +233,59 @@ document.addEventListener("change", (e) => {
   if (!e.target.matches?.("#mc-panel [data-mc-narrow]")) return;
   mc[e.target.dataset.mcNarrow] = e.target.value;
   renderCellarPanel();
+});
+
+// ---- About a region -------------------------------------------------------------------
+// The card shows Wikipedia's own opening words, fetched when it opens, so nothing is retold.
+// data/regions.json names the article for each place in the cellars ("Nahe" alone is the river).
+let regionTitles = null;
+const regionLink = (r) => `<button type="button" class="linklike mc-region" data-mc-region="${esc(r)}" title="About ${esc(r)}">${esc(r)}</button>`;
+const regionCountry = (wines) => wines.find((w) => regionOf(w) === mc.region)?.country || "";
+async function regionTitle(r) {
+  regionTitles ||= fetch("data/regions.json", FRESH).then((x) => (x.ok ? x.json() : {})).catch(() => ({}));
+  return (await regionTitles)[r] || r; // a place not on the list is tried as it's written
+}
+async function wikiSummary(title) {
+  const x = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title.replace(/ /g, "_"))}`);
+  if (!x.ok) throw new Error(x.status);
+  const d = await x.json();
+  if (d.type === "disambiguation" || !d.extract) throw new Error("no article");
+  return d;
+}
+function regionCellarHtml(r) {
+  const open = mcOpenCellar(), wines = (open ? mcWinesOf(open[0]) : cellarFindWines()).filter((w) => regionOf(w) === r);
+  if (!wines.length) return "";
+  const makers = groupWines(wines, (w) => w.producer).map(([p, ws]) => `${esc(p)} (${ws.length})`);
+  const scores = wines.map(bestScore).filter((n) => n != null), colours = groupWines(wines, (w) => w.type).map(([t, ws]) => `${ws.length} ${t.toLowerCase()}`);
+  return `<div class="region-cellar"><h3>In ${esc(open ? open[1] : "your cellars")}</h3>
+    <p><strong>${esc(wineCount(wines.length))} from ${esc(r)}</strong>: ${esc(colours.join(", "))}.${scores.length ? ` Best score ${Math.round(Math.max(...scores))}.` : ""}</p>
+    ${makers.length ? `<p>Made by ${makers.join(", ")}.</p>` : ""}</div>`;
+}
+async function openRegion(r) {
+  const country = regionCountry(cellarFindWines().filter((w) => regionOf(w) === r)) || "";
+  const where = [r, country].filter(Boolean).join(", ");
+  const mapUrl = (d) => (d?.coordinates ? `https://www.google.com/maps/search/?api=1&query=${d.coordinates.lat},${d.coordinates.lon}` : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(where)}`);
+  const body = (wiki, d) => `<h2 class="dialog-q">${esc(r)}${country ? `<span class="region-country">, ${esc(country)}</span>` : ""}</h2>
+    ${wiki}
+    <p class="region-links">${d ? `<a href="${esc(d.content_urls.desktop.page)}" target="_blank" rel="noopener">📖 Read the full article on Wikipedia</a>` : ""}
+      <a href="${esc(mapUrl(d))}" target="_blank" rel="noopener">🗺 See it on a map</a></p>
+    ${regionCellarHtml(r)}`;
+  $("region-pop-body").innerHTML = body(`<p class="hint">Asking Wikipedia about ${esc(r)}…</p>`);
+  $("region-pop").showModal?.();
+  try {
+    const d = await wikiSummary(await regionTitle(r));
+    if (!$("region-pop").open) return;
+    const pic = d.thumbnail ? `<img class="region-pic" src="${esc(d.thumbnail.source)}" alt="" loading="lazy">` : "";
+    $("region-pop-body").innerHTML = body(`<div class="region-wiki">${pic}<p class="region-art">From the Wikipedia article <strong>${esc(d.title)}</strong>:</p>${d.extract_html || `<p>${esc(d.extract)}</p>`}
+      <p class="hint region-credit">Text from Wikipedia, shared under CC BY-SA. It may describe the town or the wider area the wine is named after.</p></div>`, d);
+  } catch {
+    if ($("region-pop").open) $("region-pop-body").innerHTML = body(`<p class="hint">Wikipedia didn't answer just now, or has no article for ${esc(r)}. The map link still works.</p>`);
+  }
+}
+document.addEventListener("click", (e) => {
+  const t = e.target.closest?.("[data-mc-region], #region-pop [data-region-close]");
+  if (!t) return;
+  if ("regionClose" in t.dataset) return void $("region-pop").close();
+  e.preventDefault();
+  openRegion(t.dataset.mcRegion);
 });
