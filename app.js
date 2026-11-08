@@ -2139,9 +2139,9 @@ function wineLine(w, i, forClaude = false) {
     if (inCellars.length) line += `; in our family's cellars: ${inCellars.join("; ")}`;
     const r = ratingOf(w.id);
     // Claude's own earlier scores are left out so it judges afresh; people's own points are useful context.
-    if (r.mine) line += `; my own rating: ${r.mine.points}/100`;
+    if (r.mine) line += `; my own rating: ${[r.mine.points ? `${r.mine.points}/100` : "", r.mine.verdict ? VERDICTS[r.mine.verdict][1].toLowerCase() : ""].filter(Boolean).join(", ")}`;
     const f = frOf(w.id);
-    if (f.family && !r.mine) line += `; our family's rating: ${f.family.points}/100`;
+    if (f.family && !r.mine) line += `; our family's rating: ${[f.family.points ? `${f.family.points}/100` : "", f.family.verdict ? VERDICTS[f.family.verdict][1].toLowerCase() : ""].filter(Boolean).join(", ")}`;
     line += ` [${w.id}]`;
   }
   return line;
@@ -2950,16 +2950,21 @@ function ratingsHtml(w) {
       (!c.quick && styleText(c) ? `<span class="rating rating-style">${esc(styleText(c))}</span>` : ""));
   }
   if (r.mine && !same(r.mine, f.family)) {
-    parts.push(`<span class="rating rating-mine">My rating <strong>${r.mine.points}</strong>` +
+    parts.push(`<span class="rating rating-mine">My rating ${mineWords(r.mine)}` +
       `${r.mine.note ? ` · ${esc(r.mine.note)}` : ""}</span>`);
   }
   return parts.length ? `<p class="wine-ratings">${parts.join("")}</p>` : "";
 }
 
-function rateButton(w) {
+// "Tried it?": a gem, fine, or not for me, beside (or instead of) a score. Shared with the family
+// like a rating, without a name.
+const VERDICTS = { gem: ["💎", "A gem"], fine: ["👍", "Fine"], no: ["👎", "Not for me"] };
+const verdictWords = (v) => (VERDICTS[v] ? `${VERDICTS[v][0]} ${VERDICTS[v][1]}` : "");
+const mineWords = (m) => [m.verdict ? verdictWords(m.verdict) : "", m.points ? `<strong>${m.points}</strong>` : ""].filter(Boolean).join(" · ");
+function rateButton(w, label = "☆ Your rating") {
   const mine = ratingOf(w.id).mine;
   return `<button type="button" class="btn btn-rate" data-rate="${esc(w.id)}" aria-expanded="false">${mine
-    ? `Your rating: ${mine.points}` : "☆ Your rating"}</button>`;
+    ? `Your rating: ${[mine.verdict ? verdictWords(mine.verdict) : "", mine.points ?? ""].filter(Boolean).join(" · ")}` : label}</button>`;
 }
 
 function toggleRatePanel(btn) {
@@ -2970,38 +2975,46 @@ function toggleRatePanel(btn) {
   const mine = ratingOf(id).mine || {};
   const panel = document.createElement("div");
   panel.className = "rate-panel";
-  panel.innerHTML = `<div class="rate-row">
-      <label>Your rating, out of 100<input type="number" class="rate-points" inputmode="numeric" min="50" max="100" value="${mine.points ?? ""}" placeholder="e.g. 88"></label>
-      <label class="rate-note-label">Note (optional)<input type="text" class="rate-note" maxlength="80" value="${esc(mine.note || "")}" placeholder="e.g. lovely with lamb"></label>
+  panel.innerHTML = `<div class="rate-row rate-verdicts" role="radiogroup" aria-label="Tried it?"><span class="rate-tried">Tried it?</span>
+      ${Object.entries(VERDICTS).map(([k, [icon, words]]) => `<label class="rate-verdict"><input type="radio" name="verdict-${esc(id)}" value="${k}"${mine.verdict === k ? " checked" : ""}> ${icon} ${words}</label>`).join("")}</div>
+    <div class="rate-row">
+      <label>Your rating, out of 100 <span class="hint-inline">(optional)</span><input type="number" class="rate-points" inputmode="numeric" min="50" max="100" value="${mine.points ?? ""}" placeholder="e.g. 88"></label>
+      <label class="rate-note-label">Note (optional)<input type="text" class="rate-note" maxlength="80" value="${esc(mine.note || "")}" placeholder="e.g. bright and chalky, superb for $22"></label>
     </div>
-    <p class="hint">Most wines worth buying score between 80 and 95.</p>
+    <p class="hint">Choose a verdict, a score, or both. Most wines worth buying score between 80 and 95. Shared with the family without your name.</p>
     <p class="rate-msg" role="status"></p>
     <div class="rate-row">
       <button type="button" class="btn btn-primary" data-rate-save="${esc(id)}">Save my rating</button>
-      ${mine.points ? `<button type="button" class="btn btn-danger" data-rate-clear="${esc(id)}">Remove my rating</button>` : ""}
+      ${mine.points || mine.verdict ? `<button type="button" class="btn btn-danger" data-rate-clear="${esc(id)}">Remove my rating</button>` : ""}
     </div>`;
   host.appendChild(panel);
   btn.setAttribute("aria-expanded", "true");
-  panel.querySelector(".rate-points").focus();
+  (panel.querySelector("input[type=radio]:checked") || panel.querySelector("input[type=radio]")).focus();
 }
 
 function refreshRatedViews() {
   ratingsVer++;
   if (!$("view-shortlist").hidden) renderShortlist();
   else if (!$("view-find").hidden) renderResults();
+  else if (!$("view-mywines").hidden && typeof mc !== "undefined" && mc.gems) renderCellarPanel(); // a verdict on a gem pick
 }
 
 function saveMyRating(id, btn) {
   const panel = btn.closest(".rate-panel");
-  const points = parseInt(panel.querySelector(".rate-points").value, 10);
-  if (!(points >= 50 && points <= 100)) {
-    panel.querySelector(".rate-msg").textContent = "Please enter a number from 50 to 100.";
+  const raw = panel.querySelector(".rate-points").value.trim(), points = parseInt(raw, 10);
+  const verdict = panel.querySelector("input[type=radio]:checked")?.value || null;
+  if (raw && !(points >= 50 && points <= 100)) {
+    panel.querySelector(".rate-msg").textContent = "Please enter a number from 50 to 100, or leave it empty.";
     panel.querySelector(".rate-points").focus();
+    return;
+  }
+  if (!raw && !verdict) {
+    panel.querySelector(".rate-msg").textContent = "Choose a verdict (a gem, fine, not for me) or enter a score.";
     return;
   }
   const w = findWine(id);
   ratings[id] = { ...ratingOf(id), name: w?.name || ratingOf(id).name || id,
-    mine: { points, note: panel.querySelector(".rate-note").value.trim().slice(0, 80) || null, date: todayIso() } };
+    mine: Object.fromEntries(Object.entries({ points: raw ? points : null, verdict, note: panel.querySelector(".rate-note").value.trim().slice(0, 80) || null, date: todayIso() }).filter(([k, v]) => v != null || k === "note")) };
   saveRatings();
   refreshRatedViews();
 }
@@ -3079,19 +3092,19 @@ function parseShareHash(hash) {
   const score = (s) => { const n = parseInt(s, 10); return /^\d{2,3}$/.test(s) && n >= 50 && n <= 100 ? n : null; };
   const items = [];
   for (const part of raw.split(";")) {
-    const [code = "", cp = "", vin = "", cnote = "", mp = "", mnote = "", name = ""] = part.split("~").map((s) => s.trim());
+    const [code = "", cp = "", vin = "", cnote = "", mp = "", mnote = "", name = "", vd = ""] = part.split("~").map((s) => s.trim());
     if (!WINE_CODE.test(code)) continue;
-    const claudeOk = cp === "" || score(cp) !== null, mine = score(mp);
+    const claudeOk = cp === "" || score(cp) !== null, mine = score(mp), verdict = { g: "gem", f: "fine", n: "no" }[vd] || null;
     if (!claudeOk) continue;
     const hasClaude = cp !== "" || cnote !== "" || vin !== "";
-    if (!hasClaude && mine === null) continue;
+    if (!hasClaude && mine === null && !verdict) continue;
     items.push({
       id: code, shared: true,
       points: score(cp),
       claude: hasClaude,
       vintage: /^(19|20)\d\d$/.test(vin) ? +vin : /^nv$/i.test(vin) ? "NV" : null,
       note: cnote.slice(0, 80) || null,
-      mine: mine === null ? null : { points: mine, note: mnote.slice(0, 80) || null },
+      mine: mine === null && !verdict ? null : { ...(mine === null ? {} : { points: mine }), ...(verdict ? { verdict } : {}), note: mnote.slice(0, 80) || null },
       name: name.slice(0, 60) || null,
     });
   }
@@ -3116,7 +3129,7 @@ function offerSavedRatings() {
   $("save-list").innerHTML = items.map((it) => `<li><strong>${esc(nameOf(it) || `Wine ${it.id} (not found on this computer)`)}</strong>` +
     (it.claude === false ? "" : `<br>Claude's ${it.quick ? "score" : "rating"}: <strong>${it.points ?? "no reviews found"}</strong>${it.vintage ? ` (${esc(String(it.vintage))})` : ""}${it.note ? ` · ${esc(it.note)}` : ""}` +
       (styleText(it) ? `<br><span class="hint">${esc(styleText(it))}</span>` : "")) +
-    (it.mine ? `<br>Family member's own rating: <strong>${it.mine.points}</strong>${it.mine.note ? ` · ${esc(it.mine.note)}` : ""}` : "") +
+    (it.mine ? `<br>Family member's own rating: ${mineWords(it.mine)}${it.mine.note ? ` · ${esc(it.mine.note)}` : ""}` : "") +
     `</li>`).join("");
   $("save-help").hidden = items.length > 0;
   $("save-yes").hidden = items.length === 0;
@@ -3207,7 +3220,7 @@ function scrollToFamilyBox() { openTools(); document.querySelector(".fr-box")?.s
 
 // ---- Emailing ratings to the family ----------------------------------------------
 // Anyone can email the ratings on their computer (Claude's and their own) as one link:
-// <page>#share=CODE~CLAUDE~VINTAGE~CLAUDENOTE~MINE~MYNOTE~NAME;...
+// <page>#share=CODE~CLAUDE~VINTAGE~CLAUDENOTE~MINE~MYNOTE~NAME~VERDICT;... (VERDICT: g gem, f fine, n not for me)
 // The website keeper clicks it, saves, and publishes them as Family ratings.
 const shareClean = (s, max) => String(s ?? "").replace(/[~;\r\n]/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
 
@@ -3254,7 +3267,7 @@ function shareLink(ids) {
     const r = ratingOf(id), c = r.claude || {}, m = r.mine || {};
     const name = findWine(id)?.name || r.name || "";
     return [id, c.points ?? "", c.vintage ?? "", shareClean(c.note, 80), m.points ?? "", shareClean(m.note, 80),
-      shareClean(name, 60)].join("~");
+      shareClean(name, 60), { gem: "g", fine: "f", no: "n" }[m.verdict] || ""].join("~");
   });
   return location.href.split("#")[0].split("?")[0] + "#share=" + encodeURIComponent(entries.join(";")).replace(/%20/g, "+");
 }
@@ -3266,7 +3279,7 @@ function emailRatings() {
   const lines = ids.map((id) => {
     const r = ratingOf(id), bits = [];
     if (r.claude) bits.push(`Claude ${r.claude.points ?? "no reviews"}${r.claude.vintage ? ` (${r.claude.vintage})` : ""}`);
-    if (r.mine) bits.push(`mine ${r.mine.points}`);
+    if (r.mine) bits.push(`mine ${[r.mine.points, r.mine.verdict ? VERDICTS[r.mine.verdict][1].toLowerCase() : ""].filter(Boolean).join(", ")}`);
     return `- ${findWine(id)?.name || r.name || id}: ${bits.join(", ")}`;
   });
   const subject = `Wine ratings for the family Wine Finder (${ids.length} ${ids.length === 1 ? "wine" : "wines"})`;
@@ -3299,7 +3312,7 @@ function ratedTwin(w) {
   if (ratedNamesVer !== ver) {
     ratedNamesVer = ver;
     ratedNames = Object.entries(familyRatings)
-      .filter(([, r]) => r.name && (r.claude?.points || r.family?.points || r.claude?.body || r.claude?.drinkFrom || r.claude?.fruity != null || r.claude?.finish || r.claude?.pair))
+      .filter(([, r]) => r.name && (r.claude?.points || r.family?.points || r.family?.verdict || r.claude?.body || r.claude?.drinkFrom || r.claude?.fruity != null || r.claude?.finish || r.claude?.pair))
       .map(([id, r]) => ({ id, r, key: [...storeTokens(r.name)].sort((a, b) => b.length - a.length)[0] || "" }))
       .filter((x) => x.key.length > 2);
   }
@@ -3332,7 +3345,7 @@ function frHtml(w) {
     `${f.claude.vintage ? ` · ${esc(String(f.claude.vintage))}` : ""}${f.claude.note ? ` · ${esc(f.claude.note)}` : ""}` +
     `${f.claude.quick ? `<span class="quick-more">ⓘ Details</span></button>` : "</span>"}` +
     (!f.claude.quick && styleText(f.claude) ? `<span class="rating rating-style">${esc(styleText(f.claude))}</span>` : ""));
-  if (f.family) parts.push(`<span class="rating rating-fr">Family <strong>${f.family.points}</strong>` +
+  if (f.family) parts.push(`<span class="rating rating-fr">Family ${mineWords(f.family)}` +
     `${f.family.note ? ` · ${esc(f.family.note)}` : ""}</span>`);
   return parts.join("");
 }

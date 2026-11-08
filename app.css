@@ -1058,3 +1058,11 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 .gem-why, .gem-ev { margin: 0.25rem 0; }
 .gem-tag { display: inline-block; font-size: 0.95rem; font-weight: 700; padding: 0.05rem 0.5rem; border-radius: 1rem; background: #e3f2fa; color: #0f4f69; border: 1px solid #9cc9de; }
 .gem-fam { background: #eaf6ec; color: #1f6b34; border-color: #a6d3b0; }
+/* Tried it? verdicts */
+.rate-verdicts { align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+.rate-tried { font-weight: 700; }
+.rate-verdict { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.7rem; border: 2px solid var(--line); border-radius: 2rem; cursor: pointer; background: #fff; }
+.rate-verdict:has(input:checked) { border-color: var(--wine); background: #f7e9ec; font-weight: 700; }
+.gem-said { margin: 0.25rem 0; padding: 0.2rem 0.5rem; background: #f3faf4; border-left: 4px solid var(--green); }
+.gem-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.35rem 0 0; }
+.gem-family { border-left: 6px solid #1a7fa8; }

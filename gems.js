@@ -72,6 +72,12 @@ const gemArea = (w) => { const t = " " + gemTokens([w.name, w.region_or_grape, w
   return GEM_AREAS.find(([, re, country]) => (!c || !country || c === country) && re.test(t))?.[0] || GEM_HOME[c] || (c ? `${c} (elsewhere)` : ""); };
 const gemGrapes = (w) => grapesOf(w).filter((g) => !["Late-harvest white"].includes(g));
 const gemScoreOf = (w) => w.my_score ?? w.ct_score ?? familyScore(w);
+// "Tried it?" verdicts: this computer's own, and the family's (published without names).
+const gemMine = (w) => ratingOf(w.id).mine || null;
+const gemFam = (w) => { const f = frOf(w.id).family || ratedTwin(w)?.family; return f?.verdict ? f : null; };
+// This computer's own marks count for a cellar when the name given here is the owner's
+// ("Dave" or "David" for David's cellar).
+const gemIsMe = (owner) => { const me = fold(myName()).slice(0, 3); return me.length === 3 && fold(owner).startsWith(me); };
 
 // ---- Wine Enthusiast, by producer ----------------------------------------------------------
 let weData = null, weIndex = null;
@@ -122,6 +128,12 @@ function gemPattern(owner, leaveOut = null) {
   const cut = priced.length >= 20 ? priced[Math.floor(priced.length / 2)] : null;
   let value = wines.filter((w) => (gemScoreOf(w) ?? 0) >= 90.5 && (cut == null || (w.price > 0 && w.price <= cut)));
   if (value.length < 8) value = wines.filter((w) => (gemScoreOf(w) ?? 0) >= 90 && (cut == null || w.price > 0));
+  // wines the owner marked 💎 on this computer count as value wines too, wherever they were bought
+  if (gemIsMe(owner) && !leaveOut) for (const [id, r] of Object.entries(ratings)) {
+    if (r.mine?.verdict !== "gem") continue;
+    const w = findWine(id);
+    if (w && !value.includes(w)) value.push(w);
+  }
   // a label that names no area takes its producer's, from any cellar: "Dönnhoff Riesling" is from the Nahe
   const home = new Map();
   for (const w of cellarFindWines()) { const a = gemArea(w); if (w.producer && a && !/\(elsewhere\)$/.test(a)) home.set(fold(w.producer), a); }
@@ -186,13 +198,15 @@ function gemPicks(owner, maxPrice, extra = []) {
   const owned = new Set(mcWinesOf(owner).map((w) => fold(w.name).replace(/\b(19|20)\d\d\b/g, "").replace(/[^a-z0-9]+/g, " ").trim()));
   const pool = [...WINES, ...extra].filter((w) => w.available !== false && w.price >= 12 && w.price <= maxPrice &&
     (!w.size_ml || (w.size_ml >= 700 && w.size_ml <= 1000)) && pattern.types.has(w.type) && // a rosé only for someone who loves one
-    !owned.has(fold(w.name).replace(/\b(19|20)\d\d\b/g, "").replace(/[^a-z0-9]+/g, " ").trim()));
+    !owned.has(fold(w.name).replace(/\b(19|20)\d\d\b/g, "").replace(/[^a-z0-9]+/g, " ").trim()) &&
+    !(gemMine(w)?.verdict && gemIsMe(owner)) && !(gemFam(w)?.verdict === "gem")); // tried here, or already a family gem (shown above)
   const myAreas = new Map(); for (const k of pattern.pairs.keys()) { const [g, a] = k.split("|"); (myAreas.get(g) || myAreas.set(g, new Set()).get(g)).add(a); }
   const kinds = { producer: [], area: [], new: [] };
   for (const w of pool) {
     const hit = gemProducerHit(w, pattern), area = gemArea(w);
     const g = gemGrapes(w).find((x) => pattern.grapes.has(x));
     const qual = gemQuality(w);
+    if (gemFam(w)?.verdict === "no") qual.q -= 1.5; // a family member found it wasn't for them
     const famHit = hit && fam.has(hit[0]);
     const base = { w, area, g, ...qual, fam: famHit };
     if (hit) kinds.producer.push({ ...base, prod: hit[1], rank: qual.q + 2 + Math.min(3, hit[1].n) * 0.5 + (famHit ? 2 : 0) });
@@ -212,7 +226,11 @@ function gemPicks(owner, maxPrice, extra = []) {
     }
     return out;
   };
-  return { pattern, maxPrice,
+  // the family's 💎 wines in the stores, within the price, best scored first
+  const famGems = WINES.filter((w) => w.available !== false && w.price <= maxPrice && (gemFam(w)?.verdict === "gem" || (gemMine(w)?.verdict === "gem")))
+    .map((w) => ({ w, area: gemArea(w), ...gemQuality(w), famV: gemFam(w), mineV: gemMine(w) }))
+    .sort((a, b) => b.q - a.q).slice(0, 8);
+  return { pattern, maxPrice, famGems,
     producer: pick(kinds.producer, (x) => fold(x.prod.name), 5),
     area: pick(kinds.area, (x) => `${x.g}|${x.area}`, 5),
     new: pick(kinds.new, (x) => `${x.g}|${x.area}`, 5) };
@@ -240,10 +258,17 @@ function gemEvidence(x) {
   return bits.join(" ");
 }
 const gemTag = (x) => ((x.how === "score" && x.q >= 3) || (x.how === "we" && x.we[5] >= 2 && x.we[2] >= 3) ? `<span class="gem-tag">💎 Gem</span> ` : "");
+// What the family (and this computer) said after tasting it.
+function gemSaid(w) {
+  const f = gemFam(w), m = gemMine(w);
+  const line = (who, r) => `<p class="gem-said">${who}: <strong>${verdictWords(r.verdict)}</strong>${r.points ? ` · ${r.points}` : ""}${r.note ? ` · “${esc(r.note)}”` : ""}</p>`;
+  return (f ? line("A family member", f) : "") + (m?.verdict && JSON.stringify(m) !== JSON.stringify(f) ? line("You", m) : "");
+}
 function gemCard(x, why) {
   return `<li class="gem-pick">${gemTag(x)}${x.fam ? `<span class="gem-tag gem-fam">👪 Family favourite</span> ` : ""}<button type="button" class="linklike gem-name" data-somm-pop="${esc(x.w.id)}">${esc(x.w.name)}</button>
     <span class="gem-where">${esc(sourceLabel(x.w.source))} · ${gemMoney(x.w)}</span>
-    <p class="gem-why">${why}</p><p class="gem-ev">${gemEvidence(x)}</p>${familyScore(x.w) == null ? `<p>${quickMarkButton(x.w)}</p>` : ""}</li>`;
+    <p class="gem-why">${why}</p>${gemSaid(x.w)}<p class="gem-ev">${gemEvidence(x)}</p>
+    <p class="gem-actions">${rateButton(x.w, "Tried it?")} ${familyScore(x.w) == null ? quickMarkButton(x.w) : ""}</p></li>`;
 }
 function gemsHtml(owner, title) {
   if (!weData) return `<p class="empty">Opening the reviews…</p>`;
@@ -260,13 +285,17 @@ function gemsHtml(owner, title) {
     ${p.cut == null ? `<p class="hint">This computer has no prices for this cellar, so the pattern uses the best-scored wines at any price. A private copy with prices (Tools below) makes it a true value pattern.</p>` : ""}
     <div class="somm-row"><label>Up to <select data-gem-price aria-label="Highest price">${GEM_PRICES.map((v) => `<option value="${v}"${v === price ? " selected" : ""}>$${v}</option>`).join("")}</select> a bottle</label>
       <span class="hint-inline">Searched: ${esc(knownSources().map(sourceLabel).join(", "))}${knownSources().includes("LCBO") ? "" : ". The LCBO joins once its list is opened on this computer (Find wines, step 1)"}. Swiss prices are shown in francs, with dollars.</span></div>
+    <p class="hint">Tried one? Press <strong>Tried it?</strong> and choose 💎 A gem, 👍 Fine or 👎 Not for me. It's shared with the family without your name, and 💎 wines come first for everyone.</p>
     <p class="hint">💎 Gem: scored well above what its price usually gets, or from a producer whose wines do. 👪 Family favourite: a producer two of the cellars love at a modest price. Scores come first from the family, CellarTracker and Claude's quick scores (Claude's judgement), then Wine Enthusiast's reviews of the producer.</p></div>`;
   const unscored = [...r.producer, ...r.area, ...r.new].filter((x) => familyScore(x.w) == null && x.w.kind !== "typed");
   gemUnscored = unscored.map((x) => x.w.id);
   const scoreAll = unscored.length ? `<div class="somm-card gem-score"><p><strong>${unscored.length} of these picks have no score of their own yet.</strong> A Claude quick score (Claude's judgement, from published reviews) ranks them better, and is shared with the family so nobody asks twice.</p>
     <p><button type="button" class="btn btn-gem" data-gem-score>⭐ Get quick scores for these ${unscored.length} ${unscored.length === 1 ? "wine" : "wines"}</button> <span class="hint-inline">or mark single wines below with ＋ Add Claude Quick Score.</span></p></div>` : "";
   const kind = (h, list, why, empty) => `<div class="somm-card"><h3 class="somm-wine-h">${h}</h3>${list.length ? `<ul class="gem-list">${list.map((x) => gemCard(x, why(x))).join("")}</ul>` : `<p class="hint">${empty}</p>`}</div>`;
-  return head + scoreAll +
+  const famCard = r.famGems.length ? `<div class="somm-card gem-family"><h3 class="somm-wine-h">💎 Family gems</h3>
+    <p class="hint">Wines someone in the family tried and marked 💎, in the stores up to $${price}. They come first, whatever ${esc(who)}'s pattern says.</p>
+    <ul class="gem-list">${r.famGems.map((x) => gemCard(x, `Tried and marked a gem${x.famV ? " by a family member" : " on this computer"}.`)).join("")}</ul></div>` : "";
+  return head + famCard + scoreAll +
     kind("More from a producer you love", r.producer, (x) => `${esc(who)} owns ${x.prod.n} ${x.prod.n === 1 ? "wine" : "wines"} from ${esc(x.prod.name)} scored about 91 or more${pattern0.cut != null ? " at a modest price" : ""}.`, `No other wine from ${esc(who)}'s favourite producers is in the stores up to $${price}.`) +
     kind("Your grape, from an area you love", r.area, (x) => `${esc(who)} owns ${x.pair} ${esc(x.g)} ${x.pair === 1 ? "wine" : "wines"} from ${esc(x.area)} scored about 91 or more${pattern0.cut != null ? " at a modest price" : ""}.`, `Nothing new from those areas up to $${price}.`) +
     kind("Your grape, from somewhere new", r.new, (x) => `${esc(x.g)} is one of ${esc(who)}'s value grapes (${p.grapes.get(x.g)} wines); this one is from ${esc(x.area || x.w.country || "elsewhere")}.`, `Nothing scored yet up to $${price}.`) +
