@@ -6751,6 +6751,236 @@
     "drinkTo": 2027,
     "from": "Mike"
    }
+  },
+  "bcl-515700": {
+   "name": "Mosel Riesling Spatlese - Dr Loosen Urziger Wurzgarten",
+   "type": "White",
+   "upc": "00183103000105",
+   "claude": {
+    "points": 94,
+    "vintage": 2024,
+    "note": "JS 96 Vinous 93-95 RP 93 WS 91",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "light",
+    "sweet": "medium-sweet",
+    "fruity": true,
+    "finish": "long",
+    "pair": "Thai green curry pork with roasted apples",
+    "grapes": "Riesling",
+    "drinkFrom": 2026,
+    "drinkTo": 2045,
+    "from": "Mike"
+   }
+  },
+  "luc-n32420": {
+   "name": "Château Latour-Martillac 2025 Cru Classé, Graves AC, MC (lieferbar Mitte 2028)",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2025,
+    "note": "JS 93-94 Dunnuck 92-94 Martin 89-91",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast lamb with rosemary duck breast",
+    "grapes": "Cabernet Sauvignon Merlot Petit Verdot",
+    "drinkFrom": 2030,
+    "drinkTo": 2045,
+    "from": "Mike"
+   }
+  },
+  "bcl-649376": {
+   "name": "Pinot Gris - Domaine Weinbach Particuliere Reserve 2013",
+   "type": "White",
+   "upc": "03434040015118",
+   "claude": {
+    "points": null,
+    "vintage": 2013,
+    "note": "No reviews found",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "full",
+    "sweet": "off-dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "roast pork loin mushroom cream sauce",
+    "grapes": "Pinot Gris",
+    "drinkFrom": 2016,
+    "drinkTo": 2026,
+    "from": "Mike"
+   }
+  },
+  "lcbo-25773": {
+   "name": "Thorle Riesling Rheinhessen Trocken 2020",
+   "type": "White",
+   "claude": {
+    "points": 89,
+    "vintage": 2015,
+    "note": "WineAlign 90 2015 89 2014",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "light",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "grilled salmon sushi",
+    "grapes": "Riesling",
+    "drinkFrom": 2021,
+    "drinkTo": 2027,
+    "from": "Mike"
+   }
+  },
+  "bsw-9755353776358": {
+   "name": "G.D. Vajra Barolo Albe",
+   "type": "Red",
+   "claude": {
+    "points": 93,
+    "vintage": 2020,
+    "note": "WS 94 WA 94 WE 93 JS 93",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "wild boar ragu truffle risotto",
+    "grapes": "Nebbiolo",
+    "drinkFrom": 2025,
+    "drinkTo": 2040,
+    "from": "Mike"
+   }
+  },
+  "bcl-715201": {
+   "name": "Riesling - Penfolds Bin 51 Eden Valley 2024",
+   "type": "White",
+   "upc": "00012354072558",
+   "claude": {
+    "points": 93,
+    "vintage": 2024,
+    "note": "JS 96 Halliday 93 RP 93 Vinous 92",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "light",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "long",
+    "pair": "oysters Thai fish cakes",
+    "grapes": "Riesling",
+    "drinkFrom": 2025,
+    "drinkTo": 2036,
+    "from": "Mike"
+   }
+  },
+  "lcbo-231282": {
+   "name": "Ken Forrester Old Vine Reserve Chenin Blanc",
+   "type": "White",
+   "upc": "06009607661083",
+   "claude": {
+    "points": 90,
+    "vintage": 2023,
+    "note": "WineAlign 90 Wine Review Online 92",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "roast pork belly Cape Malay chicken curry",
+    "grapes": "Chenin Blanc",
+    "drinkFrom": 2024,
+    "drinkTo": 2028,
+    "from": "Mike"
+   }
+  },
+  "bsw-9755352400102": {
+   "name": "Hermann J. Wiemer Dry Riesling",
+   "type": "White",
+   "claude": {
+    "points": 91,
+    "vintage": 2023,
+    "note": "Vinous 91 Wine Review Online 93",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "light",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "seared salmon pork tenderloin with apples",
+    "grapes": "Riesling",
+    "drinkFrom": 2024,
+    "drinkTo": 2032,
+    "from": "Mike"
+   }
+  },
+  "bcl-240093": {
+   "name": "Cabernet Sauvignon - Columbia Crest Grand Estates",
+   "type": "Red",
+   "upc": "00088586401848",
+   "claude": {
+    "points": 87,
+    "vintage": 2021,
+    "note": "Vinous 89 WS 88 WE 86",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "burgers barbecued ribs",
+    "grapes": "Cabernet Sauvignon Merlot Syrah",
+    "drinkFrom": 2023,
+    "drinkTo": 2027,
+    "from": "Mike"
+   }
+  },
+  "lcbo-233635": {
+   "name": "Cave Spring Riesling Dry VQA",
+   "type": "White",
+   "upc": "00779334336351",
+   "claude": {
+    "points": 89,
+    "vintage": 2023,
+    "note": "WineAlign 91 2023 89 2019",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "light",
+    "sweet": "off-dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "shrimp spring rolls pickerel with lemon",
+    "grapes": "Riesling",
+    "drinkFrom": 2024,
+    "drinkTo": 2028,
+    "from": "Mike"
+   }
+  },
+  "bcl-359505": {
+   "name": "(Repack)chardonnay - Sonoma Cutrer Russian River Ranches 201",
+   "type": "White",
+   "upc": "00769611047599",
+   "claude": {
+    "points": 88,
+    "vintage": 2012,
+    "note": "CellarTracker 88-89 2012 WineAlign 89 2010",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "crab cakes roast chicken with lemon butter",
+    "grapes": "Chardonnay",
+    "drinkFrom": 2014,
+    "drinkTo": 2020,
+    "from": "Mike"
+   }
   }
  }
 }
