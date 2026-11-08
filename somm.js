@@ -823,16 +823,22 @@ function runFridge() {
   showWineFood(fridgeHtml(wineNow.w, text), text ? `the fridge: ${text}` : "");
 }
 document.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.id === "somm-fridge") { e.preventDefault(); loadSomm().then(runFridge); } });
-function startAgain() {
-  wineNow = null;
+// Every box and choice on the page back to how it starts. Start over (top bar) uses it too, with
+// jump false. The stores and cellars ticked in step 1 stay: they say where the bottles are.
+function startAgain(jump = true) {
+  wineNow = null; lastMenu = null;
   if ($("somm-cellar-pick")) $("somm-cellar-pick").value = "";
   for (const el of document.querySelectorAll("#somm [name=somm-food]:checked")) el.checked = false;
   for (const id of ["somm-q", "somm-dish", "somm-price", "somm-cook-price", "somm-menu-price"]) if ($(id)) $(id).value = "";
-  for (const id of ["somm-country", "somm-colour", "somm-cook-country", "somm-cook-colour", "somm-menu-country", "somm-protein"]) if ($(id)) $(id).selectedIndex = 0;
-  document.querySelector("#somm [name=somm-daring][value=classic]").checked = true;
-  if ($("somm-hits")) $("somm-hits").innerHTML = "";
+  for (const id of ["somm-country", "somm-colour", "somm-cook-country", "somm-cook-colour", "somm-menu-country", "somm-protein", "somm-cmp-protein"]) if ($(id)) $(id).selectedIndex = 0;
+  if ($("somm-nwines")) $("somm-nwines").value = "3";
+  for (const b of document.querySelectorAll("#somm [data-somm-course], #somm [data-somm-cmp-course]")) b.checked = b.value !== "starter";
+  const classic = document.querySelector("#somm [name=somm-daring][value=classic]");
+  if (classic) classic.checked = true;
+  for (const id of ["somm-hits", "somm-country-msg", "somm-cook-msg"]) if ($(id)) $(id).innerHTML = "";
+  if ($("somm-stores")?.children.length) renderSommComparison(); // its ticks back on
   sommTab("wine");
-  $("somm-h").scrollIntoView({ block: "start" });
+  if (jump) $("somm-h").scrollIntoView({ block: "start" });
 }
 // One good bottle for tonight: from the best of what's ready, the urgent ones favoured.
 function surpriseHtml() {

@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Basil's Wine Finder</title>
 <!-- Bump ?v= whenever app.css or app.js changes, so browsers fetch the new files instead of a saved copy. -->
-<link rel="stylesheet" href="app.css?v=2026-11-08.2">
+<link rel="stylesheet" href="app.css?v=2026-11-08.3">
 </head>
 <body>
 <!-- Line icons for the top bar: drawn in the button's own text colour, so they look the same on every computer. -->
@@ -393,7 +393,7 @@
       <li><strong>☆ Your rating</strong>: give the wine your own score out of 100.</li>
       <li><strong>📖 Claude Research Results</strong>: appears when someone in the family has had Claude research this wine. Tap it to read the full write-up.</li>
     </ul>
-    <p><strong>Start over</strong> (top right) clears all the filters. It asks before emptying your Short List for Claude and your Comparison List.</p>
+    <p><strong>Start over</strong> (top right) clears all the filters. It clears every page's choices: Find wines, the Sommelier &amp; Food Pairing page, My cellars and the Dining out question (your saved restaurant picks stay). It asks before emptying your Short List for Claude, your Comparison List and your Food Pairings list.</p>
     <p class="help-back"><a href="#help-top">↑ Back to the topics</a></p>
   </section>
 
@@ -765,7 +765,7 @@
 
 <dialog id="reset-dialog" class="dialog" aria-labelledby="reset-q">
   <p id="reset-q" class="dialog-q"></p>
-  <p>The filters have been reset.</p>
+  <p>Every page's choices have been cleared.</p>
   <div class="dialog-actions">
     <button type="button" class="btn btn-danger" id="reset-yes">Yes, empty the lists</button>
     <button type="button" class="btn btn-primary" id="reset-no" autofocus>No, keep my lists</button>
@@ -878,8 +878,8 @@
 
 <div id="print-area" class="print-area"></div>
 
-<script src="app.js?v=2026-11-08.2"></script>
-<script src="somm.js?v=2026-11-08.2"></script>
-<script src="cellar.js?v=2026-11-08.2"></script>
+<script src="app.js?v=2026-11-08.3"></script>
+<script src="somm.js?v=2026-11-08.3"></script>
+<script src="cellar.js?v=2026-11-08.3"></script>
 </body>
 </html>

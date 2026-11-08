@@ -1677,6 +1677,7 @@ function renderSweet() {
 function syncInputs() {
   $("q").value = state.q;
   $("country-q").value = state.countryQ;
+  if ($("grape-q")) $("grape-q").value = state.grapeQ;
   $("not-rated").checked = state.notRated;
   $("bottle-only").checked = state.bottleOnly;
   renderSorts();
@@ -5262,12 +5263,23 @@ function showView(name, fromHistory = false) {
   window.scrollTo(0, 0);
 }
 
+// Start over clears every page's choices, not just Find wines. What it keeps: the three lists
+// (unless the keeper says yes below), Dining out's saved picks, the stores and cellars ticked on
+// the Sommelier page, the cellar that's open, ratings, notes and settings.
 function startOver() {
   state = defaultState();
   closeClaudeSteps();
+  if (typeof startAgain === "function") startAgain(false);           // Sommelier & Food Pairing
+  if (typeof clearMcFilters === "function") {                          // My cellars
+    clearMcFilters(); Object.assign(mc, { col: "drink", dir: 1, more: {} });
+  }
+  mwView.q = ""; mwView.shown = MW_PAGE; if ($("mw-q")) $("mw-q").value = "";
+  dine.food.clear(); Object.assign(dine, { colour: "Any", serve: "Either", lo: 0 }); dine.hi = dineScale().max; // Dining out: the question only
+  if ($("dine-food-text")) $("dine-food-text").value = "";
+  if ($("sl-add-q")) $("sl-add-q").value = "";                         // Short List's add box
   renderAll();
   showView("find");
-  if (shortlist.length || shopping.length) askToEmptyLists();
+  if (shortlist.length || shopping.length || pairList.length) askToEmptyLists();
 }
 
 // Yes/No box after Start over: the Short List and the Comparison List survive Start over
@@ -5277,10 +5289,19 @@ function askToEmptyLists() {
   const parts = [];
   if (n) parts.push(`your Short List for Claude has ${wines(n)} (${shortlistCountries()})`);
   if (k) parts.push(`your Comparison List has ${wines(k)}`);
-  $("reset-q").textContent = capFirst(parts.join(" and ")) + ". Do you also want to empty " + (parts.length > 1 ? "both lists" : "it") + "?";
+  if (pairList.length) parts.push(`your Food Pairings list has ${wines(pairList.length)}`);
+  const all = parts.length > 2 ? `${parts.slice(0, -1).join(", ")} and ${parts.at(-1)}` : parts.join(" and ");
+  $("reset-q").textContent = capFirst(all) + ". Do you also want to empty " + (parts.length > 2 ? "all three lists" : parts.length > 1 ? "both lists" : "it") + "?";
   const dlg = $("reset-dialog");
   if (typeof dlg.showModal !== "function") return; // very old browser: just keep the list
   dlg.showModal();
+}
+
+function emptyPairList() {
+  pairList = [];
+  storeSet("wf.pairList", pairList);
+  for (const b of document.querySelectorAll("[data-pair][aria-pressed]")) { b.setAttribute("aria-pressed", "false"); b.textContent = pairWords(false); }
+  if (typeof renderPairBar === "function") renderPairBar();
 }
 
 function emptyShortlist() {
@@ -5782,7 +5803,7 @@ function wireEvents() {
   });
 
   $("start-over").addEventListener("click", startOver);
-  $("reset-yes").addEventListener("click", () => { emptyShortlist(); shopping = []; saveShopping(); renderShopping(); refresh(); $("reset-dialog").close(); });
+  $("reset-yes").addEventListener("click", () => { emptyShortlist(); shopping = []; saveShopping(); renderShopping(); emptyPairList(); refresh(); $("reset-dialog").close(); });
   $("reset-no").addEventListener("click", () => $("reset-dialog").close());
   $("ask-claude").addEventListener("click", () => askClaude("about"));
   $("ask-claude-rank").addEventListener("click", () => askClaude("rank"));
