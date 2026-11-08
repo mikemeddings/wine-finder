@@ -1,118 +1,930 @@
 {
- "Aglianico del Vulture": "Aglianico del Vulture",
- "Alsace": "Alsace wine",
- "Amarone della Valpolicella": "Amarone",
- "Amarone della Valpolicella Classico": "Amarone",
- "Barbaresco": "Barbaresco",
- "Barolo": "Barolo",
- "Barossa": "Barossa Valley wine region",
- "Barossa Valley": "Barossa Valley wine region",
- "Beaune": "Beaune wine",
- "Bolgheri": "Bolgheri",
- "Bolgheri Sassicaia": "Bolgheri",
- "Brunello di Montalcino": "Brunello di Montalcino",
- "Canelones": "Canelones Department",
- "Chablis": "Chablis (AOC)",
- "Champagne": "Champagne wine region",
- "Charlemagne": "Corton-Charlemagne",
- "Chassagne-Montrachet": "Chassagne-Montrachet wine",
- "Châteauneuf-du-Pape": "Châteauneuf-du-Pape AOC",
- "Citrusdal": "Citrusdal",
- "Clare Valley": "Clare Valley",
- "Colli della Toscana Centrale IGT": "Tuscan wine",
- "Columbia Valley": "Columbia Valley AVA",
- "Coonawarra": "Coonawarra wine region",
- "Corbières-Boutenac": "Corbières AOC",
- "Cornas": "Cornas AOC",
- "Corton": "Corton (wine)",
- "Coteaux du Languedoc La Clape": "Massif de la Clape",
- "Crozes-Hermitage": "Crozes-Hermitage AOC",
- "Côtes de Bourg": "Côtes de Bourg",
- "Côtes du Jura": "Jura wine",
- "Dardagny": "Dardagny",
- "Douro": "Douro DOC",
- "Eastern Switzerland": "Swiss wine",
- "Fixin": "Fixin wine",
- "Flanthey": "Lens, Switzerland",
- "Fully": "Fully",
- "Féchy": "Féchy",
- "Genève": "Canton of Geneva",
- "Gevrey-Chambertin": "Gevrey-Chambertin wine",
- "Ghemme": "Ghemme",
- "Gigondas": "Gigondas AOC",
- "Graves": "Graves (wine region)",
- "Haut-Médoc": "Haut-Médoc AOC",
- "Hemel-en-Aarde Ridge": "Walker Bay",
- "Hermitage": "Hermitage AOC",
- "Kumeu": "Kumeū",
- "Lalande de Pomerol": "Lalande-de-Pomerol AOC",
- "Langhe DOC": "Langhe",
- "Les Baux-de-Provence": "Provence wine",
- "Les Coteaux de Sierre": "Sierre",
- "Leytron": "Leytron",
- "Lirac": "Lirac AOC",
- "Malans": "Malans, Switzerland",
- "Maremma Toscana": "Maremma Toscana",
- "Margaret River": "Margaret River (wine region)",
- "Margaux": "Margaux AOC",
- "Martigny": "Martigny",
- "Martinborough": "Martinborough",
- "McLaren Vale": "McLaren Vale",
- "Meursault": "Meursault wine",
- "Morey-Saint-Denis": "Morey-Saint-Denis wine",
- "Mosel Saar Ruwer": "Mosel (wine region)",
- "Moulin-à-Vent": "Moulin-à-Vent AOC",
- "Muscat de Beaumes-de-Venise": "Beaumes de Venise AOC",
- "Médoc": "Médoc AOC",
- "Nahe": "Nahe (wine region)",
- "Napa Valley": "Napa Valley AVA",
- "Nuits-Saint-Georges": "Nuits-Saint-Georges wine",
- "Okanagan Valley": "Okanagan Valley (wine region)",
- "Okanagan Valley VQA": "Okanagan Valley (wine region)",
- "Pauillac": "Pauillac AOC",
- "Pays d'Hérault": "Languedoc-Roussillon wine",
- "Pessac-Léognan": "Pessac-Léognan",
- "Pfalz": "Palatinate (wine region)",
- "Pomerol": "Pomerol AOC",
- "Porto": "Port wine",
- "Pouilly-Vinzelles": "Pouilly-Vinzelles",
- "Puente Alto": "Puente Alto",
- "Puligny-Montrachet": "Puligny-Montrachet wine",
- "Rheingau": "Rheingau (wine region)",
- "Rheinhessen": "Rheinhessen (wine region)",
- "Ribera del Duero": "Ribera del Duero",
- "Rioja": "Rioja DOCa",
- "Robertson": "Robertson, South Africa",
- "Roccamonfina IGT": "Roccamonfina",
- "Saint-Aubin": "Saint-Aubin wine",
- "Saint-Estèphe": "Saint-Estèphe AOC",
- "Saint-Joseph": "Saint-Joseph AOC",
- "Saint-Julien": "Saint-Julien AOC",
- "Saint-Émilion": "Saint-Émilion AOC",
- "Salgesch": "Salgesch",
- "Santa Barbara County": "Santa Barbara County wine",
- "Santa Lucia Highlands": "Santa Lucia Highlands AVA",
- "Santorini": "Santorini (wine)",
- "Satigny": "Satigny",
- "Sauternes": "Sauternes (wine)",
- "Sta. Rita Hills": "Sta. Rita Hills AVA",
- "Stags Leap District": "Stags Leap District AVA",
- "Stellenbosch": "Stellenbosch",
- "Swartland": "Swartland",
- "Terrasses du Larzac": "Terrasses du Larzac",
- "Terre Siciliane": "Sicily",
- "Toscana IGT": "Tuscan wine",
- "Valais": "Valais",
- "Vaucluse": "Vaucluse",
- "Ventoux": "Ventoux AOC",
- "Vinho Regional Alentejano": "Alentejo wine",
- "Visp": "Visp",
- "Volnay": "Volnay wine",
- "Vouvray": "Vouvray (wine)",
- "Vétroz": "Vétroz",
- "Wachau": "Wachau",
- "Walla Walla Valley": "Walla Walla Valley AVA",
- "Wallis": "Valais",
- "Western Cape": "Western Cape wine",
- "Ștefan Vodă Region": "Ștefan Vodă District"
+ "Aglianico del Vulture": {
+  "wiki": "Aglianico del Vulture",
+  "map": "Rionero in Vulture",
+  "at": [
+   40.9262,
+   15.6694
+  ]
+ },
+ "Alsace": {
+  "wiki": "Alsace wine",
+  "map": "Colmar",
+  "at": [
+   48.0778,
+   7.358
+  ]
+ },
+ "Amarone della Valpolicella": {
+  "wiki": "Amarone",
+  "map": "Valpolicella",
+  "at": [
+   45.5395,
+   10.9522
+  ]
+ },
+ "Amarone della Valpolicella Classico": {
+  "wiki": "Amarone",
+  "map": "Fumane",
+  "at": [
+   45.581,
+   10.8841
+  ]
+ },
+ "Barbaresco": {
+  "wiki": "Barbaresco",
+  "map": "Barbaresco",
+  "at": [
+   44.7193,
+   8.0769
+  ]
+ },
+ "Barolo": {
+  "wiki": "Barolo",
+  "map": "Barolo",
+  "at": [
+   44.6147,
+   7.9394
+  ]
+ },
+ "Barossa": {
+  "wiki": "Barossa Valley wine region",
+  "map": "Tanunda",
+  "at": [
+   -34.5217,
+   138.9603
+  ]
+ },
+ "Barossa Valley": {
+  "wiki": "Barossa Valley wine region",
+  "map": "Tanunda",
+  "at": [
+   -34.5217,
+   138.9603
+  ]
+ },
+ "Beaune": {
+  "wiki": "Beaune wine",
+  "map": "Beaune",
+  "at": [
+   47.0239,
+   4.838
+  ]
+ },
+ "Bolgheri": {
+  "wiki": "Bolgheri",
+  "map": "Bolgheri",
+  "at": [
+   43.234,
+   10.6179
+  ]
+ },
+ "Bolgheri Sassicaia": {
+  "wiki": "Bolgheri",
+  "map": "Bolgheri",
+  "at": [
+   43.234,
+   10.6179
+  ]
+ },
+ "Brunello di Montalcino": {
+  "wiki": "Brunello di Montalcino",
+  "map": "Montalcino",
+  "at": [
+   43.0576,
+   11.4903
+  ]
+ },
+ "Canelones": {
+  "wiki": "Canelones Department",
+  "map": "Canelones",
+  "at": [
+   -34.6222,
+   -55.9904
+  ]
+ },
+ "Chablis": {
+  "wiki": "Chablis (AOC)",
+  "map": "Chablis",
+  "at": [
+   47.8152,
+   3.8002
+  ]
+ },
+ "Champagne": {
+  "wiki": "Champagne wine region",
+  "map": "Épernay",
+  "at": [
+   49.0426,
+   3.9529
+  ]
+ },
+ "Charlemagne": {
+  "wiki": "Corton-Charlemagne",
+  "map": "Aloxe-Corton",
+  "at": [
+   47.0653,
+   4.8596
+  ]
+ },
+ "Chassagne-Montrachet": {
+  "wiki": "Chassagne-Montrachet wine",
+  "map": "Chassagne-Montrachet",
+  "at": [
+   46.9364,
+   4.7274
+  ]
+ },
+ "Châteauneuf-du-Pape": {
+  "wiki": "Châteauneuf-du-Pape AOC",
+  "map": "Châteauneuf-du-Pape",
+  "at": [
+   44.056,
+   4.8317
+  ]
+ },
+ "Citrusdal": {
+  "wiki": "Citrusdal",
+  "map": "Citrusdal",
+  "at": [
+   -32.5894,
+   19.0147
+  ]
+ },
+ "Clare Valley": {
+  "wiki": "Clare Valley",
+  "map": "Clare",
+  "at": [
+   -33.8334,
+   138.612
+  ]
+ },
+ "Colli della Toscana Centrale IGT": {
+  "wiki": "Tuscan wine",
+  "map": "Siena",
+  "at": [
+   43.1672,
+   11.4676
+  ]
+ },
+ "Columbia Valley": {
+  "wiki": "Columbia Valley AVA",
+  "map": "Prosser",
+  "at": [
+   46.2068,
+   -119.7692
+  ]
+ },
+ "Coonawarra": {
+  "wiki": "Coonawarra wine region",
+  "map": "Coonawarra",
+  "at": [
+   -37.2909,
+   140.8347
+  ]
+ },
+ "Corbières-Boutenac": {
+  "wiki": "Corbières AOC",
+  "map": "Boutenac",
+  "at": [
+   43.1476,
+   2.792
+  ]
+ },
+ "Cornas": {
+  "wiki": "Cornas AOC",
+  "map": "Cornas",
+  "at": [
+   44.9635,
+   4.8475
+  ]
+ },
+ "Corton": {
+  "wiki": "Corton (wine)",
+  "map": "Aloxe-Corton",
+  "at": [
+   47.0653,
+   4.8596
+  ]
+ },
+ "Coteaux du Languedoc La Clape": {
+  "wiki": "Massif de la Clape",
+  "map": "Massif de la Clape",
+  "at": [
+   43.1658,
+   3.1118
+  ]
+ },
+ "Crozes-Hermitage": {
+  "wiki": "Crozes-Hermitage AOC",
+  "map": "Crozes-Hermitage",
+  "at": [
+   45.0907,
+   4.8459
+  ]
+ },
+ "Côtes de Bourg": {
+  "wiki": "Côtes de Bourg",
+  "map": "Bourg, Gironde",
+  "at": [
+   45.0395,
+   -0.5596
+  ]
+ },
+ "Côtes du Jura": {
+  "wiki": "Jura wine",
+  "map": "Arbois",
+  "at": [
+   46.9032,
+   5.7728
+  ]
+ },
+ "Dardagny": {
+  "wiki": "Dardagny",
+  "map": "Dardagny",
+  "at": [
+   46.1992,
+   5.9838
+  ]
+ },
+ "Douro": {
+  "wiki": "Douro DOC",
+  "map": "Pinhão",
+  "at": [
+   41.191,
+   -7.546
+  ]
+ },
+ "Eastern Switzerland": {
+  "wiki": "Swiss wine",
+  "map": "St. Gallen",
+  "at": [
+   47.4256,
+   9.3762
+  ]
+ },
+ "Fixin": {
+  "wiki": "Fixin wine",
+  "map": "Fixin",
+  "at": [
+   47.2455,
+   4.9728
+  ]
+ },
+ "Flanthey": {
+  "wiki": "Lens, Switzerland",
+  "map": "Flanthey",
+  "at": [
+   46.2704,
+   7.4535
+  ]
+ },
+ "Fully": {
+  "wiki": "Fully",
+  "map": "Fully",
+  "at": [
+   46.139,
+   7.1147
+  ]
+ },
+ "Féchy": {
+  "wiki": "Féchy",
+  "map": "Féchy",
+  "at": [
+   46.4787,
+   6.3748
+  ]
+ },
+ "Genève": {
+  "wiki": "Canton of Geneva",
+  "map": "Geneva",
+  "at": [
+   46.2018,
+   6.1466
+  ]
+ },
+ "Gevrey-Chambertin": {
+  "wiki": "Gevrey-Chambertin wine",
+  "map": "Gevrey-Chambertin",
+  "at": [
+   47.2262,
+   4.9706
+  ]
+ },
+ "Ghemme": {
+  "wiki": "Ghemme",
+  "map": "Ghemme",
+  "at": [
+   45.5983,
+   8.4209
+  ]
+ },
+ "Gigondas": {
+  "wiki": "Gigondas AOC",
+  "map": "Gigondas",
+  "at": [
+   44.1641,
+   5.0051
+  ]
+ },
+ "Graves": {
+  "wiki": "Graves (wine region)",
+  "map": "Podensac",
+  "at": [
+   44.6508,
+   -0.3558
+  ]
+ },
+ "Haut-Médoc": {
+  "wiki": "Haut-Médoc AOC",
+  "map": "Saint-Laurent-Médoc",
+  "at": [
+   45.1516,
+   -0.8217
+  ]
+ },
+ "Hemel-en-Aarde Ridge": {
+  "wiki": "Walker Bay",
+  "map": "Hemel-en-Aarde",
+  "at": [
+   -34.4116,
+   19.2062
+  ]
+ },
+ "Hermitage": {
+  "wiki": "Hermitage AOC",
+  "map": "Tain-l'Hermitage",
+  "at": [
+   45.0713,
+   4.8371
+  ]
+ },
+ "Kumeu": {
+  "wiki": "Kumeū",
+  "map": "Kumeu",
+  "at": [
+   -36.7753,
+   174.5547
+  ]
+ },
+ "Lalande de Pomerol": {
+  "wiki": "Lalande-de-Pomerol AOC",
+  "map": "Lalande-de-Pomerol",
+  "at": [
+   44.9561,
+   -0.2104
+  ]
+ },
+ "Langhe DOC": {
+  "wiki": "Langhe",
+  "map": "Alba",
+  "at": [
+   44.6866,
+   8.0311
+  ]
+ },
+ "Les Baux-de-Provence": {
+  "wiki": "Provence wine",
+  "map": "Les Baux-de-Provence",
+  "at": [
+   43.7436,
+   4.795
+  ]
+ },
+ "Les Coteaux de Sierre": {
+  "wiki": "Sierre",
+  "map": "Sierre",
+  "at": [
+   46.2923,
+   7.5323
+  ]
+ },
+ "Leytron": {
+  "wiki": "Leytron",
+  "map": "Leytron",
+  "at": [
+   46.186,
+   7.2068
+  ]
+ },
+ "Lirac": {
+  "wiki": "Lirac AOC",
+  "map": "Lirac",
+  "at": [
+   44.0366,
+   4.6911
+  ]
+ },
+ "Malans": {
+  "wiki": "Malans, Switzerland",
+  "map": "Malans",
+  "at": [
+   46.9821,
+   9.5761
+  ]
+ },
+ "Maremma Toscana": {
+  "wiki": "Maremma Toscana",
+  "map": "Grosseto",
+  "at": [
+   42.7751,
+   11.2878
+  ]
+ },
+ "Margaret River": {
+  "wiki": "Margaret River (wine region)",
+  "map": "Margaret River",
+  "at": [
+   -33.9532,
+   115.0769
+  ]
+ },
+ "Margaux": {
+  "wiki": "Margaux AOC",
+  "map": "Margaux",
+  "at": [
+   45.0463,
+   -0.6729
+  ]
+ },
+ "Martigny": {
+  "wiki": "Martigny",
+  "map": "Martigny",
+  "at": [
+   46.1031,
+   7.0727
+  ]
+ },
+ "Martinborough": {
+  "wiki": "Martinborough",
+  "map": "Martinborough",
+  "at": [
+   -41.2183,
+   175.4595
+  ]
+ },
+ "McLaren Vale": {
+  "wiki": "McLaren Vale",
+  "map": "McLaren Vale",
+  "at": [
+   -35.2173,
+   138.5417
+  ]
+ },
+ "Meursault": {
+  "wiki": "Meursault wine",
+  "map": "Meursault",
+  "at": [
+   46.9784,
+   4.7694
+  ]
+ },
+ "Morey-Saint-Denis": {
+  "wiki": "Morey-Saint-Denis wine",
+  "map": "Morey-Saint-Denis",
+  "at": [
+   47.1955,
+   4.9623
+  ]
+ },
+ "Mosel Saar Ruwer": {
+  "wiki": "Mosel (wine region)",
+  "map": "Bernkastel-Kues",
+  "at": [
+   49.9157,
+   7.0708
+  ]
+ },
+ "Moulin-à-Vent": {
+  "wiki": "Moulin-à-Vent AOC",
+  "map": "Romanèche-Thorins",
+  "at": [
+   46.1892,
+   4.7367
+  ]
+ },
+ "Muscat de Beaumes-de-Venise": {
+  "wiki": "Beaumes de Venise AOC",
+  "map": "Beaumes-de-Venise",
+  "at": [
+   44.1219,
+   5.0302
+  ]
+ },
+ "Médoc": {
+  "wiki": "Médoc AOC",
+  "map": "Lesparre-Médoc",
+  "at": [
+   45.3082,
+   -0.9379
+  ]
+ },
+ "Nahe": {
+  "wiki": "Nahe (wine region)",
+  "map": "Bad Kreuznach",
+  "at": [
+   49.8153,
+   7.9125
+  ]
+ },
+ "Napa Valley": {
+  "wiki": "Napa Valley AVA",
+  "map": "Napa",
+  "at": [
+   38.4899,
+   -122.3218
+  ]
+ },
+ "Nuits-Saint-Georges": {
+  "wiki": "Nuits-Saint-Georges wine",
+  "map": "Nuits-Saint-Georges",
+  "at": [
+   47.1367,
+   4.949
+  ]
+ },
+ "Okanagan Valley": {
+  "wiki": "Okanagan Valley (wine region)",
+  "map": "Oliver",
+  "at": [
+   49.1833,
+   -119.55
+  ]
+ },
+ "Okanagan Valley VQA": {
+  "wiki": "Okanagan Valley (wine region)",
+  "map": "Oliver",
+  "at": [
+   49.1833,
+   -119.55
+  ]
+ },
+ "Pauillac": {
+  "wiki": "Pauillac AOC",
+  "map": "Pauillac",
+  "at": [
+   45.1996,
+   -0.7485
+  ]
+ },
+ "Pays d'Hérault": {
+  "wiki": "Languedoc-Roussillon wine",
+  "map": "Pézenas",
+  "at": [
+   43.4612,
+   3.4228
+  ]
+ },
+ "Pessac-Léognan": {
+  "wiki": "Pessac-Léognan",
+  "map": "Léognan",
+  "at": [
+   44.7294,
+   -0.5997
+  ]
+ },
+ "Pfalz": {
+  "wiki": "Palatinate (wine region)",
+  "map": "Neustadt an der Weinstraße",
+  "at": [
+   49.3536,
+   8.136
+  ]
+ },
+ "Pomerol": {
+  "wiki": "Pomerol AOC",
+  "map": "Pomerol",
+  "at": [
+   44.9311,
+   -0.2
+  ]
+ },
+ "Porto": {
+  "wiki": "Port wine",
+  "map": "Vila Nova de Gaia",
+  "at": [
+   41.1292,
+   -8.6057
+  ]
+ },
+ "Pouilly-Vinzelles": {
+  "wiki": "Pouilly-Vinzelles",
+  "map": "Vinzelles",
+  "at": [
+   46.2715,
+   4.7683
+  ]
+ },
+ "Puente Alto": {
+  "wiki": "Puente Alto",
+  "map": "Puente Alto",
+  "at": [
+   -33.6095,
+   -70.5755
+  ]
+ },
+ "Puligny-Montrachet": {
+  "wiki": "Puligny-Montrachet wine",
+  "map": "Puligny-Montrachet",
+  "at": [
+   46.9487,
+   4.7532
+  ]
+ },
+ "Rheingau": {
+  "wiki": "Rheingau (wine region)",
+  "map": "Eltville am Rhein",
+  "at": [
+   50.022,
+   8.1044
+  ]
+ },
+ "Rheinhessen": {
+  "wiki": "Rheinhessen (wine region)",
+  "map": "Nierstein",
+  "at": [
+   49.8711,
+   8.3365
+  ]
+ },
+ "Ribera del Duero": {
+  "wiki": "Ribera del Duero",
+  "map": "Peñafiel",
+  "at": [
+   41.5966,
+   -4.1216
+  ]
+ },
+ "Rioja": {
+  "wiki": "Rioja DOCa",
+  "map": "Haro",
+  "at": [
+   42.5769,
+   -2.8467
+  ]
+ },
+ "Robertson": {
+  "wiki": "Robertson, South Africa",
+  "map": "Robertson",
+  "at": [
+   -33.8036,
+   19.8816
+  ]
+ },
+ "Roccamonfina IGT": {
+  "wiki": "Roccamonfina",
+  "map": "Roccamonfina",
+  "at": [
+   41.2897,
+   13.9835
+  ]
+ },
+ "Saint-Aubin": {
+  "wiki": "Saint-Aubin wine",
+  "map": "Saint-Aubin",
+  "at": [
+   46.9501,
+   4.7089
+  ]
+ },
+ "Saint-Estèphe": {
+  "wiki": "Saint-Estèphe AOC",
+  "map": "Saint-Estèphe",
+  "at": [
+   45.2643,
+   -0.7707
+  ]
+ },
+ "Saint-Joseph": {
+  "wiki": "Saint-Joseph AOC",
+  "map": "Tournon-sur-Rhône",
+  "at": [
+   45.0675,
+   4.8329
+  ]
+ },
+ "Saint-Julien": {
+  "wiki": "Saint-Julien AOC",
+  "map": "Saint-Julien-Beychevelle",
+  "at": [
+   45.1649,
+   -0.7414
+  ]
+ },
+ "Saint-Émilion": {
+  "wiki": "Saint-Émilion AOC",
+  "map": "Saint-Émilion",
+  "at": [
+   44.8931,
+   -0.1561
+  ]
+ },
+ "Salgesch": {
+  "wiki": "Salgesch",
+  "map": "Salgesch",
+  "at": [
+   46.3116,
+   7.5699
+  ]
+ },
+ "Santa Barbara County": {
+  "wiki": "Santa Barbara County wine",
+  "map": "Los Olivos",
+  "at": [
+   34.6678,
+   -120.1148
+  ]
+ },
+ "Santa Lucia Highlands": {
+  "wiki": "Santa Lucia Highlands AVA",
+  "map": "Gonzales",
+  "at": [
+   36.5081,
+   -121.4447
+  ]
+ },
+ "Santorini": {
+  "wiki": "Santorini (wine)",
+  "map": "Santorini",
+  "at": [
+   36.4071,
+   25.4567
+  ]
+ },
+ "Satigny": {
+  "wiki": "Satigny",
+  "map": "Satigny",
+  "at": [
+   46.2158,
+   6.0331
+  ]
+ },
+ "Sauternes": {
+  "wiki": "Sauternes (wine)",
+  "map": "Sauternes",
+  "at": [
+   44.5328,
+   -0.3414
+  ]
+ },
+ "Sta. Rita Hills": {
+  "wiki": "Sta. Rita Hills AVA",
+  "map": "Lompoc",
+  "at": [
+   34.6392,
+   -120.4579
+  ]
+ },
+ "Stags Leap District": {
+  "wiki": "Stags Leap District AVA",
+  "map": "Yountville",
+  "at": [
+   38.4022,
+   -122.3595
+  ]
+ },
+ "Stellenbosch": {
+  "wiki": "Stellenbosch",
+  "map": "Stellenbosch",
+  "at": [
+   -33.9344,
+   18.8692
+  ]
+ },
+ "Swartland": {
+  "wiki": "Swartland",
+  "map": "Malmesbury",
+  "at": [
+   -33.4603,
+   18.7236
+  ]
+ },
+ "Terrasses du Larzac": {
+  "wiki": "Terrasses du Larzac",
+  "map": "Saint-Jean-de-Fos",
+  "at": [
+   43.7008,
+   3.5514
+  ]
+ },
+ "Terre Siciliane": {
+  "wiki": "Sicily",
+  "map": "Sicily",
+  "at": [
+   37.5878,
+   14.155
+  ]
+ },
+ "Toscana IGT": {
+  "wiki": "Tuscan wine",
+  "map": "Tuscany",
+  "at": [
+   43.4587,
+   11.1389
+  ]
+ },
+ "Valais": {
+  "wiki": "Valais",
+  "map": "Sion",
+  "at": [
+   46.2312,
+   7.3589
+  ]
+ },
+ "Vaucluse": {
+  "wiki": "Vaucluse",
+  "map": "Vaucluse",
+  "at": [
+   43.9939,
+   5.1819
+  ]
+ },
+ "Ventoux": {
+  "wiki": "Ventoux AOC",
+  "map": "Bédoin",
+  "at": [
+   44.124,
+   5.1807
+  ]
+ },
+ "Vinho Regional Alentejano": {
+  "wiki": "Alentejo wine",
+  "map": "Évora",
+  "at": [
+   38.5708,
+   -7.9093
+  ]
+ },
+ "Visp": {
+  "wiki": "Visp",
+  "map": "Visp",
+  "at": [
+   46.2913,
+   7.8812
+  ]
+ },
+ "Volnay": {
+  "wiki": "Volnay wine",
+  "map": "Volnay",
+  "at": [
+   47.0017,
+   4.7811
+  ]
+ },
+ "Vouvray": {
+  "wiki": "Vouvray (wine)",
+  "map": "Vouvray",
+  "at": [
+   47.4137,
+   0.7998
+  ]
+ },
+ "Vétroz": {
+  "wiki": "Vétroz",
+  "map": "Vétroz",
+  "at": [
+   46.2253,
+   7.2813
+  ]
+ },
+ "Wachau": {
+  "wiki": "Wachau",
+  "map": "Dürnstein",
+  "at": [
+   48.3954,
+   15.5203
+  ]
+ },
+ "Walla Walla Valley": {
+  "wiki": "Walla Walla Valley AVA",
+  "map": "Walla Walla",
+  "at": [
+   46.2055,
+   -118.5174
+  ]
+ },
+ "Wallis": {
+  "wiki": "Valais",
+  "map": "Sion",
+  "at": [
+   46.2312,
+   7.3589
+  ]
+ },
+ "Western Cape": {
+  "wiki": "Western Cape wine",
+  "map": "Western Cape",
+  "at": [
+   -33.547,
+   20.7275
+  ]
+ },
+ "Ștefan Vodă Region": {
+  "wiki": "Ștefan Vodă District",
+  "map": "Ștefan Vodă",
+  "at": [
+   46.5156,
+   29.6621
+  ]
+ }
 }

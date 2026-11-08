@@ -237,13 +237,14 @@ document.addEventListener("change", (e) => {
 
 // ---- About a region -------------------------------------------------------------------
 // The card shows Wikipedia's own opening words, fetched when it opens, so nothing is retold.
-// data/regions.json names the article for each place in the cellars ("Nahe" alone is the river).
-let regionTitles = null;
+// data/regions.json names the article for each place in the cellars ("Nahe" alone is the river),
+// and a town at its heart for the map: Google can't find a wine region such as "Nahe, Germany".
+let regionInfo = null;
 const regionLink = (r) => `<button type="button" class="linklike mc-region" data-mc-region="${esc(r)}" title="About ${esc(r)}">${esc(r)}</button>`;
 const regionCountry = (wines) => wines.find((w) => regionOf(w) === mc.region)?.country || "";
-async function regionTitle(r) {
-  regionTitles ||= fetch("data/regions.json", FRESH).then((x) => (x.ok ? x.json() : {})).catch(() => ({}));
-  return (await regionTitles)[r] || r; // a place not on the list is tried as it's written
+async function regionOn(r) {
+  regionInfo ||= fetch("data/regions.json", FRESH).then((x) => (x.ok ? x.json() : {})).catch(() => ({}));
+  return (await regionInfo)[r] || { wiki: r }; // a place not on the list is tried as it's written
 }
 async function wikiSummary(title) {
   const x = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title.replace(/ /g, "_"))}`);
@@ -264,16 +265,20 @@ function regionCellarHtml(r) {
 async function openRegion(r) {
   const country = regionCountry(cellarFindWines().filter((w) => regionOf(w) === r)) || "";
   const where = [r, country].filter(Boolean).join(", ");
-  const mapUrl = (d) => (d?.coordinates ? `https://www.google.com/maps/search/?api=1&query=${d.coordinates.lat},${d.coordinates.lon}` : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(where)}`);
+  const info = await regionOn(r), at = (d) => info.at || (d?.coordinates ? [d.coordinates.lat, d.coordinates.lon] : null);
+  // the area around it with the hills shown, not one pin at street level
+  const mapUrl = (d) => (at(d) ? `https://www.google.com/maps/@?api=1&map_action=map&center=${at(d).join(",")}&zoom=10&basemap=terrain`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(where)}`);
+  const mapWords = info.map && info.map !== r ? ` (around ${esc(info.map)})` : "";
   const body = (wiki, d) => `<h2 class="dialog-q">${esc(r)}${country ? `<span class="region-country">, ${esc(country)}</span>` : ""}</h2>
     ${wiki}
     <p class="region-links">${d ? `<a href="${esc(d.content_urls.desktop.page)}" target="_blank" rel="noopener">📖 Read the full article on Wikipedia</a>` : ""}
-      <a href="${esc(mapUrl(d))}" target="_blank" rel="noopener">🗺 See it on a map</a></p>
+      <a href="${esc(mapUrl(d))}" target="_blank" rel="noopener">🗺 See it on a map${mapWords}</a></p>
     ${regionCellarHtml(r)}`;
   $("region-pop-body").innerHTML = body(`<p class="hint">Asking Wikipedia about ${esc(r)}…</p>`);
   $("region-pop").showModal?.();
   try {
-    const d = await wikiSummary(await regionTitle(r));
+    const d = await wikiSummary(info.wiki);
     if (!$("region-pop").open) return;
     const pic = d.thumbnail ? `<img class="region-pic" src="${esc(d.thumbnail.source)}" alt="" loading="lazy">` : "";
     $("region-pop-body").innerHTML = body(`<div class="region-wiki">${pic}<p class="region-art">From the Wikipedia article <strong>${esc(d.title)}</strong>:</p>${d.extract_html || `<p>${esc(d.extract)}</p>`}
