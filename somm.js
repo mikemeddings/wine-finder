@@ -864,6 +864,8 @@ function printOut(title = "From the family's cellars") {
 // Choosing a wine asks what's in the kitchen. A food tile or the fridge box then answers for this
 // wine with that food; the full write-up waits under "More about this wine".
 let wineNow = null; // { w, typed }
+const FOOD_ICONS = { "Red meat": "🥩", Lamb: "🐑", Pork: "🐖", Chicken: "🍗", Fish: "🐟", Seafood: "🦐", "Pasta and pizza": "🍝", Cheese: "🧀", "Spicy food": "🌶️", Dessert: "🍰" };
+const foodIcon = (f) => (FOOD_ICONS[f] ? `<span class="food-icon" aria-hidden="true">${FOOD_ICONS[f]}</span> ` : "");
 function foodRating(w, typed, f) {
   const keys = bookKeys(sommKeys(w), !typed && isSweetWine(w));
   if (typed) { const t = Math.max(0, ...keys.map((k) => grapeFoodTier(k, f))); return t > 1 ? { t } : keys.length ? { stretch: true } : {}; }
@@ -877,14 +879,14 @@ function bestWithHtml(w, typed) {
   const best = FOODS.map((f) => ({ f, t: foodRating(w, typed, f).t || 0 })).filter((x) => x.t > 1).sort((a, b) => b.t - a.t);
   if (!best.length) return "";
   const line = ({ f }) => { const { ds } = wineDishes(w, f, keys), dishes = ds.length ? ds.map((d) => d.dish).join(", ") : typed ? "" : pairDish(w, f);
-    return `<li><button type="button" class="linklike" data-wine-food="${esc(f)}">${esc(f)}</button>${dishes ? `: ${esc(dishes)}` : ""}</li>`; };
+    return `<li>${foodIcon(f)}<button type="button" class="linklike" data-wine-food="${esc(f)}">${esc(f)}</button>${dishes ? `: ${esc(dishes)}` : ""}</li>`; };
   return `<div class="somm-best"><h4>Best with</h4><ul>${best.slice(0, 3).map(line).join("")}</ul>${best.length > 3 ? `<p class="hint">And ${best.length - 3} more below. Click a food for why it works and its recipes.</p>` : `<p class="hint">Click a food for why it works and its recipes.</p>`}</div>`;
 }
 function wineStartHtml(w, typed = false, fromList = false) {
   wineNow = { w, typed };
   const order = (x) => { const r = foodRating(w, typed, x); return r.t ? 4 - r.t : r.bold ? 4 : 5; };
   const tiles = FOODS.slice().sort((a, b) => order(a) - order(b)).map((f) =>
-    `<button type="button" class="somm-food" data-wine-food="${esc(f)}" aria-pressed="false">${esc(f)} <span class="tile-rate">${ratingText(foodRating(w, typed, f))}</span></button>`).join("");
+    `<button type="button" class="somm-food" data-wine-food="${esc(f)}" aria-pressed="false">${foodIcon(f)}${esc(f)} <span class="tile-rate">${ratingText(foodRating(w, typed, f))}</span></button>`).join("");
   return `<div id="somm-wine-answer">
     <p class="somm-trail"><strong>${esc(w.name)}</strong> <span id="somm-trail-food"></span>
       <button type="button" class="btn btn-mini" data-somm="other-food" id="somm-other-food" hidden>Choose another food</button>
@@ -924,7 +926,7 @@ function wineFoodHtml(w, typed, f) {
   const verdict = r.t ? `${STARS(r.t)} A classic match.` : r.bold ? "⚡ An adventurous match." : r.stretch ? "Not a natural match, so these are the closest ideas." : "";
   const adv = !typed && r.bold ? advIdeaHtml(w, f, true) : "";
   const pick = recipePickHtml(w, f, 3, 0);
-  return `<div class="somm-card"><h3 class="somm-wine-h">This wine with ${esc(f.toLowerCase())}</h3>
+  return `<div class="somm-card"><h3 class="somm-wine-h">${foodIcon(f)}This wine with ${esc(f.toLowerCase())}</h3>
     ${verdict ? `<p class="somm-reason">${esc(verdict)}</p>` : ""}
     ${why ? `<p><strong>Why it works:</strong> ${esc(capFirst(why.why))}${srcSpan(why.b, why.p)}</p>` : ""}
     ${dishes && !r.bold ? `<p><strong>Dishes to try:</strong> ${esc(dishes)}.</p>${ds[0] ? `<p>${recipeButton(capFirst(ds[0].dish), wineWord(w))}</p>` : ""}` : ""}
@@ -1011,18 +1013,62 @@ function pairsStartHtml(fromList) {
   const score = (f) => wines.reduce((k, w) => k + (foodRating(w, false, f).t || (foodRating(w, false, f).bold ? 0.5 : 0)), 0);
   const tiles = FOODS.slice().sort((a, b) => score(b) - score(a)).map((f) => {
     const k = wines.filter((w) => suits(w, f)).length;
-    return `<button type="button" class="somm-food" data-pairs-food="${esc(f)}" aria-pressed="false">${esc(f)} <span class="tile-rate">${k} of ${n}</span></button>`;
+    return `<button type="button" class="somm-food" data-pairs-food="${esc(f)}" aria-pressed="false">${foodIcon(f)}${esc(f)} <span class="tile-rate">${k} of ${n}</span></button>`;
   }).join("");
   return `<div id="somm-wine-answer">
     <p class="somm-trail"><strong>${n} wines together</strong> <span id="somm-trail-food"></span>
       <button type="button" class="btn btn-mini" data-somm="other-food" id="somm-other-food" hidden>Choose another food</button>
       ${fromList ? `<button type="button" class="btn btn-mini" data-somm="back-list">Back to the list</button>` : ""}</p>
-    <div class="somm-way"><h4>What have you got?</h4>
-      <p class="hint">Each food shows how many of your wines suit it, classic or adventurous. Tap what you're cooking.</p>
+    ${pairsOverviewHtml(wines)}
+    <div class="somm-way"><h4>Already know what you're cooking?</h4>
+      <p class="hint">Each food shows how many of your wines suit it, classic or adventurous. Tap it for your wines with that food.</p>
       <div class="somm-foods-pick">${tiles}</div>
       <label class="somm-label" for="somm-fridge">Or type what's in the fridge <span class="hint-inline">(for example pork, apples)</span></label>
       <div class="somm-row"><input type="text" id="somm-fridge" autocomplete="off"> <button type="button" class="btn btn-somm" data-somm="fridge">Find recipes</button></div></div>
     <div id="somm-wine-food"></div></div>`;
+}
+// The answer for several wines, before any question: where they meet, each at its best, one dinner.
+function pairsOverviewHtml(wines) {
+  if (!SOMM) return "";
+  const recipes = SOMM.recipes || [], main = (r) => r[4] !== "side";
+  const rate = (w, f) => foodRating(w, false, f).t || 0;
+  // A. foods every wine handles as a classic, strongest for the weakest wine first
+  const meet = FOODS.map((f) => ({ f, lo: Math.min(...wines.map((w) => rate(w, f))) })).filter((x) => x.lo > 1).sort((a, b) => b.lo - a.lo);
+  const meetCard = ({ f }) => {
+    const both = recipes.filter((r) => r[3] === f && main(r) && wines.every((w) => recipeTierFor(w, r)));
+    const dishes = wines.map((w) => { const { ds } = wineDishes(w, f, bookKeys(sommKeys(w), isSweetWine(w)));
+      const d = ds.length ? ds.map((x) => x.dish).slice(0, 3).join(", ") : pairDish(w, f);
+      return `<li>${pairName(w)} ${STARS(rate(w, f))}${d ? `: ${esc(d)}` : ""}</li>`; }).join("");
+    return `<div class="somm-meet"><h5>${foodIcon(f)}<button type="button" class="linklike" data-pairs-food="${esc(f)}">${esc(f)}</button></h5><ul>${dishes}</ul>
+      ${both.length ? recipeFold("Recipes that suit every wine here", both, both.length <= 3) : `<p class="hint">No single recipe in the books suits all of them, but each wine has its own dishes above.</p>`}</div>`;
+  };
+  const meetHtml = `<div class="somm-card somm-pairs-a"><h3 class="somm-wine-h">Where your wines meet</h3>
+    ${meet.length ? `<p class="hint">Foods the books rate as a classic match for every one of your wines.</p>${meet.slice(0, 2).map(meetCard).join("")}`
+      : `<p>These wines don't share a classic food in the books: each is best with something different. The dinner below gives each its own course.</p>`}</div>`;
+  // B. each wine with its top foods, the books' own grape first
+  const foodFold = (w, { f, t }, i) => {
+    const mine = recipes.filter((r) => r[3] === f && main(r)), exact = mine.filter((r) => recipeTierFor(w, r) === "exact"), style = mine.filter((r) => recipeTierFor(w, r) === "style");
+    const { ds, why } = wineDishes(w, f, bookKeys(sommKeys(w), isSweetWine(w)));
+    const dishes = ds.length ? ds.map((d) => d.dish).join(", ") : pairDish(w, f);
+    const count = [exact.length ? `${exact.length} the books pour with ${grapeWordOf(w)}` : "", style.length ? `${style.length} for wines like it` : ""].filter(Boolean).join(", ");
+    return `<details class="somm-fold"${i === 0 ? " open" : ""}><summary>${foodIcon(f)}${esc(f)} ${STARS(t)}${count ? ` <span class="hint-inline">· recipes: ${esc(count)}</span>` : ""}</summary>
+      ${why ? `<p>${esc(capFirst(why.why))}${srcSpan(why.b, why.p)}</p>` : ""}${dishes ? `<p><strong>Dishes the books suggest:</strong> ${esc(dishes)}.</p>` : ""}
+      ${exact.length || style.length ? wineRecipeFolds(w, exact, style, true) : `<p class="hint">The books have no ${esc(f.toLowerCase())} recipe for this wine.</p>`}</details>`;
+  };
+  const bestHtml = `<div class="somm-card"><h3 class="somm-wine-h">Each wine at its best</h3>
+    <p class="hint">★ rates the wine with the food, from the books. Recipes the books pour with the wine's own grape come first; the ones for wines like it are Claude's judgement.</p>
+    ${wines.map((w) => { const best = bestFoodsOf(w).slice(0, 3);
+      return `<div class="somm-pair-wine"><p class="somm-pair-head">${pairName(w)}</p><p>${w.kind === "cellar" ? drinkTag(w) : ""}</p>
+        ${best.length ? best.map((x, i) => foodFold(w, x, i)).join("") : `<p class="hint">The books don't rate this wine highly with any one food.</p>`}</div>`; }).join("")}</div>`;
+  // C. one dinner with all of them, from the menu builder
+  const courses = ["main", "cheese", ...(wines.some(isSweetWine) ? ["dessert"] : []), ...(wines.length > 2 ? ["starter"] : [])];
+  const m = buildMenu({ country: "", courses, protein: "", stores: sommStores(), pool: wines });
+  lastMenu = m;
+  const line = (p) => `<li><strong>${esc(COURSES[p.c])}${p.food && p.c !== "cheese" && p.c !== "dessert" ? ` (${esc(p.food.toLowerCase())})` : ""}:</strong> ${p.w ? pairName(p.w) : "no wine here"}${p.note ? ` <span class="hint-inline">${esc(p.note)}</span>` : ""}</li>`;
+  const dinnerHtml = `<div class="somm-card"><h3 class="somm-wine-h">One dinner with all ${wines.length}</h3>
+    <p class="hint">Each wine on the course it suits best.</p><ol class="somm-dinner">${m.plan.map(line).join("")}</ol>
+    <details class="somm-fold"><summary>The full menu, with dishes and a recipe for each course</summary>${menuHtml(m)}</details></div>`;
+  return meetHtml + bestHtml + dinnerHtml;
 }
 // How a recipe stands with a wine: the book pours its grape ("exact"), or a grape of the same style.
 // The books don't rate recipes, so this is the only strength a recipe has.
@@ -1032,13 +1078,34 @@ function recipeTierFor(w, r) {
 }
 const recipeFold = (label, list, open = false) => (list.length
   ? `<details class="somm-fold"${open ? " open" : ""}><summary>${esc(label)} (${list.length})</summary>${list.map(recipeHtml).join("")}</details>` : "");
+// "Riesling" for a Riesling, "Nebbiolo" for a Barolo: the grape the books would have to name.
+const grapeWordOf = (w) => (sommKeys(w)[0] || "this grape").split(/ \/| \(/)[0];
+// The grapes the books actually poured with these recipes, of the same style as this wine.
+function likeGrapes(w, list) {
+  const alike = sameStyleAs(bookKeys(w)), n = new Map();
+  for (const r of list) for (const g of expandKeys(r[6] || [])) if (alike.has(g)) n.set(g, (n.get(g) || 0) + 1);
+  return [...n].sort((a, b) => b[1] - a[1]).map(([g]) => g.split(/ \/| \(/)[0]);
+}
+// The two kinds of recipe for one wine: the books' own grape first, then wines like it, named.
+function wineRecipeFolds(w, exact, style, openExact = exact.length <= 3) {
+  const like = likeGrapes(w, style), names = like.slice(0, 4).join(", ") + (like.length > 4 ? "…" : "");
+  return (!exact.length && style.length ? `<p class="hint">None of these recipes is one the books pour with ${esc(grapeWordOf(w))} itself, so they come from wines of the same style.</p>` : "") +
+    recipeFold(`Recipes the books pour with ${grapeWordOf(w)}`, exact, openExact) +
+    recipeFold(`Recipes for wines like it${names ? ` (the books pour ${names})` : ""}, Claude's judgement`, style);
+}
+// A wine's best foods from the books, strongest first.
+const bestFoodsOf = (w) => FOODS.map((f) => ({ f, t: foodRating(w, false, f).t || 0 })).filter((x) => x.t > 1).sort((a, b) => b.t - a.t);
+const foodLinks = (list) => list.map(({ f, t }) => `${foodIcon(f)}<button type="button" class="linklike" data-pairs-food="${esc(f)}">${esc(f.toLowerCase())}</button>${t ? ` ${STARS(t)}` : ""}`);
+const orWords = (a) => (a.length > 1 ? `${a.slice(0, -1).join(", ")} or ${a.at(-1)}` : a[0] || "");
 // One section per wine with its recipes, and first any that are the books' own match for every wine.
-function pairSectionsHtml(wines, recipes, head) {
+// A wine that doesn't suit the food (weak) keeps its recipes folded away, for anyone set on it.
+function pairSectionsHtml(wines, recipes, head, weak = () => "") {
   const tiers = new Map(recipes.map((r) => [r, wines.map((w) => recipeTierFor(w, r))]));
   const shared = recipes.filter((r) => tiers.get(r).every((t) => t === "exact"));
   const other = recipes.filter((r) => tiers.get(r).every((t) => !t));
-  const section = (w, k) => { const of = (t) => recipes.filter((r) => tiers.get(r)[k] === t), exact = of("exact");
-    return `<div class="somm-pair-wine">${head(w)}${recipeFold("The book's own match", exact, exact.length <= 3)}${recipeFold("Same style of wine (Claude's judgement)", of("style"))}</div>`; };
+  const section = (w, k) => { const of = (t) => recipes.filter((r) => tiers.get(r)[k] === t), exact = of("exact"), style = of("style");
+    const folds = wineRecipeFolds(w, exact, style), set = weak(w);
+    return `<div class="somm-pair-wine">${head(w)}${set && folds ? `<details class="somm-fold somm-stretch"><summary>${esc(set)} (${exact.length + style.length})</summary>${folds}</details>` : folds}</div>`; };
   return `${shared.length ? `<div class="somm-pair-wine somm-pair-all"><h4>Good for all your wines</h4><p class="hint">The book's own match for every wine here.</p>${shared.map(recipeHtml).join("")}</div>` : ""}
     ${wines.map(section).join("")}${recipeFold("Other recipes using this", other)}`;
 }
@@ -1047,17 +1114,23 @@ function pairsFoodHtml(f) {
   const order = Object.keys(STAGES), strength = (w) => { const r = foodRating(w, false, f); return r.t || (r.bold ? 0.5 : 0); };
   const wines = pairWines().sort((a, b) => strength(b) - strength(a) || order.indexOf(drinkStage(a)) - order.indexOf(drinkStage(b)));
   const food = f.toLowerCase();
+  const weak = (w) => { const r = foodRating(w, false, f); return r.t || r.bold ? "" : `If you're set on ${food} anyway`; };
   const head = (w) => {
     const r = foodRating(w, false, f), { ds, why } = wineDishes(w, f, bookKeys(sommKeys(w), isSweetWine(w)));
-    const label = r.t ? `${STARS(r.t)} with ${food}` : r.bold ? `⚡ an adventurous match with ${food}` : `not a natural match with ${food}`;
+    if (!r.t && !r.bold) {
+      const best = bestFoodsOf(w).slice(0, 3);
+      return `<p class="somm-pair-head">${pairName(w)}</p><p><strong>Not a natural match with ${esc(food)}.</strong> ${w.kind === "cellar" ? drinkTag(w) : ""}</p>
+        ${best.length ? `<p>This ${esc(grapeWordOf(w))} is at its best with ${orWords(foodLinks(best))}.</p>` : ""}`;
+    }
+    const label = r.t ? `${STARS(r.t)} with ${food}` : `⚡ an adventurous match with ${food}`;
     const dishes = ds.length ? ds.map((d) => d.dish).join(", ") : r.bold ? "" : pairDish(w, f);
     return `<p class="somm-pair-head">${pairName(w)}</p><p><strong>${esc(label)}</strong> ${w.kind === "cellar" ? drinkTag(w) : ""}</p>
       ${why ? `<p>${esc(capFirst(why.why))}${srcSpan(why.b, why.p)}</p>` : ""}${dishes ? `<p><strong>Dishes the books suggest:</strong> ${esc(dishes)}.</p>` : ""}${r.bold ? advIdeaHtml(w, f, false) : ""}`;
   };
   const recipes = (SOMM?.recipes || []).filter((r) => r[3] === f && r[4] !== "side" && wines.some((w) => recipeTierFor(w, r)));
-  return `<div class="somm-card"><h3 class="somm-wine-h">Your wines with ${esc(food)}</h3>
+  return `<div class="somm-card"><h3 class="somm-wine-h">${foodIcon(f)}Your wines with ${esc(food)}</h3>
     <p class="hint">★ rates the wine with this food, not the recipes. The books don't rate recipes.</p>
-    ${pairSectionsHtml(wines, recipes, head)}</div>`;
+    ${pairSectionsHtml(wines, recipes, head, weak)}</div>`;
 }
 function pairsFridgeHtml(text) {
   const wanted = fold(text).split(/[^a-z]+/).filter((t) => t.length > 2).map((t) => t.replace(/s$/, ""));
