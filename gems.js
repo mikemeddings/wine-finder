@@ -2,7 +2,7 @@
 // modest price. Loaded after cellar.js, in the same global scope (names here start gem/GEM/we).
 //
 // 1. The owner's value wines: scored 90.5 or more (their own score, else CellarTracker's), and, when
-//    the private copy on this computer has prices, in the cheaper half of what they paid.
+//    in their modest price bands (the shared cellars carry a band per wine, never the price paid).
 // 2. From those: their producers, their grapes, and each grape's areas (Nahe, Southern Rhône…).
 // 3. Store wines up to the price chosen, not already owned, in three kinds: more from a producer
 //    they love; their grape from an area they love; their grape from somewhere new.
@@ -124,10 +124,18 @@ function weExpected(cad) {
 // ---- A cellar's pattern ---------------------------------------------------------------------
 function gemPattern(owner, leaveOut = null) {
   const wines = mcWinesOf(owner).filter((w) => w !== leaveOut && w.id !== leaveOut?.id);
-  const priced = wines.map((w) => w.price).filter((p) => p > 0).sort((a, b) => a - b);
-  const cut = priced.length >= 20 ? priced[Math.floor(priced.length / 2)] : null;
-  let value = wines.filter((w) => (gemScoreOf(w) ?? 0) >= 90.5 && (cut == null || (w.price > 0 && w.price <= cut)));
-  if (value.length < 8) value = wines.filter((w) => (gemScoreOf(w) ?? 0) >= 90 && (cut == null || w.price > 0));
+  // Price bands, the same on every computer: the shared cellar's (a private copy looks its wines up
+  // there by name). The modest bands are the cheapest ones holding no more than 60% of the cellar.
+  const slot = slotFor(owner), shared = new Map((sharedCellars[slot]?.wines || []).filter((w) => w.pb).map((w) => [fold(w.name), w.pb]));
+  const bandOfWine = (w) => w.pb ?? shared.get(fold(w.name)) ?? priceBand(w, shared);
+  const banded = wines.map(bandOfWine).filter(Boolean);
+  let k = 0;
+  if (banded.length >= 20) for (let b = 1; b <= 5; b++) if (banded.filter((x) => x <= b).length <= 0.6 * banded.length) k = b;
+  if (banded.length >= 20 && !k) k = 1;
+  const cut = k ? (PRICE_BAND_TOPS[k - 1] ?? 150) : null; // Canadian dollars, the top of the modest bands
+  let value = wines.filter((w) => (gemScoreOf(w) ?? 0) >= 90.5 && (!k || (bandOfWine(w) && bandOfWine(w) <= k)));
+  if (value.length < 8) value = wines.filter((w) => (gemScoreOf(w) ?? 0) >= 90 && (!k || bandOfWine(w)));
+  const priced = banded;
   // wines the owner marked 💎 on this computer count as value wines too, wherever they were bought
   if (gemIsMe(owner) && !leaveOut) for (const [id, r] of Object.entries(ratings)) {
     if (r.mine?.verdict !== "gem") continue;
@@ -280,9 +288,9 @@ function gemsHtml(owner, title) {
   const prods = [...p.producers.values()].sort((a, b) => b.n - a.n).slice(0, 6).map((x) => `${esc(x.name)} (${x.n})`).join(", ");
   const head = `<div class="somm-card gem-pattern"><h3 class="somm-wine-h">💎 Gems for ${esc(who)}</h3>
     <p>Wines in the stores that fit what ${esc(who)} already loves${p.cut != null ? " at a modest price" : ""}, and that aren't in ${esc(title)}.</p>
-    <p><strong>What ${esc(who)} loves${p.cut != null ? " at a modest price" : ""}</strong> (${n} ${n === 1 ? "wine" : "wines"} scored about 91 or more${p.cut != null ? `, in the cheaper half of what ${esc(who)} paid` : ""}):</p>
+    <p><strong>What ${esc(who)} loves${p.cut != null ? " at a modest price" : ""}</strong> (${n} ${n === 1 ? "wine" : "wines"} scored about 91 or more${p.cut != null ? `, in ${esc(who)}'s modest price bands, up to about $${p.cut}` : ""}):</p>
     <ul class="gem-pat">${grapes ? `<li><strong>Grapes:</strong> ${grapes}</li>` : ""}${topPairs ? `<li><strong>From:</strong> ${topPairs}</li>` : ""}${prods ? `<li><strong>Producers:</strong> ${prods}</li>` : ""}</ul>
-    ${p.cut == null ? `<p class="hint">This computer has no prices for this cellar, so the pattern uses the best-scored wines at any price. A private copy with prices (Tools below) makes it a true value pattern.</p>` : ""}
+    ${p.cut == null ? `<p class="hint">This cellar has no price bands yet, so the pattern uses the best-scored wines at any price.</p>` : ""}
     <div class="somm-row"><label>Up to <select data-gem-price aria-label="Highest price">${GEM_PRICES.map((v) => `<option value="${v}"${v === price ? " selected" : ""}>$${v}</option>`).join("")}</select> a bottle</label>
       <span class="hint-inline">Searched: ${esc(knownSources().map(sourceLabel).join(", "))}${knownSources().includes("LCBO") ? "" : ". The LCBO joins once its list is opened on this computer (Find wines, step 1)"}. Swiss prices are shown in francs, with dollars.</span></div>
     <p class="hint">Tried one? Press <strong>Tried it?</strong> and choose 💎 A gem, 👍 Fine or 👎 Not for me. It's shared with the family without your name, and 💎 wines come first for everyone.</p>

@@ -2519,6 +2519,7 @@ const CT_COLUMNS = { // field: CellarTracker column names it may use (compared i
   size: ["size", "bottlesize"],
   quantity: ["quantity", "qty", "totalquantity", "bottles"],
   price: ["price", "purchaseprice", "value", "valuation"],
+  currency: ["currency"],
   my: ["my", "myscore", "myrating", "score", "rating", "pscore"],
   ct: ["ct", "cscore", "communityscore", "ctscore"],
   drinkFrom: ["beginconsume", "drinkfrom"],
@@ -2657,6 +2658,7 @@ function readCellar(text, owner) {
       pack: 1,
       quantity: qty,
       price: num(get(r, "price")),
+      currency: get(r, "currency") || null, // CellarTracker's: CAD, CHF…
       my_score: scoreOf(get(r, "my")),
       ct_score: scoreOf(get(r, "ct")),
       drink_from: parseInt(get(r, "drinkFrom"), 10) || null,
@@ -3511,11 +3513,23 @@ function cellarsChanged() {
   updateCellarSorts();
 }
 
-const trimForShare = (wines, slot) => wines.map((w, i) => Object.fromEntries(Object.entries({
+// A shared cellar carries a price band, never the price paid: pb 1 under $25, 2 $25-40, 3 $40-60,
+// 4 $60-100, 5 over $100 (Canadian dollars; francs converted at the Swiss lists' rate). A copy
+// imported before currencies were kept reuses the band the shared copy already has.
+const PRICE_BAND_TOPS = [25, 40, 60, 100];
+const bandOf = (cad) => { const i = PRICE_BAND_TOPS.findIndex((t) => cad < t); return i < 0 ? 5 : i + 1; };
+function priceBand(w, before) {
+  const rate = { CAD: 1, CHF: META.sources?.Lucullus?.fx?.CAD_per_CHF || 1.7 }[String(w.currency || "").toUpperCase()];
+  if (w.price > 0 && rate) return bandOf(w.price * rate);
+  return before.get(fold(w.name)) ?? (w.price > 0 && !w.currency ? bandOf(w.price) : null);
+}
+const trimForShare = (wines, slot) => { const before = new Map((sharedCellars[slot]?.wines || []).filter((w) => w.pb).map((w) => [fold(w.name), w.pb]));
+  return wines.map((w, i) => Object.fromEntries(Object.entries({
   id: `cellar-${slot}-${i + 1}`, name: w.name, vintage: w.vintage, producer: w.producer,
   region_or_grape: w.region_or_grape, varietal: w.varietal, country: w.country, type: w.type,
   size_ml: w.size_ml, my_score: w.my_score, ct_score: w.ct_score, drink_from: w.drink_from, drink_to: w.drink_to,
-}).filter(([, v]) => v != null && v !== "")));
+  pb: priceBand(w, before),
+}).filter(([, v]) => v != null && v !== ""))); };
 
 // Read a JSON file in the repository, change it, write it back (once more if someone
 // else wrote at the same moment).
