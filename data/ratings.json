@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-07",
+ "updated": "2026-11-08",
  "ratings": {
   "bcl-220979": {
    "name": "Cabernet Sauvignon - Haras De Pirque Hussonet Reserva",
@@ -6470,6 +6470,286 @@
     "grapes": "Chenin Blanc",
     "drinkTo": 2037,
     "from": "Claude (researched for Mike)"
+   }
+  },
+  "lcbo-363457": {
+   "name": "Famille Perrin Réserve Côtes du Rhône",
+   "type": "Red",
+   "upc": "00631470000131",
+   "claude": {
+    "points": 87,
+    "vintage": "NV",
+    "note": "Gismondi 87-89 across vintages",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "steak frites BBQ ribs chicken wings",
+    "grapes": "Grenache Syrah",
+    "drinkFrom": 2024,
+    "drinkTo": 2027,
+    "from": "Mike"
+   }
+  },
+  "bcl-461572": {
+   "name": "Vin De France - Domaine De La Mordoree Sans Sulfites",
+   "type": "Red",
+   "upc": "00795898012258",
+   "claude": {
+    "points": 90,
+    "vintage": 2021,
+    "note": "Gismondi 91 for 2020 2021 WA 90",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "full",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "charcuterie pizza grilled lamb",
+    "grapes": "Marselan",
+    "drinkFrom": 2025,
+    "drinkTo": 2027,
+    "from": "Mike"
+   }
+  },
+  "lcbo-43224": {
+   "name": "Mitolo Jester Cabernet Sauvignon 2021",
+   "type": "Red",
+   "upc": "00836974000100",
+   "claude": {
+    "points": 90,
+    "vintage": 2021,
+    "note": "WineAlign 88 WinePilot 91-92",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "full",
+    "tannin": "firm",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "lamb tomahawk ribeye steak",
+    "grapes": "Cabernet Sauvignon",
+    "drinkFrom": 2025,
+    "drinkTo": 2033,
+    "from": "Mike"
+   }
+  },
+  "lcbo-245340": {
+   "name": "Chapoutier Belleruche Cote du Rhone White",
+   "type": "White",
+   "upc": "03391180015074",
+   "claude": {
+    "points": 90,
+    "vintage": 2022,
+    "note": "WE 91 Suckling 91 for 2022",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "roast chicken grilled white fish goat cheese",
+    "grapes": "Roussanne Grenache Blanc Viognier",
+    "drinkFrom": 2024,
+    "drinkTo": 2026,
+    "from": "Mike"
+   }
+  },
+  "zyn-6536727003223": {
+   "name": "Two Hands Gnarly Dudes 2022",
+   "type": "Red",
+   "claude": {
+    "points": 92,
+    "vintage": 2022,
+    "note": "Wine Advocate 92 VinePair 91",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "full",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "BBQ beef ribs grilled lamb",
+    "grapes": "Shiraz",
+    "drinkFrom": 2024,
+    "drinkTo": 2029,
+    "from": "Mike"
+   }
+  },
+  "lcbo-331850": {
+   "name": "Dr. Heidemanns-Bergweiler Bernkasteler Badstube Riesling Kabinett 2022",
+   "type": "White",
+   "upc": "04004888312084",
+   "claude": {
+    "points": 90,
+    "vintage": 2022,
+    "note": "WineAlign 92 MacLean 90 for 2022",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "light",
+    "sweet": "medium-sweet",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "veal schnitzel bratwurst Thai green curry",
+    "grapes": "Riesling",
+    "drinkFrom": 2025,
+    "drinkTo": 2030,
+    "from": "Mike"
+   }
+  },
+  "lcbo-506519": {
+   "name": "Cesari Mara Valpolicella Ripasso Superiore",
+   "type": "Red",
+   "upc": "08000834312005",
+   "claude": {
+    "points": 90,
+    "vintage": 2019,
+    "note": "WE 91 Suckling 91 for 2019",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "mushroom risotto braised beef pizza",
+    "grapes": "Corvina Corvinone Rondinella",
+    "drinkFrom": 2024,
+    "drinkTo": 2028,
+    "from": "Mike"
+   }
+  },
+  "lcbo-39538": {
+   "name": "Reserve Saint Dominique Ventoux Rouge",
+   "type": "Red",
+   "upc": "03760123030311",
+   "claude": {
+    "points": 88,
+    "vintage": 2022,
+    "note": "Vert de Vin 88 Hachette Coup de Coeur",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "lamb stew grilled sausages",
+    "grapes": "Grenache Syrah",
+    "drinkFrom": 2024,
+    "drinkTo": 2027,
+    "from": "Mike"
+   }
+  },
+  "lcbo-18796": {
+   "name": "Thorn-Clarke Shotfire Shiraz 2021",
+   "type": "Red",
+   "upc": "00853065000115",
+   "claude": {
+    "points": 91,
+    "vintage": 2021,
+    "note": "Sam Kim 93 Caro 92 for 2021",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "full",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "beef ribs lamb shoulder aged cheddar",
+    "grapes": "Shiraz",
+    "drinkFrom": 2024,
+    "drinkTo": 2030,
+    "from": "Mike"
+   }
+  },
+  "bcl-127019": {
+   "name": "Vouvray Sec - Vincent Raimbault Bel Air",
+   "type": "White",
+   "upc": "03496922012202",
+   "claude": {
+    "points": 88,
+    "vintage": 2016,
+    "note": "WineAlign 90 for 2016 MacLean 88",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "medium",
+    "sweet": "dry",
+    "fruity": false,
+    "finish": "medium",
+    "pair": "oysters goat cheese salad grilled chicken",
+    "grapes": "Chenin Blanc",
+    "drinkFrom": 2024,
+    "drinkTo": 2028,
+    "from": "Mike"
+   }
+  },
+  "bsw-7693201932518": {
+   "name": "Michael David Winery 6th Sense Syrah 2022",
+   "type": "Red",
+   "claude": {
+    "points": 90,
+    "vintage": 2022,
+    "note": "WE 92 Editors Choice for 2022",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "full",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "long",
+    "pair": "lamb chops BBQ ribs braised short ribs",
+    "grapes": "Syrah Petite Sirah",
+    "drinkFrom": 2024,
+    "drinkTo": 2028,
+    "from": "Mike"
+   }
+  },
+  "bsw-7176734736537": {
+   "name": "Kendall-Jackson Vintner's Reserve Cabernet Sauvignon 2020/2021",
+   "type": "Red",
+   "claude": {
+    "points": 89,
+    "vintage": 2021,
+    "note": "WE 92 for 2021 Decanter 86 older",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "medium",
+    "tannin": "soft",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "beef short ribs burgers",
+    "grapes": "Cabernet Sauvignon",
+    "drinkFrom": 2024,
+    "drinkTo": 2028,
+    "from": "Mike"
+   }
+  },
+  "bcl-281444": {
+   "name": "Cabernet Sauvignon - Trivento Reserve Mendoza",
+   "type": "Red",
+   "upc": "07798039591660",
+   "claude": {
+    "points": 88,
+    "vintage": 2020,
+    "note": "Wine Orbit 91 for 2020 WRO 90",
+    "date": "2026-11-08",
+    "quick": true,
+    "body": "medium",
+    "tannin": "medium",
+    "sweet": "dry",
+    "fruity": true,
+    "finish": "medium",
+    "pair": "lamb ribs grilled steak beef empanadas",
+    "grapes": "Cabernet Sauvignon",
+    "drinkFrom": 2024,
+    "drinkTo": 2027,
+    "from": "Mike"
    }
   }
  }
