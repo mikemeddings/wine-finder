@@ -122,7 +122,9 @@ function weExpected(cad) {
 }
 
 // ---- A cellar's pattern ---------------------------------------------------------------------
-function gemPattern(owner, leaveOut = null) {
+// only: the cellar view's narrowing (South Africa, Chenin…): the pattern comes from those wines,
+// while the modest price bands still come from the whole cellar.
+function gemPattern(owner, leaveOut = null, only = null) {
   const wines = mcWinesOf(owner).filter((w) => w !== leaveOut && w.id !== leaveOut?.id);
   // Price bands, the same on every computer: the shared cellar's (a private copy looks its wines up
   // there by name). The modest bands are the cheapest ones holding no more than 60% of the cellar.
@@ -133,14 +135,16 @@ function gemPattern(owner, leaveOut = null) {
   if (banded.length >= 20) for (let b = 1; b <= 5; b++) if (banded.filter((x) => x <= b).length <= 0.6 * banded.length) k = b;
   if (banded.length >= 20 && !k) k = 1;
   const cut = k ? (PRICE_BAND_TOPS[k - 1] ?? 150) : null; // Canadian dollars, the top of the modest bands
-  let value = wines.filter((w) => (gemScoreOf(w) ?? 0) >= 90.5 && (!k || (bandOfWine(w) && bandOfWine(w) <= k)));
-  if (value.length < 8) value = wines.filter((w) => (gemScoreOf(w) ?? 0) >= 90 && (!k || bandOfWine(w)));
+  const pool = only ? wines.filter(only) : wines;
+  let value = pool.filter((w) => (gemScoreOf(w) ?? 0) >= 90.5 && (!k || (bandOfWine(w) && bandOfWine(w) <= k)));
+  if (value.length < 8) value = pool.filter((w) => (gemScoreOf(w) ?? 0) >= 90 && (!k || bandOfWine(w)));
+  if (only && value.length < 4) value = pool.filter((w) => (gemScoreOf(w) ?? 0) >= 88); // a small corner: its best wines
   const priced = banded;
   // wines the owner marked 💎 on this computer count as value wines too, wherever they were bought
   if (gemIsMe(owner) && !leaveOut) for (const [id, r] of Object.entries(ratings)) {
     if (r.mine?.verdict !== "gem") continue;
     const w = findWine(id);
-    if (w && !value.includes(w)) value.push(w);
+    if (w && !value.includes(w) && (!only || only(w))) value.push(w);
   }
   // a label that names no area takes its producer's, from any cellar: "Dönnhoff Riesling" is from the Nahe
   const home = new Map();
@@ -158,7 +162,7 @@ function gemPattern(owner, leaveOut = null) {
       if (area) { const k = `${g}|${area}`; pairs.set(k, (pairs.get(k) || 0) + 1); }
     }
   }
-  const top = [...grapes].filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const top = [...grapes].filter(([, n]) => n >= (only && value.length < 15 ? 1 : 2)).sort((a, b) => b[1] - a[1]).slice(0, 6);
   return { owner, value, cut, priced: priced.length, producers, grapes: new Map(top), pairs, types: new Set(value.map((w) => w.type)), areaOf };
 }
 // Producers two or more cellars both love at a modest price.
@@ -178,6 +182,24 @@ function gemProducerHit(w, pattern) {
     return [k, p];
   }
   return null;
+}
+
+// ---- Narrowed to a country, region, grape or colour -----------------------------------------
+// What the cellar view is narrowed to. The pattern then comes from those wines, and the picks keep
+// to the same country, region, grape and colour, unless "look anywhere" is on.
+function gemNarrow(owner) {
+  const on = mc.mood !== "all" || mc.colour || mc.country || mc.grape || mc.region || mc.stage || mc.score || mc.vint || mc.ends;
+  if (!on) return null;
+  const regionArea = mc.region ? gemArea({ name: mc.region, country: mcWinesOf(owner).find((w) => regionOf(w) === mc.region)?.country }) : "";
+  const grapeWord = mc.grape ? fold(mc.grape).split(/[ /(]/)[0] : "";
+  const keep = (w) => (!mc.colour || w.type === mc.colour) && (!mc.country || gemCountry(w.country) === gemCountry(mc.country)) &&
+    (!grapeWord || gemGrapes(w).some((g) => fold(g).includes(grapeWord))) && (!regionArea || gemArea(w) === regionArea);
+  const words = [mc.country, mc.region, mc.grape, mc.colour && mc.colour.toLowerCase()].filter(Boolean);
+  // "white Chenin Blanc wines from Swartland, South Africa"
+  const where = [mc.region, mc.country].filter(Boolean).join(", ");
+  const phrase = `${[mc.colour && mc.colour.toLowerCase(), mc.grape].filter(Boolean).join(" ")} wines${where ? ` from ${where}` : ""}`.trim();
+  const limits = !!(mc.colour || mc.country || mc.grape || mc.region);
+  return { only: (w) => mcPasses(w), keep, words, phrase, limits, n: mcWinesOf(owner).filter((w) => mcPasses(w)).length };
 }
 
 // ---- The picks --------------------------------------------------------------------------------
@@ -201,13 +223,14 @@ function gemQuality(w) {
   if (we && we[5] != null) return { q: (we[5] * we[2]) / (we[2] + 2) - 0.5, how: "we", we, lab }; // one or two reviews count for less
   return { q: -2, how: "", we, lab };
 }
-function gemPicks(owner, maxPrice, extra = []) {
-  const pattern = gemPattern(owner), fam = gemFamilyProducers();
+function gemPicks(owner, maxPrice, extra = [], narrow = null) {
+  const pattern = gemPattern(owner, null, narrow?.only), fam = gemFamilyProducers();
+  const inScope = (w) => !narrow?.limits || mc.gemAnywhere || narrow.keep(w); // the same country, grape… as the cellar view
   const owned = new Set(mcWinesOf(owner).map((w) => fold(w.name).replace(/\b(19|20)\d\d\b/g, "").replace(/[^a-z0-9]+/g, " ").trim()));
   const pool = [...WINES, ...extra].filter((w) => w.available !== false && w.price >= 12 && w.price <= maxPrice &&
     (!w.size_ml || (w.size_ml >= 700 && w.size_ml <= 1000)) && pattern.types.has(w.type) && // a rosé only for someone who loves one
     !owned.has(fold(w.name).replace(/\b(19|20)\d\d\b/g, "").replace(/[^a-z0-9]+/g, " ").trim()) &&
-    !(gemMine(w)?.verdict && gemIsMe(owner)) && !(gemFam(w)?.verdict === "gem")); // tried here, or already a family gem (shown above)
+    !(gemMine(w)?.verdict && gemIsMe(owner)) && !(gemFam(w)?.verdict === "gem") && inScope(w)); // tried here, or already a family gem (shown above)
   const myAreas = new Map(); for (const k of pattern.pairs.keys()) { const [g, a] = k.split("|"); (myAreas.get(g) || myAreas.set(g, new Set()).get(g)).add(a); }
   const kinds = { producer: [], area: [], new: [], unscored: [] };
   for (const w of pool) {
@@ -236,7 +259,7 @@ function gemPicks(owner, maxPrice, extra = []) {
     return out;
   };
   // the family's 💎 wines in the stores, within the price, best scored first
-  const famGems = WINES.filter((w) => w.available !== false && w.price <= maxPrice && (gemFam(w)?.verdict === "gem" || (gemMine(w)?.verdict === "gem")))
+  const famGems = WINES.filter((w) => w.available !== false && w.price <= maxPrice && inScope(w) && (gemFam(w)?.verdict === "gem" || (gemMine(w)?.verdict === "gem")))
     .map((w) => ({ w, area: gemArea(w), ...gemQuality(w), famV: gemFam(w), mineV: gemMine(w) }))
     .sort((a, b) => b.q - a.q).slice(0, 8);
   const shortlist = { producer: pick(kinds.producer, (x) => fold(x.prod.name), 5),
@@ -283,13 +306,16 @@ function gemCard(x, why) {
 }
 function gemsHtml(owner, title) {
   if (!weData) return `<p class="empty">Opening the reviews…</p>`;
-  const pattern0 = gemPattern(owner), price = mc.gemPrice || gemDefaultPrice(pattern0);
-  const r = gemPicks(owner, price), p = r.pattern, who = owner;
+  const narrow = gemNarrow(owner), pattern0 = gemPattern(owner), price = mc.gemPrice || gemDefaultPrice(pattern0);
+  const r = gemPicks(owner, price, [], narrow), p = r.pattern, who = owner;
   const n = p.value.length;
   const grapes = [...p.grapes].map(([g, k]) => `${esc(g)} (${k})`).join(", ");
   const topPairs = [...p.pairs].sort((a, b) => b[1] - a[1]).slice(0, 4).map(([k, c]) => { const [g, a] = k.split("|"); return `${esc(g)} from ${esc(a)} (${c})`; }).join(", ");
   const prods = [...p.producers.values()].sort((a, b) => b.n - a.n).slice(0, 6).map((x) => `${esc(x.name)} (${x.n})`).join(", ");
-  const head = `<div class="somm-card gem-pattern"><h3 class="somm-wine-h">💎 Gems for ${esc(who)}</h3>
+  const scope = narrow ? `<div class="gem-scope"><p><strong>Narrowed to ${narrow.words.length ? esc(narrow.words.join(", ")) : "your choices"}</strong>: the pattern below comes from ${narrow.n} of ${esc(who)}'s wines, not the whole cellar. Press ← Back and “Show all again” for gems from everything.</p>
+    ${narrow.limits ? `<p class="gem-switch" role="radiogroup" aria-label="Where to look"><label><input type="radio" name="gem-where" value="0"${mc.gemAnywhere ? "" : " checked"} data-gem-anywhere> Only ${esc(narrow.phrase)}</label>
+      <label><input type="radio" name="gem-where" value="1"${mc.gemAnywhere ? " checked" : ""} data-gem-anywhere> Look anywhere for wines like these</label></p>` : ""}</div>` : "";
+  const head = `<div class="somm-card gem-pattern"><h3 class="somm-wine-h">💎 Gems ${narrow ? (narrow.limits ? `like ${esc(who)}'s ${esc(narrow.phrase)}` : `like ${esc(who)}'s chosen wines`) : `for ${esc(who)}`}</h3>${scope}
     <p>Wines in the stores that fit what ${esc(who)} already loves${p.cut != null ? " at a modest price" : ""}, and that aren't in ${esc(title)}.</p>
     <p><strong>What ${esc(who)} loves${p.cut != null ? " at a modest price" : ""}</strong> (${n} ${n === 1 ? "wine" : "wines"} scored about 91 or more${p.cut != null ? `, in ${esc(who)}'s modest price bands, up to about $${p.cut}` : ""}):</p>
     <ul class="gem-pat">${grapes ? `<li><strong>Grapes:</strong> ${grapes}</li>` : ""}${topPairs ? `<li><strong>From:</strong> ${topPairs}</li>` : ""}${prods ? `<li><strong>Producers:</strong> ${prods}</li>` : ""}</ul>
@@ -371,7 +397,8 @@ document.addEventListener("click", (e) => {
 });
 document.addEventListener("change", (e) => {
   const t = e.target;
-  if (t.matches?.("#mc-panel [data-gall-only]")) gemAll.only = t.value === "1";
+  if (t.matches?.("#mc-panel [data-gem-anywhere]")) mc.gemAnywhere = t.value === "1";
+  else if (t.matches?.("#mc-panel [data-gall-only]")) gemAll.only = t.value === "1";
   else if (t.matches?.("#mc-panel [data-gall]")) gemAll[t.dataset.gall] = t.value;
   else return;
   gemAll.shown = 50;

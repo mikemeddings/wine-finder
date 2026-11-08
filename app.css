@@ -1070,3 +1070,4 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 .gem-switch label { display: inline-flex; align-items: center; gap: 0.3rem; font-weight: 700; }
 .gem-table td:first-child { text-align: center; }
 .gem-all { border-left: 6px solid #1a7fa8; }
+.gem-scope { background: #eef7fb; border: 1px solid #9cc9de; border-radius: 0.5rem; padding: 0.4rem 0.7rem; margin: 0.4rem 0 0.6rem; }

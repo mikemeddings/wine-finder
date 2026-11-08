@@ -1,8 +1,8 @@
 // My cellars: a box per cellar, then At a glance and the sortable table for the one that's open.
 // Loaded after app.js and somm.js, in the same global scope. Counts are wines, not bottles.
-const mc = { colour: "", country: "", grape: "", region: "", stage: "", score: "", vint: "", ends: "", mood: "all", col: "drink", dir: 1, more: {}, gems: false, gemPrice: 0 };
+const mc = { colour: "", country: "", grape: "", region: "", stage: "", score: "", vint: "", ends: "", mood: "all", col: "drink", dir: 1, more: {}, gems: false, gemPrice: 0, gemAnywhere: false };
 let mcTried = false; // somm.json holds the books the ⚡ column and the moods read
-const clearMcFilters = () => Object.assign(mc, { colour: "", country: "", grape: "", region: "", stage: "", score: "", vint: "", ends: "", mood: "all", gems: false, gemPrice: 0 });
+const clearMcFilters = () => Object.assign(mc, { colour: "", country: "", grape: "", region: "", stage: "", score: "", vint: "", ends: "", mood: "all", gems: false, gemPrice: 0, gemAnywhere: false });
 
 // The cellars on this computer as [value, title, source]; value is what mwView.owner holds.
 function mcCellars() {
@@ -168,7 +168,7 @@ function mcAnswerHtml(all, name) {
       <p class="somm-sel-count">${n === all.length ? wineCount(n) : `${n.toLocaleString()} of ${wineCount(all.length)}`}${mc.region ? ` from ${regionLink(mc.region)}${regionCountry(all) ? `, ${esc(regionCountry(all))}` : ""}` : ""}</p>
       <p>${mc.mood === "all" ? "" : `${esc(capFirst(`These wines ${m.line}`))} `}Sorted by <strong>${esc(sorted)}</strong>. Click a heading to sort by it, or a wine to see its details.</p>
       ${mcBannerControls(all)}
-      <p class="mc-food">${n ? `<button type="button" class="btn btn-somm" data-mc-food>🍽 Find food for ${n === 1 ? "this wine" : `these ${n.toLocaleString()} wines`}</button> ` : ""}${mcOpenCellar() && !mwView.q ? `<button type="button" class="btn btn-gem" data-mc-gems>💎 Gems for ${esc(mcOpenCellar()[0])}</button>` : ""}</p></div>
+      <p class="mc-food">${n ? `<button type="button" class="btn btn-somm" data-mc-food>🍽 Find food for ${n === 1 ? "this wine" : `these ${n.toLocaleString()} wines`}</button> ` : ""}${mcOpenCellar() && !mwView.q && n ? `<button type="button" class="btn btn-gem" data-mc-gems>${n < all.length ? `💎 Gems like ${n === 1 ? "this wine" : `these ${n.toLocaleString()} wines`}` : `💎 Gems for ${esc(mcOpenCellar()[0])}`}</button>` : ""}</p></div>
     ${n ? wineTableHtml(rows, cols, mc.col, mc.dir, isDaring, "data-mc-col", mc.region ? { name: ` from ${regionLink(mc.region)}` } : {}) : `<p class="empty">No wines match. Press “Show all again” above.</p>`}`;
 }
 // Everything below the boxes. With no cellar open, a search looks through all of them.
