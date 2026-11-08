@@ -1,8 +1,8 @@
 // My cellars: a box per cellar, then At a glance and the sortable table for the one that's open.
 // Loaded after app.js and somm.js, in the same global scope. Counts are wines, not bottles.
-const mc = { colour: "", country: "", grape: "", region: "", stage: "", score: "", vint: "", ends: "", mood: "all", col: "drink", dir: 1, more: {} };
+const mc = { colour: "", country: "", grape: "", region: "", stage: "", score: "", vint: "", ends: "", mood: "all", col: "drink", dir: 1, more: {}, gems: false, gemPrice: 0 };
 let mcTried = false; // somm.json holds the books the ⚡ column and the moods read
-const clearMcFilters = () => Object.assign(mc, { colour: "", country: "", grape: "", region: "", stage: "", score: "", vint: "", ends: "", mood: "all" });
+const clearMcFilters = () => Object.assign(mc, { colour: "", country: "", grape: "", region: "", stage: "", score: "", vint: "", ends: "", mood: "all", gems: false, gemPrice: 0 });
 
 // The cellars on this computer as [value, title, source]; value is what mwView.owner holds.
 function mcCellars() {
@@ -168,7 +168,7 @@ function mcAnswerHtml(all, name) {
       <p class="somm-sel-count">${n === all.length ? wineCount(n) : `${n.toLocaleString()} of ${wineCount(all.length)}`}${mc.region ? ` from ${regionLink(mc.region)}${regionCountry(all) ? `, ${esc(regionCountry(all))}` : ""}` : ""}</p>
       <p>${mc.mood === "all" ? "" : `${esc(capFirst(`These wines ${m.line}`))} `}Sorted by <strong>${esc(sorted)}</strong>. Click a heading to sort by it, or a wine to see its details.</p>
       ${mcBannerControls(all)}
-      ${n ? `<p class="mc-food"><button type="button" class="btn btn-somm" data-mc-food>🍽 Find food for ${n === 1 ? "this wine" : `these ${n.toLocaleString()} wines`}</button></p>` : ""}</div>
+      <p class="mc-food">${n ? `<button type="button" class="btn btn-somm" data-mc-food>🍽 Find food for ${n === 1 ? "this wine" : `these ${n.toLocaleString()} wines`}</button> ` : ""}${mcOpenCellar() && !mwView.q ? `<button type="button" class="btn btn-gem" data-mc-gems>💎 Gems for ${esc(mcOpenCellar()[0])}</button>` : ""}</p></div>
     ${n ? wineTableHtml(rows, cols, mc.col, mc.dir, isDaring, "data-mc-col", mc.region ? { name: ` from ${regionLink(mc.region)}` } : {}) : `<p class="empty">No wines match. Press “Show all again” above.</p>`}`;
 }
 // Everything below the boxes. With no cellar open, a search looks through all of them.
@@ -184,6 +184,14 @@ function renderCellarPanel() {
     mcTried = true;
     $("mc-answer").innerHTML = `<p class="empty">Opening the cellar…</p>`;
     loadSomm().finally(() => { if (!$("view-mywines").hidden) renderCellarPanel(); });
+    return;
+  }
+  if (mc.gems && open && !mwView.q) { // the store lists and the reviews, then the picks
+    $("mc-glance").hidden = true;
+    const ready = allLoaded() && weData;
+    $("mc-answer").innerHTML = `<p class="mc-food"><button type="button" class="btn" data-mc-gems-off>← Back to ${esc(open[1])}</button></p>` +
+      (ready ? gemsHtml(open[0], open[1]) : `<p class="empty">Looking through every store list…</p>`);
+    if (!ready) Promise.all([loadAllSources(), loadWe()]).finally(() => { if (mc.gems && !$("view-mywines").hidden) renderCellarPanel(); });
     return;
   }
   if (!$("mc-glance").hidden) $("mc-glance-body").innerHTML = glanceHtml(wines);
@@ -214,9 +222,10 @@ async function cellarToSomm() {
 
 document.addEventListener("click", (e) => {
   if (e.target.closest?.("#mw-add-open")) { openTools(); $("mw-add-h").scrollIntoView({ block: "start" }); $("mw-name").focus({ preventScroll: true }); return; }
-  const t = e.target.closest?.("#mc-panel [data-mc-k], #mc-panel [data-mc-mood], #mc-panel [data-mc-col], #mc-panel [data-mc-clear], #mc-panel [data-mc-food], #mc-panel [data-mc-more]");
+  const t = e.target.closest?.("#mc-panel [data-mc-k], #mc-panel [data-mc-mood], #mc-panel [data-mc-col], #mc-panel [data-mc-clear], #mc-panel [data-mc-food], #mc-panel [data-mc-more], #mc-panel [data-mc-gems], #mc-panel [data-mc-gems-off]");
   if (!t) return;
   if ("mcFood" in t.dataset) return void cellarToSomm();
+  if ("mcGems" in t.dataset || "mcGemsOff" in t.dataset) { mc.gems = "mcGems" in t.dataset; renderCellarPanel(); return void $("mc-panel").scrollIntoView({ block: "start" }); }
   if ("mcClear" in t.dataset) clearMcFilters();
   else if (t.dataset.mcMood) mc.mood = t.dataset.mcMood;
   else if (t.dataset.mcCol) { mc.dir = mc.col === t.dataset.mcCol ? -mc.dir : 1; mc.col = t.dataset.mcCol; }
@@ -230,6 +239,7 @@ document.addEventListener("click", (e) => {
   renderCellarPanel();
 });
 document.addEventListener("change", (e) => {
+  if (e.target.matches?.("#mc-panel [data-gem-price]")) { mc.gemPrice = +e.target.value; return void renderCellarPanel(); }
   if (!e.target.matches?.("#mc-panel [data-mc-narrow]")) return;
   mc[e.target.dataset.mcNarrow] = e.target.value;
   renderCellarPanel();

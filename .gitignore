@@ -17,3 +17,5 @@ food pairings/*.epub
 food pairings/*.mobi
 food pairings/_text_*/
 food pairings/_tmp_rec_*/
+# Wine Enthusiast reviews: only the summary by producer (data/producers-we.json) is published
+WineMag/

@@ -1046,3 +1046,15 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 .somm-pairs-a { border-left: 6px solid var(--green); }
 .somm-stretch > summary { color: var(--muted, #6f6a63); }
 #somm-cellar-pick { max-width: 100%; } /* long wine names must not widen the page */
+/* Gems */
+.btn-gem { background: #1a7fa8; color: #fff; border-color: #135f7e; }
+.btn-gem:hover { background: #135f7e; }
+.gem-pat { margin: 0.2rem 0 0.5rem 1.2rem; padding: 0; }
+.gem-pat li { margin: 0.2rem 0; }
+.gem-list { list-style: none; margin: 0; padding: 0; }
+.gem-pick { border-top: 1px dashed var(--line); padding: 0.55rem 0; }
+.gem-name { font-weight: 700; font-size: 1.12rem; text-align: left; }
+.gem-where { display: block; color: var(--muted, #6f6a63); margin-top: 0.15rem; }
+.gem-why, .gem-ev { margin: 0.25rem 0; }
+.gem-tag { display: inline-block; font-size: 0.95rem; font-weight: 700; padding: 0.05rem 0.5rem; border-radius: 1rem; background: #e3f2fa; color: #0f4f69; border: 1px solid #9cc9de; }
+.gem-fam { background: #eaf6ec; color: #1f6b34; border-color: #a6d3b0; }
