@@ -209,7 +209,7 @@ function gemPicks(owner, maxPrice, extra = []) {
     !owned.has(fold(w.name).replace(/\b(19|20)\d\d\b/g, "").replace(/[^a-z0-9]+/g, " ").trim()) &&
     !(gemMine(w)?.verdict && gemIsMe(owner)) && !(gemFam(w)?.verdict === "gem")); // tried here, or already a family gem (shown above)
   const myAreas = new Map(); for (const k of pattern.pairs.keys()) { const [g, a] = k.split("|"); (myAreas.get(g) || myAreas.set(g, new Set()).get(g)).add(a); }
-  const kinds = { producer: [], area: [], new: [] };
+  const kinds = { producer: [], area: [], new: [], unscored: [] };
   for (const w of pool) {
     const hit = gemProducerHit(w, pattern), area = gemArea(w);
     const g = gemGrapes(w).find((x) => pattern.grapes.has(x));
@@ -220,6 +220,7 @@ function gemPicks(owner, maxPrice, extra = []) {
     if (hit) kinds.producer.push({ ...base, prod: hit[1], rank: qual.q + 2 + Math.min(3, hit[1].n) * 0.5 + (famHit ? 2 : 0) });
     else if (g && area && myAreas.get(g)?.has(area)) kinds.area.push({ ...base, pair: pattern.pairs.get(`${g}|${area}`), rank: qual.q + 0.5 * Math.log2(1 + pattern.pairs.get(`${g}|${area}`)) });
     else if (g && qual.how) kinds.new.push({ ...base, rank: qual.q + Math.log2(1 + pattern.grapes.get(g)) * 0.5 });
+    else if (g) kinds.unscored.push({ ...base, rank: -5 }); // their grape, but nothing known about it yet
   }
   // Best first, and variety: one wine per producer, and no more than one per grape and area in a kind.
   const usedProd = new Set(), pick = (list, key, n) => {
@@ -238,10 +239,12 @@ function gemPicks(owner, maxPrice, extra = []) {
   const famGems = WINES.filter((w) => w.available !== false && w.price <= maxPrice && (gemFam(w)?.verdict === "gem" || (gemMine(w)?.verdict === "gem")))
     .map((w) => ({ w, area: gemArea(w), ...gemQuality(w), famV: gemFam(w), mineV: gemMine(w) }))
     .sort((a, b) => b.q - a.q).slice(0, 8);
-  return { pattern, maxPrice, famGems,
-    producer: pick(kinds.producer, (x) => fold(x.prod.name), 5),
-    area: pick(kinds.area, (x) => `${x.g}|${x.area}`, 5),
-    new: pick(kinds.new, (x) => `${x.g}|${x.area}`, 5) };
+  const shortlist = { producer: pick(kinds.producer, (x) => fold(x.prod.name), 5),
+    area: pick(kinds.area, (x) => `${x.g}|${x.area}`, 5), new: pick(kinds.new, (x) => `${x.g}|${x.area}`, 5) };
+  // every match, for the table: each wine once, with the kind it came under
+  const all = [...kinds.producer.map((x) => ({ ...x, kind: "producer" })), ...kinds.area.map((x) => ({ ...x, kind: "area" })),
+    ...kinds.new.map((x) => ({ ...x, kind: "new" })), ...kinds.unscored.map((x) => ({ ...x, kind: "unscored" }))];
+  return { pattern, maxPrice, famGems, all, ...shortlist };
 }
 
 // ---- On the page --------------------------------------------------------------------------------
@@ -307,8 +310,73 @@ function gemsHtml(owner, title) {
     kind("More from a producer you love", r.producer, (x) => `${esc(who)} owns ${x.prod.n} ${x.prod.n === 1 ? "wine" : "wines"} from ${esc(x.prod.name)} scored about 91 or more${pattern0.cut != null ? " at a modest price" : ""}.`, `No other wine from ${esc(who)}'s favourite producers is in the stores up to $${price}.`) +
     kind("Your grape, from an area you love", r.area, (x) => `${esc(who)} owns ${x.pair} ${esc(x.g)} ${x.pair === 1 ? "wine" : "wines"} from ${esc(x.area)} scored about 91 or more${pattern0.cut != null ? " at a modest price" : ""}.`, `Nothing new from those areas up to $${price}.`) +
     kind("Your grape, from somewhere new", r.new, (x) => `${esc(x.g)} is one of ${esc(who)}'s value grapes (${p.grapes.get(x.g)} wines); this one is from ${esc(x.area || x.w.country || "elsewhere")}.`, `Nothing scored yet up to $${price}.`) +
-    `<p class="hint">These are suggestions to taste, not scores for these bottles.</p>`;
+    gemAllHtml(r) + `<p class="hint">These are suggestions to taste, not scores for these bottles.</p>`;
 }
+
+// ---- Every gem and match, in a table to sort and narrow ----------------------------------------
+const gemAll = { only: true, kind: "", colour: "", country: "", grape: "", store: "", col: "rank", dir: -1, shown: 50 };
+const GEM_KINDS = { producer: "Producer you love", area: "Your grape, an area you love", new: "Your grape, somewhere new", unscored: "Your grape, no score yet" };
+const gemRowScore = (x) => (x.how === "score" ? Math.round(x.s) : null);
+const gemSort = {
+  rank: (x) => x.rank, name: (x) => fold(x.w.name), store: (x) => sourceLabel(x.w.source), price: (x) => x.w.price,
+  score: (x) => gemRowScore(x) ?? (x.we ? x.we[3] - 100 : -999), type: (x) => x.w.type || "", country: (x) => x.w.country || "",
+  grape: (x) => x.g || "", kind: (x) => Object.keys(GEM_KINDS).indexOf(x.kind), gem: (x) => (gemTag(x) ? 1 : 0),
+};
+function gemAllHtml(r) {
+  if (gemAll.owner !== r.pattern.owner) Object.assign(gemAll, { owner: r.pattern.owner, kind: "", colour: "", country: "", grape: "", store: "", shown: 50 }); // another cellar: start afresh
+  const base = r.all.filter((x) => !gemAll.only || gemTag(x));
+  const rows = base.filter((x) => (!gemAll.kind || x.kind === gemAll.kind) && (!gemAll.colour || x.w.type === gemAll.colour) &&
+    (!gemAll.country || x.w.country === gemAll.country) && (!gemAll.grape || x.g === gemAll.grape) && (!gemAll.store || x.w.source === gemAll.store));
+  const key = gemSort[gemAll.col] || gemSort.rank, dir = gemAll.dir;
+  rows.sort((a, b) => { const ka = key(a), kb = key(b); return (ka < kb ? -1 : ka > kb ? 1 : 0) * dir || b.rank - a.rank; });
+  const opts = (k, label, get, words = (v) => v) => { const vals = [...new Set(base.map(get).filter(Boolean))].sort((a, b) => String(words(a)).localeCompare(String(words(b))));
+    return `<select data-gall="${k}" aria-label="${esc(label)}"><option value="">Any ${esc(label.toLowerCase())}</option>${vals.map((v) => `<option value="${esc(v)}"${String(v) === String(gemAll[k]) ? " selected" : ""}>${esc(words(v))}</option>`).join("")}</select>`; };
+  const cols = [["gem", "💎"], ["name", "Wine"], ["store", "Store"], ["price", "Price"], ["score", "Score"], ["type", "Colour"], ["country", "Country"], ["grape", "Grape"], ["kind", "Why"]];
+  const head = cols.map(([k, l]) => `<th scope="col"><button type="button" class="linklike" data-gall-col="${k}" aria-pressed="${gemAll.col === k}">${l}${gemAll.col === k ? (dir > 0 ? " ▲" : " ▼") : ""}</button></th>`).join("");
+  const cell = (k, x) => {
+    switch (k) {
+      case "gem": return gemTag(x) ? "💎" : "";
+      case "name": return `<button type="button" class="linklike" data-somm-pop="${esc(x.w.id)}">${esc(x.w.name)}</button>${gemFam(x.w) ? ` <span class="hint-inline">${esc(verdictWords(gemFam(x.w).verdict))} (family)</span>` : ""}`;
+      case "store": return esc(sourceLabel(x.w.source));
+      case "price": return gemMoney(x.w);
+      case "score": return gemRowScore(x) != null ? `<strong>${gemRowScore(x)}</strong>` : x.we ? `<span class="hint-inline">producer avg ${x.we[3]} (WE)</span>` : "";
+      case "type": return esc(x.w.type || "");
+      case "country": return esc(x.w.country || "");
+      case "grape": return esc(x.g || "");
+      default: return esc(GEM_KINDS[x.kind] || "");
+    }
+  };
+  const shown = rows.slice(0, gemAll.shown);
+  return `<div class="somm-card gem-all"><h3 class="somm-wine-h">Every ${gemAll.only ? "gem" : "match"} up to $${r.maxPrice}</h3>
+    <p class="hint">The lists above show the best few of each kind. Here is every one, to sort by clicking a heading or narrow with the menus. Sorted best first to start.</p>
+    <div class="somm-row somm-narrow">
+      <span class="gem-switch" role="radiogroup" aria-label="Which wines"><label><input type="radio" name="gall-only" value="1"${gemAll.only ? " checked" : ""} data-gall-only> 💎 Gems only (${r.all.filter((x) => gemTag(x)).length})</label>
+        <label><input type="radio" name="gall-only" value="0"${gemAll.only ? "" : " checked"} data-gall-only> All matches (${r.all.length})</label></span>
+      ${opts("kind", "Kind", (x) => x.kind, (v) => GEM_KINDS[v])}${opts("colour", "Colour", (x) => x.w.type)}${opts("country", "Country", (x) => x.w.country)}
+      ${opts("grape", "Grape", (x) => x.g)}${opts("store", "Store", (x) => x.w.source, sourceLabel)}
+      ${gemAll.kind || gemAll.colour || gemAll.country || gemAll.grape || gemAll.store ? `<button type="button" class="btn btn-mini" data-gall-clear>Show all again</button>` : ""}</div>
+    <p class="somm-sel-count">${rows.length.toLocaleString()} ${rows.length === 1 ? "wine" : "wines"}</p>
+    ${rows.length ? `<div class="somm-table-wrap"><table class="somm-table gem-table"><thead><tr>${head}</tr></thead>
+      <tbody>${shown.map((x) => `<tr>${cols.map(([k]) => `<td>${cell(k, x)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>` : `<p class="empty">Nothing matches these choices.</p>`}
+    ${rows.length > shown.length ? `<p><button type="button" class="btn" data-gall-more>Show ${Math.min(50, rows.length - shown.length)} more (${(rows.length - shown.length).toLocaleString()} left)</button></p>` : ""}
+    <p class="hint">Score: the family's, CellarTracker's or a Claude quick score for this wine; otherwise the producer's average in Wine Enthusiast's older reviews (WE), which is a reputation, not this bottle's score.</p></div>`;
+}
+document.addEventListener("click", (e) => {
+  const t = e.target.closest?.("#mc-panel [data-gall-col], #mc-panel [data-gall-more], #mc-panel [data-gall-clear]");
+  if (!t) return;
+  if (t.dataset.gallCol) { const k = t.dataset.gallCol; gemAll.dir = gemAll.col === k ? -gemAll.dir : ["name", "store", "type", "country", "grape", "kind"].includes(k) ? 1 : -1; gemAll.col = k; }
+  else if ("gallMore" in t.dataset) gemAll.shown += 50;
+  else Object.assign(gemAll, { kind: "", colour: "", country: "", grape: "", store: "", shown: 50 });
+  const y = window.scrollY; renderCellarPanel(); window.scrollTo(0, y);
+});
+document.addEventListener("change", (e) => {
+  const t = e.target;
+  if (t.matches?.("#mc-panel [data-gall-only]")) gemAll.only = t.value === "1";
+  else if (t.matches?.("#mc-panel [data-gall]")) gemAll[t.dataset.gall] = t.value;
+  else return;
+  gemAll.shown = 50;
+  const y = window.scrollY; renderCellarPanel(); window.scrollTo(0, y);
+});
 
 // The fair test: hide each value wine in turn and see whether the pattern still points to it,
 // by its producer or by its grape and area. Run from the console: gemFairTest("David").

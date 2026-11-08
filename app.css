@@ -1066,3 +1066,7 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 .gem-said { margin: 0.25rem 0; padding: 0.2rem 0.5rem; background: #f3faf4; border-left: 4px solid var(--green); }
 .gem-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.35rem 0 0; }
 .gem-family { border-left: 6px solid #1a7fa8; }
+.gem-switch { display: inline-flex; flex-wrap: wrap; gap: 0.6rem; margin-right: 0.5rem; }
+.gem-switch label { display: inline-flex; align-items: center; gap: 0.3rem; font-weight: 700; }
+.gem-table td:first-child { text-align: center; }
+.gem-all { border-left: 6px solid #1a7fa8; }
