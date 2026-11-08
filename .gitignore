@@ -19,3 +19,6 @@ food pairings/_text_*/
 food pairings/_tmp_rec_*/
 # Wine Enthusiast reviews: only the summary by producer (data/producers-we.json) is published
 WineMag/
+# Word-for-word lists from What to Drink with What You Eat: kept on the PC only
+food pairings/classic_comparison_data.json
+food pairings/classic_comparison.md
