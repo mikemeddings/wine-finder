@@ -1071,3 +1071,4 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 .gem-table td:first-child { text-align: center; }
 .gem-all { border-left: 6px solid #1a7fa8; }
 .gem-scope { background: #eef7fb; border: 1px solid #9cc9de; border-radius: 0.5rem; padding: 0.4rem 0.7rem; margin: 0.4rem 0 0.6rem; }
+.shop-bottles { font-size: 1.15rem; margin: 0.4rem 0; padding: 0.3rem 0.6rem; background: #f7f2e8; border-left: 4px solid var(--wine); }

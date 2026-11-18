@@ -2101,9 +2101,25 @@ function toggleShopping(id) {
   }
   if (!$("view-shopping").hidden) renderShopping();
 }
+// Bottles of a wine in the family cellars, where this computer knows them (the private copies; the
+// shared cellars carry no bottle counts): [{source, n, vintages}].
+function cellarBottles(w) {
+  const mine = allMyWines().filter((x) => x.kind === "cellar" && x.quantity > 0);
+  if (!mine.length) return [];
+  const twin = (x) => (x.quantity > 0 ? x : mine.find((m) => m.owner === x.owner && fold(m.name) === fold(x.name)));
+  const found = [];
+  if (w.kind === "cellar") { const t = twin(w); if (t) found.push(t); }
+  for (const id of cellarMatches(w).ids || []) { const x = findWine(id), t = x && twin(x); if (t && !found.includes(t)) found.push(t); }
+  const by = new Map();
+  for (const x of found) { const e = by.get(x.source) || { source: x.source, n: 0, vintages: new Set() }; e.n += x.quantity; if (x.vintage) e.vintages.add(x.vintage); by.set(x.source, e); }
+  return [...by.values()].map((e) => ({ ...e, vintages: [...e.vintages].sort() }));
+}
+const bottlesLine = (list) => (list.length ? `<p class="shop-bottles">🍾 <strong>In the cellars:</strong> ${list.map((e) =>
+  `${esc(sourceLabel(e.source))} <strong>${e.n} ${e.n === 1 ? "bottle" : "bottles"}</strong>${e.vintages.length ? ` (${esc(e.vintages.join(", "))})` : ""}`).join(" · ")}</p>` : "");
 function renderShopping() {
   if (!$("shop-list")) return;
   const items = shopping.map((s) => findWine(s.id) || s);
+  const bottles = items.map(cellarBottles), nBottles = bottles.flat().reduce((k, e) => k + e.n, 0);
   const byStore = new Map();
   for (const w of items) if (w.kind !== "cellar" && w.price != null) {
     const k = sourceLabel(w.source), v = byStore.get(k) || { n: 0, sum: 0 };
@@ -2111,12 +2127,12 @@ function renderShopping() {
   }
   const totals = [...byStore].map(([k, v]) => `${v.n} at ${esc(k)}: <strong>${money(v.sum)}</strong>`).join(" · ");
   $("shop-summary").innerHTML = items.length
-    ? `<strong>${items.length} ${items.length === 1 ? "wine" : "wines"}</strong> on your Comparison List${totals ? `. ${totals} (one bottle of each)` : ""}.`
+    ? `<strong>${items.length} ${items.length === 1 ? "wine" : "wines"}</strong> on your Comparison List${totals ? `. ${totals} (one bottle of each)` : ""}.${nBottles ? ` 🍾 ${nBottles} ${nBottles === 1 ? "bottle" : "bottles"} of these in the family cellars.` : ""}`
     : `Your Comparison List is empty. Press <strong>⚖️ ＋ Add wine to Comparison List</strong> on any wine in Find wines or My cellars.`;
   $("shop-clear").hidden = !items.length;
   $("shop-list").innerHTML = items.map((w, i) => wineCard(w)
     .replace('<h3 class="wine-name">', `<h3 class="wine-name"><span class="wine-seq">${i + 1} of ${items.length}</span>`)
-    .replace('<div class="wine-actions">', `${boldAdviceHtml(w)}<div class="wine-actions"><button type="button" class="btn btn-shop-remove" data-shop-remove="${esc(w.id)}">✕ Remove from Comparison List</button>`)).join("");
+    .replace('<div class="wine-actions">', `${bottlesLine(bottles[i])}${boldAdviceHtml(w)}<div class="wine-actions"><button type="button" class="btn btn-shop-remove" data-shop-remove="${esc(w.id)}">✕ Remove from Comparison List</button>`)).join("");
 }
 
 // "$25.99 at BC Liquor - LDB", or "from Alex's cellar" for a wine with no shop price.
