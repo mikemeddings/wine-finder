@@ -3529,7 +3529,7 @@ function cellarsChanged() {
   updateCellarSorts();
 }
 
-// A shared cellar carries a price band, never the price paid: pb 1 under $25, 2 $25-40, 3 $40-60,
+// A shared cellar carries each wine's bottle count and a price band, never the price paid: pb 1 under $25, 2 $25-40, 3 $40-60,
 // 4 $60-100, 5 over $100 (Canadian dollars; francs converted at the Swiss lists' rate). A copy
 // imported before currencies were kept reuses the band the shared copy already has.
 const PRICE_BAND_TOPS = [25, 40, 60, 100];
@@ -3544,7 +3544,7 @@ const trimForShare = (wines, slot) => { const before = new Map((sharedCellars[sl
   id: `cellar-${slot}-${i + 1}`, name: w.name, vintage: w.vintage, producer: w.producer,
   region_or_grape: w.region_or_grape, varietal: w.varietal, country: w.country, type: w.type,
   size_ml: w.size_ml, my_score: w.my_score, ct_score: w.ct_score, drink_from: w.drink_from, drink_to: w.drink_to,
-  pb: priceBand(w, before),
+  pb: priceBand(w, before), quantity: w.quantity || null, // bottles in the cellar (never what they cost)
 }).filter(([, v]) => v != null && v !== ""))); };
 
 // Read a JSON file in the repository, change it, write it back (once more if someone
