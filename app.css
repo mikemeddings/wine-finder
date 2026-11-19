@@ -1072,3 +1072,78 @@ button.quick-btn:hover, button.quick-btn:focus-visible { background: #3a4004; bo
 .gem-all { border-left: 6px solid #1a7fa8; }
 .gem-scope { background: #eef7fb; border: 1px solid #9cc9de; border-radius: 0.5rem; padding: 0.4rem 0.7rem; margin: 0.4rem 0 0.6rem; }
 .shop-bottles { font-size: 1.15rem; margin: 0.4rem 0; padding: 0.3rem 0.6rem; background: #f7f2e8; border-left: 4px solid var(--wine); }
+/* Sommelier steps: route colours, the trail, a tier down for the current step */
+.route-wine, #somm.route-wine { --route: #8b1e2d; --route-tint: #fbeef0; }
+.route-cook, #somm.route-cook { --route: #2f6b3a; --route-tint: #e9f5eb; }
+.route-menu, #somm.route-menu { --route: #1f4e79; --route-tint: #e7f0f9; }
+.route-cmp, #somm.route-cmp { --route: #6b4a8a; --route-tint: #f2ecf8; }
+.somm-tab[class*="route-"] { border-color: var(--route); color: var(--route); text-align: left; border-left-width: 0.7rem; }
+.somm-tab[class*="route-"]:hover { background: var(--route-tint); }
+.somm-tab-sub { display: block; font-size: 0.9rem; font-weight: 400; color: var(--text); }
+.somm-tab-small { font-size: 1rem; align-self: center; }
+.somm-trail { list-style: none; margin: 0.4rem 0 0.6rem; padding: 0; display: flex; flex-direction: column; align-items: stretch; gap: 0.35rem; }
+.somm-trail[hidden], #somm-s1[hidden], #somm-s2[hidden], #somm-s1-done[hidden], #somm-help-choose[hidden] { display: none; }
+.trail-btn { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; width: 100%; text-align: left; font: inherit; font-size: 1.1rem; font-weight: 700; color: var(--text); background: #f6ecd2; border: 2px solid #d9c48a; border-radius: 0.6rem; padding: 0.4rem 0.7rem; cursor: pointer; }
+.trail-btn:hover { filter: brightness(0.97); }
+.trail-route { margin-left: 1.5rem; }
+.trail-route .trail-btn { background: var(--route-tint); border-color: var(--route); border-left-width: 0.7rem; color: var(--route); }
+.trail-edit { margin-left: auto; font-size: 0.95rem; font-weight: 600; text-decoration: underline; white-space: nowrap; }
+.trail-btn .zone-num { border: 2px solid currentColor; }
+.somm-src-chip { display: inline-block; padding: 0.1rem 0.55rem; border: 2px solid; border-radius: 0.4rem; font-weight: 700; margin: 0.1rem 0; }
+#somm[class*="route-"] .somm-pane:not([hidden]), #somm[class*="route-"] #somm-step3, #somm[class*="route-"] .somm-tier { margin-left: 3rem; border-left: 6px solid var(--route); padding-left: 0.8rem; }
+#somm[class*="route-"] .somm-pane .somm-step, #somm[class*="route-"] #somm-step3 { color: var(--route); }
+#somm[class*="route-"] #somm-step3 { margin-bottom: 0; padding: 0.5rem 0 0.5rem 0.8rem; }
+#somm[class*="route-"] .somm-tier { margin-top: 0; }
+@media (max-width: 640px) { .trail-route { margin-left: 0.6rem; } #somm[class*="route-"] .somm-pane:not([hidden]), #somm[class*="route-"] #somm-step3, #somm[class*="route-"] .somm-tier { margin-left: 0.6rem; padding-left: 0.5rem; } }
+/* Sommelier: filters, the shared table, the answers */
+.somm-filters { display: flex; flex-wrap: wrap; gap: 0.5rem 0.9rem; margin: 0.3rem 0 0.6rem; }
+.somm-filter { display: flex; flex-direction: column; gap: 0.15rem; font-weight: 700; }
+.somm-filter select, .somm-filter input { font: inherit; font-weight: 400; padding: 0.3rem 0.45rem; border: 2px solid #b8902a; border-radius: 0.4rem; background: #fff; max-width: 16rem; }
+.somm-filter input { width: 7rem; }
+.somm-at-only { font-size: 1.05rem; font-weight: 700; display: inline-flex; gap: 0.4rem; align-items: center; margin: 0.2rem 0 0.4rem; }
+.somm-sorts { flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-top: 0.4rem; }
+.somm-sorts select { font: inherit; padding: 0.25rem 0.4rem; border: 2px solid #b8902a; border-radius: 0.4rem; background: #fff; }
+.somm-tick { text-align: center; }
+.pair-tick { width: 1.35rem; height: 1.35rem; cursor: pointer; }
+.row-picked td { background: #fff4d6; }
+.at-store { white-space: nowrap; font-weight: 700; }
+.at-exact { color: #1f6a2e; }
+.at-vintage { color: #8a4b00; }
+.at-producer { color: #555; font-weight: 600; }
+.somm-lead { border-left: 6px solid var(--route, #8b1e2d); }
+.somm-lead .somm-why { font-weight: 400; }
+.somm-read { border-left: 6px solid var(--route, #8b1e2d); }
+.somm-picked { margin-bottom: 0.8rem; }
+.somm-sub { margin: 1rem 0 0.4rem; }
+.somm-big-pick .somm-food { font-size: 1.15rem; padding: 0.55rem 0.9rem; }
+.somm-country-fold > summary { cursor: pointer; padding: 0.3rem 0; }
+#somm-special-cellar[hidden], #somm-special-store[hidden], #somm-cook-price-l[hidden] { display: none; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.somm-table td.somm-name { min-width: 14rem; }
+.btn-mood-on { background: var(--route, #8b1e2d); color: #fff; border-color: var(--route, #8b1e2d); }
+.btn-mood-on .tap-n { background: #fff; color: var(--route, #8b1e2d); }
+.somm-preset-on { flex-basis: 100%; margin: 0.5rem 0 0; padding: 0.4rem 0.6rem; background: var(--route-tint, #fbeef0); border-left: 4px solid var(--route, #8b1e2d); border-radius: 0.3rem; }
+.somm-which select { max-width: 30rem; font-weight: 700; }
+#somm-from-q[hidden] { display: none; }
+.trail-picks { margin-left: 3rem; }
+.trail-static { cursor: default; background: #fff8e6; }
+.trail-picks .chip { font-weight: 600; margin: 0.1rem 0.15rem; }
+.somm-at-line { font-weight: 700; color: #1f6a2e; margin: 0.2rem 0; }
+.somm-asked { display: inline-block; margin-bottom: 0.3rem; }
+.somm-unused { margin: 0.4rem 0 0; }
+@media (max-width: 640px) { .trail-picks { margin-left: 1.2rem; } }
+.somm-pour { margin: 0.3rem 0; }
+.somm-dinner select { font: inherit; padding: 0.25rem 0.4rem; border: 2px solid #b8902a; border-radius: 0.4rem; background: #fff; margin-left: 0.3rem; max-width: 100%; }
+.somm-dinner li { margin: 0.3rem 0; }
+.somm-recipe-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-top: 0.6rem; }
+.somm-recipe-tools select { font: inherit; padding: 0.3rem 0.4rem; border: 2px solid #b8902a; border-radius: 0.4rem; background: #fff; }
+.somm-shop-box { flex-basis: 100%; }
+.somm-shop { border: 2px solid #2f6b3a; border-radius: 0.5rem; background: #f4fbf5; padding: 0.5rem 0.8rem; margin-top: 0.4rem; }
+.somm-shop h5 { margin: 0 0 0.2rem; font-size: 1.05rem; }
+.somm-shop-list { list-style: none; padding: 0; margin: 0.2rem 0 0.4rem; columns: 2 18rem; }
+.somm-shop-list li { break-inside: avoid; margin: 0.1rem 0; }
+.somm-shop-list input { width: 1.1rem; height: 1.1rem; vertical-align: -0.15rem; }
+.somm-shop-list input:checked + span { text-decoration: line-through; color: #777; }
+.somm-shop-sub { font-weight: 700; margin: 0.4rem 0 0; }
+.somm-dinner-shop { border-left: 6px solid #2f6b3a; margin-top: 0.6rem; }
+@media print { .print-area .pa-shop { list-style: none; padding-left: 0; columns: 2; } .print-area .pa-shop li { margin-bottom: 4pt; } .print-area .pa-break { break-after: page; } }

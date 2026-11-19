@@ -279,7 +279,11 @@ function recipeHtml(r) {
       <h5>Ingredients</h5><ul class="somm-ing">${x.i.map((l) => /:\s*$/.test(l) ? `<li class="somm-ing-h">${esc(l)}</li>` : `<li>${esc(l)}</li>`).join("")}</ul>
       <h5>Method</h5><ol class="somm-method">${x.m.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>
       <p class="somm-src">Ingredients as printed in ${esc(ref(r[1], r[2]))}; the method is in our own words.</p>
-      <p><button type="button" class="btn" data-somm-print="${esc(recipeKey(r))}">🖨 Print the recipe</button></p></div></details>`;
+      <div class="somm-recipe-tools" data-recipe-tools="${esc(recipeKey(r))}">
+        <button type="button" class="btn" data-recipe-shop aria-expanded="false">🛒 Shopping list</button>
+        <select data-recipe-what aria-label="What to print or email"><option value="both">Recipe and shopping list</option><option value="recipe">The recipe</option><option value="list">The shopping list</option></select>
+        <button type="button" class="btn" data-recipe-out="print">🖨 Print</button> <button type="button" class="btn" data-recipe-out="email">✉️ Email</button>
+        <span class="status" role="status"></span><div class="somm-shop-box"></div></div></div></details>`;
 }
 // ---- Other wines for this dish -------------------------------------------------------------
 // Bottles in the stores ticked that carry the grape the book pours with a recipe, then bottles
@@ -426,6 +430,7 @@ function recipePickHtml(w, food = null, n = 1, at = null, course = "") {
   return `<div class="somm-recipe-pick" data-pick-wine="${esc(w.id)}" data-pick-food="${esc(food || "")}" data-pick-n="${n}" data-pick-at="${i}" data-pick-course="${esc(course)}">
     ${rows.join("")}
     ${!all || courses.length > 1 ? `<div class="somm-row somm-pick-nav">
+      ${!all && n === 1 ? `<button type="button" class="btn btn-mini" data-pick-next>Another recipe</button>` : ""}
       ${!all ? `<button type="button" class="btn btn-mini" data-pick-all>Show all ${list.length} recipes</button>` : ""}
       ${courses.length > 1 ? `<select data-pick-course-choice aria-label="Course"><option value="">Any course</option>${courses.map((c) => `<option value="${esc(c)}"${c === course ? " selected" : ""}>${esc(COURSES[c])}</option>`).join("")}</select>` : ""}</div>` : ""}</div>`;
 }
@@ -437,6 +442,10 @@ function redrawPick(box, at, course, n = +box.dataset.pickN) {
 document.addEventListener("click", (e) => {
   const b = e.target.closest?.("[data-pick-all]");
   if (b) { const box = b.closest(".somm-recipe-pick"); redrawPick(box, 0, box.dataset.pickCourse, 9999); }
+  const nx = e.target.closest?.("[data-pick-next]");
+  if (nx) { const box = nx.closest(".somm-recipe-pick"), up = box.parentElement, i = [...up.children].indexOf(box);
+    redrawPick(box, +box.dataset.pickAt + 1, box.dataset.pickCourse, 1);
+    up.children[i]?.querySelector("details.somm-recipe")?.setAttribute("open", ""); }
 });
 document.addEventListener("change", (e) => {
   if (e.target.matches?.("[data-pick-course-choice]")) redrawPick(e.target.closest(".somm-recipe-pick"), 0, e.target.value);
@@ -658,9 +667,14 @@ const stageReason = (w) => ({ first: w.drink_to < THIS_YEAR ? `Its window ended 
 // The cellar's answer, re-drawn when its colour, country or order changes. rows: [{w, t}].
 // what: "for spicy food"; moodLine: the summary's ending for a mood, with no food chosen.
 let answerArgs = null, answerOpts = {};
-function cellarAnswerHtml(rows, food, what = "", moodLine = "", title = "") {
-  answerArgs = { rows, food, what, moodLine, title };
-  answerOpts = { colour: "", country: "", col: "drink", dir: 1, daring: false };
+// Any list of wines (cellar, store or both): a tick box on each row for Pairings, sorting on up to
+// three columns, and the columns that suit what's in it. rows: [{w, t, bold}].
+function cellarAnswerHtml(rows, food, what = "", moodLine = "", title = "", kind = "") {
+  answerArgs = { rows, food, what, moodLine, title, kind };
+  if (kind !== "find") atLimit = { max: null, same: false };
+  const cellar = rows.some((x) => x.w.kind === "cellar");
+  answerOpts = { colour: "", country: "", where: "", daring: false, shown: 60,
+    sorts: [{ col: cellar ? "drink" : food ? "match" : "score", dir: 1 }, { col: food && cellar ? "match" : "", dir: 1 }, { col: "", dir: 1 }] };
   return `<div id="somm-cellar-answer">${answerBodyHtml()}</div>`;
 }
 function answerControlsHtml() {
@@ -670,68 +684,144 @@ function answerControlsHtml() {
   return `<div class="somm-row somm-narrow">
     <select data-somm-narrow="colour" aria-label="Colour">${opt("", "Any colour", colour)}${list("type").map((v) => opt(v, v, colour)).join("")}</select>
     <select data-somm-narrow="country" aria-label="Country">${opt("", "Any country", country)}${list("country").map((v) => opt(v, v, country)).join("")}</select>
+    ${rows.some((x) => x.w.kind === "cellar") && rows.some((x) => x.w.kind !== "cellar") ? `<select data-somm-narrow="where" aria-label="Where">${opt("", "Cellar and store wines", answerOpts.where)}${opt("cellar", "Cellar wines only", answerOpts.where)}${opt("store", "Store wines only", answerOpts.where)}</select>` : ""}
     ${food ? "" : `<label class="somm-check"><input type="checkbox" data-somm-narrow="daring"${daring ? " checked" : ""}> ⚡ Only wines with an adventurous pairing</label>`}</div>`;
 }
-const TABLE_WORDS = { name: "name", type: "colour", country: "country", vintage: "vintage", score: "score", match: "best match", drink: "what to drink first", daring: "adventurous first", bottles: "bottles" };
+const TABLE_WORDS = { name: "name", type: "colour", country: "country", vintage: "vintage", score: "score", match: "best match", drink: "drink window", daring: "adventurous first", bottles: "bottles", price: "price", rep: "producer's reputation", store: "at the store", where: "where it is" };
+// What each direction means, for the "Sort by" menus: [first way, reversed].
+const DIR_WORDS = { name: ["A to Z", "Z to A"], type: ["A to Z", "Z to A"], country: ["A to Z", "Z to A"], where: ["A to Z", "Z to A"],
+  vintage: ["oldest first", "newest first"], score: ["best first", "lowest first"], match: ["best first", "weakest first"],
+  drink: ["drink first", "keep longest"], bottles: ["most first", "fewest first"], price: ["cheapest first", "dearest first"],
+  rep: ["best first", "lowest first"], store: ["same wine first", "last"], daring: ["adventurous first", "last"] };
+const BAND_WORDS = { 1: "under $25", 2: "$25–40", 3: "$40–60", 4: "$60–100", 5: "over $100" };
+let bandByName = null;
+const cellarBand = (w) => w.pb ?? (bandByName ??= new Map(Object.values(sharedCellars || {}).flatMap((c) => (c?.wines || []).filter((x) => x.pb).map((x) => [fold(x.name), x.pb])))).get(fold(w.name)) ?? null;
+const realScore = (w) => { const s = bestScore(w); return s != null && s > 1 ? s : null; };
 const matchText = (x) => (x.bold ? "⚡" : x.t ? STARS(x.t) : "");
-// Rows are { w, t, bold }. Each row's sort value is worked out once, not at every comparison.
+function sortValue(x, col, isDaring) {
+  const w = x.w;
+  switch (col) {
+    case "name": return fold(w.name);
+    case "type": return w.type || "";
+    case "country": return w.country || "";
+    case "where": return w.kind === "cellar" ? `0 ${w.source}` : `1 ${sourceLabel(w.source)}`;
+    case "vintage": return w.vintage ?? 9999;
+    case "score": return -(realScore(w) ?? 0);
+    case "match": return x.bold ? 0.5 : -(x.t || 0);
+    case "bottles": return -(w.quantity || 0);
+    case "daring": return isDaring(x) ? 0 : 1;
+    case "price": return w.kind === "cellar" ? (cellarBand(w) ? cellarBand(w) * 1000 : 1e9) : (priceOf(w) ?? 1e9);
+    case "rep": return -((weIndex && weOf(w)?.[3]) || 0);
+    case "store": return atStoreOf(w)?.v ?? 9;
+    default: return w.kind === "cellar" ? Object.keys(STAGES).indexOf(drinkStage(w)) * 10000 + (w.drink_to ?? 9999) : 99999;
+  }
+}
+// Kept for the cellar page's own table (one column at a time).
 function tableSort(rows, col, dir, isDaring) {
-  const order = Object.keys(STAGES);
-  const value = (x) => { const w = x.w;
-    switch (col) {
-      case "name": return w.name;
-      case "type": return w.type || "";
-      case "country": return w.country || "";
-      case "vintage": return w.vintage ?? 9999;
-      case "score": return -(bestScore(w) ?? 0);
-      case "match": return x.bold ? 0.5 : -(x.t || 0);
-      case "bottles": return -(w.quantity || 0);
-      case "daring": return isDaring(x) ? 0 : 1;
-      default: return order.indexOf(drinkStage(w)) * 10000 + (w.drink_to ?? 9999);
-    } };
-  return rows.map((x) => [x, value(x), bestScore(x.w) ?? 0]).sort(([a, p, sa], [b, q, sb]) =>
-    ((typeof p === "string" ? p.localeCompare(q) : p - q) * dir) || (b.t || 0) - (a.t || 0) || sb - sa).map(([x]) => x);
+  return sortRows(rows, [{ col, dir }], isDaring);
+}
+function sortRows(rows, sorts, isDaring) {
+  const on = sorts.filter((x) => x.col);
+  return rows.map((x) => [x, on.map((o) => sortValue(x, o.col, isDaring)), realScore(x.w) ?? 0]).sort(([a, p, sa], [b, q, sb]) => {
+    for (let i = 0; i < on.length; i++) {
+      const d = (typeof p[i] === "string" ? p[i].localeCompare(q[i]) : p[i] - q[i]) * on[i].dir;
+      if (d) return d;
+    }
+    return (b.t || 0) - (a.t || 0) || sb - sa;
+  }).map(([x]) => x);
 }
 function wineTableHtml(list, cols, col, dir, isDaring, colAttr = "data-somm-col", headExtra = {}) {
   const cell = (k, x) => { const w = x.w;
     switch (k) {
+      case "tick": return `<input type="checkbox" class="pair-tick" data-pair-tick="${esc(w.id)}"${inPairs(w.id) ? " checked" : ""} aria-label="Add ${esc(w.name)} to Pairings">`;
       case "name": return `<button type="button" class="linklike" data-somm-pop="${esc(w.id)}">${esc(w.name)}</button>`;
+      case "where": return w.kind === "cellar" ? `<span class="badge badge-cellar${cellarTone(w.source)}">${esc(w.source)}</span>` : sourceBadge(w.source);
+      case "price": return w.kind === "cellar" ? (cellarBand(w) ? `<span class="hint-inline">${esc(BAND_WORDS[cellarBand(w)])}</span>` : "") : priceOf(w) != null ? `<strong>${priceHtml(w)}</strong>` : "";
       case "type": return esc(w.type || "");
       case "country": return esc(w.country || "");
       case "vintage": return esc(String(w.vintage ?? "NV"));
-      case "score": return bestScore(w) != null ? `<strong>${Math.round(bestScore(w))}</strong>` : "";
+      case "score": return realScore(w) != null ? `<strong>${Math.round(realScore(w))}</strong>` : "";
       case "match": return matchText(x);
+      case "rep": { const p = w.kind !== "cellar" && weIndex ? weOf(w) : null; return p ? `<span title="${esc(`${p[0]}: average of ${p[2]} Wine Enthusiast reviews`)}">${p[3]}</span>` : ""; }
+      case "store": return atStoreHtml(w);
       case "bottles": return w.quantity ? String(w.quantity) : "";
-      case "drink": return drinkTag(w);
+      case "drink": return w.kind === "cellar" ? drinkTag(w) : "";
       default: return isDaring(x) ? "⚡" : "";
     } };
-  return `<div class="somm-table-wrap"><table class="somm-table"><thead><tr>${cols.map(([k, label]) => `<th scope="col"><button type="button" class="linklike" ${colAttr}="${k}" aria-pressed="${col === k}">${esc(label)}${col === k ? (dir > 0 ? " ▲" : " ▼") : ""}</button>${headExtra[k] || ""}</th>`).join("")}</tr></thead>
-      <tbody>${list.map((x) => `<tr>${cols.map(([k]) => `<td${k === "match" ? ' class="somm-match"' : ""}>${cell(k, x)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  return `<div class="somm-table-wrap"><table class="somm-table"><thead><tr>${cols.map(([k, label]) => k === "tick" ? `<th scope="col"><span class="visually-hidden">Pairings</span>✓</th>`
+      : `<th scope="col"><button type="button" class="linklike" ${colAttr}="${k}" aria-pressed="${col === k}">${esc(label)}${col === k ? (dir > 0 ? " ▲" : " ▼") : ""}</button>${headExtra[k] || ""}</th>`).join("")}</tr></thead>
+      <tbody>${list.map((x) => `<tr${inPairs(x.w.id) ? ' class="row-picked"' : ""}>${cols.map(([k]) => `<td${k === "match" ? ' class="somm-match"' : k === "tick" ? ' class="somm-tick"' : k === "name" ? ' class="somm-name"' : ""}>${cell(k, x)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
 }
-// Banner, then a table to scan and sort by hand. A wine's name opens it.
+function sortControlsHtml(cols) {
+  const choices = cols.filter(([k]) => k !== "tick");
+  const one = (i) => { const o = answerOpts.sorts[i];
+    return `<select data-somm-sort="${i}" aria-label="${i ? "Then by" : "Sort by"}">${i ? `<option value="">nothing</option>` : ""}${choices.map(([k, l]) => `<option value="${k}"${o.col === k ? " selected" : ""}>${esc(l === "⚡" ? "Adventurous" : l)}</option>`).join("")}</select>` +
+      (o.col ? `<button type="button" class="btn btn-mini" data-somm-sortdir="${i}">${esc((DIR_WORDS[o.col] || ["up", "down"])[o.dir > 0 ? 0 : 1])} ⇅</button>` : ""); };
+  return `<div class="somm-row somm-sorts"><span class="somm-label">Sort by</span>${one(0)}<span class="somm-label">then by</span>${one(1)}<span class="somm-label">then by</span>${one(2)}</div>`;
+}
+// Banner, then a table to tick and sort. A wine's name opens its card.
 function answerBodyHtml() {
-  const { food, what, moodLine, title } = answerArgs, { colour, country, col, dir, daring } = answerOpts;
-  const names = sommCellars().join(" and ");
+  const { food, what, moodLine, title } = answerArgs, { colour, country, daring, sorts, shown } = answerOpts;
   const isDaring = (x) => (food ? !!x.bold : advIdeasOf(x.w).length > 0);
-  const rows = answerArgs.rows.filter((x) => (!colour || x.w.type === colour) && (!country || x.w.country === country) && (!daring || isDaring(x)));
-  const list = tableSort(rows, col, dir, isDaring);
+  const where = answerOpts.where;
+  const rows = answerArgs.rows.filter((x) => (!colour || x.w.type === colour) && (!country || x.w.country === country) && (!daring || isDaring(x)) &&
+    (!where || (where === "cellar") === (x.w.kind === "cellar")));
+  const list = sortRows(rows, sorts, isDaring);
   const n = list.length, daringN = food ? rows.filter((x) => x.bold).length : 0;
-  const urgent = rows.filter((x) => ["first", "soon"].includes(drinkStage(x.w))).length;
+  const all = answerArgs.rows, hasCellar = all.some((x) => x.w.kind === "cellar"), hasStore = all.some((x) => x.w.kind !== "cellar");
+  const st = sommStores(), urgent = rows.filter((x) => x.w.kind === "cellar" && ["first", "soon"].includes(drinkStage(x.w))).length;
   const mode = food ? { classic: "Classic matches", bold: "Classic and adventurous", only: "Adventurous only" }[document.querySelector("#somm [name=somm-daring]:checked")?.value] : "";
-  const head = [food ? capFirst(what.replace(/^for /, "")) : title, mode, names].filter(Boolean).join(" · ");
-  const count = !n ? "Nothing fits these choices." : `${n} ${n === 1 ? "wine" : "wines"}${daringN && daringN < n ? `: ${n - daringN} classic, ${daringN} adventurous` : daringN ? ", all adventurous" : ""}.${food ? urgent ? ` ${urgent} should be drunk soon.` : " None is urgent." : ""}`;
-  const cols = [["name", "Wine"], ["type", "Colour"], ["country", "Country"], ["vintage", "Vintage"], ["score", "Score"], ...(food ? [["match", "Match"]] : []), ["drink", "Drink"], ["daring", "⚡"]];
-  const sorted = col === "drink" && dir > 0 ? `what to drink first${food ? ", then best match, then best rated" : ""}. Start at the top of the list` : `${TABLE_WORDS[col]}${dir < 0 ? ", reversed" : ""}`;
+  const names = [...new Set(all.map((x) => (x.w.kind === "cellar" ? x.w.source : sourceLabel(x.w.source))))];
+  const head = [food ? capFirst(what.replace(/^for /, "")) : title, mode, andWords(names)].filter(Boolean).join(" · ");
+  const count = !n ? "Nothing fits these choices." : `${n.toLocaleString()} ${n === 1 ? "wine" : "wines"}${daringN && daringN < n ? `: ${n - daringN} classic, ${daringN} adventurous` : daringN ? ", all adventurous" : ""}.${hasCellar && food ? urgent ? ` ${urgent} should be drunk soon.` : " None is urgent." : ""}`;
+  const cols = [["tick", "✓"], ["name", "Wine"], ...(hasCellar && hasStore ? [["where", "Where"]] : []),
+    ["price", hasStore ? (hasCellar ? "Price or band" : "Price") : "Price band"], ["type", "Colour"], ["country", "Country"], ["vintage", "Vintage"], ["score", "Score"],
+    ...(food ? [["match", "Match"]] : []), ...(hasStore ? [["rep", "Producer"]] : []),
+    ...(hasCellar && st.length ? [["store", `At ${st.length === 1 ? (st[0] === "LCBO" ? "the LCBO" : sourceLabel(st[0])) : "the stores"}`]] : []),
+    ...(hasCellar ? [["bottles", "Bottles"], ["drink", "Drink window"]] : []), ["daring", "⚡"]];
+  const said = sorts.filter((o) => o.col).map((o) => `${TABLE_WORDS[o.col] || o.col} (${(DIR_WORDS[o.col] || ["", ""])[o.dir > 0 ? 0 : 1]})`).join(", then ");
+  const page = list.slice(0, shown);
   return `<div class="somm-selection"><p class="somm-sel-head">${esc(head)}</p><p class="somm-sel-count">${esc(count)}</p>
-      <p>${moodLine ? `${esc(capFirst(`These wines ${moodLine}`))} ` : ""}Sorted by <strong>${esc(sorted)}</strong>. Click a heading to sort by it, or a wine to see its details.</p>
-      <p class="hint">Drinking dates are the cellar owner's own.</p>
-      ${answerArgs.rows.length > 1 ? answerControlsHtml() : ""}</div>
-    ${n ? wineTableHtml(list, cols, col, dir, isDaring) : ""}`;
+      <p>${moodLine ? `${esc(capFirst(`These wines ${moodLine}`))} ` : ""}Sorted by <strong>${esc(said)}</strong>. Tick the wines you want, then press <strong>See pairings</strong>. A wine's name opens its card.</p>
+      ${hasCellar ? `<p class="hint">Drinking dates are the cellar owner's own.${hasCellar && st.length ? ` At the store: ✓ the same wine and vintage, ≈ another vintage, or how many of the producer's wines the store has.` : ""}</p>` : ""}
+      ${hasStore ? `<p class="hint">Producer: the producer's average in Wine Enthusiast's reviews, a reputation rather than this bottle's score.</p>` : ""}
+      ${all.length > 1 ? answerControlsHtml() + sortControlsHtml(cols) : ""}</div>
+    <div class="somm-pairbar pairbar-slot" hidden></div>
+    ${n ? wineTableHtml(page, cols, sorts[0].col, sorts[0].dir, isDaring) : ""}
+    ${n > page.length ? `<p><button type="button" class="btn" data-somm-more>Show ${Math.min(60, n - page.length)} more (${(n - page.length).toLocaleString()} left)</button></p>` : ""}`;
+}
+function redrawAnswer() {
+  const box = $("somm-cellar-answer");
+  if (!box) return;
+  const y = window.scrollY;
+  box.innerHTML = answerBodyHtml();
+  renderPairBar();
+  window.scrollTo(0, y);
 }
 document.addEventListener("change", (e) => {
-  if (!e.target.matches?.("#somm-cellar-answer [data-somm-narrow]")) return;
-  answerOpts[e.target.dataset.sommNarrow] = e.target.type === "checkbox" ? e.target.checked : e.target.value;
-  $("somm-cellar-answer").innerHTML = answerBodyHtml();
+  const t = e.target;
+  if (t.matches?.("#somm-cellar-answer [data-somm-narrow]")) {
+    answerOpts[t.dataset.sommNarrow] = t.type === "checkbox" ? t.checked : t.value;
+    answerOpts.shown = 60;
+  } else if (t.matches?.("#somm-cellar-answer [data-somm-sort]")) {
+    const i = +t.dataset.sommSort;
+    answerOpts.sorts[i] = { col: t.value, dir: 1 };
+    if (!answerOpts.sorts[0].col) answerOpts.sorts[0] = { col: "name", dir: 1 };
+  } else if (t.matches?.("[data-pair-tick]")) {
+    const id = t.dataset.pairTick;
+    if (t.checked !== inPairs(id)) togglePair(id);
+    if (t.checked && !inPairs(id)) { t.checked = false; for (const b of document.querySelectorAll(".pairbar-slot, #somm-pairbar")) if (!b.hidden) b.insertAdjacentHTML("beforeend", ` <strong class="status">Only ${PAIR_MAX} at a time: untick one first.</strong>`); }
+    t.closest("tr")?.classList.toggle("row-picked", inPairs(id));
+    return;
+  } else return;
+  redrawAnswer();
+});
+document.addEventListener("click", (e) => {
+  const t = e.target.closest?.("#somm-cellar-answer [data-somm-sortdir], #somm-cellar-answer [data-somm-more]");
+  if (!t) return;
+  if (t.dataset.sommSortdir != null) { const o = answerOpts.sorts[+t.dataset.sommSortdir]; o.dir = -o.dir; }
+  else answerOpts.shown += 60;
+  redrawAnswer();
 });
 const needCellar = () => `<div class="somm-card"><p>Tick a cellar under <strong>Where are the bottles?</strong> first.</p></div>`;
 // The middle of the owner's drinking window: a rough guide, since wines age differently.
@@ -757,22 +847,28 @@ function moodHtml(key) {
   const m = MOODS[key], rows = sommPool({ stores: [] }).filter(m.test).map((w) => ({ w, t: 0 }));
   return cellarAnswerHtml(rows, null, "", m.line, m.label);
 }
-// "Pick from the cellar" is there only with a cellar ticked; each button counts the cellars ticked.
+// "Help me choose" (in Find a wine) is there only with a cellar ticked; each button counts the cellars ticked.
 function renderMoods() {
-  const box = $("somm-moods"), tab = $("somm-tab-pick");
-  if (!box || !tab) return;
+  const box = $("somm-moods"), help = $("somm-help-choose");
+  if (!box || !help) return;
   renderCellarPick();
   for (const id of ["somm-cook-next", "somm-daring"]) if ($(id)) $(id).hidden = !sommCellars().length; // adventurous matches are for the cellars
   if ($("somm-cook-filters")) { // with a cellar ticked, colour and country sit with the answer
     $("somm-cook-filters").hidden = !!sommCellars().length;
     if (sommCellars().length) $("somm-cook-country").selectedIndex = $("somm-cook-colour").selectedIndex = 0;
   }
-  tab.hidden = !sommCellars().length;
-  if (tab.hidden) { if (tab.getAttribute("aria-selected") === "true") sommTab("wine"); return; }
-  const pool = sommPool({ stores: [] });
-  box.innerHTML = Object.entries(MOODS).map(([k, m]) =>
-    `<button type="button" class="btn btn-mood" data-somm-mood="${k}">${m.icon} ${esc(m.label)} <span class="tap-n">${pool.filter(m.test).length}</span></button>`).join(" ") +
-    ` <button type="button" class="btn btn-mood" data-somm="surprise">🎲 Surprise me</button>`;
+  renderFindIntro(); renderFindFilters(); renderDinnerQ(); renderPairBar();
+  if ($("somm-cook-price-l")) $("somm-cook-price-l").hidden = !sommStores().length;
+  help.hidden = !sommCellars().length;
+  if (help.hidden) return;
+  const pool = sommPool({ stores: [] }), st = sommStores();
+  // with a store ticked too: how many of each pick that store sells (same wine, any vintage)
+  const buyable = st.length ? new Set(pool.filter((w) => ["exact", "vintage"].includes(atStoreOf(w, { max: null, same: false })?.kind)).map((w) => w.id)) : null;
+  box.innerHTML = Object.entries(MOODS).map(([k, m]) => { const ws = pool.filter(m.test), at = buyable ? ws.filter((w) => buyable.has(w.id)).length : 0;
+    return `<button type="button" class="btn btn-mood${findF.preset === k ? " btn-mood-on" : ""}" data-somm-mood="${k}" aria-pressed="${findF.preset === k}">${findF.preset === k ? "✓ " : ""}${m.icon} ${esc(m.label)} <span class="tap-n">${ws.length}${buyable ? ` · ${at} at ${esc(theStore(st))}` : ""}</span></button>`; }).join(" ") +
+    ` <button type="button" class="btn btn-mood" data-somm="surprise">🎲 Surprise me</button>` +
+    (findF.preset ? `<p class="somm-preset-on">Showing <strong>${esc(MOODS[findF.preset].label)}</strong> only (wines that ${esc(MOODS[findF.preset].line.replace(/\.$/, ""))}). Everything below narrows this list.
+      <button type="button" class="linklike" data-somm-mood="${findF.preset}">✕ Show all of ${esc(andWords(sommCellars()))}'s wines</button></p>` : "");
 }
 // I have a bottle: the ticked cellars' wines to choose from, what needs drinking first at the top.
 function renderCellarPick() {
@@ -800,7 +896,7 @@ function renderUsing() {
   const names = [...sommCellars(), ...sommStores().map(sourceLabel)];
   const text = names.length ? names.join(", ") : "";
   $("somm-using").innerHTML = text ? `<strong>Using:</strong> ${esc(text)}` : `<strong>Nothing ticked.</strong> Tick a cellar or a store above.`;
-  $("somm-choosing").innerHTML = text ? `Choosing from <strong>${esc(text)}</strong>. <button type="button" class="linklike" data-somm="to-step1">Change this</button>` : "";
+  renderTrail();
 }
 function runCook() {
   const food = document.querySelector("#somm [name=somm-food]:checked")?.value;
@@ -814,6 +910,7 @@ document.addEventListener("change", async (e) => {
   if (!e.target.matches?.("#somm [name=somm-food], #somm [name=somm-daring]")) return;
   if (!document.querySelector("#somm [name=somm-food]:checked")) return;
   await loadSomm();
+  if (sommStores().length) await loadWe(); // the Producer column needs the reviews
   runCook();
 });
 function runFridge() {
@@ -826,19 +923,29 @@ document.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.
 // Every box and choice on the page back to how it starts. Start over (top bar) uses it too, with
 // jump false. The stores and cellars ticked in step 1 stay: they say where the bottles are.
 function startAgain(jump = true) {
+  for (const w of pairList.slice()) togglePair(w.id); // a fresh start carries no old picks
+  resetChoices();
+  sommTab("", true);
+  if (jump) $("somm-h").scrollIntoView({ block: "start" });
+}
+// Every answer and choice in steps 3 and 4 back to how it starts (step 1's ticks stay).
+function resetChoices() {
   wineNow = null; lastMenu = null;
   if ($("somm-cellar-pick")) $("somm-cellar-pick").value = "";
   for (const el of document.querySelectorAll("#somm [name=somm-food]:checked")) el.checked = false;
   for (const id of ["somm-q", "somm-dish", "somm-price", "somm-cook-price", "somm-menu-price"]) if ($(id)) $(id).value = "";
-  for (const id of ["somm-country", "somm-colour", "somm-cook-country", "somm-cook-colour", "somm-menu-country", "somm-protein", "somm-cmp-protein"]) if ($(id)) $(id).selectedIndex = 0;
-  if ($("somm-nwines")) $("somm-nwines").value = "3";
-  for (const b of document.querySelectorAll("#somm [data-somm-course], #somm [data-somm-cmp-course]")) b.checked = b.value !== "starter";
+  for (const id of ["somm-country", "somm-colour", "somm-cook-country", "somm-cook-colour", "somm-menu-country", "somm-cmp-protein"]) if ($(id)) $(id).selectedIndex = 0;
+  for (const [name, v] of [["somm-protein", ""], ["somm-nwines", "one"], ["somm-special", ""]]) { const r = document.querySelector(`#somm [name=${name}][value="${v}"]`); if (r) r.checked = true; }
+  for (const b of document.querySelectorAll("#somm [data-somm-avoid]")) b.checked = false;
+  if ($("somm-guests")) $("somm-guests").value = "";
+  for (const b of document.querySelectorAll("#somm [data-somm-course]")) b.checked = b.value === "main";
+  for (const b of document.querySelectorAll("#somm [data-somm-cmp-course]")) b.checked = b.value !== "starter";
+  dinnerAnchors = []; dinnerOpts = null; dinnerFixed = null; findF = { ...FIND0 };
+  renderFindFilters();
   const classic = document.querySelector("#somm [name=somm-daring][value=classic]");
   if (classic) classic.checked = true;
   for (const id of ["somm-hits", "somm-country-msg", "somm-cook-msg"]) if ($(id)) $(id).innerHTML = "";
   if ($("somm-stores")?.children.length) renderSommComparison(); // its ticks back on
-  sommTab("wine");
-  if (jump) $("somm-h").scrollIntoView({ block: "start" });
 }
 // One good bottle for tonight: from the best of what's ready, the urgent ones favoured.
 function surpriseHtml() {
@@ -892,9 +999,9 @@ function wineStartHtml(w, typed = false, fromList = false) {
       <button type="button" class="btn btn-mini" data-somm="other-food" id="somm-other-food" hidden>Choose another food</button>
       ${fromList ? `<button type="button" class="btn btn-mini" data-somm="back-list">Back to the list</button>` : `<button type="button" class="btn btn-mini" data-somm="other-wine">Choose another wine</button>`}</p>
     ${typed ? "" : `<p>${typePill(w.type)} ${esc([w.country, w.vintage].filter(Boolean).join(" · "))} · ${bottleWhere(w)}${familyScore(w) ? ` · <strong>${Math.round(familyScore(w))}</strong> points` : ""}</p><div class="hit-buttons">${pairButton(w)}${shoppingButton(w)}${researchButton(w)}</div>`}
-    ${bestWithHtml(w, typed)}
-    <div class="somm-way"><h4>What have you got?</h4>
-      <p class="hint">★ a classic match · ⚡ an adventurous one. Tap what you're cooking.</p>
+    ${mainCoursesHtml(w, typed)}<div id="somm-at-store"></div>
+    <div class="somm-way"><h4>Thinking of something else?</h4>
+      <p class="hint">★ a classic match · ⚡ an adventurous one. Tap a food, or type what's in the fridge, to see how it goes with this wine.</p>
       <div class="somm-foods-pick">${tiles}</div>
       <label class="somm-label" for="somm-fridge">Or type what's in the fridge <span class="hint-inline">(for example pork, apples)</span></label>
       <div class="somm-row"><input type="text" id="somm-fridge" autocomplete="off"> <button type="button" class="btn btn-somm" data-somm="fridge">Find recipes</button></div></div>
@@ -979,10 +1086,13 @@ function popWine(id) {
 // buttons that lead elsewhere shouldn't leave the card open over the page
 document.addEventListener("click", (e) => { if (e.target.closest?.('#somm-pop [data-action="mw-where"], #somm-pop [data-notes]')) $("somm-pop").close(); });
 function renderPairBar() {
-  for (const box of [$("somm-pairbar"), $("mc-pairbar")]) {
+  if (typeof sommRoute !== "undefined" && sommRoute) renderTrail(); // the picks line in the trail
+  const slot = document.querySelector("#somm-out .pairbar-slot");
+  for (const b of document.querySelectorAll("[data-pair-tick]")) { b.checked = inPairs(b.dataset.pairTick); b.closest("tr")?.classList.toggle("row-picked", b.checked); }
+  for (const box of [$("somm-pairbar"), $("mc-pairbar"), ...document.querySelectorAll(".pairbar-slot")]) {
   if (!box) continue;
-  box.hidden = !pairList.length;
-  box.innerHTML = pairList.length ? `<strong>🍽 Food pairings: ${pairList.length} of ${PAIR_MAX} wines</strong>
+  box.hidden = !pairList.length || (box.id === "somm-pairbar" && !!slot);
+  box.innerHTML = pairList.length ? `<strong>🍽 Pairings: ${pairList.length} of ${PAIR_MAX} wines</strong>
     ${pairList.map((w) => `<span class="chip">${esc(w.name)}<button type="button" class="chip-x" data-pair="${esc(w.id)}" aria-label="Remove ${esc(w.name)}">✕</button></span>`).join(" ")}
     <button type="button" class="btn btn-somm" data-somm="see-pairs">See pairings</button> <button type="button" class="btn btn-mini" data-somm="clear-pairs">Clear</button>` : "";
   }
@@ -992,12 +1102,23 @@ function openWine(w, fromList) {
   const food = fromList && answerArgs?.food;
   showOut(wineStartHtml(w, false, fromList));
   fillStory(w);
+  fillAtStore(w);
   if (food) {
     document.querySelector(`#somm button.somm-food[data-wine-food="${food}"]`)?.setAttribute("aria-pressed", "true");
     $("somm-wine-food").innerHTML = wineFoodHtml(w, false, food);
     $("somm-trail-food").textContent = `› ${food}`;
     $("somm-other-food").hidden = false;
   }
+}
+function openWineFood(w, food) {
+  showOut(wineStartHtml(w, false, false));
+  fillStory(w); fillAtStore(w);
+  if (!food) return;
+  document.querySelector(`#somm button.somm-food[data-wine-food="${food}"]`)?.setAttribute("aria-pressed", "true");
+  $("somm-wine-food").innerHTML = wineFoodHtml(w, false, food);
+  $("somm-trail-food").textContent = `› ${food}`;
+  $("somm-other-food").hidden = false;
+  jumpTo($("somm-wine-food"));
 }
 function seePairs() {
   if (!pairList.length) return;
@@ -1019,6 +1140,7 @@ function pairsStartHtml(fromList) {
     <p class="somm-trail"><strong>${n} wines together</strong> <span id="somm-trail-food"></span>
       <button type="button" class="btn btn-mini" data-somm="other-food" id="somm-other-food" hidden>Choose another food</button>
       ${fromList ? `<button type="button" class="btn btn-mini" data-somm="back-list">Back to the list</button>` : ""}</p>
+    ${selectionReadHtml(wines)}
     ${pairsOverviewHtml(wines)}
     <div class="somm-way"><h4>Already know what you're cooking?</h4>
       <p class="hint">Each food shows how many of your wines suit it, classic or adventurous. Tap it for your wines with that food.</p>
@@ -1039,7 +1161,10 @@ function pairsOverviewHtml(wines) {
     const dishes = wines.map((w) => { const { ds } = wineDishes(w, f, bookKeys(sommKeys(w), isSweetWine(w)));
       const d = ds.length ? ds.map((x) => x.dish).slice(0, 3).join(", ") : pairDish(w, f);
       return `<li>${pairName(w)} ${STARS(rate(w, f))}${d ? `: ${esc(d)}` : ""}</li>`; }).join("");
-    return `<div class="somm-meet"><h5>${foodIcon(f)}<button type="button" class="linklike" data-pairs-food="${esc(f)}">${esc(f)}</button></h5><ul>${dishes}</ul>
+    const order = Object.keys(STAGES), pour = wines.slice().sort((a, b) => rate(b, f) - rate(a, f) || order.indexOf(drinkStage(a)) - order.indexOf(drinkStage(b)) || (a.drink_to ?? 9999) - (b.drink_to ?? 9999));
+    const pourHtml = `<p class="somm-pour"><strong>Pour:</strong> ${pour.map((w, i) => `${esc(w.name)}${i === 0 && w.kind === "cellar" && ["first", "soon"].includes(drinkStage(w)) ? " (drink it sooner)" : ""}
+      <button type="button" class="btn btn-mini" data-somm="just-wine" data-id="${esc(w.id)}" data-food="${esc(f)}">Use this one</button>`).join(" or ")}</p>`;
+    return `<div class="somm-meet"><h5>${foodIcon(f)}<button type="button" class="linklike" data-pairs-food="${esc(f)}">${esc(f)}</button></h5><ul>${dishes}</ul>${pourHtml}
       ${both.length ? recipeFold("Recipes that suit every wine here", both, both.length <= 3) : `<p class="hint">No single recipe in the books suits all of them, but each wine has its own dishes above.</p>`}</div>`;
   };
   const meetHtml = `<div class="somm-card somm-pairs-a"><h3 class="somm-wine-h">Where your wines meet</h3>
@@ -1059,14 +1184,19 @@ function pairsOverviewHtml(wines) {
     <p class="hint">★ rates the wine with the food, from the books. Recipes the books pour with the wine's own grape come first; the ones for wines like it are Claude's judgement.</p>
     ${wines.map((w) => { const best = bestFoodsOf(w).slice(0, 3);
       return `<div class="somm-pair-wine"><p class="somm-pair-head">${pairName(w)}</p><p>${w.kind === "cellar" ? drinkTag(w) : ""}</p>
+        <p class="somm-row"><button type="button" class="btn btn-somm" data-somm="just-wine" data-id="${esc(w.id)}">Just this wine →</button>
+          <button type="button" class="btn btn-mini" data-somm="drop-wine" data-id="${esc(w.id)}">✕ Drop it from my picks</button></p>
         ${best.length ? best.map((x, i) => foodFold(w, x, i)).join("") : `<p class="hint">The books don't rate this wine highly with any one food.</p>`}</div>`; }).join("")}</div>`;
   // C. one dinner with all of them, from the menu builder
   const courses = ["main", "cheese", ...(wines.some(isSweetWine) ? ["dessert"] : []), ...(wines.length > 2 ? ["starter"] : [])];
   const m = buildMenu({ country: "", courses, protein: "", stores: sommStores(), pool: wines });
   lastMenu = m;
-  const line = (p) => `<li><strong>${esc(COURSES[p.c])}${p.food && p.c !== "cheese" && p.c !== "dessert" ? ` (${esc(p.food.toLowerCase())})` : ""}:</strong> ${p.w ? pairName(p.w) : "no wine here"}${p.note ? ` <span class="hint-inline">${esc(p.note)}</span>` : ""}</li>`;
+  const line = (p) => `<li><label><strong>${esc(COURSES[p.c])}${p.food && p.c !== "cheese" && p.c !== "dessert" ? ` (${esc(p.food.toLowerCase())})` : ""}:</strong>
+      <select data-dinner-course="${esc(p.c)}" aria-label="Wine for ${esc(COURSES[p.c])}">${wines.map((w) => `<option value="${esc(w.id)}"${p.w?.id === w.id ? " selected" : ""}>${esc(w.name)}</option>`).join("")}
+        <option value=""${p.w ? "" : " selected"}>No wine with this course</option></select></label>${p.note ? ` <span class="hint-inline">${esc(p.note)}</span>` : ""}</li>`;
   const dinnerHtml = `<div class="somm-card"><h3 class="somm-wine-h">One dinner with all ${wines.length}</h3>
-    <p class="hint">Each wine on the course it suits best.</p><ol class="somm-dinner">${m.plan.map(line).join("")}</ol>
+    <p class="hint">Each wine on the course it suits best. Change any course's wine, then plan it.</p><ol class="somm-dinner">${m.plan.map(line).join("")}</ol>
+    <p><button type="button" class="btn btn-somm btn-big" data-somm="dinner-from-choice">🧀 Plan this dinner →</button></p>
     <details class="somm-fold"><summary>The full menu, with dishes and a recipe for each course</summary>${menuHtml(m)}</details></div>`;
   return meetHtml + bestHtml + dinnerHtml;
 }
@@ -1173,60 +1303,72 @@ function cookHtml({ food, dish, stores, country, colour, maxPrice }) {
   const recs = recipesFor([], food, words).length ? recipesFor([], food, words) : recipesFor([], food);
   const storeWord = stores.map(sourceLabel).join(", ");
   const local = country && LOCAL_NOTES[country] ? localNotesHtml(country) : "";
-  const answer = sommCellars().length ? cellarAnswerHtml(own, food, `for ${dish || food.toLowerCase()}`) : "";
-  return `${answer}<div class="somm-card"><h3 class="somm-wine-h">${esc(dish ? capFirst(dish) : food)}: what the books pour</h3>
+  const rowsAll = [...own, ...bottles]; // cellar wines and store bottles in one table to tick and sort
+  const answer = rowsAll.length || sommCellars().length || stores.length ? cellarAnswerHtml(rowsAll, food, `for ${dish || food.toLowerCase()}`) : "";
+  const picked = pairList.length ? `<div class="somm-picked"><p class="somm-sel-head">Your ${pairList.length === 1 ? "picked wine" : `${pairList.length} picked wines`} with ${esc(food.toLowerCase())}</p>${pairsFoodHtml(food)}</div>
+    <h4 class="somm-sub">Or choose from everything ticked</h4>` : "";
+  return `${picked}${answer}<div class="somm-card"><h3 class="somm-wine-h">${esc(dish ? capFirst(dish) : food)}: what the books pour</h3>
       <ul class="somm-foods">${gList || "<li>The books name no wine for this.</li>"}</ul>
       ${avoid.size ? `<p><strong>⚠️ Avoid:</strong> ${esc([...avoid].join(", "))}.</p>` : ""}
       ${dish ? `<p>${recipeButton(dish, ranked[0]?.[0] || "")}</p>` : ""}
       ${recipesHtml(recs, 6, `Recipes from the books for ${food.toLowerCase()}`)}</div>${local}
-    ${stores.length ? `<div class="somm-card"><h3 class="somm-wine-h">Bottles you can buy (${bottles.length})</h3>
-      <p class="hint">${esc(storeWord)}${country ? `, from ${esc(country)}` : ""}${colour ? `, ${esc(colour.toLowerCase())}` : ""}${maxPrice != null ? `, up to ${money(maxPrice)}` : ""}. Best match first, then best rated.</p>
-      ${bottles.length ? `<ul class="somm-bottles">${bottles.slice(0, 12).map(({ w, t }) => sommRow(w, `<div><span class="food-star tier-${t}">${STARS(t)}</span> ${esc(sommKeys(w).join(", "))}</div>`)).join("")}</ul>` : "<p>No bottles match. Try more stores, another country or a higher price.</p>"}
-      ${bottles.length > 12 ? `<button type="button" class="btn" data-somm-find="${esc(food)}">See all ${bottles.length} in Find wines</button>` : ""}</div>` : ""}`;
+    ${stores.length && !bottles.length ? `<p class="hint">No store bottles match: try more stores, another country or a higher price.</p>` : ""}`;
 }
 
 // ---- Route 3: Plan a dinner --------------------------------------------------------------
 let lastMenu = null;
 // A country's wines in the stores, or (own) the bottles handed in from the Comparison List.
-function buildMenu({ country, nWines, courses, protein, stores, maxPrice, pool: given = null }) {
+// How weighty a wine is, for pouring light to heavy: sparkling, whites by body, rosé, reds by body.
+function wineWeight(w) {
+  if (!w || isSweetWine(w)) return 9;
+  if (w.type === "Sparkling") return 0;
+  const b = { light: 0, medium: 1, full: 2 }[styleOfW(w, "body")] ?? 1;
+  return w.type === "Red" ? 4 + b : w.type === "Rosé" ? 3 : 1 + b;
+}
+function buildMenu({ country, nWines, courses, protein, stores, maxPrice, pool: given = null, banned = new Set(), keep = null, exclude = {}, cellars = sommCellars(), ceiling = null }) {
   const own = !!given;
   const canOpen = (w) => w.kind !== "cellar" || openable(w);
-  const pool = given || sommPool({ stores, country, maxPrice }).filter(canOpen);
+  const pool = given || sommPool({ stores, country, maxPrice, cellars }).filter(canOpen).filter((w) => !keep || keep(w));
+  let mainW = null;
+  let cur = "";
   if (own) nWines = Math.max(1, pool.length);
   const used = new Set(), plan = [];
   const urge = (w) => (w.kind === "cellar" ? { first: 8, soon: 4 }[drinkStage(w)] || 0 : 0);
-  const pick = (cands, score) => cands.filter((w) => !used.has(w.id)).map((w) => ({ w, s: score(w) })).filter((x) => x.s > 0)
+  const pick = (cands, score) => cands.filter((w) => !used.has(w.id) && !exclude[cur]?.has(w.id)).map((w) => ({ w, s: score(w) })).filter((x) => x.s > 0)
     .sort((a, b) => b.s + urge(b.w) - a.s - urge(a.w) || byBest(a.w, b.w))[0]?.w || null;
   const tierFor = (w, f) => (foodsOf(w).includes(f) ? Math.max(wineTier(w, f), ...bookKeys(w).map((k) => grapeFoodTier(k, f))) : 0);
   const order = ["main", "dessert", "starter", "cheese"].filter((c) => courses.includes(c));
   const dryBonus = (w) => (["dry", null, undefined].includes(sweetV(w)) ? 5 : sweetV(w) === "off-dry" ? 1 : -20);
   for (const c of order) {
-    let food = c === "main" ? protein : COURSE_FOODS[c]?.[0];
+    cur = c;
+    let food = c === "main" ? protein : COURSE_FOODS[c]?.filter((f) => !banned.has(f))[0] || COURSE_FOODS[c]?.[0];
     let w = null, note = "";
     if (c === "dessert") {
       w = pick(pool.filter(isSweetWine), (x) => 1 + (bestScore(x) ?? 0) / 100);
       if (!w && own) note = "None of the ticked wines is a dessert wine.";
       else if (!w) {
-        const away = sommPool({ stores, maxPrice }).filter((x) => canOpen(x) && realDessert(x) && x.country !== country);
+        const away = sommPool({ stores, maxPrice, cellars }).filter((x) => canOpen(x) && realDessert(x) && x.country !== country);
         const classic = (x) => sommKeys(x).some((k) => ["Port", "Tokaji", "Ice wine", "Sauternes", "Late-harvest white", "Muscat / Moscato", "Madeira"].includes(k));
         w = pick(away, (x) => 1 + (classic(x) ? 3 : 0) + (x.type === "Dessert" ? 1 : 0) + (bestScore(x) ?? 0) / 100);
         note = w && country ? `${country} has no dessert wine in ${tickedWord()}, so this one is from ${w.country}.` : w ? "" : `No dessert wine in ${tickedWord()}.`;
       }
     } else if (c === "main") {
       const reds = pool.filter((x) => !isSweetWine(x) && x.type !== "Sparkling");
-      const mains = ["Red meat", "Lamb", "Pork", "Chicken", "Fish", "Seafood", "Pasta and pizza"];
+      const mains = ["Red meat", "Lamb", "Pork", "Chicken", "Fish", "Seafood", "Pasta and pizza"].filter((f) => !banned.has(f));
       if (food) w = pick(reds, (x) => tierFor(x, food) && tierFor(x, food) * 10 + dryBonus(x) + (bestScore(x) ?? 0) / 100);
       else {
         const red = reds.filter((x) => x.type === "Red");
         w = pick(red.length ? red : reds, (x) => 30 + Math.max(0, ...mains.map((f) => tierFor(x, f))) * 10 + dryBonus(x) + (bestScore(x) ?? 0) / 100);
-        if (w) food = foodsOf(w).filter((f) => !["Cheese", "Dessert"].includes(f)).sort((a, b) => tierFor(w, b) - tierFor(w, a))[0] || "Red meat";
+        if (w) food = foodsOf(w).filter((f) => !["Cheese", "Dessert"].includes(f) && !banned.has(f)).sort((a, b) => tierFor(w, b) - tierFor(w, a))[0] || mains[0] || "Pasta and pizza";
       }
     } else {
-      const fs = COURSE_FOODS[c] || [];
-      w = pick(pool.filter((x) => !isSweetWine(x) || c === "cheese"), (x) => Math.max(0, ...fs.map((f) => tierFor(x, f))));
+      const fs = (COURSE_FOODS[c] || []).filter((f) => !banned.has(f));
+      const mw = wineWeight(mainW || ceiling), top = c === "starter" ? (mw > 1 ? mw - 1 : mw) : 99; // pour light to heavy: the starter's wine lighter than the main's
+      w = pick(pool.filter((x) => (!isSweetWine(x) || c === "cheese") && (!(mainW || ceiling) || wineWeight(x) <= top)), (x) => Math.max(0, ...fs.map((f) => tierFor(x, f))));
       if (w && c === "starter") food = fs.slice().sort((a, b) => tierFor(w, b) - tierFor(w, a))[0];
     }
     if (w) used.add(w.id);
+    if (c === "main") mainW = w;
     plan.push({ c, w, food, note });
   }
   // fewer wines than courses: the extra courses share the closest bottle already chosen
@@ -1251,7 +1393,8 @@ function buildMenu({ country, nWines, courses, protein, stores, maxPrice, pool: 
 // One course: the local dish (for countries the books miss), the books' dishes with their
 // reasons, a recipe, flavour bridges, warnings and the books' serving advice.
 function courseHtml(p, country) {
-  if (!p.w) return `<div class="somm-card somm-course-card"><h4>${COURSES[p.c]}</h4><p>${esc(p.note || `No ${country ? `${country} ` : ""}wine suits this course in ${tickedWord()}.`)}</p></div>`;
+  if (!p.w) return `<div class="somm-card somm-course-card"><h4>${COURSES[p.c]}${p.food && p.c !== "cheese" && p.c !== "dessert" ? `: ${esc(p.food.toLowerCase())}` : ""}</h4><p>${esc(p.note || `No ${country ? `${country} ` : ""}wine suits this course in ${tickedWord()}.`)}</p>
+    ${p.dinner ? `<p><button type="button" class="btn btn-somm" data-somm="menu-add" data-course="${esc(p.c)}">Add a wine for this course</button></p>` : ""}</div>`;
   const keys = sommKeys(p.w), sweet = isSweetWine(p.w), grapes = bookKeys(keys, sweet);
   const t = foodsOf(p.w).includes(p.food) ? Math.max(wineTier(p.w, p.food), ...grapes.map((k) => grapeFoodTier(k, p.food))) : 1;
   const n = LOCAL_NOTES[p.w.country];
@@ -1283,6 +1426,8 @@ function courseHtml(p, country) {
   const tips = tipsFor(grapes, 2);
   return `<div class="somm-card somm-course-card${p.w.type ? ` wine-${esc(p.w.type)}` : ""}"><h4>${COURSES[p.c]}${p.food && p.c !== "cheese" && p.c !== "dessert" ? `: ${esc(p.food.toLowerCase())}` : ""} <span class="food-star tier-${t}">${STARS(t)}</span></h4>
     <ul class="somm-bottles">${sommRow(p.w, keys.length ? `<div>${esc(keys.join(", "))}</div>` : "")}</ul>
+    ${p.w.kind === "cellar" && sommStores().length && atStoreWords(p.w) ? `<p class="somm-at-line">🛒 Also ${atStoreWords(p.w)}</p>` : ""}
+    ${p.dinner ? `<p><button type="button" class="btn btn-mini" data-somm="menu-swap" data-course="${esc(p.c)}">Another wine for this course</button>${p.anchor ? ` <span class="hint-inline">Your chosen wine.</span>` : ""}</p>` : ""}
     ${p.note ? `<p class="somm-note">${esc(p.note)}</p>` : ""}${borrowedNote(keys, sweet)}
     ${parts.join("")}
     ${pick ? `<h5>📖 A recipe for this course</h5>${pick}` : ""}
@@ -1301,8 +1446,9 @@ function menuHtml(m) {
     .sort((a, b) => b.n - a.n).slice(0, 3).map(({ x }) => `<li><strong>${esc(x[0])}</strong>${srcSpan(x[1], x[2])}: ` +
       x[3].map((c) => `${esc(c[0])}${c[1].length ? ` <span class="hint-inline">with ${esc(c[1].join(" / "))}</span>` : ""}`).join(" · ") + `</li>`).join("");
   const n = LOCAL_NOTES[m.country];
-  const head = m.own ? `<strong>A menu from your Comparison List</strong>: ${wines.length} of the ${m.pool} ${m.pool === 1 ? "wine" : "wines"} ticked, each on the course it suits best.`
-    : `<strong>${m.country ? `A ${esc(m.country)} menu` : "Your menu"}</strong>, ${wines.length} ${wines.length === 1 ? "wine" : "wines"}, chosen from ${m.pool.toLocaleString()} ${esc(m.country)} bottles in ${tickedWord()}.`;
+  const head = m.dinner ? dinnerHeadHtml(m, wines)
+    : m.own ? `<strong>A menu from your Comparison List</strong>: ${wines.length} of the ${m.pool} ${m.pool === 1 ? "wine" : "wines"} ticked, each on the course it suits best.`
+    : `<strong>${m.country ? `A ${esc(m.country)} menu` : "Your menu"}</strong>, ${wines.length} ${wines.length === 1 ? "wine" : "wines"}, chosen from ${m.pool.toLocaleString()} ${esc(m.country)} wines in ${tickedWord()}${sommCellars().length ? " (cellar wines that are ready to open)" : ""}.`;
   return `<p class="somm-summary">${head}</p>
     ${n ? `<p>${esc(n.intro)} ${CLAUDE_TAG}</p>` : ""}
     ${reg?.foods?.length ? `<p><strong>Local food the books tie to these wines:</strong> ${esc(reg.foods.join(", "))}.</p>` : ""}
@@ -1311,7 +1457,8 @@ function menuHtml(m) {
     <div class="somm-ask"><button type="button" class="btn btn-primary" data-somm="ask-menu">Ask Claude to polish this menu</button>
       <button type="button" class="btn" data-somm="print-out" data-print-title="Your dinner menu">🖨 Print this menu</button>
       <button type="button" class="btn" data-somm="menu-all">⚖️ Add all ${wines.length} wines to the Comparison List</button>
-      <p id="somm-ask-msg" class="status" role="status"></p></div>`;
+      <button type="button" class="btn btn-somm" data-somm="dinner-shop">🛒 Shopping list for the whole dinner</button>
+      <p id="somm-ask-msg" class="status" role="status"></p></div><div id="somm-dinner-shop"></div>`;
 }
 function menuPrompt(m) {
   const lines = m.plan.map((p) => `- ${COURSES[p.c]}${p.food && p.c === "main" ? ` (${p.food.toLowerCase()})` : ""}: ${p.w ? `${p.w.name}${p.w.vintage ? " " + p.w.vintage : ""}, ${p.w.kind === "cellar" ? `from ${sourceLabel(p.w.source)}` : `${money(priceOf(p.w) ?? p.w.price)} at ${sourceLabel(p.w.source)}`}` : "no wine found"}${p.note ? ` (${p.note})` : ""}`);
@@ -1365,12 +1512,67 @@ function renderSommComparison() {
        <button type="button" class="btn btn-somm btn-big" data-somm="pair-cmp">Pair the ticked wines</button>`
     : `<p class="hint">Your Comparison List is empty. Press <strong>⚖️ ＋ Add wine to Comparison List</strong> on any wine in Find wines or My cellars, then come back here.</p>`;
 }
-function sommTab(name) {
-  for (const b of document.querySelectorAll("#somm [data-somm-tab]")) b.setAttribute("aria-selected", String(b.dataset.sommTab === name));
-  for (const p of document.querySelectorAll("#somm .somm-pane")) p.hidden = p.id !== "somm-" + name;
+// ---- Where you are: the route, the trail and the source banner ----------------------------
+// Step 2 chooses a route. Once chosen, steps 1 and 2 fold into a trail at the top (each can be
+// pressed to change it), only that route's questions show, and the route's colour runs down them.
+// Changing route starts its questions afresh, so no old choice is left showing without its answer.
+const ROUTES = { wine: { icon: "🔎", label: "Find a wine" }, cook: { icon: "🍖", label: "I have some food" },
+  menu: { icon: "🧀", label: "Plan a dinner" }, cmp: { icon: "⚖️", label: "From my Comparison List" } };
+let sommRoute = "", sommEditSources = false;
+function sommTab(name, keep = false) {
+  if (!keep) resetChoices();
+  sommRoute = ROUTES[name] ? name : "";
+  sommEditSources = false;
+  for (const b of document.querySelectorAll("#somm [data-somm-tab]")) b.setAttribute("aria-pressed", String(b.dataset.sommTab === sommRoute));
+  for (const p of document.querySelectorAll("#somm .somm-pane")) p.hidden = p.id !== "somm-" + sommRoute;
+  for (const k of Object.keys(ROUTES)) $("somm").classList.toggle("route-" + k, k === sommRoute);
   $("somm-out").innerHTML = "";
   $("somm-step3").hidden = true;
-  storeSet("wf.sommTab", name);
+  renderTrail();
+  if (sommRoute === "menu") renderDinnerQ();
+  if (sommRoute === "wine") { renderFindIntro(); renderFindFilters(); }
+}
+// Each ticked cellar and store, in its own colours, with how many wines (and bottles) it holds.
+function sourceChips() {
+  const cel = sommCellars().map((c) => {
+    const ws = cellarFindWines().filter((w) => w.source === c), b = ws.reduce((n, w) => n + (w.quantity || 0), 0);
+    return `<span class="somm-src-chip badge-cellar${cellarTone(c)}">🍷 ${esc(c)} · ${ws.length.toLocaleString()} ${ws.length === 1 ? "wine" : "wines"}${b ? ` · ${b.toLocaleString()} bottles` : ""}</span>`;
+  });
+  const sto = sommStores().map((st) => {
+    const n = WINES.filter((w) => w.source === st).length;
+    return `<span class="somm-src-chip badge-${SOURCE_CLASS[st] || "other"}">🛒 ${esc(sourceLabel(st))}${n ? ` · ${n.toLocaleString()} wines` : ""}</span>`;
+  });
+  return [...cel, ...sto].join(" ");
+}
+function renderTrail() {
+  const box = $("somm-trail");
+  if (!box) return;
+  const on = !!sommRoute, r = ROUTES[sommRoute], any = sommCellars().length + sommStores().length;
+  $("somm-s1").hidden = on && !sommEditSources;
+  $("somm-s1-done").hidden = !(on && sommEditSources);
+  $("somm-s2").hidden = on;
+  box.hidden = !on;
+  if (!on) return;
+  box.innerHTML = `<li class="trail-step"><button type="button" class="trail-btn" data-somm="edit-sources" aria-expanded="${sommEditSources}">
+      <span class="zone-num">1</span> <span class="trail-what">${any ? `Choosing from ${sourceChips()}` : "Nothing ticked yet"}</span> <span class="trail-edit">✎ Change</span></button></li>
+    <li class="trail-step trail-route"><button type="button" class="trail-btn" data-somm="to-step2">
+      <span class="zone-num">2</span> <span class="trail-what">${r.icon} ${esc(r.label)}</span> <span class="trail-edit">✎ Change</span></button></li>` +
+    (pairList.length ? `<li class="trail-step trail-picks"><div class="trail-btn trail-static"><span class="zone-num">3</span>
+      <span class="trail-what">🍽 Your picks (${pairList.length}): ${pairWines().map((w) => `<span class="chip">${pickWords(w)}</span>`).join(" ")}</span>
+      <button type="button" class="linklike trail-edit" data-somm="clear-pairs">✕ Clear the picks</button></div></li>` : "");
+}
+// A picked wine in a line: its name, where it is, and (for a cellar wine) whether the store ticked sells it.
+function pickWords(w) {
+  const at = w.kind === "cellar" ? atStoreWords(w) : "";
+  return `${esc(w.name)} · ${w.kind === "cellar" ? esc(w.source) : priceOf(w) != null ? `${money(priceOf(w))} at ${esc(sourceLabel(w.source))}` : esc(sourceLabel(w.source) || "")}${at ? ` · ${at}` : ""}`;
+}
+// "≈ at the LCBO: 2024, $92" — the same wine at the stores ticked (any size said if not a standard bottle).
+function atStoreWords(w) {
+  const r = atStoreOf(w, { max: null, same: false }), st = sommStores();
+  if (!r || r.kind === "producer") return "";
+  const size = r.s.size_ml && !STANDARD_ML.has(r.s.size_ml) ? ` (${r.s.size_ml} ml)` : "";
+  const where = st.length > 1 ? sourceLabel(r.s.source) : theStore(st);
+  return r.kind === "exact" ? `✓ at ${esc(where)}: the same vintage, ${money(r.s.price)}${size}` : `≈ at ${esc(where)}: ${esc(String(r.s.vintage || "NV"))}, ${money(r.s.price)}${size}`;
 }
 function openSomm() {
   renderSommStores();
@@ -1382,16 +1584,22 @@ function openSomm() {
 const sommNum = (id) => { const v = parseFloat($(id)?.value); return Number.isFinite(v) && v > 0 ? v : null; };
 // Straight there, in the page's own scroll: the answer can be well below the fold.
 const jumpTo = (el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 10);
-const showOut = (html) => { $("somm-out").innerHTML = html; $("somm-step3").hidden = false; jumpTo($("somm-step3")); };
+const showOut = (html) => {
+  if (!sommRoute) sommTab("wine", true); // an answer from elsewhere (the Food Pairings bar, a cellar): it's about wines
+  $("somm-out").innerHTML = html; $("somm-step3").hidden = false; jumpTo($("somm-step3"));
+};
 
 const renderSommHits = debounce(() => {
   const q = $("somm-q").value.trim(), out = $("somm-hits");
   $("somm-country-msg").textContent = "";
   if (q.length < 3) { out.innerHTML = ""; return; }
   const words = fold(q).split(/\s+/).filter(Boolean);
-  const hits = [...cellarFindWines().filter((w) => words.every((t) => w._s.includes(t))), ...listHits(q)].slice(0, 6);
+  const cels = sommCellars(), stores = sommStores(); // only what's ticked in step 1
+  const hits = [...cellarFindWines().filter((w) => cels.includes(w.source) && words.every((t) => w._s.includes(t))),
+    ...listHits(q).filter((w) => stores.includes(w.source))].slice(0, 12);
   out.innerHTML = (hits.length ? `<p>Click a wine to see its food pairings.</p><ul class="somm-hit-list">${hits.map((w) =>
-    `<li><button type="button" class="btn btn-somm somm-hit" data-somm-wine="${esc(w.id)}">Show food pairings for ${esc(w.name)}${w.vintage && !w.name.includes(String(w.vintage)) ? ` ${esc(String(w.vintage))}` : ""} · ${w.kind === "cellar" ? "" : `${priceHtml(w)} · `}${esc(sourceLabel(w.source))} →</button></li>`).join("")}</ul>` : "") +
+    `<li><button type="button" class="btn btn-somm somm-hit" data-somm-wine="${esc(w.id)}">What to eat with ${esc(w.name)}${w.vintage && !w.name.includes(String(w.vintage)) ? ` ${esc(String(w.vintage))}` : ""} · ${w.kind === "cellar" ? "" : `${priceHtml(w)} · `}${esc(sourceLabel(w.source))} →</button></li>`).join("")}</ul>` : "") +
+    (hits.length ? "" : `<p>Nothing by that name in ${esc(andWords(tickedNames()) || "what's ticked")}.</p>`) +
     (hits.some((w) => fold(w.name) === fold(q)) ? "" : `<button type="button" class="btn btn-somm" data-somm="pair-typed">Pair “${esc(q)}” as typed</button>`);
 }, 300);
 
@@ -1400,7 +1608,12 @@ document.addEventListener("click", async (e) => {
   const t = e.target.closest("#somm [data-somm], #somm [data-somm-tab], #somm [data-somm-wine], #somm [data-somm-find], [data-somm-recipe], #somm [data-somm-mood], #somm [data-wine-food], #somm [data-somm-col], #somm [data-somm-pop], #somm [data-pairs-food], #somm-pop [data-somm], #mc-pairbar [data-somm], #mc-panel [data-somm-pop]");
   if (!t) return;
   await loadSomm();
-  if (t.dataset.sommMood) return showOut(moodHtml(t.dataset.sommMood));
+  if (t.dataset.sommMood) { // a quick pick narrows the Find list; pressed again, it lets go
+    const k = t.dataset.sommMood;
+    findF.preset = findF.preset === k ? "" : k;
+    renderMoods(); renderFindFilters();
+    return runFind();
+  }
   if (t.dataset.sommTab) {
     sommTab(t.dataset.sommTab);
     if (t.dataset.sommTab === "wine") $("somm-q").focus(); // the tab may be open already: show where to start
@@ -1413,9 +1626,11 @@ document.addEventListener("click", async (e) => {
     return showWineFood(pairsFoodHtml(t.dataset.pairsFood), t.dataset.pairsFood);
   }
   if (t.dataset.sommCol) {
-    answerOpts.dir = answerOpts.col === t.dataset.sommCol ? -answerOpts.dir : 1;
-    answerOpts.col = t.dataset.sommCol;
-    $("somm-cellar-answer").innerHTML = answerBodyHtml();
+    const k = t.dataset.sommCol, first = answerOpts.sorts[0];
+    if (first.col === k) first.dir = -first.dir;
+    else answerOpts.sorts = [{ col: k, dir: 1 }, ...answerOpts.sorts.filter((o) => o.col !== k)].slice(0, 3);
+    while (answerOpts.sorts.length < 3) answerOpts.sorts.push({ col: "", dir: 1 });
+    redrawAnswer();
     return;
   }
   if (t.dataset.wineFood && wineNow) {
@@ -1446,13 +1661,18 @@ document.addEventListener("click", async (e) => {
     for (const b of document.querySelectorAll("#somm [data-somm-store], #somm [data-somm-cellar]")) b.checked = a === "all-sources";
     fillCountrySelects(); renderMoods(); renderUsing();
   } else if (a === "start-again") startAgain();
-  else if (a === "to-step1") $("somm-stores").scrollIntoView({ block: "center" });
+  else if (a === "to-step1" || (a === "edit-sources" && !sommEditSources)) {
+    if (sommRoute) { sommEditSources = true; renderTrail(); }
+    $("somm-stores").scrollIntoView({ block: "center" });
+  } else if (a === "edit-sources") { sommEditSources = false; renderTrail(); }
+  else if (a === "to-step2") { sommTab(""); $("somm-s2").scrollIntoView({ block: "center" }); }
   else if (a === "print-out") printOut(t.dataset.printTitle);
   else if (a === "close-pop") $("somm-pop").close();
   else if (a === "see-pairs") { if ($("somm-pop").open) $("somm-pop").close(); if ($("view-somm").hidden) showView("somm"); seePairs(); }
   else if (a === "clear-pairs") {
     for (const w of pairList.slice()) togglePair(w.id);
     renderPairBar();
+    if (sommRoute === "menu") renderDinnerQ();
   }
   else if (a === "fridge") runFridge();
   else if (a === "other-food") {
@@ -1484,14 +1704,44 @@ document.addEventListener("click", async (e) => {
     if (!country) { $("somm-country").focus(); return; }
     showOut(countryPairingHtml(country, sommPool({ stores: sommStores(), country, colour: $("somm-colour").value, maxPrice: sommNum("somm-price") })));
   } else if (a === "cook") {
+    if (sommStores().length) await loadWe();
     runCook();
   } else if (a === "menu") {
-    const country = $("somm-menu-country").value;
-    const courses = [...document.querySelectorAll("#somm [data-somm-course]:checked")].map((b) => b.value);
-    if (!courses.length) return;
-    lastMenu = buildMenu({ country, nWines: +$("somm-nwines").value || 3, courses, protein: $("somm-protein").value,
-      stores: sommStores(), maxPrice: sommNum("somm-menu-price") });
-    showOut(menuHtml(lastMenu));
+    const o = readDinner();
+    if (!o.courses.length) { showOut(`<div class="somm-card"><p>Tick at least one course.</p></div>`); return; }
+    dinnerOpts = o;
+    showOut(dinnerHtml());
+  } else if ((a === "menu-swap" || a === "menu-add") && dinnerOpts) {
+    const c = t.dataset.course;
+    if (a === "menu-add") dinnerOpts.add.add(c);
+    else { const cur = lastMenu?.plan.find((p) => p.c === c)?.w; if (cur) (dinnerOpts.swap[c] ||= new Set()).add(cur.id); }
+    const y = window.scrollY; $("somm-out").innerHTML = dinnerHtml(); window.scrollTo(0, y);
+  } else if (a === "find-list") runFind();
+  else if (a === "dinner-shop") { const box = $("somm-dinner-shop"); if (box) { box.innerHTML = box.innerHTML ? "" : dinnerShopHtml(); if (box.innerHTML) box.scrollIntoView({ block: "start" }); } }
+  else if (a === "just-wine") {
+    const w = findWine(t.dataset.id) || pairWines().find((x) => x.id === t.dataset.id);
+    if (w) openWineFood(w, t.dataset.food || "");
+  } else if (a === "drop-wine") {
+    togglePair(t.dataset.id);
+    if (pairList.length >= 2) seePairs();
+    else if (pairList.length === 1) openWine(findWine(pairList[0].id) || pairList[0], false);
+    else showOut(`<div class="somm-card"><p>No wines picked now. Tick some in a list, or search for one above.</p></div>`);
+  } else if (a === "dinner-from-choice") {
+    const fixed = {};
+    for (const sel of document.querySelectorAll("#somm-out [data-dinner-course]")) fixed[sel.dataset.dinnerCourse] = sel.value;
+    const ids = [...new Set(Object.values(fixed).filter(Boolean))];
+    startDinner(ids.map((id) => findWine(id) || pairWines().find((x) => x.id === id)).filter(Boolean), Object.keys(fixed), fixed);
+  }
+  else if ((a === "dinner-add-course" || a === "dinner-each") && dinnerOpts) {
+    if (a === "dinner-add-course") { const c = t.dataset.course; if (!dinnerOpts.courses.includes(c)) dinnerOpts.courses.push(c);
+      const b = document.querySelector(`#somm [data-somm-course][value="${c}"]`); if (b) b.checked = true; }
+    else { dinnerOpts.mode = "each"; const r = document.querySelector('#somm [name=somm-nwines][value="each"]'); if (r) r.checked = true; }
+    const y = window.scrollY; $("somm-out").innerHTML = dinnerHtml(); window.scrollTo(0, y);
+  }
+  else if (a === "to-find") { sommTab("wine"); $("somm-wine").scrollIntoView({ block: "start" }); }
+  else if (a === "dinner-from-wine" && wineNow && !wineNow.typed) startDinner([wineNow.w]);
+  else if (a === "dinner-from-pairs") {
+    startDinner(pairWines(), t.dataset.courses?.split(","));
   } else if (a === "ask-menu" && lastMenu) {
     const prompt = menuPrompt(lastMenu), { url } = claudeLink(prompt);
     const r = await openClaudeHere(url, prompt);
@@ -1506,7 +1756,546 @@ document.addEventListener("input", (e) => { if (e.target.id === "somm-q") render
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && e.target.id === "somm-q") { e.preventDefault(); document.querySelector('#somm [data-somm="pair-typed"]')?.click(); }
 });
+// ==== Find a wine, the store column, the answers and the dinner (2026-11-19) =====================
+const andWords = (a) => (a.length > 1 ? `${a.slice(0, -1).join(", ")} and ${a.at(-1)}` : a[0] || "");
+const tickedNames = () => [...sommCellars(), ...sommStores().map(sourceLabel)];
+const theStore = (st) => (st.length === 1 ? (st[0] === "LCBO" ? "the LCBO" : sourceLabel(st[0])) : andWords(st.map(sourceLabel)));
+
+// ---- Find a wine: what's ticked, in words, and the filters -----------------------------------
+function renderFindIntro() {
+  const el = $("somm-wine-intro"), qh = $("somm-q-h");
+  if (!el) return;
+  const cel = sommCellars(), st = sommStores();
+  if (qh) qh.textContent = tickedNames().length ? `Search ${andWords(tickedNames())}` : "Search for a wine";
+  el.innerHTML = !cel.length && !st.length ? "Tick a cellar or a store in step 1 first."
+    : cel.length && st.length ? `Choosing from <strong>${esc(andWords(cel))}</strong>, with what <strong>${esc(theStore(st))}</strong> ${st.length > 1 ? "sell" : "sells"} of it: the <strong>At ${esc(theStore(st))}</strong> column says whether you can buy each wine there, and at what price. To browse the store's own list instead, choose it under <strong>Where</strong>.`
+    : cel.length ? `Choosing from <strong>${esc(andWords(cel))}</strong>. Search for a wine, use a quick pick, or narrow the cellar down below.`
+    : `Choosing from <strong>${esc(theStore(st))}</strong>. Search for a wine you know, or narrow the list down below.`;
+}
+const FIND0 = { where: "", colour: "", country: "", grape: "", price: "", band: "", score: "", rep: "", body: "", sweet: "", drink: "", age: "", atStore: "", preset: "" };
+let findF = { ...FIND0 };
+const styleOfW = (w, k) => { try { return wineStyle(w)[k].v; } catch { return null; } };
+function findBase() {
+  const cel = sommCellars(), st = sommStores(), seen = new Set();
+  const all = sommPool({ stores: st }).filter((w) => { if (w.kind === "cellar") return true;
+    const k = `${w.source}|${fold(w.name)}|${w.vintage || ""}|${w.price}|${w.size_ml || ""}`; return !seen.has(k) && seen.add(k); });
+  if (!cel.length || !st.length || findF.where === "all") return all;
+  return findF.where === "store" ? all.filter((w) => w.kind !== "cellar") : all.filter((w) => w.kind === "cellar");
+}
+function findPasses(w) {
+  const f = findF, sc = realScore(w), cellar = w.kind === "cellar";
+  if (f.preset && (!cellar || !MOODS[f.preset]?.test(w))) return false;
+  if (f.colour && w.type !== f.colour) return false;
+  if (f.country && w.country !== f.country) return false;
+  if (f.grape && !sommKeys(w).includes(f.grape)) return false;
+  if (f.price && !cellar && !((priceOf(w) ?? Infinity) <= +f.price)) return false;
+  if (f.price && cellar && f.atStore && !atStoreOf(w)) return false;
+  if (f.band && cellar && String(cellarBand(w)) !== f.band) return false;
+  if (f.score && !(sc >= +f.score)) return false;
+  if (f.rep && !cellar && !(((weIndex && weOf(w)?.[3]) || 0) >= +f.rep)) return false;
+  if (f.body && styleOfW(w, "body") !== f.body) return false;
+  if (f.sweet) { const v = sweetV(w); if (f.sweet === "sweet" ? !["medium-sweet", "sweet"].includes(v) : (v || "dry") !== f.sweet) return false; }
+  if (f.drink && cellar) { const g = drinkStage(w);
+    if (f.drink === "open" ? g === "wait" : f.drink === "first" ? !["first", "soon"].includes(g) : f.drink === "peak" ? !atPeak(w) : g !== "wait") return false; }
+  if (f.age && !(w.vintage && THIS_YEAR - w.vintage >= +f.age)) return false;
+  if (f.atStore && cellar && !(f.atStore === "same" ? ["exact"] : ["exact", "vintage"]).includes(atStoreOf(w)?.kind)) return false;
+  if (f.atStore && !cellar) return false; // "only cellar wines I can buy there": the store's own list stays out
+  return true;
+}
+function renderFindFilters() {
+  const box = $("somm-filters");
+  if (!box) return;
+  const cel = sommCellars(), st = sommStores(), both = cel.length && st.length;
+  if (!both) { findF.where = ""; findF.atStore = ""; }
+  const pool = findBase().filter((w) => !findF.preset || (w.kind === "cellar" && MOODS[findF.preset]?.test(w))), hasStore = pool.some((w) => w.kind !== "cellar"), hasCellar = pool.some((w) => w.kind === "cellar");
+  const sel = (k, label, opts) => `<label class="somm-filter"><span>${esc(label)}</span><select data-find="${k}">${opts.map(([v, l]) =>
+    `<option value="${esc(v)}"${String(findF[k]) === String(v) ? " selected" : ""}>${esc(l)}</option>`).join("")}</select></label>`;
+  const uniq = (get) => [...new Set(pool.map(get).filter((v) => v && v !== "Country not stated"))].sort((a, b) => String(a).localeCompare(String(b)));
+  const grapes = new Map();
+  for (const w of pool) for (const g of sommKeys(w)) grapes.set(g, (grapes.get(g) || 0) + 1);
+  const gList = [...grapes].sort((a, b) => b[1] - a[1]).slice(0, 80).sort((a, b) => a[0].localeCompare(b[0]));
+  const parts = [];
+  if (both) { // one question: which wines, from the cellar, the store or both
+    const which = findF.where === "store" ? "store" : findF.where === "all" ? "all" : findF.atStore || "cellar", c = andWords(cel), sh = theStore(st);
+    const opts = [["cellar", `All of ${c}'s wines`], ["any", `${c}'s wines I can also buy at ${sh} (any vintage)`], ["same", `${c}'s wines I can also buy at ${sh} (same vintage)`],
+      ...(findF.preset ? [] : [["store", `${capFirst(sh)}'s own wines`], ["all", `Both: ${c}'s and ${sh}'s`]])];
+    parts.push(`<label class="somm-filter somm-which"><span>Which wines?</span><select data-find="which">${opts.map(([v, l]) => `<option value="${v}"${which === v ? " selected" : ""}>${esc(l)}</option>`).join("")}</select></label>`);
+  }
+  parts.push(sel("colour", "Colour", [["", "Any colour"], ...uniq((w) => w.type).map((v) => [v, v])]));
+  parts.push(sel("country", "Country", [["", "Any country"], ...uniq((w) => w.country).map((v) => [v, v])]));
+  parts.push(sel("grape", "Grape", [["", "Any grape"], ...gList.map(([g, n]) => [g, `${g} (${n})`])]));
+  if (hasStore) parts.push(`<label class="somm-filter"><span>Store price up to $</span><input type="number" data-find="price" min="0" step="1" inputmode="numeric" value="${esc(findF.price)}" placeholder="any"></label>`);
+  if (hasCellar) parts.push(sel("band", "Price band", [["", "Any band"], ...Object.entries(BAND_WORDS).map(([k, v]) => [k, capFirst(v)])]));
+  parts.push(sel("score", "Score at least", [["", "Any"], ["88", "88"], ["90", "90"], ["92", "92"], ["95", "95"]]));
+  if (hasStore) parts.push(sel("rep", "Producer's reputation at least", [["", "Any"], ["88", "88"], ["90", "90"], ["92", "92"]]));
+  parts.push(sel("body", "Body", [["", "Any"], ["light", "Light"], ["medium", "Medium"], ["full", "Full"]]));
+  parts.push(sel("sweet", "Sweetness", [["", "Any"], ["dry", "Dry"], ["off-dry", "Off-dry"], ["sweet", "Sweet"]]));
+  if (hasCellar) parts.push(sel("drink", "Drink window", [["", "Any"], ["open", "Ready to open"], ["first", "Drink soon"], ["peak", "At its peak"], ["wait", "Not ready yet"]]));
+  parts.push(sel("age", "Age", [["", "Any"], ["10", "10 years or older"], ["15", "15 years or older"], ["20", "20 years or older"]]));
+  const on = Object.keys(FIND0).filter((k) => !["where", "atStore", "preset"].includes(k) && findF[k]).length;
+  if ($("somm-narrow-h")) $("somm-narrow-h").textContent = findF.preset ? `Narrow down ${MOODS[findF.preset].label.replace(/^The /, "the ")}` : "Narrow it down";
+  box.innerHTML = `<div class="somm-filters">${parts.join("")}</div>
+    ${both && findF.atStore && findF.price ? `<p class="hint">The store price limit applies to the price at ${esc(theStore(st))}.</p>` : ""}
+    ${on ? `<p><button type="button" class="btn btn-mini" data-somm="find-clear">Clear these choices</button></p>` : ""}
+    ${hasStore ? `<p class="hint">Producer's reputation: the producer's average in Wine Enthusiast's reviews, not this bottle's score.</p>` : ""}`;
+}
+document.addEventListener("change", (e) => {
+  const t = e.target;
+  if (!t.matches?.("#somm-filters [data-find]")) return;
+  if (t.dataset.find === "which") {
+    const v = t.value;
+    findF.where = v === "store" || v === "all" ? v : "";
+    findF.atStore = v === "any" || v === "same" ? v : "";
+  } else findF[t.dataset.find] = t.type === "checkbox" ? t.checked : t.value;
+  renderFindFilters();
+  if (answerArgs?.kind === "find" && $("somm-cellar-answer")) runFind(false);
+});
+document.addEventListener("click", (e) => {
+  if (!e.target.closest?.('#somm [data-somm="find-clear"]')) return;
+  findF = { ...FIND0, where: findF.where, atStore: findF.atStore, preset: findF.preset };
+  renderFindFilters();
+  if (answerArgs?.kind === "find" && $("somm-cellar-answer")) runFind(false);
+});
+async function runFind(jump = true) {
+  if (sommStores().length) await loadWe();
+  atLimit = { max: findF.atStore && findF.price ? +findF.price : null, same: findF.atStore === "same" };
+  const rows = findBase().filter(findPasses).map((w) => ({ w, t: 0 }));
+  const f = findF, bits = [f.colour, f.country, f.grape, f.price && `up to $${f.price}`, f.band && BAND_WORDS[f.band], f.score && `${f.score}+ points`,
+    f.rep && `producer ${f.rep}+`, f.body && `${f.body}-bodied`, f.sweet, f.drink && { open: "ready to open", first: "drink soon", peak: "at its peak", wait: "not ready yet" }[f.drink],
+    f.age && `${f.age}+ years`, f.atStore && `also at ${theStore(sommStores())}${f.atStore === "same" ? " (same vintage)" : ""}`].filter(Boolean);
+  const pre = findF.preset ? MOODS[findF.preset] : null;
+  const html = cellarAnswerHtml(rows, null, "", pre?.line || "", [pre?.label, bits.length ? capFirst(bits.join(", ")) : ""].filter(Boolean).join(": ") || "All the wines", "find");
+  if (jump) showOut(html);
+  else { $("somm-out").innerHTML = html; renderPairBar(); }
+}
+
+// ---- A cellar wine at the stores ticked ---------------------------------------------------------
+// ✓ the same wine and vintage, ≈ the same wine in another vintage (cellarMatches' careful name
+// match), else the producer's other wines there (Wine Enthusiast's producer match, same country).
+let prodIdx = null, prodIdxKey = "";
+function producerAtStores(p, st) {
+  const key = `${st.join("|")}|${WINES.length}|${weIndex ? 1 : 0}`;
+  if (prodIdxKey !== key) {
+    prodIdx = new Map(); prodIdxKey = key;
+    for (const x of WINES) if (st.includes(x.source)) { const q = weOf(x); if (q) (prodIdx.get(q) || prodIdx.set(q, []).get(q)).push(x); }
+  }
+  return prodIdx.get(p) || [];
+}
+// The store listings of this very wine: the name match, kept only when the reviews don't name two
+// different producers (Bouchard's Meursault Perrières is not Château de Meursault's); and failing
+// that, one of the producer's listings whose name is the same wine (Château d'Armailhac).
+// A listing must name the wine's maker: the producer's own word ("Lagrange", "Fèvre"), or a word
+// of the wine's name that isn't a place, grape or label word ("Melchor"). "Chablis Grand Cru Les
+// Clos" names no one, so it can't be told apart from a dozen other growers' Les Clos.
+const LABEL_WORDS = new Set(["grand", "cru", "premier", "les", "clos", "domaine", "chateau", "reserva", "reserve", "riserva", "vieilles", "vignes",
+  "cuvee", "blanc", "rouge", "estate", "vineyard", "vineyards", "old", "vines", "selection", "especial", "special", "superieur", "superiore", "classico"]);
+function namesProducer(w, x, mine) {
+  const st = gemTokens(`${x.name} ${x.producer || ""}`);
+  if (mine && gemWords(mine[0]).some((t) => st.includes(t))) return true;
+  const wt = new Set(gemTokens(w.name));
+  return st.some((t) => wt.has(t) && t.length > 3 && !GRAPE_WORDS.has(t) && !isPlaceWord(t) && !LABEL_WORDS.has(t));
+}
+function storeListings(w, st) {
+  const mine = weIndex ? weOf(w) : null;
+  const age = (n) => (fold(n).match(/\b(10|20|30|40)\s*(year|yr|ans|anos)/) || [])[1] || ""; // a 20-year tawny is not the 10-year
+  let list = storeMatchesOf(w.id).filter((x) => st.includes(x.source) && (!mine || !weOf(x) || weOf(x) === mine) && age(x.name) === age(w.name) && namesProducer(w, x, mine));
+  if (!list.length && mine) {
+    const bare = w.name.replace(/\s(19|20)\d\d$/, "");
+    list = producerAtStores(mine, st).filter((x) => typesAgree(x.type, w.type) && sameWineName(bare, x.name.replace(/\s(19|20)\d\d$/, "")));
+  }
+  return list;
+}
+// While a find list is narrowed by store price (or to the same vintage), the column shows the
+// listing that fits: Clos des Papes at $182 isn't "at the LCBO for $50 or less".
+let atLimit = { max: null, same: false };
+function atStoreOf(w, lim = atLimit) {
+  const st = sommStores();
+  if (w.kind !== "cellar" || !st.length) return null;
+  const list = storeListings(w, st).filter((x) => x.price != null && (lim.max == null || x.price <= lim.max));
+  const same = (x) => (w.vintage ? +x.vintage === +w.vintage : !x.vintage); // NV with NV is the same wine
+  const std = (x) => (x.size_ml == null || STANDARD_ML.has(x.size_ml) ? 0 : 1);
+  const exact = list.filter(same).sort((a, b) => std(a) - std(b) || a.price - b.price)[0];
+  if (exact) return { kind: "exact", s: exact, v: 0 };
+  if (lim.same) return null;
+  const other = list.slice().sort((a, b) => std(a) - std(b) || (b.vintage || 0) - (a.vintage || 0) || a.price - b.price)[0];
+  if (other) return { kind: "vintage", s: other, v: 1 };
+  const p = weIndex ? weOf(w) : null, n = p ? producerAtStores(p, st) : [];
+  return n.length ? { kind: "producer", n, v: 2 } : null;
+}
+function atStoreHtml(w) {
+  const r = atStoreOf(w), many = sommStores().length > 1;
+  if (!r) return "";
+  const where = (x) => (x.size_ml && !STANDARD_ML.has(x.size_ml) ? ` (${x.size_ml} ml)` : "") + (many ? ` ${esc(sourceLabel(x.source))}` : "");
+  return r.kind === "exact" ? `<span class="at-store at-exact" title="The same wine and vintage">✓ ${money(r.s.price)}${where(r.s)}</span>`
+    : r.kind === "vintage" ? `<span class="at-store at-vintage" title="The same wine, another vintage">≈ ${esc(String(r.s.vintage || "NV"))}, ${money(r.s.price)}${where(r.s)}</span>`
+    : `<span class="at-store at-producer" title="Wines from the same producer">Producer: ${r.n.length} ${r.n.length === 1 ? "wine" : "wines"}</span>`;
+}
+// On a cellar wine's own page: the listings, or the nearest wines at the store.
+async function fillAtStore(w) {
+  const box = $("somm-at-store"), st = sommStores();
+  if (!box || w.kind !== "cellar" || !st.length) return;
+  await loadWe();
+  if (wineNow?.w !== w || !$("somm-at-store")) return;
+  const where = theStore(st), list = storeListings(w, st).sort((a, b) => (+b.vintage === +w.vintage) - (+a.vintage === +w.vintage) || (a.price ?? 1e9) - (b.price ?? 1e9));
+  let body;
+  if (list.length) body = `<ul class="somm-bottles">${list.slice(0, 4).map((x) => sommRow(x, `<div>${w.vintage && +x.vintage === +w.vintage ? "<strong>✓ The same wine and vintage</strong>" : `≈ The same wine, ${esc(String(x.vintage || "no"))} vintage`}</div>`)).join("")}</ul>`;
+  else {
+    const p = weIndex ? weOf(w) : null;
+    let near = (p ? producerAtStores(p, st) : []).slice().sort(byBest).slice(0, 3).map((x) => ({ x, why: `The same producer (${p[0]})` }));
+    if (!near.length) { const g = gemGrapes(w)[0], ar = gemArea(w);
+      if (g && ar) near = WINES.filter((x) => st.includes(x.source) && x.type === w.type && gemGrapes(x).includes(g) && gemArea(x) === ar).sort(byBest).slice(0, 3).map((x) => ({ x, why: `${g} from ${ar}` })); }
+    body = `<p>${esc(capFirst(where))} doesn't list this wine.${near.length ? " The nearest there:" : " Nothing close to it there either."}</p>${near.length ? `<ul class="somm-bottles">${near.map(({ x, why }) => sommRow(x, `<div>${esc(why)}</div>`)).join("")}</ul>` : ""}`;
+  }
+  box.innerHTML = `<div class="somm-card"><h3 class="somm-wine-h">🛒 At ${esc(where)}</h3>${body}</div>`;
+}
+
+// ---- One wine: the main course and a recipe, before any question --------------------------
+const MAIN_FOODS = ["Red meat", "Lamb", "Pork", "Chicken", "Fish", "Seafood", "Pasta and pizza", "Spicy food"];
+function mainCoursesHtml(w, typed) {
+  const keys = bookKeys(sommKeys(w), !typed && isSweetWine(w)), rate = (f) => foodRating(w, typed, f).t || 0;
+  const top = (list, min) => list.map((f) => ({ f, t: rate(f) })).filter((x) => x.t >= min).sort((a, b) => b.t - a.t).slice(0, 3);
+  let best = top(MAIN_FOODS, 2), title = "Main courses for this wine";
+  if (!best.length) best = top(MAIN_FOODS, 1); // the wine's own food list, when the books give no stronger rating
+  if (!best.length) { best = top(FOODS, 1); title = "Best with"; }
+  if (!best.length) return "";
+  const li = ({ f, t }) => { const { ds, why } = wineDishes(w, f, keys), dishes = ds.length ? ds.map((d) => d.dish).slice(0, 4).join(", ") : typed ? "" : pairDish(w, f);
+    return `<li><span class="food-star tier-${t}">${STARS(t)}</span> ${foodIcon(f)}<strong>${esc(f)}</strong>${dishes ? `: ${esc(dishes)}` : ""}${why ? `. <span class="somm-why">${esc(capFirst(why.why))}${srcSpan(why.b, why.p)}</span>` : ""}</li>`; };
+  recipesShown = new Set();
+  const pick = recipePickHtml(w, best[0].f, 1, 0);
+  return `<div class="somm-card somm-lead"><h3 class="somm-wine-h">${esc(title)}</h3><ul class="somm-foods">${best.map(li).join("")}</ul>
+    ${pick ? `<h4>📖 A recipe to cook tonight (${esc(best[0].f.toLowerCase())})</h4>${pick.replace('<details class="somm-recipe"', '<details class="somm-recipe" open')}` : ""}
+    ${typed ? "" : `<p><button type="button" class="btn btn-somm btn-big" data-somm="dinner-from-wine">🧀 Make a dinner of it →</button></p>`}</div>`;
+}
+
+// ---- Several wines: what they point to, in plain words ------------------------------------
+function styleWord(w) {
+  if (isSweetWine(w)) return "sweet wine";
+  if (w.type === "Sparkling") return "sparkling wine";
+  const b = styleOfW(w, "body"), colour = (w.type || "wine").toLowerCase();
+  const bw = (w.type === "White" ? { light: "crisp", medium: "medium-bodied", full: "full-bodied" } : { light: "light", medium: "medium-bodied", full: "full-bodied" })[b];
+  return `${bw ? `${bw} ` : ""}${colour}`;
+}
+const styleMany = (word, n) => (n === 1 ? word : word.endsWith("wine") ? `${word}s` : /(red|white|rosé)$/.test(word) ? `${word}s` : word);
+function courseForGroup(ws, foods) {
+  if (ws.every(isSweetWine)) return "dessert";
+  const top = foods[0]?.f;
+  if (top === "Cheese") return "cheese";
+  if (ws.every((w) => w.type === "Sparkling" || (w.type === "White" && styleOfW(w, "body") === "light"))) return "starter";
+  if (top && ["Fish", "Seafood"].includes(top) && ws.every((w) => w.type !== "Red")) return "starter";
+  return "main";
+}
+function selectionReadHtml(wines) {
+  // grouped by kind (reds, whites, sweet, sparkling); a group is named by its body only when all agree
+  const kindOf = (w) => (isSweetWine(w) ? "sweet" : w.type === "Sparkling" ? "sparkling" : w.type || "wine");
+  const byKind = new Map();
+  for (const w of wines) (byKind.get(kindOf(w)) || byKind.set(kindOf(w), []).get(kindOf(w))).push(w);
+  const groups = new Map([...byKind.values()].map((ws) => { const words = [...new Set(ws.map(styleWord))];
+    return [words.length === 1 ? words[0] : (ws[0].type || "wine").toLowerCase(), ws]; }));
+  const rate = (w, f) => foodRating(w, false, f).t || 0;
+  const parts = [...groups].map(([word, ws]) => {
+    const foods = FOODS.map((f) => ({ f, lo: Math.min(...ws.map((w) => rate(w, f))) })).filter((x) => x.lo > 1).sort((a, b) => b.lo - a.lo).slice(0, 2);
+    const dish = foods[0] ? (wineDishes(ws[0], foods[0].f, bookKeys(sommKeys(ws[0]), isSweetWine(ws[0]))).ds.slice(0, 2).map((d) => d.dish).join(", ") || pairDish(ws[0], foods[0].f)) : "";
+    return { word, ws, foods, dish, course: courseForGroup(ws, foods) };
+  });
+  // two groups on the main course: the reds keep it, the other moves to the starter
+  if (parts.filter((g) => g.course === "main").length > 1) for (const g of parts) if (g.course === "main" && !g.ws.every((w) => w.type === "Red")) g.course = "starter";
+  const tally = andWords(parts.map((g) => `${g.ws.length} ${styleMany(g.word, g.ws.length)}`));
+  // the same wine in two or more vintages: open the one whose window closes first
+  const bare = (w) => fold(w.name.replace(/\s(19|20)\d\d$/, "")), sameWine = new Map();
+  for (const w of wines) (sameWine.get(bare(w)) || sameWine.set(bare(w), []).get(bare(w))).push(w);
+  const vint = [...sameWine.values()].filter((ws) => ws.length > 1).map((ws) => {
+    const o = ws.slice().sort((a, b) => (a.drink_to ?? 9999) - (b.drink_to ?? 9999) || (a.vintage ?? 0) - (b.vintage ?? 0)), first = o[0];
+    const until = (w) => (w.drink_to ? (w === first ? `ready until ${w.drink_to}` : `the ${w.vintage || "NV"} keeps until ${w.drink_to}`) : "");
+    const why = o.map(until).filter(Boolean).join("; ");
+    return `<p>🍷 <strong>${ws.length === 2 ? "Two" : ws.length} vintages of the same wine:</strong> open the ${esc(String(first.vintage || "NV"))} first${why ? ` (${esc(why)})` : ""}.</p>`;
+  }).join("");
+  const who = (g) => (g.ws.length === 1 ? `The ${esc(g.ws[0].name)}` : `The ${esc(styleMany(g.word, 2))}`);
+  const lines = parts.map((g) => `<li>${who(g)} ${g.foods.length ? `${g.ws.length === 1 ? "points" : "all point"} to <strong>${esc(andWords(g.foods.map((x) => x.f.toLowerCase())))}</strong>${g.dish ? ` (${esc(g.dish)})` : ""}.`
+    : `${g.ws.length === 1 ? "has" : "have"} no food the books rate highly for ${g.ws.length === 1 ? "it" : "all of them"}.`}</li>`).join("");
+  const courses = [...new Set(parts.map((g) => g.course))];
+  const plan = parts.length > 1 ? `<p>👉 <strong>Suggested:</strong> ${andWords(parts.map((g) => `${g.ws.length === 1 ? `the ${esc(g.ws[0].name)}` : `the ${esc(styleMany(g.word, 2))}`} with ${{ starter: "a starter", main: "the main course", cheese: "the cheese", dessert: "dessert" }[g.course]}`))}.</p>` : "";
+  return `<div class="somm-card somm-read"><h3 class="somm-wine-h">You've picked ${wines.length} wines: ${esc(tally)}</h3><ul>${lines}</ul>${vint}${plan}
+    <p><button type="button" class="btn btn-somm btn-big" data-somm="dinner-from-pairs" data-courses="${esc((parts.length > 1 ? courses : ["main"]).join(","))}">🧀 Plan this dinner →</button></p></div>`;
+}
+
+// ---- Plan a dinner: the questions, and the plan ---------------------------------------------
+let dinnerAnchors = [], dinnerOpts = null, dinnerFixed = null;
+const AVOID_FOODS = { meat: ["Red meat", "Lamb", "Pork", "Chicken", "Fish", "Seafood"], fish: ["Fish", "Seafood"], pork: ["Pork"] };
+const COURSE_WORDS = { starter: "a starter", main: "the main course", cheese: "the cheese", dessert: "dessert" };
+function renderDinnerQ() {
+  const box = $("somm-menu-anchor");
+  if (!box) return;
+  const picks = dinnerAnchors.length ? dinnerAnchors : pairWines();
+  box.innerHTML = picks.length ? `<h4>Do you have a wine in mind?</h4>
+      <div class="somm-foods-pick"><label class="somm-food"><input type="radio" name="somm-anchor" value="mine" checked> Yes: build it around ${picks.length === 1 ? "this wine" : `these ${picks.length} wines`}</label>
+        <label class="somm-food"><input type="radio" name="somm-anchor" value=""> No, you choose the wines</label></div>
+      <p>${picks.map((w) => `<span class="chip">${pickWords(w)}</span>`).join(" ")}</p>
+      ${dinnerAnchors.length ? "" : `<p class="hint">These are the wines on your Pairings list. <button type="button" class="linklike" data-somm="clear-pairs">✕ Clear them</button> to start without them.</p>`}`
+    : `<h4>Do you have a wine in mind?</h4><p>No wine picked yet, so I'll choose from ${esc(andWords(tickedNames()) || "what's ticked")}. Or <button type="button" class="linklike" data-somm="to-find">find a wine first</button> and press <strong>Make a dinner of it</strong>.</p>`;
+  if ($("somm-special-cellar")) $("somm-special-cellar").hidden = !sommCellars().length;
+  const fromBox = $("somm-from-q");
+  if (fromBox) { const both = sommCellars().length && sommStores().length, c = andWords(sommCellars()), sh = theStore(sommStores());
+    const was = document.querySelector("#somm [name=somm-from]:checked")?.value || "";
+    fromBox.hidden = !both;
+    fromBox.innerHTML = both ? `<h4>Where should the other wines come from?</h4><div class="somm-foods-pick">${[["", "Either: the best match"], ["cellar", c], ["store", `${capFirst(sh)} (to buy)`]].map(([v, l]) =>
+      `<label class="somm-food"><input type="radio" name="somm-from" value="${v}"${was === v ? " checked" : ""}> ${esc(l)}</label>`).join("")}</div>` : ""; }
+  if ($("somm-special-store")) $("somm-special-store").hidden = !sommStores().length;
+}
+function startDinner(wines, courses = null, fixed = null) {
+  sommTab("menu");
+  dinnerAnchors = wines.slice();
+  dinnerFixed = fixed;
+  if (courses?.length) for (const b of document.querySelectorAll("#somm [data-somm-course]")) b.checked = courses.includes(b.value);
+  if (wines.length > 1 || fixed) { const r = document.querySelector('#somm [name=somm-nwines][value="each"]'); if (r) r.checked = true; }
+  renderDinnerQ();
+  $("somm-menu").scrollIntoView({ block: "start" });
+}
+function readDinner() {
+  const v = (n) => document.querySelector(`#somm [name=${n}]:checked`)?.value ?? "";
+  const picks = dinnerAnchors.length ? dinnerAnchors : pairWines();
+  return { courses: [...document.querySelectorAll("#somm [data-somm-course]:checked")].map((b) => b.value), protein: v("somm-protein"),
+    avoid: [...document.querySelectorAll("#somm [data-somm-avoid]:checked")].map((b) => b.value), mode: v("somm-nwines") || "one",
+    special: v("somm-special"), maxPrice: sommNum("somm-menu-price"), country: $("somm-menu-country")?.value || "", guests: sommNum("somm-guests"),
+    anchors: v("somm-anchor") === "mine" ? picks : [], stores: sommStores(), from: v("somm-from") || "", swap: {}, add: new Set(),
+    fixed: v("somm-anchor") === "mine" ? dinnerFixed : null };
+}
+// "How special": cellar wines only (store wines go by the price a bottle).
+function specialOk(w, special) {
+  if (!special || w.kind !== "cellar") return true;
+  const sc = realScore(w) ?? 0, band = cellarBand(w);
+  return special === "treasure" ? sc >= 95 : special === "good" ? sc >= 90 : sc < 92 && (!band || band <= 2);
+}
+const courseFoodOf = (p) => (p.c === "cheese" ? "Cheese" : p.c === "dessert" ? "Dessert" : p.food);
+const courseTier = (w, f) => (w && f && foodsOf(w).includes(f) ? Math.max(wineTier(w, f), ...bookKeys(w).map((k) => grapeFoodTier(k, f))) : 0);
+function bestMainFood(w, banned) {
+  return MAIN_FOODS.filter((f) => !banned.has(f) && f !== "Spicy food").sort((a, b) => courseTier(w, b) - courseTier(w, a))[0] || "Pasta and pizza";
+}
+function planDinner(o) {
+  const banned = new Set(o.avoid.flatMap((a) => AVOID_FOODS[a] || []));
+  const protein = banned.has(o.protein) ? "" : o.protein, order = Object.keys(COURSES);
+  // the other wines: from the cellar, the store or either (o.from), when both are ticked
+  const base = { country: o.country, protein, stores: o.from === "cellar" ? [] : o.stores, cellars: o.from === "store" ? [] : sommCellars(),
+    maxPrice: o.maxPrice, banned, keep: (w) => specialOk(w, o.special), exclude: o.swap };
+  const anchorIds = new Set(o.anchors.map((w) => w.id));
+  const courses = o.courses.slice().sort((a, b) => order.indexOf(a) - order.indexOf(b));
+  const fromPool = (cs, skip, ceiling = null) => buildMenu({ ...base, courses: cs, nWines: cs.length, ceiling, exclude: Object.fromEntries(cs.map((c) => [c, new Set([...(o.swap[c] || []), ...skip])])) }).plan;
+  let plan, pool = 0;
+  const first = courses.includes("main") ? "main" : courses[0];
+  if (o.mode === "one") {
+    // one bottle: the chosen wine (or the best for the first course), on every course it suits
+    const mine = o.anchors.filter((w) => !o.swap[first]?.has(w.id));
+    let w = mine.length ? buildMenu({ ...base, courses: [first], pool: mine }).plan[0]?.w || mine[0] : null;
+    if (!w) { const m = buildMenu({ ...base, courses: [first], nWines: 1 }); w = m.plan[0]?.w || null; pool = m.pool; }
+    const mainFood = protein || (w ? bestMainFood(w, banned) : "");
+    plan = courses.map((c) => {
+      const food = c === "main" ? mainFood : c === "starter" ? (w ? (COURSE_FOODS.starter.filter((f) => !banned.has(f)).sort((a, b) => courseTier(w, b) - courseTier(w, a))[0]) : "") : "";
+      const p = { c, food, w, note: "", anchor: !!w && anchorIds.has(w.id) };
+      const fits = !w ? false : c === "dessert" ? isSweetWine(w) : c === first || courseTier(w, courseFoodOf(p)) >= 2;
+      if (!fits) {
+        p.w = null; p.anchor = false;
+        p.note = !w ? `No wine suits this course in ${tickedWord()}.` : c === "dessert" ? "This wine won't suit a sweet course. Serve coffee, or add a sweet wine."
+          : c === "cheese" ? "This wine isn't a natural match for cheese: serve the cheese with the last of it, or add a wine." : "Not a natural match for this course: open it with the main, or add a wine.";
+        // another of the chosen wines that suits this course comes before "add a wine"
+        const alt = o.anchors.find((x) => x !== w && (c === "dessert" ? isSweetWine(x) : !isSweetWine(x) || c === "cheese") && (c === "dessert" || courseTier(x, courseFoodOf(p)) >= 2));
+        if (alt) { p.w = alt; p.anchor = true; p.note = "Your other chosen wine: it suits this course."; }
+        else if (o.add.has(c)) { const q = fromPool([c], w ? [w.id] : [])[0]; if (q?.w) { p.w = q.w; p.food = q.food || p.food; p.note = "Added for this course."; } }
+      } else if (c !== first) p.note = "The same bottle: it suits this course too.";
+      return p;
+    });
+  } else {
+    // a wine with each course: chosen wines on the courses they suit best, the rest from what's ticked
+    plan = courses.map((c) => ({ c, w: null, food: "", note: "" }));
+    if (o.anchors.length) {
+      const mine = buildMenu({ ...base, courses, pool: o.anchors.filter((w) => !Object.values(o.swap).some((s) => s.has(w.id))) }).plan;
+      for (const q of mine) if (q.w && !/Same bottle/.test(q.note || "")) { const p = plan.find((x) => x.c === q.c); Object.assign(p, { w: q.w, food: q.food, note: q.note, anchor: true }); }
+    }
+    const open = plan.filter((p) => !p.w).map((p) => p.c);
+    if (open.length) {
+      const got = fromPool(open, [...anchorIds], plan.find((p) => p.c === "main")?.w || null);
+      for (const q of got) { const p = plan.find((x) => x.c === q.c); Object.assign(p, { w: q.w, food: q.food, note: q.note }); }
+      pool = buildMenu({ ...base, courses: open, nWines: open.length }).pool;
+    }
+    if (o.mode === "auto") { // let the wine decide: a bottle already open goes on to the next course if it suits it
+      const lead = plan.find((p) => p.c === first)?.w;
+      for (const p of plan) if (p.c !== first && lead && p.w !== lead && !p.anchor && (p.c !== "dessert" || isSweetWine(lead)) && courseTier(lead, courseFoodOf(p)) >= 2) {
+        p.w = lead; p.note = "The same bottle as the main course: it suits this too."; }
+    }
+    for (const p of plan) if (p.c === "main" && !p.food && p.w) p.food = protein || bestMainFood(p.w, banned);
+  }
+  // the wines chosen course by course on the several-wine page, unless swapped since
+  if (o.fixed) for (const p of plan) if (p.c in o.fixed && !o.swap[p.c]) {
+    const w = o.anchors.find((x) => x.id === o.fixed[p.c]) || null;
+    if (w) { p.w = w; p.anchor = true; p.note = "Your choice for this course."; if (p.c === "main" && !protein) p.food = bestMainFood(w, banned); if (p.c === "starter" && !p.food) p.food = "Seafood"; }
+    else if (!o.add.has(p.c)) { p.w = null; p.anchor = false; p.note = "No wine with this course, as you chose."; }
+  }
+  for (const p of plan) p.dinner = true;
+  return { country: o.country, own: false, dinner: true, opts: o, plan, pool };
+}
+function dinnerHtml() {
+  lastMenu = planDinner(dinnerOpts);
+  return menuHtml(lastMenu);
+}
+function dinnerHeadHtml(m, wines) {
+  const o = m.opts, n = m.plan.length;
+  const built = o.anchors.length ? `, built around ${andWords(o.anchors.map((w) => w.name))}` : "";
+  const from = m.pool ? ` Other wines chosen from ${m.pool.toLocaleString()} in ${esc(tickedWord())}${sommCellars().length ? " (cellar wines that are ready to open)" : ""}.` : "";
+  let guests = "";
+  if (o.guests) {
+    const glasses = new Map();
+    for (const p of m.plan) if (p.w) glasses.set(p.w, (glasses.get(p.w) || 0) + o.guests * (p.c === "main" ? 2 : 1));
+    guests = `<br>For ${o.guests} ${o.guests === 1 ? "guest" : "guests"}: ${[...glasses].map(([w, g]) => `${Math.max(1, Math.ceil(g / 5))} ${Math.ceil(g / 5) > 1 ? "bottles" : "bottle"} of ${esc(w.name)}`).join("; ")} <span class="hint-inline">(about five glasses a bottle; two glasses each with the main)</span>.`;
+  }
+  const buy = wines.filter((w) => w.kind !== "cellar" && priceOf(w) != null);
+  const shop = buy.length ? `<br>🛒 <strong>To buy:</strong> ${buy.map((w) => `${esc(w.name)}, ${money(priceOf(w))} at ${esc(sourceLabel(w.source))}`).join("; ")}.` : "";
+  const said = [andWords(m.plan.map((p) => ({ starter: "starter", main: "main course", cheese: "cheese", dessert: "dessert" })[p.c])) + (n === 1 ? " only" : ""),
+    o.protein ? o.protein.toLowerCase() : "let the wine decide", ...o.avoid.map((a) => ({ meat: "vegetarian", fish: "no fish or seafood", pork: "no pork" })[a]),
+    { one: "one bottle for the whole meal", each: "a wine with each course", auto: "let the wine decide how many" }[o.mode],
+    sommCellars().length && sommStores().length ? { "": "other wines from either", cellar: `other wines from ${andWords(sommCellars())}`, store: `other wines from ${theStore(sommStores())}` }[o.from || ""] : "",
+    sommCellars().length ? { "": "any cellar wine", everyday: "an everyday bottle", good: "something good (90+)", treasure: "a treasure (95+)" }[o.special || ""] : "",
+    o.maxPrice ? `store wines up to ${money(o.maxPrice)}` : "", o.country ? `${o.country} only` : ""].filter(Boolean);
+  const unused = o.anchors.filter((w) => !wines.some((x) => x.id === w.id)).map((w) => {
+    const why = isSweetWine(w) && !m.plan.some((p) => p.c === "dessert") ? ["it's a dessert wine and Dessert isn't ticked", "dinner-add-course", "dessert", "Add a dessert course"]
+      : o.mode === "one" ? ["you asked for one bottle for the whole meal", "dinner-each", "", "Use a wine with each course"]
+      : ["it suits none of the courses ticked better than the others", "", "", ""];
+    return `<li><strong>${esc(w.name)}</strong> isn't used: ${esc(why[0])}.${why[1] ? ` <button type="button" class="btn btn-mini" data-somm="${why[1]}" data-course="${why[2]}">${esc(why[3])}</button>` : ""}</li>`;
+  }).join("");
+  return `<span class="somm-asked">You asked for: <strong>${esc(said.join(" · "))}</strong>${o.anchors.length ? `, built around your ${o.anchors.length === 1 ? "chosen wine" : `${o.anchors.length} chosen wines`}` : ""}.</span><br>
+    <strong>Your dinner</strong>: ${n} ${n === 1 ? "course" : "courses"}, ${wines.length} ${wines.length === 1 ? "wine" : "wines"}.${from}${guests}${shop}${unused ? `<ul class="somm-unused">${unused}</ul>` : ""}`;
+}
+
+// ==== Shopping lists, printing and email for recipes (2026-11-19) ==============================
+// A recipe's ingredients as a list to shop from: quantities as the book prints them, sub-headings
+// merged, pantry staples set apart, the wine at the foot, and a tick box for what's already in.
+const PANTRY_RE = /^(?:(?:kosher|sea|table|coarse|flaky|fine)\s+)?salt\b|^salt and\b|^(?:freshly\s+)?(?:cracked\s+|ground\s+)*(?:black\s+|white\s+)?pepper(?:corns)?\b(?!\s*flakes)|^(?:extra[- ]virgin\s+|light\s+)?olive oil\b|^(?:vegetable|canola|neutral|grapeseed|sunflower)\s+oil\b|^(?:unsalted\s+|salted\s+|cold\s+)?butter\b|^(?:cold\s+|warm\s+|hot\s+|boiling\s+)?water\b|^(?:granulated\s+|white\s+|superfine\s+)?sugar\b|^(?:all[- ]purpose\s+)?flour\b|^ice\b/i;
+const QTY_RE = /^((?:\d+\s+)?\d+\/\d+|\d+(?:\.\d+)?|[½¼¾⅓⅔])(\s*(?:to|-|–)\s*(?:\d+\/\d+|\d+(?:\.\d+)?))?\s*/;
+const UNIT_RE = /^(cups?|tablespoons?|tbsp|teaspoons?|tsp|pounds?|lbs?|ounces?|oz|cloves?|grams?|g|kilograms?|kg|ml|litres?|liters?|pinch(?:es)?|cans?|sprigs?|bunch(?:es)?|slices?|stalks?|heads?)\b\.?\s*(?:of\s+)?/i;
+const UNIT_ONE = { tbsp: "tablespoon", tsp: "teaspoon", lb: "pound", lbs: "pound", oz: "ounce", g: "gram", kg: "kilogram", liter: "litre" };
+const fracNum = (t) => ({ "½": 0.5, "¼": 0.25, "¾": 0.75, "⅓": 1 / 3, "⅔": 2 / 3 })[t] ?? t.trim().split(/\s+/).reduce((n, x) => n + (x.includes("/") ? +x.split("/")[0] / +x.split("/")[1] : +x), 0);
+function ingParts(line) {
+  const FR = { "½": "1/2", "¼": "1/4", "¾": "3/4", "⅓": "1/3", "⅔": "2/3", "⅛": "1/8", "⅜": "3/8", "⅝": "5/8", "⅞": "7/8" };
+  let rest = line.replace(/(\d)?([½¼¾⅓⅔⅛⅜⅝⅞])/g, (m, d, f) => `${d ? `${d} ` : ""}${FR[f]}`) // "1½" as "1 1/2"
+    .replace(/\([^)]*\)/g, " ").replace(/\s+/g, " ").trim(), q = null, unit = "";
+  const m = rest.match(QTY_RE);
+  if (m) { q = m[2] ? null : fracNum(m[1]); rest = rest.slice(m[0].length); } // a range ("2 to 3") isn't added up
+  const u = rest.match(UNIT_RE);
+  if (u) { const raw = u[1].toLowerCase(), w = /^(pinch|bunch)es$/.test(raw) ? raw.slice(0, -2) : raw.replace(/s$/, ""); unit = UNIT_ONE[raw] || UNIT_ONE[w] || w; rest = rest.slice(u[0].length); }
+  return { q: m ? q : null, unit, name: rest.replace(/,.*$/, "").trim(), line, counted: !!m };
+}
+const isPantry = (line) => PANTRY_RE.test(ingParts(line).name || line);
+const fmtQty = (q) => { const w = Math.floor(q + 1e-9), f = q - w;
+  const fr = [[0, ""], [0.25, "1/4"], [1 / 3, "1/3"], [0.5, "1/2"], [2 / 3, "2/3"], [0.75, "3/4"], [1, "+1"]].reduce((b, x) => (Math.abs(x[0] - f) < Math.abs(b[0] - f) ? x : b));
+  return fr[1] === "+1" ? String(w + 1) : [w || "", fr[1]].filter(Boolean).join(" ") || "0"; };
+// Several recipes' ingredients as one list: the same thing in the same unit added up (garlic, 5 + 2 cloves).
+function mergeIngredients(lines) {
+  const out = new Map();
+  for (const line of lines) {
+    const x = ingParts(line), key = x.q != null && x.name ? `${x.unit}|${fold(x.name)}` : `line|${fold(line)}`, o = out.get(key);
+    if (o && o.q != null && x.q != null) { o.q += x.q; o.n++; } else if (!o) out.set(key, { ...x, n: 1 });
+  }
+  return [...out.values()].map((o) => (o.n > 1 ? `${fmtQty(o.q)} ${o.unit ? `${o.unit}${o.q > 1 ? (/(ch|sh)$/.test(o.unit) ? "es" : "s") : ""} ` : ""}${o.name}` : o.line));
+}
+const ingLines = (r) => (RECIPES[recipeKey(r)]?.i || []).filter((l) => !/:\s*$/.test(l));
+// The wine(s) a recipe sits with on the page: its own wine's recipes, a wine's section, or all the picks.
+function winesFor(el) {
+  const id = el.closest("[data-pick-wine]")?.dataset.pickWine;
+  const one = id && (findWine(id) || (wineNow?.w.id === id ? wineNow.w : null));
+  if (one) return [one];
+  const sec = el.closest(".somm-pair-wine:not(.somm-pair-all)")?.querySelector("[data-somm-pop]")?.dataset.sommPop;
+  if (sec && findWine(sec)) return [findWine(sec)];
+  if (el.closest(".somm-meet, .somm-pair-all")) return pairWines();
+  return wineNow && !wineNow.typed ? [wineNow.w] : [];
+}
+function wineLine(w) {
+  if (w.kind === "cellar") { const at = atStoreWords(w); return `${w.name}, from ${w.source}${at ? ` (${at.replace(/&amp;/g, "&")})` : ""}`; }
+  return `${w.name}${priceOf(w) != null ? `, buy at ${sourceLabel(w.source)} (${money(priceOf(w))})` : ""}`;
+}
+let shopSeq = 0;
+function shopListHtml(lines, wines, title = "Shopping list") {
+  const buy = lines.filter((l) => !isPantry(l)), have = lines.filter(isPantry), id = `shop${++shopSeq}`;
+  const li = (l, on) => `<li><label><input type="checkbox" data-shop-have${on ? " checked" : ""}> <span>${esc(l)}</span></label></li>`;
+  return `<div class="somm-shop" id="${id}"><h5>🛒 ${esc(title)}</h5><p class="hint">Tick what you already have: it's left off what you print or email.</p>
+    <ul class="somm-shop-list">${buy.map((l) => li(l, false)).join("")}</ul>
+    ${have.length ? `<p class="somm-shop-sub">You probably have</p><ul class="somm-shop-list somm-shop-have">${have.map((l) => li(l, false)).join("")}</ul>` : ""}
+    ${wines.length ? `<p class="somm-shop-sub">The wine</p><ul class="somm-shop-list">${wines.map((w) => li(`🍷 ${wineLine(w)}`, false)).join("")}</ul>` : ""}</div>`;
+}
+// What's on a rendered list and not ticked, in its groups.
+function shopRead(box) {
+  const groups = [];
+  let cur = { name: "To buy", items: [] };
+  for (const el of box.querySelectorAll(".somm-shop-sub, .somm-shop-list li")) {
+    if (el.classList.contains("somm-shop-sub")) { groups.push(cur); cur = { name: el.textContent, items: [] }; continue; }
+    if (!el.querySelector("[data-shop-have]").checked) cur.items.push(el.querySelector("span").textContent);
+  }
+  groups.push(cur);
+  return groups.filter((g) => g.items.length);
+}
+const shopText = (title, groups) => `${title.toUpperCase()}\n` + groups.map((g) => `${g.name === "To buy" ? "" : `\n${g.name}:\n`}${g.items.map((i) => `[ ] ${i}`).join("\n")}`).join("\n");
+const shopSheet = (title, groups) => `<h1>🛒 ${esc(title)}</h1>` + groups.map((g) => `${g.name === "To buy" ? "" : `<h2>${esc(g.name)}</h2>`}<ul class="pa-shop">${g.items.map((i) => `<li>☐ ${esc(i)}</li>`).join("")}</ul>`).join("");
+const recipeText = (r) => { const x = RECIPES[recipeKey(r)];
+  return `${r[0]}\n${ref(r[1], r[2])}${x.s || x.t ? ` · ${[x.s, x.t].filter(Boolean).join(" · ")}` : ""}\n\nIngredients\n${x.i.map((l) => (/:\s*$/.test(l) ? `\n${l}` : `- ${l}`)).join("\n")}\n\nMethod\n${x.m.map((m, i) => `${i + 1}. ${m}`).join("\n")}\n\n(Ingredients as printed in ${ref(r[1], r[2])}; the method is in our own words. From Basil's Wine Finder.)`; };
+const recipeSheet = (r) => { const x = RECIPES[recipeKey(r)];
+  return `<h1>${esc(r[0])}</h1><p>${esc(ref(r[1], r[2]))}${r[6]?.length ? ` · with ${esc(r[6].join(", "))}` : ""}${x.s || x.t ? ` · ${esc([x.s, x.t].filter(Boolean).join(" · "))}` : ""}</p>
+    ${r[7] ? `<p><strong>Why it suits the wine:</strong> ${esc(r[7])}</p>` : ""}
+    <h2>Ingredients</h2><ul class="pa-ing">${x.i.map((l) => (/:\s*$/.test(l) ? `<li class="pa-ing-h">${esc(l)}</li>` : `<li>${esc(l)}</li>`)).join("")}</ul>
+    <h2>Method</h2><ol>${x.m.map((m) => `<li>${esc(m)}</li>`).join("")}</ol>
+    <p class="pa-foot">Ingredients as printed in ${esc(ref(r[1], r[2]))}; the method is in our own words.</p>`; };
+function printSheets(html) {
+  $("print-area").innerHTML = `${html}<p class="pa-foot">Printed from Basil's Wine Finder, ${new Date().toLocaleDateString()}.</p>`;
+  $("print-area").dataset.custom = "recipe";
+  window.print();
+  setTimeout(() => { delete $("print-area").dataset.custom; }, 2000);
+}
+// One recipe: the list opens under it; Print and Email send the recipe, the list or both.
+document.addEventListener("click", (e) => {
+  const t = e.target.closest?.("[data-recipe-shop], [data-recipe-out]");
+  if (!t) return;
+  const tools = t.closest("[data-recipe-tools]"), r = recipeByKey(tools.dataset.recipeTools), box = tools.querySelector(".somm-shop-box");
+  if (!r || !RECIPES[recipeKey(r)]) return;
+  const makeList = () => { if (!box.innerHTML) box.innerHTML = shopListHtml(ingLines(r), winesFor(tools)); };
+  if (t.dataset.recipeShop != null) {
+    box.innerHTML = box.innerHTML ? "" : shopListHtml(ingLines(r), winesFor(tools));
+    t.setAttribute("aria-expanded", String(!!box.innerHTML));
+    return;
+  }
+  const what = tools.querySelector("[data-recipe-what]").value, title = `Shopping list: ${r[0]}`;
+  let groups = [];
+  if (what !== "recipe") { const shown = !!box.innerHTML; makeList(); groups = shopRead(box.querySelector(".somm-shop")); if (!shown) box.innerHTML = ""; }
+  if (t.dataset.recipeOut === "print") printSheets([what !== "recipe" ? shopSheet(title, groups) : "", what !== "list" ? recipeSheet(r) : ""].filter(Boolean).join(`<div class="pa-break"></div>`));
+  else {
+    const subject = what === "both" ? `${r[0]}: recipe and shopping list` : what === "list" ? title : `Recipe: ${r[0]}`;
+    const body = [what !== "recipe" ? shopText("Shopping list", groups) : "", what !== "list" ? recipeText(r) : ""].filter(Boolean).join("\n\n----------\n\n");
+    sendEmail(subject, body, (msg) => { tools.querySelector(".status").textContent = msg; });
+  }
+});
+// The whole dinner: every course's recipe (the one showing on each card) in one list.
+function dinnerRecipes() {
+  return [...document.querySelectorAll("#somm-out .somm-course-card")].map((card) => {
+    const d = card.querySelector(".somm-recipe-pick details.somm-recipe[data-recipe]");
+    return d ? { course: card.querySelector("h4")?.childNodes[0]?.textContent.trim() || "", r: recipeByKey(d.dataset.recipe) } : null;
+  }).filter((x) => x?.r && RECIPES[recipeKey(x.r)]);
+}
+function dinnerShopHtml() {
+  const list = dinnerRecipes();
+  if (!list.length) return `<div class="somm-card"><p>None of these courses has a recipe from the books to shop for.</p></div>`;
+  const wines = [...new Set((lastMenu?.plan || []).map((p) => p.w).filter(Boolean))];
+  return `<div class="somm-card somm-dinner-shop"><h3 class="somm-wine-h">🛒 Shopping list for the whole dinner</h3>
+    <p>For ${list.map((x) => `<strong>${esc(x.course)}</strong>: ${esc(x.r[0])}`).join(" · ")}. The same ingredient in the same measure is added up.</p>
+    ${shopListHtml(mergeIngredients(list.flatMap((x) => ingLines(x.r))), wines, "Shopping list")}
+    <div class="somm-recipe-tools"><select data-dinner-what aria-label="What to print or email"><option value="both">Shopping list and recipes</option><option value="list">The shopping list</option><option value="recipe">The recipes</option></select>
+      <button type="button" class="btn" data-dinner-out="print">🖨 Print</button> <button type="button" class="btn" data-dinner-out="email">✉️ Email</button> <span class="status" role="status"></span></div></div>`;
+}
+document.addEventListener("click", (e) => {
+  const t = e.target.closest?.("[data-dinner-out]");
+  if (!t) return;
+  const card = t.closest(".somm-dinner-shop"), what = card.querySelector("[data-dinner-what]").value, list = dinnerRecipes();
+  const groups = shopRead(card.querySelector(".somm-shop")), title = "Shopping list for the dinner";
+  if (t.dataset.dinnerOut === "print") printSheets([what !== "recipe" ? shopSheet(title, groups) : "", ...(what !== "list" ? list.map((x) => recipeSheet(x.r)) : [])].filter(Boolean).join(`<div class="pa-break"></div>`));
+  else sendEmail(what === "recipe" ? "Our dinner: the recipes" : what === "list" ? "Our dinner: shopping list" : "Our dinner: shopping list and recipes",
+    [what !== "recipe" ? shopText("Shopping list", groups) : "", ...(what !== "list" ? list.map((x) => `${x.course.toUpperCase()}\n${recipeText(x.r)}`) : [])].filter(Boolean).join("\n\n----------\n\n"),
+    (msg) => { card.querySelector(".status").textContent = msg; });
+});
+
 // fill the panel's lists whenever the Sommelier page is shown
 new MutationObserver(() => { if (!$("view-somm").hidden) openSomm(); })
   .observe($("view-somm"), { attributes: true, attributeFilter: ["hidden"] });
-sommTab(storeGet("wf.sommTab", "wine"));
+sommTab("", true);

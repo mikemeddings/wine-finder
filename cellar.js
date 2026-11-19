@@ -161,7 +161,7 @@ function mcRows(all) {
 }
 function mcAnswerHtml(all, name) {
   const isDaring = (x) => x.adv, rows = tableSort(mcRows(all), mc.col, mc.dir, isDaring), n = rows.length, m = MOODS[mc.mood];
-  const cols = [["name", "Wine"], ["type", "Colour"], ["country", "Country"], ["vintage", "Vintage"], ["score", "Score"], ["drink", "Drink"], ["daring", "⚡"]];
+  const cols = [["name", "Wine"], ["type", "Colour"], ["country", "Country"], ["vintage", "Vintage"], ["score", "Score"], ["drink", "Drink window"], ["daring", "⚡"]];
   if (all.some((w) => w.quantity)) cols.splice(6, 0, ["bottles", "Bottles"]); // a private copy on this computer only
   const sorted = mc.col === "drink" && mc.dir > 0 ? "what to drink first" : `${TABLE_WORDS[mc.col]}${mc.dir < 0 ? ", reversed" : ""}`;
   return `<div class="somm-selection"><p class="somm-sel-head">${esc([name, mc.mood === "all" ? "" : m.label].filter(Boolean).join(" · "))}</p>
@@ -216,7 +216,7 @@ async function cellarToSomm() {
   if (!$("somm-stores").children.length) renderSommStores();
   for (const b of document.querySelectorAll("#somm [data-somm-cellar]")) b.checked = sources.has(b.value);
   fillCountrySelects(); renderMoods(); renderUsing();
-  sommTab("pick");
+  sommTab("wine", true);
   showOut(cellarAnswerHtml(rows, null, "", "", "Find food for these wines"));
 }
 
